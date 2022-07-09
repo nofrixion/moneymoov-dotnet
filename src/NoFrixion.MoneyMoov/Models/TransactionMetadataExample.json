@@ -1,0 +1,64 @@
+/// Payments
+// 1. Percentage of Balance / Outgoing transaction value is almost reaching account balance
+// 3. Payment Limit - Outbound / Outgoing transaction value is greater than limit
+// 5. High Velocity - Outbound / Number of outgoing transactions over a set period of time is greater than limit
+// 7. High Cumulative Amount- Outbound / Sum of outgoing transactions over a set period of time is greater than a limit
+// 8. High Account Balance / Account balance at the end of a transaction is greater than a limit
+// 9. Transaction value exceeds customer declared limit
+// 49. High Cumulative Amount - Outbound - Counterparty / Total sum of transactions sent to counterparty is greater than a limit over a set period of time
+// 51. High Velocity - Outbound - Counterparty / High number of transactions sent to a Counterparty over a set period of time
+// [Ask to validate] 64. Transaction Limit - Historic Average - Outbound / Outbound transaction exceeds client's historical average
+
+/// Structuring
+// 24. Structuring - Outbound / Significant number of low value outgoing transactions just below a threshold
+// 24. Notes: Use <0.5 as low transaction amount - TODO: Ask for "low value"
+
+/// Round amounts
+// 33. Round Value Transactions - Outbound / Significant number of outgoing transactions involving round amounts
+// 35. Number of High Value Round Transactions - Outbound / Significant number of outgoing transactions involving high value round amounts
+// 35. Notes: Use >=1000 as high number of transactions - TODO: Ask for "high number" value
+
+/// High Risk Geographic Locations
+// 36. (*Hard Stop*) High Risk Country /  Transaction to or from a country that is designated as high risk
+// 37. (*Hard Stop*) Prohibited Country / Transaction to or from a country that is designated as prohibited
+// 38. [considering only outbound] New Counterparty Country / Transaction to or from a country that has not been used before by this customer
+// 39. [considering only outbound] New Counterparty Bank Country / Transaction to or from a bank country that has not been used before by this customer
+
+/// Sudden Activity in dormant account
+// 65. [Long period needs to be fixed - TODO] (*Hard Stop*) Dormant Account / First activity of client after a long period of dormancy
+
+/// Duplicated items: 11, 12, 14, 16, 26 to 31, 40 to 45, 55 to 60
+
+{
+  "Amount": 450, // 3, 9
+  "AccountBalance": 4000, // 2
+  "BalanceAfterTransaction": 3550, // 8
+  "PercentageOfBalanceToTransfer": 92, // 1
+  "TransactionsOverLastMinute": 4, // 5
+  "TransactionsOverLastHour": 20, // 5
+  "TransactionsToday": 82, // 5
+  "AmountSentToRecipientOverLastMinute": 246, // 49
+  "AmountSentToRecipientOverLastHour": 246, // 49
+  "AmountSentToRecipientToday": 246, // 49
+  "TransactionsToRecipientOverLastMinute": 4, // 51
+  "TransactionsToRecipientOverLastHour": 20, // 51
+  "TransactionsToRecipientToday": 82, // 51
+  "AmountSpentOverLastMinute": 246, // 7
+  "AmountSpentOverLastHour": 246, // 7
+  "AmountSpentToday": 246, // 7
+  "LowTransactionsOverLastMinute": 1, // 24
+  "LowTransactionsOverLastHour": 2, // 24
+  "LowTransactionsToday": 3, // 24
+  "RoundTransactionsOverLastMinute": 1, // 33
+  "RoundTransactionsOverLastHour": 2, // 33
+  "RoundTransactionsToday": 3, // 33
+  "HighRoundTransactionsOverLastMinute": 0, // 35
+  "HighRoundTransactionsOverLastHour": 0, // 35
+  "HighRoundTransactionsToday": 1, // 35
+  "RecipientCountryCode": "GB", // 36, 37
+  "HadSentTransactionToCountryBefore": true, // 38, 39
+  "AverageAmountEverSent": 26, // 64
+  "PayoutID": "B8FB8C35-AEC1-4287-0C02-08DA59B675E8", // Display purposes
+  "MerchantID": "D8A9EF69-C7B9-4F57-9390-C1E93C407F3D", // Display purposes
+  "MerchantName": "Pablo Merchant" // Display purposes
+}
