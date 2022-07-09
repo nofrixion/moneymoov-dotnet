@@ -53,5 +53,5 @@ public class User
     /// </summary>
     public IEnumerable<UserSetting> Settings { get; set; } = new List<UserSetting>();
 
-    public bool IsEmpty() => ID == Guid.Empty;
+    public bool IsEmpty() => ID == Guid.Empty && EmailAddress == string.Empty;
 }

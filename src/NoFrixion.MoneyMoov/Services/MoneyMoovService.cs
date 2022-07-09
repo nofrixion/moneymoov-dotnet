@@ -32,7 +32,7 @@ public class MoneyMoovService : IMoneyMoovService
     protected readonly HttpClient _httpClient;
     protected readonly string _moneyMoovApiBaseUrl;
 
-    private string _accessToken;
+    protected string _accessToken;
 
     public MoneyMoovService(
         ILogger<MoneyMoovService> logger,
@@ -48,31 +48,48 @@ public class MoneyMoovService : IMoneyMoovService
         _moneyMoovApiBaseUrl = configuration[MoneyMoovConfigKeys.MONEYMOOV_API_BASE_URL];
     }
 
-    protected void PrepareAuthenticatedClient()
+    protected virtual Task<NoFrixionProblem> PrepareAuthenticatedClient(bool isAccessTokenRequired = false)
     {
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
-        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-    }
+        if (isAccessTokenRequired)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+        }
 
-    protected void SetAccessToken(string accessToken)
-    {
-        _accessToken = accessToken;
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        return Task.FromResult(NoFrixionProblem.Empty);
     }
 
     public async Task<Either<NoFrixionProblem, NoFrixionVersion>> VersionAsync()
     {
-        PrepareAuthenticatedClient();
-        var url = MoneyMoovUrlBuilder.VersionUrl(_moneyMoovApiBaseUrl);
-        var response = await _httpClient.GetAsync(url);
-        return await FromResponse<NoFrixionVersion>(response);     
+        var problem = await PrepareAuthenticatedClient(false);
+
+        if (!problem.IsEmpty())
+        {
+            return problem;
+        }
+        else
+        {
+            var url = MoneyMoovUrlBuilder.VersionUrl(_moneyMoovApiBaseUrl);
+            var response = await _httpClient.GetAsync(url);
+            return await FromResponse<NoFrixionVersion>(response);
+        }
     }
 
     public async Task<Either<NoFrixionProblem, User>> WhoamiAsync()
     {
-        PrepareAuthenticatedClient();
-        var url = MoneyMoovUrlBuilder.WhoamiUrl(_moneyMoovApiBaseUrl);
-        var response = await _httpClient.GetAsync(url);
-        return await FromResponse<User>(response);
+        var problem = await PrepareAuthenticatedClient(true);
+
+        if (!problem.IsEmpty())
+        {
+            return problem;
+        }
+        else
+        {
+            var url = MoneyMoovUrlBuilder.WhoamiUrl(_moneyMoovApiBaseUrl);
+            var response = await _httpClient.GetAsync(url);
+            return await FromResponse<User>(response);
+        }
     }
 
     protected async Task<Either<NoFrixionProblem, T>> FromResponse<T>(HttpResponseMessage response)
