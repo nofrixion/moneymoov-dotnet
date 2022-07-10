@@ -17,6 +17,7 @@
 using LanguageExt;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using NoFrixion.MoneyMoov.Models;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -96,15 +97,23 @@ public class MoneyMoovService : IMoneyMoovService
     {
         if (response.IsSuccessStatusCode)
         {
-            var version = await response.Content.ReadFromJsonAsync<T>();
+            var version =  await response.Content.ReadFromJsonAsync<T>();
             return version != null ? version :
                 new NoFrixionProblem($"The MoneyMoov {typeof(T).Name} details could not be deserialised in {nameof(MoneyMoovService)}.");
         }
         else if(response.Content != null )
         {
-            if (response.Content.Headers.ContentType?.MediaType == "application/json")
+            if (response.Content.Headers.ContentType?.MediaType == "application/problem+json")
             {
-                return await response.Content.ReadFromJsonAsync<NoFrixionProblem>() ??
+                // TODO: Improve the JSON parsing. Possibly switch NoFrixion problem to mirror the ASP.NET MVC ProblemDetails type.
+                string probDetailsJson = await response.Content.ReadAsStringAsync();
+                _logger.LogDebug($"Problem details JSON=" + probDetailsJson);
+                dynamic probDetails = JObject.Parse(probDetailsJson);
+                string detail = probDetails?.detail ?? string.Empty;
+                int.TryParse(probDetails?.status as string, out int errorCode);
+
+                return detail != string.Empty ?
+                    new NoFrixionProblem(detail, errorCode) :
                     new NoFrixionProblem($"The MoneyMoov problem details could not be deserialised in {nameof(MoneyMoovService)}.");
             }
             else
