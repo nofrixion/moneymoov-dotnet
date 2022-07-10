@@ -28,6 +28,6 @@ public class Merchant
     public string? MerchantCategoryCode { get; set; }
     public string? ShortName { get; set; }
     public string? ModulrNotificationID { get; set; }
-    public string? ModulrMerchantID { get; set; }
+    public string? ModulrCustomerID { get; set; }
     public string? EmailAddress { get; set; }
 }
