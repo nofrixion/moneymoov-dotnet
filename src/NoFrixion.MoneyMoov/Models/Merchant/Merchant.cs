@@ -23,7 +23,7 @@ public class Merchant
     /// <summary>
     /// The Company ID recorded in the Compliance system.
     /// </summary>
-    public Guid CompanyID { get; set; }
+    public Guid? CompanyID { get; set; }
 
     public string? MerchantCategoryCode { get; set; }
     public string? ShortName { get; set; }
