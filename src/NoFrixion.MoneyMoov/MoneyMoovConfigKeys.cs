@@ -19,9 +19,9 @@ namespace NoFrixion.MoneyMoov;
 public static class MoneyMoovConfigKeys
 {
     /// <summary>
-    /// Configuration setting for MoneyMoov base URL This is the URL for everything
+    /// Configuration setting for MoneyMoov base URL This is the base URL for everything
     /// preceding the resource. 
     /// </summary>
     /// <example>https://api.nofrixion.com/api/v1</example>
-    public const string MONEYMOOV_API_BASE_URL = "MoneyMoov:ApiBaseUrl";
+    public const string MONEYMOOV_BASE_URL = "MoneyMoov:BaseUrl";
 }

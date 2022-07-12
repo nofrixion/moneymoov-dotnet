@@ -31,7 +31,7 @@ public class MoneyMoovService : IMoneyMoovService
     protected readonly ILogger _logger;
     protected readonly IConfiguration _config;
     protected readonly HttpClient _httpClient;
-    protected readonly string _moneyMoovApiBaseUrl;
+    protected readonly string _moneyMoovBaseUrl;
 
     protected string _accessToken;
 
@@ -46,7 +46,7 @@ public class MoneyMoovService : IMoneyMoovService
         _httpClient = httpClient;
         _accessToken = accessToken;
 
-        _moneyMoovApiBaseUrl = configuration[MoneyMoovConfigKeys.MONEYMOOV_API_BASE_URL];
+        _moneyMoovBaseUrl = configuration[MoneyMoovConfigKeys.MONEYMOOV_BASE_URL];
     }
 
     protected virtual Task<NoFrixionProblem> PrepareAuthenticatedClient(bool isAccessTokenRequired = false)
@@ -71,7 +71,7 @@ public class MoneyMoovService : IMoneyMoovService
         }
         else
         {
-            var url = MoneyMoovUrlBuilder.VersionUrl(_moneyMoovApiBaseUrl);
+            var url = MoneyMoovUrlBuilder.VersionUrl(_moneyMoovBaseUrl);
             var response = await _httpClient.GetAsync(url);
             return await FromResponse<NoFrixionVersion>(response);
         }
@@ -87,7 +87,7 @@ public class MoneyMoovService : IMoneyMoovService
         }
         else
         {
-            var url = MoneyMoovUrlBuilder.WhoamiUrl(_moneyMoovApiBaseUrl);
+            var url = MoneyMoovUrlBuilder.WhoamiUrl(_moneyMoovBaseUrl);
             var response = await _httpClient.GetAsync(url);
             return await FromResponse<User>(response);
         }
