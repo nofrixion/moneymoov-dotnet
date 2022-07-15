@@ -18,6 +18,9 @@ namespace NoFrixion.MoneyMoov.Models
 
     public enum WebhookEvent
     {
+        [EnumMember(Value = "NONE")]
+        NONE,
+
         [EnumMember(Value = "PAY_IN")]
         PAYIN,
 
