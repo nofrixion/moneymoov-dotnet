@@ -20,7 +20,8 @@ namespace NoFrixion.MoneyMoov.Models
     {
         [JsonProperty("type")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public IdentifierType Type {
+        public IdentifierType Type
+        {
             get
             {
                 if (!string.IsNullOrEmpty(Iban))
@@ -30,11 +31,11 @@ namespace NoFrixion.MoneyMoov.Models
 
                 if (!string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(Number))
                 {
-                    return IdentifierType.IBAN;
+                    return IdentifierType.SCAN;
                 }
 
                 // Return default
-                return IdentifierType.IBAN;
+                return IdentifierType.NONE;
             }
         }
 
@@ -53,6 +54,9 @@ namespace NoFrixion.MoneyMoov.Models
 
     public enum IdentifierType
     {
+        [EnumMember(Value = "NONE")]
+        NONE,
+
         [EnumMember(Value = "IBAN")]
         IBAN,
 
