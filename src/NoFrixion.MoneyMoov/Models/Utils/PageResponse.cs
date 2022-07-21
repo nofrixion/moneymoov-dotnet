@@ -7,21 +7,21 @@ namespace NoFrixion.MoneyMoov.Models.Utils
     public class PageResponse<T>
     {
         [JsonProperty("content")]
-        public T Content { get; set; }
+        public List<T> Content { get; set; } = new();
 
         /// <summary>
-        /// Current page number. Its 0 based. i.e firstpage &#x3D;0, secondpage&#x3D;1 
+        /// Current page number. Its 1 based. i.e firstpage is 1, secondpage is 2 
         /// </summary>
-        /// <value>Current page number. Its 0 based. i.e firstpage &#x3D;0, secondpage&#x3D;1 </value>
-        [JsonProperty("page")]
-        public int Page { get; set; }
+        /// <value>Current page number. Its 1 based. i.e first page is 1, second page is 2</value>
+        [JsonProperty("pageNumber")]
+        public int PageNumber { get; set; }
 
         /// <summary>
         /// Page size
         /// </summary>
         /// <value>Page size</value>
-        [JsonProperty("size")]
-        public int Size { get; set; }
+        [JsonProperty("pageSize")]
+        public int PageSize { get; set; }
 
         /// <summary>
         /// Total pages
@@ -36,10 +36,5 @@ namespace NoFrixion.MoneyMoov.Models.Utils
         /// <value>Total count</value>
         [JsonProperty("totalSize")]
         public long TotalSize { get; set; }
-
-        public override string ToString()
-        {
-            return $"{nameof(Content)}: {Content}, {nameof(Page)}: {Page}, {nameof(Size)}: {Size}, {nameof(TotalPages)}: {TotalPages}, {nameof(TotalSize)}: {TotalSize}";
-        }
     }
 }
