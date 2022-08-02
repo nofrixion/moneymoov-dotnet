@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------
 //  Filename: PaymentResultEnum.cs
 // 
-//  Description: TODO:
+//  Description: Enum for Status of payment request
 // 
 //  Author(s):
 //  Saurav Maiti (saurav@nofrixion.com)
