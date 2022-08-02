@@ -1,0 +1,65 @@
+// -----------------------------------------------------------------------------
+//  Filename: PaymentResultEnum.cs
+// 
+//  Description: TODO:
+// 
+//  Author(s):
+//  Saurav Maiti (saurav@nofrixion.com)
+// 
+//  History:
+//  02 08 2022  Saurav Maiti Created, Harcourt Street, Dublin, Ireland.
+// 
+//  License:
+//  Proprietary NoFrixion.
+// -----------------------------------------------------------------------------
+
+namespace NoFrixion.MoneyMoov.Enums;
+
+public enum PaymentResultEnum
+{
+    /// <summary>
+    /// No events have been recorded for the payment request.
+    /// </summary>
+    None,
+
+    /// <summary>
+    /// At least one event has been recorded for the payment request
+    /// but it has not yet been finalised.
+    /// </summary>
+    //InProgress,
+
+    /// <summary>
+    /// The payment attempt was successful and the request amount has been fully paid.
+    /// </summary>
+    FullyPaid,
+
+    /// <summary>
+    /// The payment attempt was successful but the amount paid was less than the requested amount.
+    /// </summary>
+    PartiallyPaid,
+
+    /// <summary>
+    /// Payments over the expected amount have been received.
+    /// </summary>
+    OverPaid,
+
+    /// <summary>
+    /// The payment attempt failed.
+    /// </summary>
+    //Failed,
+
+    /// <summary>
+    /// The payment has been authorized by the payer but is awaiting settlement.
+    /// </summary>
+    //Authorized,
+
+    /// <summary>
+    /// The state of the payment could not be determined from the events.
+    /// </summary>
+    //Unknown,
+
+    /// <summary>
+    /// For card payments the payment was voided prior to settlement.
+    /// </summary>
+    Voided,
+}
