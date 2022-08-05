@@ -44,7 +44,7 @@ namespace NoFrixion.MoneyMoov.Models
         public string? Number { get; set; }
 
         // Only available for SCAN type
-        [JsonProperty("sort_code", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("SortCode", NullValueHandling = NullValueHandling.Ignore)]
         public string? SortCode { get; set; }
 
         // Only available for IBAN type
