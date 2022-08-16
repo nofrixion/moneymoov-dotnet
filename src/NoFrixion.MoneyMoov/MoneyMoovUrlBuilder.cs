@@ -113,6 +113,11 @@ public static class MoneyMoovUrlBuilder
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANT_GET_TOKEN_ENDPOINT}";
     }
 
+    public static string UserRolesApiUrl(string moneyMoovBaseUrl)
+    {
+        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANTS_ENDPOINT}/userroles";
+    }
+
     /// <summary>
     /// The tokens API URL is used for deleting and creating merchant tokens. It's different
     /// to the GET API which requires the merchant ID in the URL. This is inconsistent but perhaps more
