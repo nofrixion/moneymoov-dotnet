@@ -85,4 +85,9 @@ public class MoneyMoovApiEndPoints
     /// The URL to access the main NoFrixion MoneyMoov User API.
     /// </summary>
     public const string USER_ENDPOINT = "user";
+
+    /// <summary>
+    /// The URL to access the NoFrixion MoneyMoov user roles API.
+    /// </summary>
+    public const string USERROLES_ENDPOINT = "userroles";
 }
