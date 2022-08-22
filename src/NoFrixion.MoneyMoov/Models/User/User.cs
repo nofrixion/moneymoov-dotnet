@@ -54,4 +54,11 @@ public class User
     public IEnumerable<UserSetting> Settings { get; set; } = new List<UserSetting>();
 
     public bool IsEmpty() => ID == Guid.Empty && EmailAddress == string.Empty;
+
+    /// <summary>
+    /// The merchant Id to add user role for a newly created user. This field
+    /// is only required when a new user is being created. It doesn't need to be sent. 
+    /// </summary>
+    [JsonIgnore]
+    public Guid MerchantId { get; set; }
 }
