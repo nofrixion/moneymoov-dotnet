@@ -60,5 +60,5 @@ public class User
     /// is only required when a new user is being created. It doesn't need to be sent. 
     /// </summary>
     [JsonIgnore]
-    public Guid MerchantId { get; set; }
+    public Guid MerchantID { get; set; }
 }
