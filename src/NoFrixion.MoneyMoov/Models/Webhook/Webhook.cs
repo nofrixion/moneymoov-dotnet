@@ -6,25 +6,46 @@ using System.Runtime.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models
 {
-    public class Webhook
-    {
-        [JsonProperty("event")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public WebhookEvent Event { get; set; }
-
-        [JsonProperty("data")]
-        public PayInfo Data { get; set; }
-    }
-
+    /// <summary>
+    /// The webhook event.
+    /// </summary>
     public enum WebhookEvent
     {
+        /// <summary>
+        /// The none.
+        /// </summary>
         [EnumMember(Value = "NONE")]
         NONE,
 
+        /// <summary>
+        /// The pay in event.
+        /// </summary>
         [EnumMember(Value = "PAY_IN")]
         PAYIN,
 
+        /// <summary>
+        /// The payout event.
+        /// </summary>
         [EnumMember(Value = "PAY_OUT")]
-        PAYOUT
+        PAYOUT,
+
+        /// <summary>
+        /// The payment request success event.
+        /// </summary>
+        [EnumMember(Value = "PAYMENT_REQUEST_SUCCESS")]
+        PAYMENTREQUESTSUCCESS
     }
+
+    /// <summary>
+    /// The webhook class.
+    /// </summary>
+    public class WebHook
+    {
+        /// <summary>
+        /// Gets or sets the event.
+        /// </summary>
+        [JsonProperty("event")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public WebhookEvent Event { get; set; }
+    }  
 }
