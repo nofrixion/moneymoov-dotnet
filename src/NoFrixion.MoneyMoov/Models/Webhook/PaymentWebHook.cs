@@ -9,8 +9,7 @@
 //  History:
 //  12 09 2022  Saurav Maiti Created, Harcourt Street, Dublin, Ireland.
 // 
-//  License:
-//  Proprietary NoFrixion.
+//  License: MIT
 // -----------------------------------------------------------------------------
 
 using Newtonsoft.Json;
