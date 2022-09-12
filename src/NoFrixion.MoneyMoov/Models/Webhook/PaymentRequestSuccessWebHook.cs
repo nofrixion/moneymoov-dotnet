@@ -13,9 +13,10 @@
 //  Proprietary NoFrixion.
 // -----------------------------------------------------------------------------
 
+using Newtonsoft.Json;
+
 namespace NoFrixion.MoneyMoov.Models;
 
-using Newtonsoft.Json;
 
 /// <summary>
 /// The payment request success web hook.
