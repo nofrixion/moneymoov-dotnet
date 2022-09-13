@@ -25,5 +25,5 @@ public class PaymentWebHook : WebHook
     /// Gets or sets the data.
     /// </summary>
     [JsonProperty("data")]
-    public PayInfo Data { get; set; }
+    public PayInfo Data { get; set; } = PayInfo.Empty;
 }

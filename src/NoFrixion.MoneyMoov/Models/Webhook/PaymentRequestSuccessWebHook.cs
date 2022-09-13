@@ -40,11 +40,11 @@ public class PaymentRequestSuccessWebHook : WebHook
     /// Success web hook Url.
     /// </summary>
     [JsonProperty("successWebHookUrl")]
-    public string SuccessWebHookUrl { get; set; }
+    public string SuccessWebHookUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// Payment request order ID.
     /// </summary>
     [JsonProperty("orderID")]
-    public string OrderID { get; set; }
+    public string OrderID { get; set; } = string.Empty;
 }
