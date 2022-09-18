@@ -2,33 +2,37 @@
 
 #nullable disable
 
-namespace NoFrixion.MoneyMoov.Models
+namespace NoFrixion.MoneyMoov.Models;
+
+public class PayInfo
 {
-    public class PayInfo
-    {
-        // Only available for PAYOUT
-        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
-        public Guid? Id { get; set; }
+    public static PayInfo Empty = new PayInfo { _isEmpty  = true };
 
-        [JsonProperty("transactionId")]
-        public string TransactionId { get; set; }
+    private bool _isEmpty;
+    public bool IsEmpty => _isEmpty;
 
-        [JsonProperty("amount")]
-        public decimal Amount { get; set; }
+    // Only available for PAYOUT
+    [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+    public Guid? Id { get; set; }
 
-        [JsonProperty("currency")]
-        public string Currency { get; set; }
+    [JsonProperty("transactionId")]
+    public string TransactionId { get; set; }
 
-        [JsonProperty("description")]
-        public string Description { get; set; }
+    [JsonProperty("amount")]
+    public decimal Amount { get; set; }
 
-        [JsonProperty("date")]
-        public DateTimeOffset Date { get; set; }
+    [JsonProperty("currency")]
+    public string Currency { get; set; }
 
-        [JsonProperty("from")]
-        public AccountInfo From { get; set; }
+    [JsonProperty("description")]
+    public string Description { get; set; }
 
-        [JsonProperty("to")]
-        public AccountInfo To { get; set; }
-    }
+    [JsonProperty("date")]
+    public DateTimeOffset Date { get; set; }
+
+    [JsonProperty("from")]
+    public AccountInfo From { get; set; }
+
+    [JsonProperty("to")]
+    public AccountInfo To { get; set; }
 }
