@@ -7,7 +7,7 @@ namespace NoFrixion.MoneyMoov.Models
     public class AccountInfo
     {
         [JsonProperty("account_id", NullValueHandling = NullValueHandling.Ignore)]
-        public string? AccountId { get; set; }
+        public Guid? AccountId { get; set; }
 
         [JsonProperty("name")]
         public string? Name { get; set; }
