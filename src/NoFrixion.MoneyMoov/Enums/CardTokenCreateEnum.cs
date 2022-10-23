@@ -13,24 +13,23 @@
 //  License: MIT
 // -----------------------------------------------------------------------------
 
-namespace NoFrixion.MoneyMoov.Enums
+namespace NoFrixion.MoneyMoov;
+
+public enum CardTokenCreateModes
 {
-    public enum CardTokenCreateModes
-    {
-        /// <summary>
-        /// Card will not be tokenised.
-        /// </summary>
-        None,
+    /// <summary>
+    /// Card will not be tokenised.
+    /// </summary>
+    None,
 
-        /// <summary>
-        /// Card will be tokenised without explicit consent from user.
-        /// However, a message making user aware of it will be displayed on the payelement.
-        /// </summary>
-        ConsentNotRequired,
+    /// <summary>
+    /// Card will be tokenised without explicit consent from user.
+    /// However, a message making user aware of it will be displayed on the payelement.
+    /// </summary>
+    ConsentNotRequired,
 
-        /// <summary>
-        /// Card will be tokenised only if user consents to it.
-        /// </summary>
-        UserConsentRequired
-    }
+    /// <summary>
+    /// Card will be tokenised only if user consents to it.
+    /// </summary>
+    UserConsentRequired
 }
