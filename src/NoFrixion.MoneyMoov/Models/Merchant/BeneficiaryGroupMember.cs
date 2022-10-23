@@ -1,9 +1,9 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: BeneficiaryGroup.cs
+// Filename: BeneficiaryGroupMember.cs
 // 
-// Description: Represents a collection of beneficiaries. Useful for cases
-// where a business process requires a number of payouts to be created based
-// on a known set of beneficiaries, e.g payroll.
+// Description: Represents a member of a beneficiary group. Beneficiary groups
+// are useful for cases where a business process requires a number of payouts
+// to be created based on a known set of beneficiaries, e.g payroll.
 // 
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)
@@ -19,21 +19,21 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class BeneficiaryGroup
+public class BeneficiaryGroupMember
 {
     public Guid ID { get; set; }
 
     /// <summary>
-    /// Gets or Sets the merchant id.
+    /// The ID of the beneficiary for the membership.
     /// </summary>
     [Required]
-    public Guid MerchantID { get; set; }
+    public Guid BeneficiaryID { get; set; }
 
     /// <summary>
-    /// The descriptive name for the beneficiary group.
+    /// The ID of the beneficiary group for the membership.
     /// </summary>
-    [Required(ErrorMessage = "The Beneficiary Group Name is required.")]
-    public string? GroupName { get; set; }
+    [Required]
+    public Guid BeneficiaryGroupID { get; set; }
 
     /// <summary>
     /// Timestamp indicating when the group was created.
@@ -41,18 +41,13 @@ public class BeneficiaryGroup
     public DateTimeOffset Inserted { get; set; }
 
     /// <summary>
-    /// Timestamp indicating when the group was last updated.
+    /// The beneficiary for this membership.
     /// </summary>
-    public DateTimeOffset LastUpdated { get; set; }
+    public Beneficiary? Beneficiary { get; set; }
 
     /// <summary>
-    /// The existing group members.
-    /// </summary>
-    public ICollection<BeneficiaryGroupMember>? GroupMembers { get; set; }
-
-    /// <summary>
-    /// Places all the beneficiary group's properties into a dictionary. Useful for testing
-    /// when HTML form encoding is required.
+    /// Places all the beneficiary group member's properties into a dictionary. Useful
+    /// for testing when HTML form encoding is required.
     /// </summary>
     /// <returns>A dictionary with all the beneficiary's non-collection properties 
     /// represented as key-value pairs.</returns>
@@ -61,8 +56,8 @@ public class BeneficiaryGroup
         var dict = new Dictionary<string, string>();
 
         dict.Add(nameof(ID), ID.ToString());
-        dict.Add(nameof(MerchantID), MerchantID.ToString());
-        dict.Add(nameof(GroupName), GroupName ?? string.Empty);
+        dict.Add(nameof(BeneficiaryID), BeneficiaryID.ToString());
+        dict.Add(nameof(BeneficiaryGroupID), BeneficiaryGroupID.ToString());
 
         return dict;
     }
