@@ -12,38 +12,37 @@
 //  License: MIT
 // -----------------------------------------------------------------------------
 
-namespace NoFrixion.MoneyMoov.Enums
+namespace NoFrixion.MoneyMoov;
+
+public enum PaymentRequestStatusFilterEnum
 {
-    public enum PaymentRequestStatusFilterEnum
-    {
-        /// <summary>
-        /// Default filter to get all payment requests regardless of Status
-        /// </summary>
-        All,
+    /// <summary>
+    /// Default filter to get all payment requests regardless of Status
+    /// </summary>
+    All,
 
-        /// <summary>
-        /// No events have been recorded for the payment request.
-        /// </summary>
-        None,
+    /// <summary>
+    /// No events have been recorded for the payment request.
+    /// </summary>
+    None,
 
-        /// <summary>
-        /// The payment attempt was successful and the request amount has been fully paid.
-        /// </summary>
-        FullyPaid,
+    /// <summary>
+    /// The payment attempt was successful and the request amount has been fully paid.
+    /// </summary>
+    FullyPaid,
 
-        /// <summary>
-        /// The payment attempt was successful but the amount paid was less than the requested amount.
-        /// </summary>
-        PartiallyPaid,
+    /// <summary>
+    /// The payment attempt was successful but the amount paid was less than the requested amount.
+    /// </summary>
+    PartiallyPaid,
 
-        /// <summary>
-        /// Payments over the expected amount have been received.
-        /// </summary>
-        OverPaid,
+    /// <summary>
+    /// Payments over the expected amount have been received.
+    /// </summary>
+    OverPaid,
 
-        /// <summary>
-        /// For card payments the payment was voided prior to settlement.
-        /// </summary>
-        Voided
-    }
+    /// <summary>
+    /// For card payments the payment was voided prior to settlement.
+    /// </summary>
+    Voided
 }

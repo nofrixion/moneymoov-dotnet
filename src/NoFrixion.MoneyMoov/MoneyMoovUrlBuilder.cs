@@ -177,4 +177,16 @@ public static class MoneyMoovUrlBuilder
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.BENEFICIARIES_ENDPOINT}";
     }
+
+    public static string BeneficiaryGroupsGetAllApiUrl(string moneyMoovBaseUrl, Guid merchantID)
+    {
+        var url = $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.BENEFICIARY_GROUPS_GETALL_ENDPOINT}";
+
+        if (merchantID != Guid.Empty)
+        {
+            url = url.Replace(MoneyApiEndPointParameters.MERCHANT_ID_PARAMETER, merchantID.ToString());
+        }
+
+        return url;
+    }
 }
