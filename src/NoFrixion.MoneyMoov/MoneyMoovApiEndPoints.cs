@@ -15,11 +15,19 @@
 
 namespace NoFrixion.MoneyMoov;
 
+public static class MoneyApiEndPointParameters
+{
+    /// <summary>
+    /// Url parameter that acts as a place-holder for a merchant ID.
+    /// </summary>
+    public const string MERCHANT_ID_PARAMETER = "{merchantid}";
+}
+
 /// <summary>
 /// Convenience class to hold the MoneyMoov API endpoints to save them being hard coded
 /// in multiple places or requiring a configuration file setting.
 /// </summary>
-public class MoneyMoovApiEndPoints
+public static class MoneyMoovApiEndPoints
 {
     /// <summary>
     /// The URL to access the main NoFrixion MoneyMoov Accounts API.
@@ -85,4 +93,19 @@ public class MoneyMoovApiEndPoints
     /// The URL to access the main NoFrixion MoneyMoov User API.
     /// </summary>
     public const string USER_ENDPOINT = "user";
+
+    /// <summary>
+    /// The URL to get all the beneficiaries for a merchant end point.
+    /// </summary>
+    public const string BENEFICIARIES_GETALL_ENDPOINT = $"merchants/{MoneyApiEndPointParameters.MERCHANT_ID_PARAMETER}/beneficiaries";
+
+    /// <summary>
+    /// The URL to for operations on a single beneficiary end point.
+    /// </summary>
+    public const string BENEFICIARIES_ENDPOINT = $"merchants/beneficiaries";
+
+    /// <summary>
+    /// The URL to get all the beneficiary groups for a merchant end point.
+    /// </summary>
+    public const string BENEFICIARY_GROUPS_GETALL_ENDPOINT = $"merchants/{MoneyApiEndPointParameters.MERCHANT_ID_PARAMETER}/beneficiarygroups";
 }

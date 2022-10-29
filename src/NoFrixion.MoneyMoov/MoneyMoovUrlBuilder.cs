@@ -160,4 +160,33 @@ public static class MoneyMoovUrlBuilder
     {
         return $"{moneyMoovBaseUrl}/metadata/whoami";
     }
+
+    public static string BeneficiariesGetAllApiUrl(string moneyMoovBaseUrl, Guid merchantID)
+    {
+        var url = $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.BENEFICIARIES_GETALL_ENDPOINT}";
+
+        if(merchantID != Guid.Empty)
+        {
+            url = url.Replace(MoneyApiEndPointParameters.MERCHANT_ID_PARAMETER, merchantID.ToString());
+        }
+
+        return url;
+    }
+
+    public static string BeneficiariesApiUrl(string moneyMoovBaseUrl)
+    {
+        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.BENEFICIARIES_ENDPOINT}";
+    }
+
+    public static string BeneficiaryGroupsGetAllApiUrl(string moneyMoovBaseUrl, Guid merchantID)
+    {
+        var url = $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.BENEFICIARY_GROUPS_GETALL_ENDPOINT}";
+
+        if (merchantID != Guid.Empty)
+        {
+            url = url.Replace(MoneyApiEndPointParameters.MERCHANT_ID_PARAMETER, merchantID.ToString());
+        }
+
+        return url;
+    }
 }
