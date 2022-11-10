@@ -37,5 +37,8 @@ public enum PaymentMethodTypeEnum
     /// </summary>
     lightning = 4,
 
+    /// <summary>
+    /// Pay with a previously stored card token.
+    /// </summary>
     cardtoken = 8,
 }
