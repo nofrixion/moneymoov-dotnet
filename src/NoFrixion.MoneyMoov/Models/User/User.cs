@@ -61,4 +61,9 @@ public class User
     /// </summary>
     [JsonIgnore]
     public Guid MerchantID { get; set; }
+
+    /// <summary>
+    /// Flag indicating if a user has a pending invitation.
+    /// </summary>
+    public bool IsInvitee { get; set; }
 }
