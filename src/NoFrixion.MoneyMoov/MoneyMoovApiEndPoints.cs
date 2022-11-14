@@ -102,7 +102,7 @@ public static class MoneyMoovApiEndPoints
     /// <summary>
     /// The URL to for operations on a single beneficiary end point.
     /// </summary>
-    public const string BENEFICIARIES_ENDPOINT = $"merchants/beneficiaries";
+    public const string BENEFICIARIES_ENDPOINT = $"beneficiaries";
 
     /// <summary>
     /// The URL to get all the beneficiary groups for a merchant end point.
