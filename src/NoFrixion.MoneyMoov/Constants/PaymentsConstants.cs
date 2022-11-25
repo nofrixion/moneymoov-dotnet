@@ -60,4 +60,9 @@ public static class PaymentsConstants
     /// Dummy sort code used in dev and sandbox.
     /// </summary>
     public const string DUMMY_SORT_CODE = "040002";
+
+    /// <summary>
+    /// The format string for Fiat amounts.
+    /// </summary>
+    public const string FIAT_AMOUNT_FORMAT_STRING = "0.##";
 }
