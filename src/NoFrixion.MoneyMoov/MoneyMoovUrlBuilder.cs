@@ -18,6 +18,10 @@ namespace NoFrixion.MoneyMoov;
 
 public static class MoneyMoovUrlBuilder
 {
+    public const string DEFAULT_MONEYMOOV_BASE_URL = "https://api.nofrixion.com/api/v1/";
+
+    public const string SANDBOX_MONEYMOOV_BASE_URL = "https://api-sandbox.nofrixion.com/api/v1/";
+
     public static string AccountsApiUrl(string moneyMoovBaseUrl)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.ACCOUNTS_ENDPOINT}/";
@@ -161,6 +165,15 @@ public static class MoneyMoovUrlBuilder
         return $"{moneyMoovBaseUrl}/metadata/whoami";
     }
 
+    /// <summary>
+    /// The MoneyMoov URL to check the identity of a request's merchant access token.
+    /// </summary>
+    /// <returns>A URL for the MoneyMoov whoami end point.</returns>
+    public static string WhoamiMerchantUrl(string moneyMoovBaseUrl)
+    {
+        return $"{moneyMoovBaseUrl}/metadata/whoamimerchant";
+    }
+
     public static string BeneficiariesGetAllApiUrl(string moneyMoovBaseUrl, Guid merchantID)
     {
         var url = $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.BENEFICIARIES_GETALL_ENDPOINT}";
@@ -188,5 +201,14 @@ public static class MoneyMoovUrlBuilder
         }
 
         return url;
+    }
+
+    /// <summary>
+    /// The MoneyMoov URL to echo a request message.
+    /// </summary>
+    /// <returns>A URL for the MoneyMoov echo end point.</returns>
+    public static string EchoUrl(string moneyMoovBaseUrl)
+    {
+        return $"{moneyMoovBaseUrl}/metadata/echo";
     }
 }

@@ -13,14 +13,13 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using LanguageExt;
 using NoFrixion.MoneyMoov.Models;
 
 namespace NoFrixion.MoneyMoov.Services;
 
 public interface IMoneyMoovService
 {
-    Task<Either<NoFrixionProblem, NoFrixionVersion>> VersionAsync();
+    Task<MoneyMoovApiResponse<NoFrixionVersion>> VersionAsync();
 
-    Task<Either<NoFrixionProblem, User>> WhoamiAsync();
+    //Task<Either<NoFrixionProblem, User>> WhoamiAsync();
 }

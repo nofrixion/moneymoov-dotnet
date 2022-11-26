@@ -13,6 +13,7 @@
 	<PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
     <PackageReference Include="LanguageExt.Core" Version="4.0.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
