@@ -45,7 +45,7 @@ public static class MoneyMoovUrlBuilder
 
     public static string MerchantAccountTransactionsApiUrl(string moneyMoovBaseUrl, string accountId)
     {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.ACCOUNTS_ENDPOINT}/{accountId}/{MoneyMoovApiEndPoints.MERCHANT_TRANSACTIONS_ENDPOINT}";
+        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.TRANSACTIONS_ENDPOINT}/{accountId}";
     }
 
     public static string MerchantAccountsApiUrl(string moneyMoovBaseUrl)

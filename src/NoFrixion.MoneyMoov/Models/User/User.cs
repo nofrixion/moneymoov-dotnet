@@ -35,11 +35,11 @@ public class User
     public string EmailAddress { get; set; } = string.Empty;
 
     /// <summary>
-    /// The Auth0UserID for a newly created user. This field is only required
+    /// The IdentityUserID for a newly created user. This field is only required
     /// when a new user is being created. It doesn't need to be sent.
     /// </summary>
     [JsonIgnore]
-    public string Auth0UserID { get; set; } = string.Empty;
+    public string IdentityUserID { get; set; } = string.Empty;
 
     /// <summary>
     /// The company name specified by a newly registered sandbox user. This field
@@ -61,4 +61,9 @@ public class User
     /// </summary>
     [JsonIgnore]
     public Guid MerchantID { get; set; }
+
+    /// <summary>
+    /// Flag indicating if a user has a pending invitation.
+    /// </summary>
+    public bool IsInvitee { get; set; }
 }

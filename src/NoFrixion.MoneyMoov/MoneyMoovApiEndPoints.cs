@@ -102,10 +102,15 @@ public static class MoneyMoovApiEndPoints
     /// <summary>
     /// The URL to for operations on a single beneficiary end point.
     /// </summary>
-    public const string BENEFICIARIES_ENDPOINT = $"merchants/beneficiaries";
+    public const string BENEFICIARIES_ENDPOINT = $"beneficiaries";
 
     /// <summary>
     /// The URL to get all the beneficiary groups for a merchant end point.
     /// </summary>
     public const string BENEFICIARY_GROUPS_GETALL_ENDPOINT = $"merchants/{MoneyApiEndPointParameters.MERCHANT_ID_PARAMETER}/beneficiarygroups";
+
+    /// <summary>
+    /// The URL to access the main NoFrixion MoneyMoov Transactions API.
+    /// </summary>
+    public const string TRANSACTIONS_ENDPOINT = "transactions";
 }
