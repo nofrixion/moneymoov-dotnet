@@ -14,6 +14,7 @@
 //-----------------------------------------------------------------------------
 
 using LanguageExt;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
@@ -28,6 +29,8 @@ namespace NoFrixion.MoneyMoov
         Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, HttpContent content);
 
         Uri GetBaseUri();
+
+        NoFrixionProblemDetails CheckAccessToken(string accessToken, string callerName);
     }
 
     public class MoneyMoovApiClient : IMoneyMoovApiClient
@@ -59,6 +62,18 @@ namespace NoFrixion.MoneyMoov
         public Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, HttpContent content)
         {
             return ExecAsync<T>(BuildRequest(HttpMethod.Post, path, string.Empty, content));
+        }
+
+        public NoFrixionProblemDetails CheckAccessToken(string accessToken, string callerName)
+        {
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                return NoFrixionProblemDetails.MissingAccessToken(HttpStatusCode.PreconditionFailed, callerName);
+            }
+            else
+            {
+                return NoFrixionProblemDetails.Empty;
+            }
         }
 
         private HttpRequestMessage BuildRequest(

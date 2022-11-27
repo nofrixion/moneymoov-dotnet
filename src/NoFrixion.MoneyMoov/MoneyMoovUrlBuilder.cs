@@ -117,9 +117,16 @@ public static class MoneyMoovUrlBuilder
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANT_GET_TOKEN_ENDPOINT}";
     }
 
-    public static string UserRolesApiUrl(string moneyMoovBaseUrl)
+    public static string UserRolesApiUrl(string moneyMoovBaseUrl, Guid merchantID)
     {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANTS_ENDPOINT}/userroles";
+        var url = $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANT_GET_USERROLES_ENDPOINT}";
+
+        if (merchantID != Guid.Empty)
+        {
+            url = url.Replace(MoneyApiEndPointParameters.MERCHANT_ID_PARAMETER, merchantID.ToString());
+        }
+
+        return url;
     }
 
     /// <summary>

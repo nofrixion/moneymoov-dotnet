@@ -60,6 +60,11 @@ public static class MoneyMoovApiEndPoints
     public const string MERCHANT_GET_TOKEN_ENDPOINT = "merchants/{id}/tokens";
 
     /// <summary>
+    /// The URL for the NoFrixion MoneyMoov merchant get user roles API.
+    /// </summary>
+    public const string MERCHANT_GET_USERROLES_ENDPOINT = "merchants/{id}/userroles";
+
+    /// <summary>
     /// The URL to acquire a strong token that can be used to approve a payout.
     /// </summary>
     public const string MERCHANT_PAYOUT_ACQUIRE_TOKEN_ENDPOINT = "payouts/acquiretoken";

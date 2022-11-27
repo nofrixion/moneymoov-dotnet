@@ -27,6 +27,8 @@ public class MoneyMoovTestBase<T> where T : class
         public HttpClient CreateClient(string name) => new HttpClient();
     }
 
+    protected readonly string SandboxAccessToken;
+
     public MoneyMoovTestBase(ITestOutputHelper testOutputHelper)
     {
         LoggerFactory = new LoggerFactory();
@@ -36,6 +38,8 @@ public class MoneyMoovTestBase<T> where T : class
         Configuration = JsonConfiguration.BuildConfiguration();
 
         HttpClientFactory = new DefaultHttpClientFactory();
+
+        SandboxAccessToken = Configuration["MoneyMoov:SandboxAccessToken"];
     }
 
     public LoggerFactory LoggerFactory { get; set; }
@@ -46,4 +50,3 @@ public class MoneyMoovTestBase<T> where T : class
 
     public IHttpClientFactory HttpClientFactory { get; set; }
 }
-

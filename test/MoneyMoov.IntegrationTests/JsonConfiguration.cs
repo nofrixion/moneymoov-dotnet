@@ -1,9 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿//-----------------------------------------------------------------------------
+// Filename: JsonConfiguration.cs
+//
+// Description: A JSON based configuration helper for integrations tests.
+//
+// Author(s):
+// Aaron Clauson (aaron@nofrixion.com)
+// 
+// History:
+// 27 Nov 2022  Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
+//
+// License: 
+// MIT.
+//-----------------------------------------------------------------------------
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
+using System.Reflection;
 
 namespace NoFrixion.MoneyMoov.IntegrationTests;
 
@@ -12,8 +24,10 @@ public static class JsonConfiguration
     public static IConfiguration BuildConfiguration()
     {
         return new ConfigurationBuilder()
-            .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
+            .SetBasePath(Directory.GetParent(AppContext.BaseDirectory)!.FullName)
             .AddJsonFile("appsettings.json", true)
+            .AddEnvironmentVariables()
+            .AddUserSecrets(Assembly.GetExecutingAssembly(), true)
             .Build();
     }
 

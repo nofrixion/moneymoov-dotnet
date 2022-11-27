@@ -56,7 +56,7 @@ public class MetadataClient
     {
         var url = MoneyMoovUrlBuilder.WhoamiUrl(_apiClient.GetBaseUri().ToString());
 
-        var prob = CheckAccessToken(accessToken, nameof(WhoamiMerchantAsync));
+        var prob = _apiClient.CheckAccessToken(accessToken, nameof(WhoamiMerchantAsync));
 
         return !prob.IsEmpty ?
             Task.FromResult(new MoneyMoovApiResponse<User>(HttpStatusCode.PreconditionFailed, new Uri(url), prob)) :
@@ -72,7 +72,7 @@ public class MetadataClient
     {
         var url = MoneyMoovUrlBuilder.WhoamiMerchantUrl(_apiClient.GetBaseUri().ToString());
 
-        var prob = CheckAccessToken(accessToken, nameof(WhoamiMerchantAsync));
+        var prob = _apiClient.CheckAccessToken(accessToken, nameof(WhoamiMerchantAsync));
 
         return !prob.IsEmpty ?
             Task.FromResult(new MoneyMoovApiResponse<Merchant>(HttpStatusCode.PreconditionFailed, new Uri(url), prob)) :
@@ -97,18 +97,5 @@ public class MetadataClient
     {
         var content = JsonContent.Create(new { name = name, message = message });
         return _apiClient.PostAsync<dynamic>(MoneyMoovUrlBuilder.EchoUrl(_apiClient.GetBaseUri().ToString()), content);
-    }
-
-    private NoFrixionProblemDetails CheckAccessToken(string accessToken, string callerName)
-    {
-        if (string.IsNullOrEmpty(accessToken))
-        {
-            _logger.LogWarning($"{callerName} requires an access token but one was not provided.");
-            return NoFrixionProblemDetails.MissingAccessToken(HttpStatusCode.PreconditionFailed, nameof(callerName));
-        }
-        else
-        {
-            return NoFrixionProblemDetails.Empty;
-        }
     }
 }
