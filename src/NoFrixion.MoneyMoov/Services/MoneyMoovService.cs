@@ -11,7 +11,7 @@
 // 06 Jul 2022  Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
 //
 // License: 
-// Proprietary NoFrixion.
+// MIT.
 //-----------------------------------------------------------------------------
 
 using Microsoft.Extensions.Configuration;

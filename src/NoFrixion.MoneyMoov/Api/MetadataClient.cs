@@ -13,6 +13,7 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NoFrixion.MoneyMoov.Models;
@@ -86,6 +87,8 @@ public class MetadataClient
     public Task<MoneyMoovApiResponse<string>> EchoAsync(string name, string message)
     {
         var content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>> { new ( "message", message ), new ( "name", name ) });
+        //var x = Map<string, string>(("message", message), ("name", name));
+        //var content = new FormUrlEncodedContent(Map(("message", message), ("name", name)));
         return _apiClient.PostAsync<string>(MoneyMoovUrlBuilder.EchoUrl(_apiClient.GetBaseUri().ToString()), content);
     }
 

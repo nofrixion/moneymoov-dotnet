@@ -13,7 +13,6 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
@@ -27,6 +26,7 @@ public class MoneyMoovTestBase<T> where T : class
         public HttpClient CreateClient(string name) => new HttpClient();
     }
 
+    protected readonly Guid SandboxMerchantID;
     protected readonly string SandboxAccessToken;
 
     public MoneyMoovTestBase(ITestOutputHelper testOutputHelper)
@@ -39,6 +39,8 @@ public class MoneyMoovTestBase<T> where T : class
 
         HttpClientFactory = new DefaultHttpClientFactory();
 
+        var merchantID = Configuration["MoneyMoov:SandboxMerchantID"];
+        SandboxMerchantID = string.IsNullOrEmpty(merchantID) ? Guid.Empty : Guid.Parse(merchantID);
         SandboxAccessToken = Configuration["MoneyMoov:SandboxAccessToken"];
     }
 
