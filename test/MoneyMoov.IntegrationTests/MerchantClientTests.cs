@@ -217,7 +217,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     /// Tests that the create merchant token method can be correctly called on the sandbox cluster.
     /// </summary>
     [Fact]
-    public async Task Create_Merchant_Token_Sandbox_Test()
+    public async Task Create_And_Delete_Merchant_Token_Sandbox_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
@@ -228,7 +228,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
 
         var tokenAdd = new TokenAdd
         {
-            Description = "Create_Merchant_Token_Sandbox_Test",
+            Description = "Create_Merchant_Token_Sandbox_Test_Delete_Me",
             MerchantID = SandboxMerchantID
         };
         var response = await merchantApiClient.CreateMerchantTokenAsync(SandboxUserAccessToken, tokenAdd);
@@ -238,6 +238,14 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
         Assert.True(response.Data.IsSome);
         Assert.True(response.ProblemDetails.IsEmpty);
 
-        Logger.LogDebug(System.Text.Json.JsonSerializer.Serialize((MerchantToken)response.Data));
+        var merchantToken = (MerchantToken)response.Data;
+        Logger.LogDebug(System.Text.Json.JsonSerializer.Serialize(merchantToken));
+
+        // Clean up.
+        var deleteResponse = await merchantApiClient.DeleteMerchantTokenAsync(SandboxUserAccessToken, merchantToken.ID);
+
+        Assert.NotNull(deleteResponse);
+        Assert.Equal(System.Net.HttpStatusCode.OK, deleteResponse.StatusCode);
+        Assert.True(deleteResponse.ProblemDetails.IsEmpty);
     }
 }

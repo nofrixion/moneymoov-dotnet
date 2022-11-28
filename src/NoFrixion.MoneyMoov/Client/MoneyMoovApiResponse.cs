@@ -47,9 +47,9 @@ public interface IApiResponse
 }
 
 /// <summary>
-/// API Response
+/// API Response.
 /// </summary>
-public class MoneyMoovApiResponse<T> : IApiResponse
+public class MoneyMoovApiResponse
 {
     /// <summary>
     /// Gets or sets the status code (HTTP status code)
@@ -65,27 +65,13 @@ public class MoneyMoovApiResponse<T> : IApiResponse
     /// <value>HTTP headers</value>
     public Option<HttpResponseHeaders> Headers { get; }
 
-    /// <summary>
-    /// Gets or sets the data (parsed HTTP body)
-    /// </summary>
-    /// <value>The data.</value>
-    public Option<T> Data { get; } = Option<T>.None;
-
     public NoFrixionProblemDetails ProblemDetails { get; } = NoFrixionProblemDetails.Empty;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="MoneyMoovApiResponse{T}" /> class.
-    /// </summary>
-    /// <param name="statusCode">HTTP status code.</param>
-    /// <param name="headers">HTTP headers.</param>
-    /// <param name="data">Data (parsed HTTP body)</param>
-    /// <param name="rawContent">Raw content.</param>
-    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, HttpResponseHeaders headers, T data)
+    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, HttpResponseHeaders headers)
     {
         StatusCode = statusCode;
         RequestUri = requestUri ?? Option<Uri>.None;
         Headers = headers;
-        Data = data;
     }
 
     public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, NoFrixionProblemDetails problemDetails) :
@@ -105,3 +91,40 @@ public class MoneyMoovApiResponse<T> : IApiResponse
         return System.Text.Json.JsonSerializer.Serialize(this);
     }
 }
+
+/// <summary>
+/// API Response.
+/// </summary>
+public class MoneyMoovApiResponse<T> : MoneyMoovApiResponse, IApiResponse
+{
+    /// <summary>
+    /// Gets or sets the data (parsed HTTP body)
+    /// </summary>
+    /// <value>The data.</value>
+    public Option<T> Data { get; } = Option<T>.None;
+
+    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, HttpResponseHeaders headers)
+        : base(statusCode, requestUri, headers)
+    { }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MoneyMoovApiResponse{T}" /> class.
+    /// </summary>
+    /// <param name="statusCode">HTTP status code.</param>
+    /// <param name="headers">HTTP headers.</param>
+    /// <param name="data">Data (parsed HTTP body)</param>
+    /// <param name="rawContent">Raw content.</param>
+    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, HttpResponseHeaders headers, T data)
+        :  base(statusCode, requestUri, headers)
+    {
+        Data = data;
+    }
+
+    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, NoFrixionProblemDetails problemDetails)
+    : base(statusCode, requestUri, problemDetails)
+    { }
+
+    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, Option<HttpResponseHeaders> headers, NoFrixionProblemDetails problemDetails)
+        : base(statusCode, requestUri, headers, problemDetails)
+    { }
+ }

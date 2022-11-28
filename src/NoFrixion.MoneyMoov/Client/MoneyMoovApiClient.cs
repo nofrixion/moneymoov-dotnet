@@ -30,6 +30,8 @@ namespace NoFrixion.MoneyMoov
 
         Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content);
 
+        Task<MoneyMoovApiResponse> DeleteAsync(string path, string accessToken);
+
         Uri GetBaseUri();
 
         NoFrixionProblemDetails CheckAccessToken(string accessToken, string callerName);
@@ -47,29 +49,22 @@ namespace NoFrixion.MoneyMoov
         }
 
         public Uri GetBaseUri()
-        {
-            return _httpClient.BaseAddress ?? new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
-        }
+            => _httpClient.BaseAddress ?? new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
 
         public Task<MoneyMoovApiResponse<T>> GetAsync<T>(string path)
-        {
-            return ExecAsync<T>(BuildRequest(HttpMethod.Get, path, string.Empty));
-        }
+            => ExecAsync<T>(BuildRequest(HttpMethod.Get, path, string.Empty, Option<HttpContent>.None));
 
-        public Task<MoneyMoovApiResponse<T>> GetAsync<T>(string path, string accessToken)
-        {
-            return ExecAsync<T>(BuildRequest(HttpMethod.Get, path, accessToken));
-        }
+        public Task<MoneyMoovApiResponse<T>> GetAsync<T>(string path, string accessToken) 
+            => ExecAsync<T>(BuildRequest(HttpMethod.Get, path, accessToken, Option<HttpContent>.None));
 
         public Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, HttpContent content)
-        {
-            return ExecAsync<T>(BuildRequest(HttpMethod.Post, path, string.Empty, content));
-        }
+            => ExecAsync<T>(BuildRequest(HttpMethod.Post, path, string.Empty, content));
 
-        public Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content)
-        {
-            return ExecAsync<T>(BuildRequest(HttpMethod.Post, path, accessToken, content));
-        }
+        public Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content) 
+            => ExecAsync<T>(BuildRequest(HttpMethod.Post, path, accessToken, content));
+
+        public Task<MoneyMoovApiResponse> DeleteAsync(string path, string accessToken)
+            => ExecAsync(BuildRequest(HttpMethod.Delete, path, accessToken, Option<HttpContent>.None));
 
         public NoFrixionProblemDetails CheckAccessToken(string accessToken, string callerName)
         {
@@ -81,14 +76,6 @@ namespace NoFrixion.MoneyMoov
             {
                 return NoFrixionProblemDetails.Empty;
             }
-        }
-
-        private HttpRequestMessage BuildRequest(
-           HttpMethod method,
-           string path,
-           string accessToken)
-        {
-            return BuildRequest(method, path, accessToken, Option<HttpContent>.None); 
         }
 
         private HttpRequestMessage BuildRequest(
@@ -112,6 +99,34 @@ namespace NoFrixion.MoneyMoov
             }
 
             return request;
+        }
+
+        private async Task<MoneyMoovApiResponse> ToApiResponse(HttpResponseMessage response, Uri? requestUri)
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                return new MoneyMoovApiResponse(response.StatusCode, requestUri, response.Headers);
+            }
+            else if ((int)response.StatusCode >= 400 && (int)response.StatusCode < 500 && response.Content.Headers.ContentLength > 0)
+            {
+                var problemDetails = await response.Content.ReadFromJsonAsync<NoFrixionProblemDetails>();
+                return problemDetails != null ?
+                    new MoneyMoovApiResponse(response.StatusCode, requestUri, response.Headers, problemDetails) :
+                    new MoneyMoovApiResponse(response.StatusCode, requestUri, response.Headers,
+                       NoFrixionProblemDetails.DeserialisationFailure(response.StatusCode, $"Json deserialisation failed for type {typeof(NoFrixionProblemDetails)}."));
+            }
+            else
+            {
+                string error = await response.Content.ReadAsStringAsync();
+
+                return new MoneyMoovApiResponse(response.StatusCode, requestUri, response.Headers,
+                    new NoFrixionProblemDetails
+                    {
+                        Status = (int)response.StatusCode,
+                        Title = response.ReasonPhrase,
+                        Detail = error
+                    });
+            }
         }
 
         private async Task<MoneyMoovApiResponse<T>> ToApiResponse<T>(HttpResponseMessage response, Uri? requestUri)
@@ -144,6 +159,14 @@ namespace NoFrixion.MoneyMoov
                         Detail = error
                     });
             }
+        }
+
+        private async Task<MoneyMoovApiResponse> ExecAsync(
+            HttpRequestMessage req,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var response = await _httpClient.SendAsync(req, cancellationToken).ConfigureAwait(false);
+            return await ToApiResponse(response, req.RequestUri);
         }
 
         private async Task<MoneyMoovApiResponse<T>> ExecAsync<T>(
