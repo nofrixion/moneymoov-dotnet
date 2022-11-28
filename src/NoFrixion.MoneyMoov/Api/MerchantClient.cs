@@ -13,6 +13,7 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NoFrixion.MoneyMoov.Models;
@@ -58,7 +59,7 @@ public class MerchantClient
     }
 
     /// <summary>
-    /// Calls the MoneyMoov Merchant get merchant tokens endpoint to get the list of all the mercahnt tokens
+    /// Calls the MoneyMoov Merchant get merchant tokens endpoint to get the list of all the merchant tokens
     /// that have been allocated for the merchant.
     /// </summary>
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
@@ -74,6 +75,25 @@ public class MerchantClient
         {
             var p when p.IsEmpty => _apiClient.GetAsync<MerchantTokenPageResponse>(url, userAccessToken),
             _ => Task.FromResult(new MoneyMoovApiResponse<MerchantTokenPageResponse>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov Merchant create merchant token endpoint to create anew merchant scoped token.
+    /// </summary>
+    /// <param name="userAccessToken">A User scoped JWT access token.</param>
+    /// <param name="token">The detaals of the token to create.</param>
+    /// <returns>If successful, the newly created merchant token.</returns>
+    public Task<MoneyMoovApiResponse<MerchantToken>> CreateMerchantTokenAsync(string userAccessToken, TokenAdd token)
+    {
+        var url = MoneyMoovUrlBuilder.UserMerchantTokensApiUrl(_apiClient.GetBaseUri().ToString());
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetUserRolesAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PostAsync<MerchantToken>(url, userAccessToken, new FormUrlEncodedContent(token.ToDictionary())),
+            _ => Task.FromResult(new MoneyMoovApiResponse<MerchantToken>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }

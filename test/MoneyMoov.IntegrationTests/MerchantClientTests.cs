@@ -17,7 +17,6 @@ using Microsoft.Extensions.Logging;
 using NoFrixion.MoneyMoov;
 using NoFrixion.MoneyMoov.IntegrationTests;
 using NoFrixion.MoneyMoov.Models;
-using System.Collections.Generic;
 using Xunit.Abstractions;
 
 namespace MoneyMoov.IntegrationTests;
@@ -212,5 +211,33 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         Assert.False(response.Data.IsNone);
         Assert.True(response.ProblemDetails.IsEmpty);
+    }
+
+    /// <summary>
+    /// Tests that the create merchant token method can be correctly called on the sandbox cluster.
+    /// </summary>
+    [Fact]
+    public async Task Create_Merchant_Token_Sandbox_Test()
+    {
+        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
+
+        var httpClient = HttpClientFactory.CreateClient();
+        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var apiClient = new MoneyMoovApiClient(httpClient);
+        var merchantApiClient = new MerchantClient(apiClient);
+
+        var tokenAdd = new TokenAdd
+        {
+            Description = "Create_Merchant_Token_Sandbox_Test",
+            MerchantID = SandboxMerchantID
+        };
+        var response = await merchantApiClient.CreateMerchantTokenAsync(SandboxUserAccessToken, tokenAdd);
+
+        Assert.NotNull(response);
+        Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
+        Assert.True(response.Data.IsSome);
+        Assert.True(response.ProblemDetails.IsEmpty);
+
+        Logger.LogDebug(System.Text.Json.JsonSerializer.Serialize((MerchantToken)response.Data));
     }
 }

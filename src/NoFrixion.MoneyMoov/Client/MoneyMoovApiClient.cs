@@ -28,6 +28,8 @@ namespace NoFrixion.MoneyMoov
 
         Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, HttpContent content);
 
+        Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content);
+
         Uri GetBaseUri();
 
         NoFrixionProblemDetails CheckAccessToken(string accessToken, string callerName);
@@ -62,6 +64,11 @@ namespace NoFrixion.MoneyMoov
         public Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, HttpContent content)
         {
             return ExecAsync<T>(BuildRequest(HttpMethod.Post, path, string.Empty, content));
+        }
+
+        public Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content)
+        {
+            return ExecAsync<T>(BuildRequest(HttpMethod.Post, path, accessToken, content));
         }
 
         public NoFrixionProblemDetails CheckAccessToken(string accessToken, string callerName)
@@ -111,8 +118,6 @@ namespace NoFrixion.MoneyMoov
         {
             if (response.IsSuccessStatusCode && response.Content.Headers.ContentLength > 0)
             {
-                var responseStr = await response.Content.ReadAsStringAsync();
-
                 var result = await response.Content.ReadFromJsonAsync<T>();
                 return result != null ?
                     new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers, result) :

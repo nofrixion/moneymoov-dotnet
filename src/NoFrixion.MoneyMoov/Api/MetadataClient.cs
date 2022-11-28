@@ -86,9 +86,7 @@ public class MetadataClient
     /// <returns>A string echo response message.</returns>
     public Task<MoneyMoovApiResponse<string>> EchoAsync(string name, string message)
     {
-        var content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>> { new ( "message", message ), new ( "name", name ) });
-        //var x = Map<string, string>(("message", message), ("name", name));
-        //var content = new FormUrlEncodedContent(Map(("message", message), ("name", name)));
+        var content = new FormUrlEncodedContent(Map.create(("message", message), ("name", name)).ToDictionary());
         return _apiClient.PostAsync<string>(MoneyMoovUrlBuilder.EchoUrl(_apiClient.GetBaseUri().ToString()), content);
     }
 
@@ -98,7 +96,7 @@ public class MetadataClient
     /// <returns>A JSON echo response message.</returns>
     public Task<MoneyMoovApiResponse<dynamic>> EchoJsonAsync(string name, string message)
     {
-        var content = JsonContent.Create(new { name = name, message = message });
+        var content = JsonContent.Create(new { name, message });
         return _apiClient.PostAsync<dynamic>(MoneyMoovUrlBuilder.EchoUrl(_apiClient.GetBaseUri().ToString()), content);
     }
 }
