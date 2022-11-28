@@ -14,6 +14,8 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using System;
+
 namespace NoFrixion.MoneyMoov;
 
 public static class MoneyMoovUrlBuilder
@@ -112,9 +114,16 @@ public static class MoneyMoovUrlBuilder
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.USER_ENDPOINT}/settings";
     }
 
-    public static string UserMerchantGetTokensApiUrl(string moneyMoovBaseUrl)
+    public static string MerchantGetTokensApiUrl(string moneyMoovBaseUrl, Guid merchantID)
     {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANT_GET_TOKEN_ENDPOINT}";
+        var url = $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANT_GET_TOKEN_ENDPOINT}";
+
+        if (merchantID != Guid.Empty)
+        {
+            url = url.Replace(MoneyApiEndPointParameters.MERCHANT_ID_PARAMETER, merchantID.ToString());
+        }
+
+        return url;
     }
 
     public static string UserRolesApiUrl(string moneyMoovBaseUrl, Guid merchantID)

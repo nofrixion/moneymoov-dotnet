@@ -111,6 +111,8 @@ namespace NoFrixion.MoneyMoov
         {
             if (response.IsSuccessStatusCode && response.Content.Headers.ContentLength > 0)
             {
+                var responseStr = await response.Content.ReadAsStringAsync();
+
                 var result = await response.Content.ReadFromJsonAsync<T>();
                 return result != null ?
                     new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers, result) :

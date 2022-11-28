@@ -17,7 +17,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NoFrixion.MoneyMoov.Models;
 using System.Net;
-using System.Net.Http.Json;
 
 namespace NoFrixion.MoneyMoov;
 
@@ -39,20 +38,42 @@ public class MerchantClient
     }
 
     /// <summary>
-    /// Calls the MoneyMoov UserRoles Merchant endpoint to get the list of uses who have been
-    /// assigned a role on the merchant..
+    /// Calls the MoneyMoov UserRoles Merchant endpoint to get the list of users who have been
+    /// assigned a role on the merchant.
     /// </summary>
-    /// <param name="accessToken">A Merchant JWT access token.</param>
+    /// <param name="auserAccessToken">A User scoped JWT access token.</param>
     /// <param name="merchantID">The ID of the merchant to get the user roles for.</param>
-    /// <returns>If successful a list of the user role assignments for the merchant.</returns>
-    public Task<MoneyMoovApiResponse<UserRole>> GetUserRolesAsync(string accessToken, Guid merchantID)
+    /// <returns>If successful, a list of the user role assignments for the merchant.</returns>
+    public Task<MoneyMoovApiResponse<IEnumerable<UserRole>>> GetUserRolesAsync(string userAccessToken, Guid merchantID)
     {
         var url = MoneyMoovUrlBuilder.UserRolesApiUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
-        var prob = _apiClient.CheckAccessToken(accessToken, nameof(GetUserRolesAsync));
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetUserRolesAsync));
 
-        return !prob.IsEmpty ?
-            Task.FromResult(new MoneyMoovApiResponse<UserRole>(HttpStatusCode.PreconditionFailed, new Uri(url), prob)) :
-            _apiClient.GetAsync<UserRole>(url, accessToken);
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<IEnumerable<UserRole>>(url, userAccessToken),
+            _ => Task.FromResult(new MoneyMoovApiResponse<IEnumerable<UserRole>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov Merchant get merchant tokens endpoint to get the list of all the mercahnt tokens
+    /// that have been allocated for the merchant.
+    /// </summary>
+    /// <param name="userAccessToken">A User scoped JWT access token.</param>
+    /// <param name="merchantID">The ID of the merchant to get the merchant tokens for.</param>
+    /// <returns>If successful, a list of tokens for the merchant.</returns>
+    public Task<MoneyMoovApiResponse<MerchantTokenPageResponse>> GetMerchantTokensAsync(string userAccessToken, Guid merchantID)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantGetTokensApiUrl(_apiClient.GetBaseUri().ToString(), merchantID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetUserRolesAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<MerchantTokenPageResponse>(url, userAccessToken),
+            _ => Task.FromResult(new MoneyMoovApiResponse<MerchantTokenPageResponse>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
     }
 }

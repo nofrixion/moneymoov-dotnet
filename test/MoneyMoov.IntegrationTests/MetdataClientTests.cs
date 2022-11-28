@@ -176,7 +176,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
 
     /// <summary>
     /// Tests that the a success response is received when an attempt is made to call
-    /// the whoami merchant endpoint without an valid access token.
+    /// the whoami merchant endpoint without a valid access token.
     /// </summary>
     [Fact]
     public async Task Whoami_Merchant_Sandbox_Valid_Token_Test()
@@ -188,7 +188,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         var apiClient = new MoneyMoovApiClient(httpClient);
         var metadataApiClient = new MetadataClient(apiClient);
 
-        var response = await metadataApiClient.WhoamiMerchantAsync(SandboxAccessToken);
+        var response = await metadataApiClient.WhoamiMerchantAsync(SandboxMerchantAccessToken);
 
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
@@ -196,6 +196,30 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         Assert.True(response.ProblemDetails.IsEmpty);
 
         Logger.LogDebug(System.Text.Json.JsonSerializer.Serialize((Merchant)response.Data));
+    }
+
+    /// <summary>
+    /// Tests that the a success response is received when an attempt is made to call
+    /// the whoami user endpoint without an valid access token.
+    /// </summary>
+    [Fact]
+    public async Task Whoami_Sandbox_Valid_Token_Test()
+    {
+        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
+
+        var httpClient = HttpClientFactory.CreateClient();
+        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var apiClient = new MoneyMoovApiClient(httpClient);
+        var metadataApiClient = new MetadataClient(apiClient);
+
+        var response = await metadataApiClient.WhoamiAsync(SandboxUserAccessToken);
+
+        Assert.NotNull(response);
+        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+        Assert.False(response.Data.IsNone);
+        Assert.True(response.ProblemDetails.IsEmpty);
+
+        Logger.LogDebug(System.Text.Json.JsonSerializer.Serialize((User)response.Data));
     }
 
     /// <summary>

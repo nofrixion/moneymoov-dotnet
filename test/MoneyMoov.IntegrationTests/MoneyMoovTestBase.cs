@@ -27,7 +27,8 @@ public class MoneyMoovTestBase<T> where T : class
     }
 
     protected readonly Guid SandboxMerchantID;
-    protected readonly string SandboxAccessToken;
+    protected readonly string SandboxMerchantAccessToken;
+    protected readonly string SandboxUserAccessToken;
 
     public MoneyMoovTestBase(ITestOutputHelper testOutputHelper)
     {
@@ -41,7 +42,8 @@ public class MoneyMoovTestBase<T> where T : class
 
         var merchantID = Configuration["MoneyMoov:SandboxMerchantID"];
         SandboxMerchantID = string.IsNullOrEmpty(merchantID) ? Guid.Empty : Guid.Parse(merchantID);
-        SandboxAccessToken = Configuration["MoneyMoov:SandboxAccessToken"];
+        SandboxMerchantAccessToken = Configuration["MoneyMoov:SandboxMerchantAccessToken"];
+        SandboxUserAccessToken = Configuration["MoneyMoov:SandboxUserAccessToken"];
     }
 
     public LoggerFactory LoggerFactory { get; set; }
