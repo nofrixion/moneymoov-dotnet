@@ -8,7 +8,6 @@
 // 
 // History:
 // 15 Oct 2021  Donal O'Connor   Created, Carmichael House, Dublin, Ireland.
-// 09 Jul 2022  Aaron Clauson    Renamed from MoneyMoovUrlBuilder to MoneyMoovUrlBuilder.
 //
 // License: 
 // MIT.
@@ -16,8 +15,55 @@
 
 namespace NoFrixion.MoneyMoov;
 
+public enum MoneyMoovResources
+{
+    accounts,
+
+    merchants,
+
+    tokens,
+
+    userroles
+}
+
 public static class MoneyMoovUrlBuilder
 {
+    public const string DEFAULT_MONEYMOOV_BASE_URL = "https://api.nofrixion.com/api/v1/";
+
+    public const string SANDBOX_MONEYMOOV_BASE_URL = "https://api-sandbox.nofrixion.com/api/v1/";
+
+    /// <summary>
+    /// Available endpoint URLs for the Accounts resource.
+    /// </summary>
+    public static class AccountsApi
+    {
+        public static string AccountsApiUrl(string moneyMoovBaseUrl)
+        {
+            return $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/";
+        }
+    }
+
+    /// <summary>
+    /// Available endpoint URLs for the Merchants resource.
+    /// </summary>
+    public static class MerchantsApi
+    {
+        public static string CreateTokenUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.tokens}";
+
+        public static string DeleteTokenUrl(string moneyMoovBaseUrl, Guid tokenID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.tokens}/{tokenID}";
+
+        public static string GetUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}";
+
+        public static string GetTokensUrl(string moneyMoovBaseUrl, Guid merchantID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.tokens}";
+
+         public static string GetUserRolesUrl(string moneyMoovBaseUrl, Guid merchantID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.userroles}";
+    }
+
     public static string AccountsApiUrl(string moneyMoovBaseUrl)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.ACCOUNTS_ENDPOINT}/";
@@ -108,14 +154,16 @@ public static class MoneyMoovUrlBuilder
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.USER_ENDPOINT}/settings";
     }
 
-    public static string UserMerchantGetTokensApiUrl(string moneyMoovBaseUrl)
+    public static string UserRolesApiUrl(string moneyMoovBaseUrl, Guid merchantID)
     {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANT_GET_TOKEN_ENDPOINT}";
-    }
+        var url = $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANT_GET_USERROLES_ENDPOINT}";
 
-    public static string UserRolesApiUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANTS_ENDPOINT}/userroles";
+        if (merchantID != Guid.Empty)
+        {
+            url = url.Replace(MoneyApiEndPointParameters.MERCHANT_ID_PARAMETER, merchantID.ToString());
+        }
+
+        return url;
     }
 
     /// <summary>
@@ -161,6 +209,15 @@ public static class MoneyMoovUrlBuilder
         return $"{moneyMoovBaseUrl}/metadata/whoami";
     }
 
+    /// <summary>
+    /// The MoneyMoov URL to check the identity of a request's merchant access token.
+    /// </summary>
+    /// <returns>A URL for the MoneyMoov whoami end point.</returns>
+    public static string WhoamiMerchantUrl(string moneyMoovBaseUrl)
+    {
+        return $"{moneyMoovBaseUrl}/metadata/whoamimerchant";
+    }
+
     public static string BeneficiariesGetAllApiUrl(string moneyMoovBaseUrl, Guid merchantID)
     {
         var url = $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.BENEFICIARIES_GETALL_ENDPOINT}";
@@ -188,5 +245,14 @@ public static class MoneyMoovUrlBuilder
         }
 
         return url;
+    }
+
+    /// <summary>
+    /// The MoneyMoov URL to echo a request message.
+    /// </summary>
+    /// <returns>A URL for the MoneyMoov echo end point.</returns>
+    public static string EchoUrl(string moneyMoovBaseUrl)
+    {
+        return $"{moneyMoovBaseUrl}/metadata/echo";
     }
 }

@@ -11,121 +11,86 @@
 // 06 Jul 2022  Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
 //
 // License: 
-// Proprietary NoFrixion.
+// MIT.
 //-----------------------------------------------------------------------------
 
-using LanguageExt;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using NoFrixion.MoneyMoov.Models;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 
 namespace NoFrixion.MoneyMoov.Services;
 
 public class MoneyMoovService : IMoneyMoovService
 {
-    private const int MAXIMUM_ERROR_LENGTH = 1024;
-
-    protected readonly ILogger _logger;
-    protected readonly IConfiguration _config;
-    protected readonly HttpClient _httpClient;
-    protected readonly string _moneyMoovBaseUrl;
-
-    protected string _accessToken;
+    private readonly ILogger _logger;
+    private readonly IConfiguration _config;
+    private readonly IHttpClientFactory _httpClientFactory;
+    private Uri _moneyMoovBaseUri;
 
     public MoneyMoovService(
         ILogger<MoneyMoovService> logger,
         IConfiguration configuration,
-        string accessToken, 
-        HttpClient httpClient)
+        IHttpClientFactory httpClientFactory)
     {
         _logger = logger;
         _config = configuration;
-        _httpClient = httpClient;
-        _accessToken = accessToken;
+        _httpClientFactory = httpClientFactory;
 
-        _moneyMoovBaseUrl = configuration[MoneyMoovConfigKeys.MONEYMOOV_BASE_URL];
-    }
+        string baseUrlStr = configuration[MoneyMoovConfigKeys.MONEYMOOV_BASE_URL];
 
-    protected virtual Task<NoFrixionProblem> PrepareAuthenticatedClient(bool isAccessTokenRequired = false)
-    {
-        if (isAccessTokenRequired)
+        if (string.IsNullOrEmpty(baseUrlStr))
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+            _moneyMoovBaseUri = new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+            _logger.LogDebug($"{nameof(MoneyMoovService)} created with default base URI of {_moneyMoovBaseUri}.");
         }
-
-        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-        return Task.FromResult(NoFrixionProblem.Empty);
-    }
-
-    public async Task<Either<NoFrixionProblem, NoFrixionVersion>> VersionAsync()
-    {
-        var problem = await PrepareAuthenticatedClient(false);
-
-        if (!problem.IsEmpty())
+        else if (Uri.TryCreate(baseUrlStr, UriKind.Absolute, out var baseUri))
         {
-            return problem;
+            _moneyMoovBaseUri = baseUri;
+            _logger.LogDebug($"{nameof(MoneyMoovService)} created with base URI of {_moneyMoovBaseUri}.");
         }
         else
         {
-            var url = MoneyMoovUrlBuilder.VersionUrl(_moneyMoovBaseUrl);
-            var response = await _httpClient.GetAsync(url);
-            return await FromResponse<NoFrixionVersion>(response);
+            _logger.LogError($"The base URI supplied to the MoneyMoov service was not a valid URI, {baseUrlStr}. Using default of {MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL}.");
+            _moneyMoovBaseUri = new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
         }
     }
 
-    public async Task<Either<NoFrixionProblem, User>> WhoamiAsync()
+    /// <summary>
+    /// Attempts to update the base URL of the MoneyMoov API for this service to use.
+    /// </summary>
+    /// <param name="url">The new base URL to set.</param>
+    /// <returns>True if the URL was successfully updated, otherwise false.</returns>
+    public bool SetBaseUrl(string url)
     {
-        var problem = await PrepareAuthenticatedClient(true);
-
-        if (!problem.IsEmpty())
+        if (!string.IsNullOrEmpty(url) && Uri.TryCreate(url, UriKind.Absolute, out var baseUri))
         {
-            return problem;
+            _moneyMoovBaseUri = baseUri;
+            _logger.LogDebug($"{nameof(MoneyMoovService)} updated base URI to {_moneyMoovBaseUri}.");
+            return true;
         }
         else
         {
-            var url = MoneyMoovUrlBuilder.WhoamiUrl(_moneyMoovBaseUrl);
-            var response = await _httpClient.GetAsync(url);
-            return await FromResponse<User>(response);
+            _logger.LogWarning($"The base URI supplied was not a valid URI. It should be in the format {MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL}. Base URI was not updated.");
+            return false;
         }
     }
 
-    protected async Task<Either<NoFrixionProblem, T>> FromResponse<T>(HttpResponseMessage response)
+    public Task<MoneyMoovApiResponse<NoFrixionVersion>> VersionAsync()
     {
-        if (response.IsSuccessStatusCode)
-        {
-            var version =  await response.Content.ReadFromJsonAsync<T>();
-            return version != null ? version :
-                new NoFrixionProblem($"The MoneyMoov {typeof(T).Name} details could not be deserialised in {nameof(MoneyMoovService)}.");
-        }
-        else if(response.Content != null )
-        {
-            if (response.Content.Headers.ContentType?.MediaType == "application/problem+json")
-            {
-                // TODO: Improve the JSON parsing. Possibly switch NoFrixion problem to mirror the ASP.NET MVC ProblemDetails type.
-                string probDetailsJson = await response.Content.ReadAsStringAsync();
-                _logger.LogDebug($"Problem details JSON=" + probDetailsJson);
-                dynamic probDetails = JObject.Parse(probDetailsJson);
-                string detail = probDetails?.detail ?? string.Empty;
-                int.TryParse(probDetails?.status as string, out int errorCode);
+        var metadataClient = new MetadataClient(new MoneyMoovApiClient(GetHttpClient()));
+        return metadataClient.GetVersionAsync();
+    }
 
-                return detail != string.Empty ?
-                    new NoFrixionProblem(detail, errorCode) :
-                    new NoFrixionProblem($"The MoneyMoov problem details could not be deserialised in {nameof(MoneyMoovService)}.");
-            }
-            else
-            {
-                string? error = await response.Content.ReadAsStringAsync();
-                error = error?.Length > MAXIMUM_ERROR_LENGTH ? error.Substring(MAXIMUM_ERROR_LENGTH) : error;
-                return new NoFrixionProblem($"An error response of {response.StatusCode} was received from the MoneyMoov API in {nameof(MoneyMoovService)}. {error}");
-            }
-        }
-        else
-        {
-            return new NoFrixionProblem($"An error response of {response.StatusCode} was received from the MoneyMoov API.");
-        }
+    public Task<MoneyMoovApiResponse<User>> WhoamiAsync(string accessToken)
+    {
+        var metadataClient = new MetadataClient(new MoneyMoovApiClient(GetHttpClient()));
+        return metadataClient.WhoamiAsync(accessToken);
+    }
+
+    private HttpClient GetHttpClient()
+    {
+        var httpClient = _httpClientFactory.CreateClient(MoneyMoovApiClient.HTTP_CLIENT_NAME);
+        httpClient.BaseAddress = _moneyMoovBaseUri;
+        return httpClient;
     }
 }
