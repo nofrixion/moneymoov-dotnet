@@ -23,10 +23,20 @@ using Xunit.Abstractions;
 
 namespace MoneyMoov.IntegrationTests;
 
+[Trait("Category", "integration")]
 public class MoneyMoovServiceTests : MoneyMoovTestBase<MoneyMoovServiceTests>
 {
     public MoneyMoovServiceTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     { }
+
+    [Fact]
+    public void Get_ConfigSettings_Test()
+    {
+        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
+        Logger.LogDebug($"MerchantID={base.SandboxMerchantID}.");
+        Logger.LogDebug($"Merchant Access Token={base.SandboxMerchantAccessToken?.Length()}.");
+        Logger.LogDebug($"User Access Token={base.SandboxUserAccessToken?.Length()}.");
+    }
 
     /// <summary>
     /// Tests that the get version method can be correctly called on the production cluster.

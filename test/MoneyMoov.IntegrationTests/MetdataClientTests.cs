@@ -14,16 +14,14 @@
 //-----------------------------------------------------------------------------
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using Newtonsoft.Json;
 using NoFrixion.MoneyMoov;
 using NoFrixion.MoneyMoov.IntegrationTests;
 using NoFrixion.MoneyMoov.Models;
-using System.Text.Json.Nodes;
 using Xunit.Abstractions;
 
 namespace MoneyMoov.IntegrationTests;
 
+[Trait("Category", "integration")]
 public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
 {
     public MetadataClientTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)

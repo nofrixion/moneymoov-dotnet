@@ -21,6 +21,7 @@ using Xunit.Abstractions;
 
 namespace MoneyMoov.IntegrationTests;
 
+[Trait("Category", "integration")]
 public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
 {
     public MerchantClientTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
