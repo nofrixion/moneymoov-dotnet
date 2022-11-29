@@ -21,6 +21,10 @@ public enum MoneyMoovResources
 
     merchants,
 
+    metadata,
+
+    paymentrequests,
+
     tokens,
 
     userroles
@@ -37,10 +41,8 @@ public static class MoneyMoovUrlBuilder
     /// </summary>
     public static class AccountsApi
     {
-        public static string AccountsApiUrl(string moneyMoovBaseUrl)
-        {
-            return $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/";
-        }
+        public static string GetAccountsApiUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/";
     }
 
     /// <summary>
@@ -62,6 +64,36 @@ public static class MoneyMoovUrlBuilder
 
          public static string GetUserRolesUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.userroles}";
+    }
+
+    /// <summary>
+    /// Available endpoint URLs for the Metadata resource.
+    /// </summary>
+    public static class MetadataApi
+    {
+        public static string EchoUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.metadata}/echo";
+
+        public static string VersionUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.metadata}/version";
+
+        public static string WhoamiUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.metadata}/whoami";
+
+        public static string WhoamiMerchantUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.metadata}/whoamimerchant";
+    }
+
+    /// <summary>
+    /// Available endpoint URLs for the PaymentRequests resource.
+    /// </summary>
+    public static class PaymentRequestsApi
+    {
+        public static string CreatePaymentRequestUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.paymentrequests}";
+
+        public static string GetByIDUrl(string moneyMoovBaseUrl, Guid paymentRequestID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}/{paymentRequestID}";
     }
 
     public static string AccountsApiUrl(string moneyMoovBaseUrl)
@@ -191,33 +223,6 @@ public static class MoneyMoovUrlBuilder
         return $"{moneyMoovBaseUrl}/pay/result";
     }
 
-    /// <summary>
-    /// The MoneyMoov URL to retrieve the current version of the API.
-    /// </summary>
-    /// <returns>A URL for the MoneyMoov version end point.</returns>
-    public static string VersionUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/metadata/version";
-    }
-
-    /// <summary>
-    /// The MoneyMoov URL to check the identity of a request's access token.
-    /// </summary>
-    /// <returns>A URL for the MoneyMoov whoami end point.</returns>
-    public static string WhoamiUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/metadata/whoami";
-    }
-
-    /// <summary>
-    /// The MoneyMoov URL to check the identity of a request's merchant access token.
-    /// </summary>
-    /// <returns>A URL for the MoneyMoov whoami end point.</returns>
-    public static string WhoamiMerchantUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/metadata/whoamimerchant";
-    }
-
     public static string BeneficiariesGetAllApiUrl(string moneyMoovBaseUrl, Guid merchantID)
     {
         var url = $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.BENEFICIARIES_GETALL_ENDPOINT}";
@@ -245,14 +250,5 @@ public static class MoneyMoovUrlBuilder
         }
 
         return url;
-    }
-
-    /// <summary>
-    /// The MoneyMoov URL to echo a request message.
-    /// </summary>
-    /// <returns>A URL for the MoneyMoov echo end point.</returns>
-    public static string EchoUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/metadata/echo";
     }
 }

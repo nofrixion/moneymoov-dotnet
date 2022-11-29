@@ -58,7 +58,7 @@ public class MetadataClient : IMetadataClient
     /// <returns>The MoneyMoov version information.</returns>
     public Task<MoneyMoovApiResponse<NoFrixionVersion>> GetVersionAsync()
     {
-        return _apiClient.GetAsync<NoFrixionVersion>(MoneyMoovUrlBuilder.VersionUrl(_apiClient.GetBaseUri().ToString()));
+        return _apiClient.GetAsync<NoFrixionVersion>(MoneyMoovUrlBuilder.MetadataApi.VersionUrl(_apiClient.GetBaseUri().ToString()));
     }
 
     /// <summary>
@@ -68,9 +68,9 @@ public class MetadataClient : IMetadataClient
     /// <returns>If the token is valid the authenticated User's details are returned.</returns>
     public Task<MoneyMoovApiResponse<User>> WhoamiAsync(string userAccessToken)
     {
-        var url = MoneyMoovUrlBuilder.WhoamiUrl(_apiClient.GetBaseUri().ToString());
+        var url = MoneyMoovUrlBuilder.MetadataApi.WhoamiUrl(_apiClient.GetBaseUri().ToString());
 
-        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(WhoamiMerchantAsync));
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(WhoamiAsync));
 
         return !prob.IsEmpty ?
             Task.FromResult(new MoneyMoovApiResponse<User>(HttpStatusCode.PreconditionFailed, new Uri(url), prob)) :
@@ -84,7 +84,7 @@ public class MetadataClient : IMetadataClient
     /// <returns>If the token is valid the authenticated Merchant's details are returned.</returns>
     public Task<MoneyMoovApiResponse<Merchant>> WhoamiMerchantAsync(string merchantAccessToken)
     {
-        var url = MoneyMoovUrlBuilder.WhoamiMerchantUrl(_apiClient.GetBaseUri().ToString());
+        var url = MoneyMoovUrlBuilder.MetadataApi.WhoamiMerchantUrl(_apiClient.GetBaseUri().ToString());
 
         var prob = _apiClient.CheckAccessToken(merchantAccessToken, nameof(WhoamiMerchantAsync));
 
@@ -100,7 +100,7 @@ public class MetadataClient : IMetadataClient
     public Task<MoneyMoovApiResponse<string>> EchoAsync(string name, string message)
     {
         var content = new FormUrlEncodedContent(Map.create(("message", message), ("name", name)).ToDictionary());
-        return _apiClient.PostAsync<string>(MoneyMoovUrlBuilder.EchoUrl(_apiClient.GetBaseUri().ToString()), content);
+        return _apiClient.PostAsync<string>(MoneyMoovUrlBuilder.MetadataApi.EchoUrl(_apiClient.GetBaseUri().ToString()), content);
     }
 
     /// <summary>
@@ -110,6 +110,6 @@ public class MetadataClient : IMetadataClient
     public Task<MoneyMoovApiResponse<dynamic>> EchoJsonAsync(string name, string message)
     {
         var content = JsonContent.Create(new { name, message });
-        return _apiClient.PostAsync<dynamic>(MoneyMoovUrlBuilder.EchoUrl(_apiClient.GetBaseUri().ToString()), content);
+        return _apiClient.PostAsync<dynamic>(MoneyMoovUrlBuilder.MetadataApi.EchoUrl(_apiClient.GetBaseUri().ToString()), content);
     }
 }

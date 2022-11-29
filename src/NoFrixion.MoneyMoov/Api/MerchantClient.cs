@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: MerchsntClient.cs
+// Filename: MerchantClient.cs
 //
 // Description: An API client to call the MoneyMoov Merchant API end point.
 //
@@ -42,7 +42,7 @@ public class MerchantClient : IMerchantClient
         _logger = NullLogger.Instance;
     }
 
-    public MerchantClient(IMoneyMoovApiClient apiClient, ILogger<MetadataClient> logger)
+    public MerchantClient(IMoneyMoovApiClient apiClient, ILogger<MerchantClient> logger)
     {
         _apiClient = apiClient;
         _logger = logger;
@@ -59,7 +59,7 @@ public class MerchantClient : IMerchantClient
     {
         var url = MoneyMoovUrlBuilder.MerchantsApi.GetTokensUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
-        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetUserRolesAsync));
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetMerchantTokensAsync));
 
         return prob switch
         {
@@ -78,7 +78,7 @@ public class MerchantClient : IMerchantClient
     {
         var url = MoneyMoovUrlBuilder.MerchantsApi.CreateTokenUrl(_apiClient.GetBaseUri().ToString());
 
-        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetUserRolesAsync));
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(CreateMerchantTokenAsync));
 
         return prob switch
         {
@@ -97,7 +97,7 @@ public class MerchantClient : IMerchantClient
     {
         var url = MoneyMoovUrlBuilder.MerchantsApi.DeleteTokenUrl(_apiClient.GetBaseUri().ToString(), tokenID);
 
-        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetUserRolesAsync));
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(DeleteMerchantTokenAsync));
 
         return prob switch
         {
