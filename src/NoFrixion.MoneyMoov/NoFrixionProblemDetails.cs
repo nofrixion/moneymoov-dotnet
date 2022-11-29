@@ -1,12 +1,22 @@
-﻿//  Microsoft.AspNetCore.Http.Extensions
+﻿//-----------------------------------------------------------------------------
+// Filename: NoFrixionProblemDetails.cs
+//
+// Description: Based on the ASP.NET Core ProbelmDetails class. Provides a
+// standard way to deliver API error information to callers.
+//
+// Author(s):
+// Aaron Clauson (aaron@nofrixion.com)
+// 
+// History:
+// 26 Nov 2022  Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
+//
+// License: 
+// MIT.
+//-----------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections;
 using System.Net;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace NoFrixion.MoneyMoov;
 
@@ -88,5 +98,94 @@ public class NoFrixionProblemDetails
 
     public string ToJson() =>
         System.Text.Json.JsonSerializer.Serialize(this);
+
+    public string ToErrorMessage()
+    {
+        string error = string.Empty;
+
+        if (!string.IsNullOrEmpty(Title))
+        {
+            error = Title + ": ";
+        }
+
+        if (Status == null)
+        {
+            error = $"({Status}) ";
+        }
+
+        if (!string.IsNullOrEmpty(Detail))
+        {
+            error += Detail;
+        }
+
+        if (Extensions?.Count > 0)
+        {
+            error += " Validation errors: ";
+
+            foreach (var kvp in Extensions)
+            {
+                if (kvp.Value is IEnumerable)
+                {
+                   error += kvp.Key + ": ";
+
+                    foreach (var item in (kvp.Value as IEnumerable)!)
+                    {
+                        error += item.ToString() + ", ";
+                    }
+                }
+                else
+                {
+                    error += $"{kvp.Key}: {kvp.Value?.ToString()}, ";
+                }
+            }
+        }
+
+        error += ".";
+
+        return error;
+    }
+
+    public string ToHtmlErrorMessage()
+    {
+        string htmlError = string.Empty;
+        
+        if(!string.IsNullOrEmpty(Title))
+        {
+            htmlError = $"<p><strong>{Title}</strong></p>";
+        }
+
+        if(!string.IsNullOrEmpty(Detail))
+        {
+            htmlError += $"<p>{Detail}</p>";
+        }
+
+        if(Extensions?.Count > 0)
+        {
+            htmlError += "<ul>";
+
+            foreach (var kvp in Extensions)
+            {
+                if (kvp.Value is IEnumerable)
+                {
+                    htmlError += $"<li>{kvp.Key}<ul>";
+
+                    foreach(var item in (kvp.Value as IEnumerable)!)
+                    {
+                        htmlError += item.ToString();
+                    }
+
+                    htmlError += $"</ul></li>";
+                }
+                else
+                {
+                    htmlError += $"<li>{kvp.Key}: {kvp.Value?.ToString()}</li>";
+                }
+            }
+
+            htmlError += "</ul>";
+        }
+
+        return htmlError;
+    }
     
 }

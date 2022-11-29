@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
-// Filename: MoneyMoovServiceTests.cs
+// Filename: MoneyMoovApiTests.cs
 //
-// Description: Integrations tests for the MoneyMoov service which calls
-// the MoneyMoov API end points.
+// Description: Integrations tests for the MoneyMoovApi which supplies clients
+// for the MoneyMoov API end points.
 //
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)
@@ -18,14 +18,13 @@ using Microsoft.Extensions.Logging;
 using NoFrixion.MoneyMoov;
 using NoFrixion.MoneyMoov.IntegrationTests;
 using NoFrixion.MoneyMoov.Models;
-using NoFrixion.MoneyMoov.Services;
 using Xunit.Abstractions;
 
 namespace MoneyMoov.IntegrationTests;
 
-public class MoneyMoovServiceTests : MoneyMoovTestBase<MoneyMoovServiceTests>
+public class MoneyMoovApiTests : MoneyMoovTestBase<MoneyMoovApiTests>
 {
-    public MoneyMoovServiceTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+    public MoneyMoovApiTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     { }
 
     /// <summary>
@@ -36,12 +35,12 @@ public class MoneyMoovServiceTests : MoneyMoovTestBase<MoneyMoovServiceTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var moneyMoovService = new MoneyMoovService(
-            LoggerFactory.CreateLogger<MoneyMoovService>(),
+        var moneyMoovApi = new MoneyMoovApi(
+            LoggerFactory.CreateLogger<MoneyMoovApi>(),
             Configuration,
             HttpClientFactory);
 
-        var response = await moneyMoovService.VersionAsync();
+        var response = await moneyMoovApi.MetadataClient().GetVersionAsync();
 
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
@@ -60,14 +59,14 @@ public class MoneyMoovServiceTests : MoneyMoovTestBase<MoneyMoovServiceTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var moneyMoovService = new MoneyMoovService(
-            LoggerFactory.CreateLogger<MoneyMoovService>(),
-            Configuration,
-            HttpClientFactory);
+        var moneyMoovApi = new MoneyMoovApi(
+          LoggerFactory.CreateLogger<MoneyMoovApi>(),
+          Configuration,
+          HttpClientFactory);
 
-        moneyMoovService.SetBaseUrl(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        moneyMoovApi.SetBaseUrl(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
-        var response = await moneyMoovService.VersionAsync();
+        var response = await moneyMoovApi.MetadataClient().GetVersionAsync();
 
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);

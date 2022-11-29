@@ -22,7 +22,20 @@ using System.Net.Http.Json;
 
 namespace NoFrixion.MoneyMoov;
 
-public class MetadataClient
+public interface IMetadataClient
+{
+    Task<MoneyMoovApiResponse<NoFrixionVersion>> GetVersionAsync();
+
+    Task<MoneyMoovApiResponse<User>> WhoamiAsync(string userAccessToken);
+
+    Task<MoneyMoovApiResponse<Merchant>> WhoamiMerchantAsync(string merchantAccessToken);
+
+    Task<MoneyMoovApiResponse<string>> EchoAsync(string name, string message);
+
+    Task<MoneyMoovApiResponse<dynamic>> EchoJsonAsync(string name, string message);
+}
+
+public class MetadataClient : IMetadataClient
 {
     private readonly ILogger _logger;
     private readonly IMoneyMoovApiClient _apiClient;
@@ -51,33 +64,33 @@ public class MetadataClient
     /// <summary>
     /// Calls the MoneyMoov WhoAmI endpoint to check whether a User access token is valid.
     /// </summary>
-    /// <param name="accessToken">A User JWT access token.</param>
+    /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <returns>If the token is valid the authenticated User's details are returned.</returns>
-    public Task<MoneyMoovApiResponse<User>> WhoamiAsync(string accessToken)
+    public Task<MoneyMoovApiResponse<User>> WhoamiAsync(string userAccessToken)
     {
         var url = MoneyMoovUrlBuilder.WhoamiUrl(_apiClient.GetBaseUri().ToString());
 
-        var prob = _apiClient.CheckAccessToken(accessToken, nameof(WhoamiMerchantAsync));
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(WhoamiMerchantAsync));
 
         return !prob.IsEmpty ?
             Task.FromResult(new MoneyMoovApiResponse<User>(HttpStatusCode.PreconditionFailed, new Uri(url), prob)) :
-            _apiClient.GetAsync<User>(url, accessToken);
+            _apiClient.GetAsync<User>(url, userAccessToken);
     }
 
     /// <summary>
     /// Calls the MoneyMoov WhoAmI Merchant endpoint to check whether a Merchant access token is valid.
     /// </summary>
-    /// <param name="accessToken">A Merchant JWT access token.</param>
+    /// <param name="merchantAccessToken">A Merchant scoped JWT access token.</param>
     /// <returns>If the token is valid the authenticated Merchant's details are returned.</returns>
-    public Task<MoneyMoovApiResponse<Merchant>> WhoamiMerchantAsync(string accessToken)
+    public Task<MoneyMoovApiResponse<Merchant>> WhoamiMerchantAsync(string merchantAccessToken)
     {
         var url = MoneyMoovUrlBuilder.WhoamiMerchantUrl(_apiClient.GetBaseUri().ToString());
 
-        var prob = _apiClient.CheckAccessToken(accessToken, nameof(WhoamiMerchantAsync));
+        var prob = _apiClient.CheckAccessToken(merchantAccessToken, nameof(WhoamiMerchantAsync));
 
         return !prob.IsEmpty ?
             Task.FromResult(new MoneyMoovApiResponse<Merchant>(HttpStatusCode.PreconditionFailed, new Uri(url), prob)) :
-            _apiClient.GetAsync<Merchant>(url, accessToken);
+            _apiClient.GetAsync<Merchant>(url, merchantAccessToken);
     }
 
     /// <summary>

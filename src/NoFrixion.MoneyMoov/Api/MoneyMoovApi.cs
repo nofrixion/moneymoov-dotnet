@@ -1,8 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: MoneyMoovService.cs
+// Filename: MoneyMoovApi.cs
 //
-// Description: Service to generate an authorised client and interact with the
-// NoFrixion MoneyMoov service.
+// Description: Main class for accessing the MoneyMoov API resources.
 //
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)
@@ -16,19 +15,25 @@
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NoFrixion.MoneyMoov.Models;
 
-namespace NoFrixion.MoneyMoov.Services;
+namespace NoFrixion.MoneyMoov;
 
-public class MoneyMoovService : IMoneyMoovService
+public interface IMoneyMoovApi
+{
+    IMerchantClient MerchantClient();
+
+    IMetadataClient MetadataClient();
+}
+
+public class MoneyMoovApi : IMoneyMoovApi
 {
     private readonly ILogger _logger;
     private readonly IConfiguration _config;
     private readonly IHttpClientFactory _httpClientFactory;
     private Uri _moneyMoovBaseUri;
 
-    public MoneyMoovService(
-        ILogger<MoneyMoovService> logger,
+    public MoneyMoovApi(
+        ILogger<MoneyMoovApi> logger,
         IConfiguration configuration,
         IHttpClientFactory httpClientFactory)
     {
@@ -36,17 +41,17 @@ public class MoneyMoovService : IMoneyMoovService
         _config = configuration;
         _httpClientFactory = httpClientFactory;
 
-        string baseUrlStr = configuration[MoneyMoovConfigKeys.MONEYMOOV_BASE_URL];
+        string baseUrlStr = configuration[MoneyMoovConfigKeys.NOFRIXION_MONEYMOOV_API_BASE_URL];
 
         if (string.IsNullOrEmpty(baseUrlStr))
         {
             _moneyMoovBaseUri = new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
-            _logger.LogDebug($"{nameof(MoneyMoovService)} created with default base URI of {_moneyMoovBaseUri}.");
+            _logger.LogDebug($"{nameof(MoneyMoovApi)} created with default base URI of {_moneyMoovBaseUri}.");
         }
         else if (Uri.TryCreate(baseUrlStr, UriKind.Absolute, out var baseUri))
         {
             _moneyMoovBaseUri = baseUri;
-            _logger.LogDebug($"{nameof(MoneyMoovService)} created with base URI of {_moneyMoovBaseUri}.");
+            _logger.LogDebug($"{nameof(MoneyMoovApi)} created with base URI of {_moneyMoovBaseUri}.");
         }
         else
         {
@@ -65,7 +70,7 @@ public class MoneyMoovService : IMoneyMoovService
         if (!string.IsNullOrEmpty(url) && Uri.TryCreate(url, UriKind.Absolute, out var baseUri))
         {
             _moneyMoovBaseUri = baseUri;
-            _logger.LogDebug($"{nameof(MoneyMoovService)} updated base URI to {_moneyMoovBaseUri}.");
+            _logger.LogDebug($"{nameof(MoneyMoovApi)} updated base URI to {_moneyMoovBaseUri}.");
             return true;
         }
         else
@@ -75,22 +80,16 @@ public class MoneyMoovService : IMoneyMoovService
         }
     }
 
-    public Task<MoneyMoovApiResponse<NoFrixionVersion>> VersionAsync()
-    {
-        var metadataClient = new MetadataClient(new MoneyMoovApiClient(GetHttpClient()));
-        return metadataClient.GetVersionAsync();
-    }
-
-    public Task<MoneyMoovApiResponse<User>> WhoamiAsync(string accessToken)
-    {
-        var metadataClient = new MetadataClient(new MoneyMoovApiClient(GetHttpClient()));
-        return metadataClient.WhoamiAsync(accessToken);
-    }
-
     private HttpClient GetHttpClient()
     {
         var httpClient = _httpClientFactory.CreateClient(MoneyMoovApiClient.HTTP_CLIENT_NAME);
         httpClient.BaseAddress = _moneyMoovBaseUri;
         return httpClient;
     }
+
+    public IMerchantClient MerchantClient()
+     => new MerchantClient(new MoneyMoovApiClient(GetHttpClient()));
+
+    public IMetadataClient MetadataClient()
+     => new MetadataClient(new MoneyMoovApiClient(GetHttpClient()));
 }

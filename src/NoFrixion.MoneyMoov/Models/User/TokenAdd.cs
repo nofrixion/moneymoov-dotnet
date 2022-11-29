@@ -48,13 +48,13 @@ public class TokenAdd : IValidatableObject
 
         if (!ValidateDescription())
         {
-            yield return new ValidationResult("{nameof(Description) can not have any special characters");
+            yield return new ValidationResult($"{nameof(Description)} can not have any special characters");
         }
     }
 
     private bool ValidateDescription()
     {
-        Regex regex = new Regex(@"^[a-zA-Z0-9_\s]*$");
+        Regex regex = new Regex(@"^[a-zA-Z0-9_\- ]*$");
 
         if (regex.IsMatch(this.Description))
         {
