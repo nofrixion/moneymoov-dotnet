@@ -24,7 +24,9 @@ public interface IPaymentRequestClient
 {
     Task<MoneyMoovApiResponse<PaymentRequest>> GetPaymentRequestAsync(string accessToken, Guid paymentRequestID);
 
-    Task<MoneyMoovApiResponse<MerchantToken>> CreateMerchantTokenAsync(string accessToken, PaymentRequestCreate paymentRequestCreate);
+    Task<MoneyMoovApiResponse<PaymentRequest>> CreatePaymentRequestAsync(string accessToken, PaymentRequestCreate paymentRequestCreate);
+
+    //Task<MoneyMoovApiResponse> DeletePaymentRequestAsync(string accessToken, Guid paymentRequestID);
 }
 
 public class PaymentRequestClient : IPaymentRequestClient
@@ -69,16 +71,35 @@ public class PaymentRequestClient : IPaymentRequestClient
     /// <param name="accessToken">A User or Merchant scoped JWT access token.</param>
     /// <param name="paymentRequestCreate">The details of the payment request to create.</param>
     /// <returns>If successful, the newly created merchant token.</returns>
-    public Task<MoneyMoovApiResponse<MerchantToken>> CreateMerchantTokenAsync(string accessToken, PaymentRequestCreate paymentRequestCreate)
+    public Task<MoneyMoovApiResponse<PaymentRequest>> CreatePaymentRequestAsync(string accessToken, PaymentRequestCreate paymentRequestCreate)
     {
-        var url = MoneyMoovUrlBuilder.PaymentRequestsApi.CreatePaymentRequestUrl(_apiClient.GetBaseUri().ToString());
+        var url = MoneyMoovUrlBuilder.PaymentRequestsApi.CreateUrl(_apiClient.GetBaseUri().ToString());
 
-        var prob = _apiClient.CheckAccessToken(accessToken, nameof(CreateMerchantTokenAsync));
+        var prob = _apiClient.CheckAccessToken(accessToken, nameof(CreatePaymentRequestAsync));
 
         return prob switch
         {
-            var p when p.IsEmpty => _apiClient.PostAsync<MerchantToken>(url, accessToken, new FormUrlEncodedContent(paymentRequestCreate.ToDictionary())),
-            _ => Task.FromResult(new MoneyMoovApiResponse<MerchantToken>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            var p when p.IsEmpty => _apiClient.PostAsync<PaymentRequest>(url, accessToken, new FormUrlEncodedContent(paymentRequestCreate.ToDictionary())),
+            _ => Task.FromResult(new MoneyMoovApiResponse<PaymentRequest>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
+
+    /// <summary>
+    /// Calls the MoneyMoov Merchant delete payment request endpoint to delete an existing payment request.
+    /// </summary>
+    /// <param name="accessToken">A User scoped JWT access token.</param>
+    /// <param name="paymentRequestID">The ID of the payment request to delete.</param>
+    /// <returns>If successful, the newly created merchant token.</returns>
+    //public Task<MoneyMoovApiResponse> DeletePaymentRequestAsync(string accessToken, Guid paymentRequestID)
+    //{
+    //    var url = MoneyMoovUrlBuilder.PaymentRequestsApi.DeleteUrl(_apiClient.GetBaseUri().ToString(), paymentRequestID);
+
+    //    var prob = _apiClient.CheckAccessToken(accessToken, nameof(DeletePaymentRequestAsync));
+
+    //    return prob switch
+    //    {
+    //        var p when p.IsEmpty => _apiClient.DeleteAsync(url, accessToken),
+    //        _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+    //    };
+    //}
 }

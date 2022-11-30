@@ -89,8 +89,11 @@ public static class MoneyMoovUrlBuilder
     /// </summary>
     public static class PaymentRequestsApi
     {
-        public static string CreatePaymentRequestUrl(string moneyMoovBaseUrl)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.paymentrequests}";
+        public static string CreateUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}";
+
+        //public static string DeleteUrl(string moneyMoovBaseUrl, Guid paymentRequestID)
+         //   => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}/{paymentRequestID}";
 
         public static string GetByIDUrl(string moneyMoovBaseUrl, Guid paymentRequestID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}/{paymentRequestID}";
