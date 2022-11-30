@@ -24,7 +24,7 @@ public interface IPaymentRequestClient
 {
     Task<MoneyMoovApiResponse<PaymentRequest>> GetPaymentRequestAsync(string accessToken, Guid paymentRequestID);
 
-    Task<MoneyMoovApiResponse<MerchantToken>> CreateMerchantTokenAsync(string accessToken, PaymentRequestCreate paymentRequestCreate);
+    Task<MoneyMoovApiResponse<PaymentRequest>> CreatePaymentRequestAsync(string accessToken, PaymentRequestCreate paymentRequestCreate);
 }
 
 public class PaymentRequestClient : IPaymentRequestClient
@@ -69,16 +69,16 @@ public class PaymentRequestClient : IPaymentRequestClient
     /// <param name="accessToken">A User or Merchant scoped JWT access token.</param>
     /// <param name="paymentRequestCreate">The details of the payment request to create.</param>
     /// <returns>If successful, the newly created merchant token.</returns>
-    public Task<MoneyMoovApiResponse<MerchantToken>> CreateMerchantTokenAsync(string accessToken, PaymentRequestCreate paymentRequestCreate)
+    public Task<MoneyMoovApiResponse<PaymentRequest>> CreatePaymentRequestAsync(string accessToken, PaymentRequestCreate paymentRequestCreate)
     {
         var url = MoneyMoovUrlBuilder.PaymentRequestsApi.CreatePaymentRequestUrl(_apiClient.GetBaseUri().ToString());
 
-        var prob = _apiClient.CheckAccessToken(accessToken, nameof(CreateMerchantTokenAsync));
+        var prob = _apiClient.CheckAccessToken(accessToken, nameof(CreatePaymentRequestAsync));
 
         return prob switch
         {
-            var p when p.IsEmpty => _apiClient.PostAsync<MerchantToken>(url, accessToken, new FormUrlEncodedContent(paymentRequestCreate.ToDictionary())),
-            _ => Task.FromResult(new MoneyMoovApiResponse<MerchantToken>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            var p when p.IsEmpty => _apiClient.PostAsync<PaymentRequest>(url, accessToken, new FormUrlEncodedContent(paymentRequestCreate.ToDictionary())),
+            _ => Task.FromResult(new MoneyMoovApiResponse<PaymentRequest>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }
