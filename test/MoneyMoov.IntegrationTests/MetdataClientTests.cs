@@ -268,7 +268,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         response.Data.Match(
             Some: x =>
             {
-                var echoResult = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string,string>>(x);
+                var echoResult = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string,string>>(x.ToString());
                 Assert.NotNull(echoResult["name"]);
                 Assert.NotNull(echoResult["message"]);
 
