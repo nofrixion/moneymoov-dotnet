@@ -17,8 +17,6 @@ using LanguageExt;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov
 {
@@ -142,6 +140,7 @@ namespace NoFrixion.MoneyMoov
                 //    Converters = { new JsonStringEnumConverter() },
                 //    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
                 //});
+
                 return result != null ?
                     new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers, result) :
                     new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers, 
