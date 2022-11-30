@@ -268,11 +268,11 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         response.Data.Match(
             Some: x =>
             {
-                var echoResult = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string,string>>(x);
+                var echoResult = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string,string>>(x.ToString());
                 Assert.NotNull(echoResult["name"]);
                 Assert.NotNull(echoResult["message"]);
 
-                Logger.LogDebug($"Rcho Result: name={echoResult["name"]}, message={echoResult["message"]}.");
+                Logger.LogDebug($"Echo Result: name={echoResult["name"]}, message={echoResult["message"]}.");
             },
             None: () => throw new ApplicationException("Should not be here")
         ); 
