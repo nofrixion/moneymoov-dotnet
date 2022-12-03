@@ -70,7 +70,7 @@ namespace NoFrixion.MoneyMoov
         {
             if (string.IsNullOrEmpty(accessToken))
             {
-                return NoFrixionProblemDetails.MissingAccessToken(HttpStatusCode.PreconditionFailed, callerName);
+                return new NoFrixionProblemDetails(HttpStatusCode.PreconditionFailed, $"No access token was available in {callerName}.");
             }
             else
             {
@@ -113,19 +113,13 @@ namespace NoFrixion.MoneyMoov
                 return problemDetails != null ?
                     new MoneyMoovApiResponse(response.StatusCode, requestUri, response.Headers, problemDetails) :
                     new MoneyMoovApiResponse(response.StatusCode, requestUri, response.Headers,
-                       NoFrixionProblemDetails.DeserialisationFailure(response.StatusCode, $"Json deserialisation failed for type {typeof(NoFrixionProblemDetails)}."));
+                       new NoFrixionProblemDetails(response.StatusCode, $"Json deserialisation failed for type {typeof(NoFrixionProblemDetails)}."));
             }
             else
             {
                 string error = await response.Content.ReadAsStringAsync();
 
-                return new MoneyMoovApiResponse(response.StatusCode, requestUri, response.Headers,
-                    new NoFrixionProblemDetails
-                    {
-                        Status = (int)response.StatusCode,
-                        Title = response.ReasonPhrase,
-                        Detail = error
-                    });
+                return new MoneyMoovApiResponse(response.StatusCode, requestUri, response.Headers, new NoFrixionProblemDetails(response.StatusCode, error));
             }
         }
 
@@ -135,36 +129,29 @@ namespace NoFrixion.MoneyMoov
             {
                 var result = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
 
-                //var result = await response.Content.ReadFromJsonAsync<T>(new JsonSerializerOptions
-                //{
-                //    Converters = { new JsonStringEnumConverter() },
-                //    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-                //});
-
                 return result != null ?
                     new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers, result) :
-                    new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers, 
-                        NoFrixionProblemDetails.DeserialisationFailure(response.StatusCode, $"Json deserialisation failed for type {typeof(T)}."));
+                    new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers,
+                        new NoFrixionProblemDetails(response.StatusCode, $"Json deserialisation failed for type {typeof(T)}."));
             }
-            else if((int)response.StatusCode >= 400 && (int)response.StatusCode < 500 && response.Content.Headers.ContentLength > 0)
+            else if (response.Content.Headers.ContentLength > 0)
             {
-                var problemDetails = await response.Content.ReadFromJsonAsync<NoFrixionProblemDetails>();
-                return problemDetails != null ?
-                    new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers, problemDetails) :
-                    new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers, 
-                       NoFrixionProblemDetails.DeserialisationFailure(response.StatusCode, $"Json deserialisation failed for type {typeof(NoFrixionProblemDetails)}."));
+                string contentStr = await response.Content.ReadAsStringAsync();
+
+                var problemDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<NoFrixionProblemDetails>(contentStr);
+
+                if(problemDetails == null)
+                {
+                    problemDetails = new NoFrixionProblemDetails(response.StatusCode, $"Json deserialisation failed for type {typeof(NoFrixionProblemDetails)}.");
+                }
+
+                problemDetails.RawError = contentStr;
+
+                return new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers, problemDetails);
             }
             else
             {
-                string error = await response.Content.ReadAsStringAsync();
-
-                return new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers,
-                    new NoFrixionProblemDetails
-                    {
-                        Status = (int)response.StatusCode,
-                        Title = response.ReasonPhrase,
-                        Detail = error
-                    });
+                return new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers, new NoFrixionProblemDetails(response.StatusCode, string.Empty));
             }
         }
 

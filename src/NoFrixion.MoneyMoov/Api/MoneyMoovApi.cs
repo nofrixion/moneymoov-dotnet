@@ -20,6 +20,8 @@ namespace NoFrixion.MoneyMoov;
 
 public interface IMoneyMoovApi
 {
+    bool SetBaseUrl(string url);
+
     IMerchantClient MerchantClient();
 
     IMetadataClient MetadataClient();
@@ -48,12 +50,12 @@ public class MoneyMoovApi : IMoneyMoovApi
         if (string.IsNullOrEmpty(baseUrlStr))
         {
             _moneyMoovBaseUri = new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
-            _logger.LogDebug($"{nameof(MoneyMoovApi)} created with default base URI of {_moneyMoovBaseUri}.");
+            //_logger.LogDebug($"{nameof(MoneyMoovApi)} created with default base URI of {_moneyMoovBaseUri}.");
         }
         else if (Uri.TryCreate(baseUrlStr, UriKind.Absolute, out var baseUri))
         {
             _moneyMoovBaseUri = baseUri;
-            _logger.LogDebug($"{nameof(MoneyMoovApi)} created with base URI of {_moneyMoovBaseUri}.");
+            //_logger.LogDebug($"{nameof(MoneyMoovApi)} created with base URI of {_moneyMoovBaseUri}.");
         }
         else
         {
@@ -72,7 +74,7 @@ public class MoneyMoovApi : IMoneyMoovApi
         if (!string.IsNullOrEmpty(url) && Uri.TryCreate(url, UriKind.Absolute, out var baseUri))
         {
             _moneyMoovBaseUri = baseUri;
-            _logger.LogDebug($"{nameof(MoneyMoovApi)} updated base URI to {_moneyMoovBaseUri}.");
+            //_logger.LogDebug($"{nameof(MoneyMoovApi)} updated base URI to {_moneyMoovBaseUri}.");
             return true;
         }
         else
@@ -82,7 +84,7 @@ public class MoneyMoovApi : IMoneyMoovApi
         }
     }
 
-    private HttpClient GetHttpClient()
+    protected HttpClient GetHttpClient()
     {
         var httpClient = _httpClientFactory.CreateClient(MoneyMoovApiClient.HTTP_CLIENT_NAME);
         httpClient.BaseAddress = _moneyMoovBaseUri;
