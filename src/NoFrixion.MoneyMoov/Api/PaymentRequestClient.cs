@@ -13,6 +13,7 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using LanguageExt.ClassInstances;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NoFrixion.MoneyMoov.Models;
@@ -23,6 +24,8 @@ namespace NoFrixion.MoneyMoov;
 public interface IPaymentRequestClient
 {
     Task<MoneyMoovApiResponse<PaymentRequest>> GetPaymentRequestAsync(string accessToken, Guid paymentRequestID);
+
+    Task<MoneyMoovApiResponse<PaymentRequest>> GetPaymentRequestByOrderAsync(string accessToken, string orderID);
 
     Task<MoneyMoovApiResponse<PaymentRequest>> CreatePaymentRequestAsync(string accessToken, PaymentRequestCreate paymentRequestCreate);
 
@@ -55,6 +58,26 @@ public class PaymentRequestClient : IPaymentRequestClient
     public Task<MoneyMoovApiResponse<PaymentRequest>> GetPaymentRequestAsync(string accessToken, Guid paymentRequestID)
     {
         var url = MoneyMoovUrlBuilder.PaymentRequestsApi.GetByIDUrl(_apiClient.GetBaseUri().ToString(), paymentRequestID);
+
+        var prob = _apiClient.CheckAccessToken(accessToken, nameof(GetPaymentRequestAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<PaymentRequest>(url, accessToken),
+            _ => Task.FromResult(new MoneyMoovApiResponse<PaymentRequest>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov Merchant get payment request endpoint to get a single payment request by merchant ID and order ID.
+    /// </summary>
+    /// <param name="accessToken">A Merchant scoped JWT access token. NOte must be a merchant token as a merchant ID
+    /// is required when retrieving a payment request by order.</param>
+    /// <param name="orderID">The order ID of the payment request to retrieve.</param>
+    /// <returns>If successful, a payment request object.</returns>
+    public Task<MoneyMoovApiResponse<PaymentRequest>> GetPaymentRequestByOrderAsync(string accessToken, string orderID)
+    {
+        var url = MoneyMoovUrlBuilder.PaymentRequestsApi.GetByOrderIDUrl(_apiClient.GetBaseUri().ToString(), orderID);
 
         var prob = _apiClient.CheckAccessToken(accessToken, nameof(GetPaymentRequestAsync));
 

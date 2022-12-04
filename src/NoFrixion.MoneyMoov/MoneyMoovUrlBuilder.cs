@@ -13,6 +13,8 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using LanguageExt.ClassInstances;
+
 namespace NoFrixion.MoneyMoov;
 
 public enum MoneyMoovResources
@@ -97,6 +99,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string GetByIDUrl(string moneyMoovBaseUrl, Guid paymentRequestID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}/{paymentRequestID}";
+
+        public static string GetByOrderIDUrl(string moneyMoovBaseUrl, string orderID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}/getbyorderid/{orderID}";
     }
 
     public static string AccountsApiUrl(string moneyMoovBaseUrl)

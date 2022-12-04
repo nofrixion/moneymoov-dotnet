@@ -21,6 +21,8 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
 {
+    public const string DESCRIPTION_ALLOWED_CHARS_REGEX = @"[a-zA-Z0-9\-_\.@&\*%\$#!:;'""()\[\] ]+";
+
     /// <summary>
     /// The ID of the merchant to create the payment request for.
     /// </summary>
@@ -68,8 +70,8 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// An optional description for the payment request. If set this field will appear
     /// on the transaction record for some card processors.
     /// </summary>
-    [RegularExpression(@"[a-zA-Z0-9-_\.@&\*%\$#!:; ]+",
-        ErrorMessage = @"The Description can only contain alphanumeric characters and -_.@&*%$#!:; and space.")]
+    [RegularExpression(DESCRIPTION_ALLOWED_CHARS_REGEX,
+        ErrorMessage = @"The Description can only contain alphanumeric characters and -_.@&*%$#!:;'"" and space.")]
     public string? Description { get; set; }
 
     /// <summary>
@@ -352,6 +354,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(CardProcessorMerchantID), CardProcessorMerchantID ?? string.Empty);
         dict.Add(nameof(PartialPaymentMethod), PartialPaymentMethod.ToString());
         dict.Add(nameof(UseHostedPaymentPage), UseHostedPaymentPage.ToString());
+        dict.Add(nameof(SuccessWebHookUrl), SuccessWebHookUrl ?? string.Empty);
 
         return dict;
     }

@@ -239,8 +239,10 @@ public class NoFrixionProblemDetails
             }
         }
 
-
-        error += ".";
+        if (!string.IsNullOrEmpty(error))
+        {
+            error = error.TrimEnd('.') + ".";
+        }
 
         //error += RawError;
 
