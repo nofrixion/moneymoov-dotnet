@@ -30,6 +30,6 @@ public class UserRole
 
     public string EmailAddress { get; set; }
 
-    public string RoleType { get; set; }
+    public UserRolesEnum RoleType { get; set; }
 }
 
