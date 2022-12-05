@@ -189,11 +189,6 @@ public static class MoneyMoovUrlBuilder
         return $"{moneyMoovBaseUrl}/merchants";
     }
 
-    public static string UserSettingsApiUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.USER_ENDPOINT}/settings";
-    }
-
     public static string UserRolesApiUrl(string moneyMoovBaseUrl, Guid merchantID)
     {
         var url = $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANT_GET_USERROLES_ENDPOINT}";
