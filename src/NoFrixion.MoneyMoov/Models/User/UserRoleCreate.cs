@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------------
-//  Filename: MerchantUserRoleAssign.cs
+//  Filename: UserRoleCreate.cs
 // 
 //  Description: Used when assigning a user role to a merchant.
 // 

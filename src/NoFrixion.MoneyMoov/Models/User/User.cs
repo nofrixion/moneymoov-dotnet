@@ -48,11 +48,6 @@ public class User
     [JsonIgnore]
     public string CompanyName { get; set; } = string.Empty;
 
-    /// <summary>
-    /// The optional list of profile settings that have been assigned to the user.
-    /// </summary>
-    public IEnumerable<UserSetting> Settings { get; set; } = new List<UserSetting>();
-
     public bool IsEmpty() => ID == Guid.Empty && EmailAddress == string.Empty;
 
     /// <summary>
