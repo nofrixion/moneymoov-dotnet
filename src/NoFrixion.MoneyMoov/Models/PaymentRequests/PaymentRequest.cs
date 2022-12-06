@@ -292,6 +292,11 @@ public class PaymentRequest : IPaymentRequest
          _ => "€"
      };
 
+    public static decimal GetDisplayAmount(decimal amount, CurrencyTypeEnum currency)
+    {
+        return IsFiat(currency) ? Math.Round(amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES) : amount;
+    }
+
     /// <summary>
     /// Combines the display currency symbol and amount.
     /// </summary>
