@@ -48,4 +48,8 @@ public class PaymentRequestMinimal
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
     public PaymentProcessorsEnum PaymentProcessor { get; set; }
+
+    public string? CallbackUrl { get; set; }
+
+    public string? CardStripePaymentIntentSecret { get; set; }
 }
