@@ -47,7 +47,7 @@ public class PaymentWebHook : WebHook
             ?? Data.To.Identifier?.Number
             ?? string.Empty;
 
-        dict.Add("PaymentID", Data.Id?.ToString() ?? string.Empty);
+        dict.Add("PaymentID", Data.Id?.ToString().ToUpper() ?? string.Empty);
         dict.Add("PaymentType", Event.ToString());
         dict.Add("Amount", Data.Amount.ToString("F"));
         dict.Add("Description", Data.Description);
