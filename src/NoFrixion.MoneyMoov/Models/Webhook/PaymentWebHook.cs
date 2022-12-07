@@ -26,4 +26,37 @@ public class PaymentWebHook : WebHook
     /// </summary>
     [JsonProperty("data")]
     public PayInfo Data { get; set; } = PayInfo.Empty;
+
+    /// <summary>
+    /// Places payment related properties into a dictionary used to send email
+    /// notification from the webhook.
+    /// </summary>
+    /// <returns>A dictionary with payment details properties 
+    /// represented as key-value pairs.</returns>
+    public Dictionary<string, string> ToEmailDictionary()
+    {
+        var dict = new Dictionary<string, string>();
+
+        var fromAccountIndentifier = Data.From.Identifier?.Iban
+            ?? Data.From.Identifier?.SortCode
+            ?? Data.From.Identifier?.Number
+            ?? string.Empty;
+
+        var toAccountIndentifier = Data.To.Identifier?.Iban
+            ?? Data.To.Identifier?.SortCode
+            ?? Data.To.Identifier?.Number
+            ?? string.Empty;
+
+        dict.Add("PaymentID", Data.Id?.ToString() ?? string.Empty);
+        dict.Add("PaymentType", Event.ToString());
+        dict.Add("Amount", Data.Amount.ToString("F"));
+        dict.Add("Description", Data.Description);
+        dict.Add("Date", Data.Date.ToString("dd MMM yyyy HH:mm:ss"));
+        dict.Add("FromAccountName", Data.From.Name ?? string.Empty);
+        dict.Add("FromAccountType", $"{Data.From.Identifier?.Type} - {fromAccountIndentifier}");
+        dict.Add("ToAccountName", Data.To.Name ?? string.Empty);
+        dict.Add("ToAccountType", $"{Data.From.Identifier?.Type} - {toAccountIndentifier}");
+
+        return dict;
+    }
 }
