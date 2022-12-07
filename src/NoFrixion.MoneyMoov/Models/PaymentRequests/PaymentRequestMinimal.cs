@@ -52,4 +52,9 @@ public class PaymentRequestMinimal
     public string? CallbackUrl { get; set; }
 
     public string? CardStripePaymentIntentSecret { get; set; }
+
+    /// <summary>
+    /// The jwk containing the public key
+    /// </summary>
+    public string? Jwk { get; set; }
 }
