@@ -48,4 +48,9 @@ public class PaymentRequestMinimal
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
     public PaymentProcessorsEnum PaymentProcessor { get; set; }
+
+    /// <summary>
+    /// The jwk containing the public key
+    /// </summary>
+    public string? Jwk { get; set; }
 }
