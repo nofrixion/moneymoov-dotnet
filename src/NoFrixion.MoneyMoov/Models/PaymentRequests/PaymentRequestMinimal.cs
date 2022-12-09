@@ -25,6 +25,8 @@ public class PaymentRequestMinimal
 
     public Guid MerchantID { get; set; }
 
+    public string? MerchantName { get; set; }
+
     /// <summary>
     /// The amount of money to request.
     /// </summary>
