@@ -45,6 +45,9 @@ public static class MoneyMoovUrlBuilder
     {
         public static string GetAccountsApiUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/";
+
+        public static string GetPayoutsForAccountApiUrl(string moneyMoovBaseUrl, Guid accountID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/{accountID}/payouts";
     }
 
     /// <summary>
@@ -112,11 +115,6 @@ public static class MoneyMoovUrlBuilder
     public static string AccountStatementApiUrl(string moneyMoovBaseUrl, string? accountId = null)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.ACCOUNTS_ENDPOINT}/{accountId ?? "#accountid#"}/{MoneyMoovApiEndPoints.ACCOUNT_STATEMENT_ENDPOINT}";
-    }
-
-    public static string AccountPendingPayoutsApiUrl(string moneyMoovBaseUrl, string? accountId = null)
-    {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.ACCOUNTS_ENDPOINT}/{accountId ?? "#accountid#"}/pending-payouts";
     }
 
     public static string MerchantsApiUrl(string moneyMoovBaseUrl)
