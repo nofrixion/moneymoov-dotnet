@@ -1,7 +1,7 @@
 ﻿// -----------------------------------------------------------------------------
 //  Filename: AccountIdentifierType.cs
 // 
-//  Description: MerchantAccount identifier type:
+//  Description: PaymentAccount identifier type:
 //  Author(s):
 //  Donal O'Connor (donal@nofrixion.com)
 // 

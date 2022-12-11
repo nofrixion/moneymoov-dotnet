@@ -127,17 +127,17 @@ public static class MoneyMoovUrlBuilder
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.ACCOUNTS_ENDPOINT}/{MoneyMoovApiEndPoints.MERCHANT_TRANSACTIONS_ENDPOINT}";
     }
 
-    public static string MerchantAccountTransactionsApiUrl(string moneyMoovBaseUrl, string accountId)
+    public static string PaymentAccountTransactionsApiUrl(string moneyMoovBaseUrl, string accountId)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.TRANSACTIONS_ENDPOINT}/{accountId}";
     }
 
-    public static string MerchantAccountsApiUrl(string moneyMoovBaseUrl)
+    public static string PaymentAccountsApiUrl(string moneyMoovBaseUrl)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.ACCOUNTS_ENDPOINT}";
     }
 
-    public static string MerchantAccountTransferApiUrl(string moneyMoovBaseUrl)
+    public static string PaymentAccountTransferApiUrl(string moneyMoovBaseUrl)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.TRANSFER_ENDPOINT}";
     }

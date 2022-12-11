@@ -1,13 +1,16 @@
 ﻿// -----------------------------------------------------------------------------
-//  Filename: MerchantAccount.cs
+//  Filename: PaymentAccount.cs
 // 
-//  Description: MerchantAccount class:
+//  Description: Represents an electronic money payment account. Typically
+//  denominated in EUR or GBP.
+//
 //  Author(s):
 //  Donal O'Connor (donal@nofrixion.com)
 // 
 //  History:
 //  21 10 2021  Donal O'Connor   Created, Carmichael House, Dublin, Ireland.
-//  10 12 2022  Aaron Clauson    Adjusted to match the database entity rather than upstream supplier. 
+//  10 12 2022  Aaron Clauson    Adjusted to match the database entity rather than upstream supplier.
+//  11 12 2022  Aaron Clauson    Renamed from PaymentAccount to PaymentAccount.
 //
 //  License:
 //  MIT.
@@ -17,7 +20,7 @@ namespace NoFrixion.MoneyMoov.Models;
 
 #nullable disable
 
-public class MerchantAccount
+public class PaymentAccount
 {
     /// <summary>
     /// Unique id for the account.

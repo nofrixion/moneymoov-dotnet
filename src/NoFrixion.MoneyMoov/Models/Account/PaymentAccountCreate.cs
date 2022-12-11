@@ -1,14 +1,15 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: MerchantAccountCreate.cs
+// Filename: PaymentAccountCreate.cs
 // 
 // Description: Model that can be supplied to the MoneyMoov API to create a mew
-// Merchant account.
+// payment account.
 //
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)
 // 
 // History:
 // 09 Dec 2022  Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
+// 11 Dec 2022  Aaron Clauson   Renamed from PaymentAccountCreate to PaymentAccountCreate.
 // 
 // License:
 // MIT.
@@ -16,7 +17,7 @@
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class MerchantAccountCreate
+public class PaymentAccountCreate
 {
     /// <summary>
     /// The ID of the merchant the payment account is being created for.

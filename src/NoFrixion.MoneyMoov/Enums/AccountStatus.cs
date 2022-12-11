@@ -1,7 +1,7 @@
 ﻿// -----------------------------------------------------------------------------
 //  Filename: AccountStatus.cs
 // 
-//  Description: Enum for the MerchantAccount class:
+//  Description: Enum for the PaymentAccount class:
 //  Author(s):
 //  Donal O'Connor (donal@nofrixion.com)
 // 
