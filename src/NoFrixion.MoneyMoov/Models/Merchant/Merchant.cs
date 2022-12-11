@@ -41,6 +41,8 @@ public class Merchant
     /// </summary>
     public int PaymentAccountLimit { get; set; }
 
+    public DateTimeOffset Inserted { get; set; }
+
     public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
     /// <summary>

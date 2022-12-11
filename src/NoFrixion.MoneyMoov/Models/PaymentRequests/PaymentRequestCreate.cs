@@ -314,8 +314,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     }
 
     /// <summary>
-    /// Places all the payment request's properties into a dictionary. Useful for testing
-    /// when HTML form encoding is required.
+    /// Places all the payment request's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payment request's non-collection properties 
     /// represented as key-value pairs.</returns>

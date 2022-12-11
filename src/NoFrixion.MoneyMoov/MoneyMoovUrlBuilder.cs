@@ -43,8 +43,14 @@ public static class MoneyMoovUrlBuilder
     /// </summary>
     public static class AccountsApi
     {
+        public static string CreateAccountsApiUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/";
+
         public static string GetAccountsApiUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/";
+
+        public static string GetPayoutsForAccountApiUrl(string moneyMoovBaseUrl, Guid accountID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/{accountID}/payouts";
     }
 
     /// <summary>
@@ -66,6 +72,9 @@ public static class MoneyMoovUrlBuilder
 
          public static string GetUserRolesUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.userroles}";
+
+        public static string GetAccountsUrl(string moneyMoovBaseUrl, Guid merchantID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.accounts}";
     }
 
     /// <summary>
@@ -114,11 +123,6 @@ public static class MoneyMoovUrlBuilder
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.ACCOUNTS_ENDPOINT}/{accountId ?? "#accountid#"}/{MoneyMoovApiEndPoints.ACCOUNT_STATEMENT_ENDPOINT}";
     }
 
-    public static string AccountPendingPayoutsApiUrl(string moneyMoovBaseUrl, string? accountId = null)
-    {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.ACCOUNTS_ENDPOINT}/{accountId ?? "#accountid#"}/pending-payouts";
-    }
-
     public static string MerchantsApiUrl(string moneyMoovBaseUrl)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANTS_ENDPOINT}";
@@ -129,17 +133,17 @@ public static class MoneyMoovUrlBuilder
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.ACCOUNTS_ENDPOINT}/{MoneyMoovApiEndPoints.MERCHANT_TRANSACTIONS_ENDPOINT}";
     }
 
-    public static string MerchantAccountTransactionsApiUrl(string moneyMoovBaseUrl, string accountId)
+    public static string PaymentAccountTransactionsApiUrl(string moneyMoovBaseUrl, string accountId)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.TRANSACTIONS_ENDPOINT}/{accountId}";
     }
 
-    public static string MerchantAccountsApiUrl(string moneyMoovBaseUrl)
+    public static string PaymentAccountsApiUrl(string moneyMoovBaseUrl)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.ACCOUNTS_ENDPOINT}";
     }
 
-    public static string MerchantAccountTransferApiUrl(string moneyMoovBaseUrl)
+    public static string PaymentAccountTransferApiUrl(string moneyMoovBaseUrl)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.TRANSFER_ENDPOINT}";
     }
