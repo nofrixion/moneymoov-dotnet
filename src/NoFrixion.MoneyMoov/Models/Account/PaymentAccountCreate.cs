@@ -36,4 +36,20 @@ public class PaymentAccountCreate
     /// suitable to for an account used for general purpose business payments.
     /// </summary>
     public string AccountName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Places all the payment request's properties into a dictionary.
+    /// </summary>
+    /// <returns>A dictionary with all the payment request's non-collection properties 
+    /// represented as key-value pairs.</returns>
+    public Dictionary<string, string> ToDictionary()
+    {
+        var dict = new Dictionary<string, string>();
+
+        dict.Add(nameof(MerchantID), MerchantID.ToString());
+        dict.Add(nameof(Currency), Currency.ToString());
+        dict.Add(nameof(AccountName), AccountName ?? string.Empty);
+
+        return dict;
+    }
 }

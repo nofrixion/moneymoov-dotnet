@@ -43,6 +43,9 @@ public static class MoneyMoovUrlBuilder
     /// </summary>
     public static class AccountsApi
     {
+        public static string CreateAccountsApiUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/";
+
         public static string GetAccountsApiUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/";
 
@@ -69,6 +72,9 @@ public static class MoneyMoovUrlBuilder
 
          public static string GetUserRolesUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.userroles}";
+
+        public static string GetAccountsUrl(string moneyMoovBaseUrl, Guid merchantID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.accounts}";
     }
 
     /// <summary>
