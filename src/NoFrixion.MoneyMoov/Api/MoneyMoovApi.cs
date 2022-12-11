@@ -22,6 +22,8 @@ public interface IMoneyMoovApi
 {
     bool SetBaseUrl(string url);
 
+    IAccountClient AccountClient();
+
     IMerchantClient MerchantClient();
 
     IMetadataClient MetadataClient();
@@ -90,6 +92,9 @@ public class MoneyMoovApi : IMoneyMoovApi
         httpClient.BaseAddress = _moneyMoovBaseUri;
         return httpClient;
     }
+
+    public IAccountClient AccountClient()
+        => new AccountClient(new MoneyMoovApiClient(GetHttpClient()));
 
     public IMerchantClient MerchantClient()
         => new MerchantClient(new MoneyMoovApiClient(GetHttpClient()));
