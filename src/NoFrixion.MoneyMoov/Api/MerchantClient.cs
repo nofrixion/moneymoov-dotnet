@@ -31,6 +31,8 @@ public interface IMerchantClient
     Task<MoneyMoovApiResponse<IEnumerable<UserRole>>> GetUserRolesAsync(string userAccessToken, Guid merchantID);
 
     Task<MoneyMoovApiResponse<IEnumerable<PaymentAccount>>> GetAccountsAsync(string userAccessToken, Guid merchantID);
+
+    Task<MoneyMoovApiResponse<IEnumerable<UserInvite>>> GetUserInvitesAsync(string userAccessToken, Guid merchantID);
 }
 
 public class MerchantClient : IMerchantClient
@@ -144,6 +146,26 @@ public class MerchantClient : IMerchantClient
         {
             var p when p.IsEmpty => _apiClient.GetAsync<IEnumerable<PaymentAccount>>(url, userAccessToken),
             _ => Task.FromResult(new MoneyMoovApiResponse<IEnumerable<PaymentAccount>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov UserInvites Merchant endpoint to get the list of invites that have been
+    /// sent inviting new users to join the merchant.
+    /// </summary>
+    /// <param name="auserAccessToken">A User scoped JWT access token.</param>
+    /// <param name="merchantID">The ID of the merchant to get the invites for.</param>
+    /// <returns>If successful, a list of the user invites for the merchant.</returns>
+    public Task<MoneyMoovApiResponse<IEnumerable<UserInvite>>> GetUserInvitesAsync(string userAccessToken, Guid merchantID)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.GetUserRolesUrl(_apiClient.GetBaseUri().ToString(), merchantID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetUserRolesAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<IEnumerable<UserInvite>>(url, userAccessToken),
+            _ => Task.FromResult(new MoneyMoovApiResponse<IEnumerable<UserInvite>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }
