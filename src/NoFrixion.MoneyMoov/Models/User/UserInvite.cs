@@ -1,0 +1,46 @@
+﻿//-----------------------------------------------------------------------------
+// Filename: UserInvite.cs
+// 
+// Description: UserInvite model
+// Author(s):
+// Saurav Maiti      (saurav@nofrixion.com)
+// 
+// History:
+// 19 Aug 2022     Created, Harcourt Street, Dublin, Ireland.
+// 
+// License:
+// MIT.
+// -----------------------------------------------------------------------------
+
+namespace NoFrixion.MoneyMoov.Models;
+
+public class UserInvite
+{
+    /// <summary>
+    /// Number of hours after which a registration invite is considered expired.
+    /// The invitee will not be able to register until re-invited.
+    /// </summary>
+    public const int USER_INVITE_EXPIRATION_HOURS = 48;
+
+    public Guid ID { get; set; }
+    public string InviteeEmailAddress { get; set; } = string.Empty;
+    public Guid InviterUserID { get; set; }
+    public User? Inviter { get; set; }
+    public Guid MerchantID { get; set; }
+    public DateTimeOffset LastInvited { get; set; }
+
+    public UserInviteStatusEnum Status
+    {
+        get
+        {
+            if ((DateTimeOffset.Now - LastInvited) > new TimeSpan(USER_INVITE_EXPIRATION_HOURS, 0, 0))
+            {
+                return UserInviteStatusEnum.Expired;
+            }
+            else
+            {
+                return UserInviteStatusEnum.Active;
+            }
+        }
+    }
+}
