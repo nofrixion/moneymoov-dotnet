@@ -158,7 +158,7 @@ public class MerchantClient : IMerchantClient
     /// <returns>If successful, a list of the user invites for the merchant.</returns>
     public Task<MoneyMoovApiResponse<IEnumerable<UserInvite>>> GetUserInvitesAsync(string userAccessToken, Guid merchantID)
     {
-        var url = MoneyMoovUrlBuilder.MerchantsApi.GetUserRolesUrl(_apiClient.GetBaseUri().ToString(), merchantID);
+        var url = MoneyMoovUrlBuilder.MerchantsApi.GetUserInvitesUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
         var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetUserRolesAsync));
 
