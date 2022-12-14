@@ -29,6 +29,8 @@ public enum MoneyMoovResources
 
     tokens,
 
+    user,
+
     userroles
 }
 
@@ -75,6 +77,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string GetAccountsUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.accounts}";
+
+        public static string GetUserInvitesUrl(string moneyMoovBaseUrl, Guid merchantID)
+           => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/userinvites";
     }
 
     /// <summary>
@@ -111,6 +116,15 @@ public static class MoneyMoovUrlBuilder
 
         public static string GetByOrderIDUrl(string moneyMoovBaseUrl, string orderID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}/getbyorderid/{orderID}";
+    }
+
+    /// <summary>
+    /// Available endpoint URLs for the User resource.
+    /// </summary>
+    public static class UserApi
+    {
+        public static string SendInviteApiUrl(string moneyMoovBaseUrl, Guid merchantID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}/sendinvite/{merchantID}";
     }
 
     public static string AccountsApiUrl(string moneyMoovBaseUrl)
