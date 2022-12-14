@@ -21,8 +21,6 @@ namespace NoFrixion.MoneyMoov;
 
 public interface IUserClient
 {
-    //Task<MoneyMoovApiResponse<IEnumerable<PaymentAccount>>> GetAccountsAsync(string userAccessToken, Guid merchantID);
-
     Task<MoneyMoovApiResponse> SendInviteAsync(string userAccessToken, Guid merchantID, string inviteeEmailAddress);
 }
 

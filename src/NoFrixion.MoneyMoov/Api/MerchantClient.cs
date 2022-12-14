@@ -114,7 +114,7 @@ public class MerchantClient : IMerchantClient
     /// Calls the MoneyMoov UserRoles Merchant endpoint to get the list of users who have been
     /// assigned a role on the merchant.
     /// </summary>
-    /// <param name="auserAccessToken">A User scoped JWT access token.</param>
+    /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="merchantID">The ID of the merchant to get the user roles for.</param>
     /// <returns>If successful, a list of the user role assignments for the merchant.</returns>
     public Task<MoneyMoovApiResponse<IEnumerable<UserRole>>> GetUserRolesAsync(string userAccessToken, Guid merchantID)
@@ -133,7 +133,7 @@ public class MerchantClient : IMerchantClient
     /// <summary>
     /// Calls the MoneyMoov Accounts Merchant endpoint to get the list of the merchant's payment accounts.
     /// </summary>
-    /// <param name="auserAccessToken">A User scoped JWT access token.</param>
+    /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="merchantID">The ID of the merchant to get the payment accounts for.</param>
     /// <returns>If successful, a list of the payment accounts for the merchant.</returns>
     public Task<MoneyMoovApiResponse<IEnumerable<PaymentAccount>>> GetAccountsAsync(string userAccessToken, Guid merchantID)
@@ -153,7 +153,7 @@ public class MerchantClient : IMerchantClient
     /// Calls the MoneyMoov UserInvites Merchant endpoint to get the list of invites that have been
     /// sent inviting new users to join the merchant.
     /// </summary>
-    /// <param name="auserAccessToken">A User scoped JWT access token.</param>
+    /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="merchantID">The ID of the merchant to get the invites for.</param>
     /// <returns>If successful, a list of the user invites for the merchant.</returns>
     public Task<MoneyMoovApiResponse<IEnumerable<UserInvite>>> GetUserInvitesAsync(string userAccessToken, Guid merchantID)
