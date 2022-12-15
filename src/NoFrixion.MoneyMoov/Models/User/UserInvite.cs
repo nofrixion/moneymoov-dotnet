@@ -24,8 +24,9 @@ public class UserInvite
 
     public Guid ID { get; set; }
     public string InviteeEmailAddress { get; set; } = string.Empty;
-    public Guid InviterUserID { get; set; }
-    public User? Inviter { get; set; }
+    public string InviterFirstName { get; set; } = string.Empty;
+    public string InviterLastName { get; set; } = string.Empty;
+    public string InviterEmailAddress { get; set; } = string.Empty;
     public Guid MerchantID { get; set; }
     public DateTimeOffset LastInvited { get; set; }
 
