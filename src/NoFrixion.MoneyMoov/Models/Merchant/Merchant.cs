@@ -43,6 +43,11 @@ public class Merchant
 
     public DateTimeOffset Inserted { get; set; }
 
+    /// <summary>
+    /// The jurisdiction the merchant entity is incorporated or established in.
+    /// </summary>
+    public JurisdictionEnum Jurisdiction { get; set; }
+
     public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
     /// <summary>

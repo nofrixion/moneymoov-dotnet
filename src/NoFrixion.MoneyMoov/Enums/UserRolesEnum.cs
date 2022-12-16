@@ -43,4 +43,11 @@ public enum UserRolesEnum : int
     /// granted to a merchant (non-User) token.
     /// </summary>
     PaymentRequestor = 4,
+
+    /// <summary>
+    /// For new users that were invited to a merchant and accepted. It's then up to the 
+    /// inviter to set the required role they wish them to have. This role has no
+    /// permissions.
+    /// </summary>
+    NewlyRegistered = 5
 }

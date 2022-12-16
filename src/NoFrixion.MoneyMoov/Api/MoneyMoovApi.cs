@@ -29,6 +29,8 @@ public interface IMoneyMoovApi
     IMetadataClient MetadataClient();
 
     IPaymentRequestClient PaymentRequestClient();
+
+    IUserClient UserClient();
 }
 
 public class MoneyMoovApi : IMoneyMoovApi
@@ -104,4 +106,7 @@ public class MoneyMoovApi : IMoneyMoovApi
 
     public IPaymentRequestClient PaymentRequestClient()
         => new PaymentRequestClient(new MoneyMoovApiClient(GetHttpClient()));
+
+    public IUserClient UserClient()
+        => new UserClient(new MoneyMoovApiClient(GetHttpClient()));
 }
