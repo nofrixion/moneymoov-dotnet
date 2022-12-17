@@ -29,6 +29,11 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class PaymentRequest : IPaymentRequest
 {
+    /// <summary>
+    /// For cases where the URI supplied doesn't need to be sent.
+    /// </summary>
+    public const string SUCCESS_WEBHOOK_BLACKHOLE_URI = "http://127.0.0.1";
+
     public Guid ID { get; set; }
 
     public Guid MerchantID { get; set; }
@@ -280,6 +285,26 @@ public class PaymentRequest : IPaymentRequest
     public bool HasWebHook()
     {
         return !string.IsNullOrEmpty(SuccessWebHookUrl);
+    }
+
+    public Uri GetSuccessWebhookUri()
+    {
+        if (string.IsNullOrEmpty(SuccessWebHookUrl))
+        {
+            return new Uri(SUCCESS_WEBHOOK_BLACKHOLE_URI);
+        }
+        else
+        {
+            var successWebHookUri = new UriBuilder(SuccessWebHookUrl);
+
+            string successParams = $"id={ID}&orderid={OrderID ?? string.Empty}";
+
+            successWebHookUri.Query = string.IsNullOrEmpty(successWebHookUri.Query)
+                ? successParams
+                : successWebHookUri.Query + "&" + successParams;
+
+            return successWebHookUri.Uri;
+        }
     }
 
     public static string GetCurrencySymbol(CurrencyTypeEnum currency) =>

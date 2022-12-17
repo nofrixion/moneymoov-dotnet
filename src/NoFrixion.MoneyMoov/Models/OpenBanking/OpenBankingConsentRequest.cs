@@ -39,4 +39,21 @@ public class OpenBankingConsentRequest
     /// </summary>
     [Required]
     public Guid MerchantID { get; set; }
+
+    /// <summary>
+    /// Optional callback URL that the end user performing the open banking authorisation
+    /// will be redirected to on completion. Typically this should be a URL that takes the 
+    /// user back to the application that they originally started the open banking authorisation
+    /// from.
+    /// </summary>
+    public string CallbackUrl { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Optional URL that will be called by the MoneyMoov server upon a successful open banking
+    /// authorisation. The webhook URL will pass a single parameter of "consentID". That ID can
+    /// then be used in the MoneyMoov open banking actions to verify the operation. Note
+    /// web hooks can easily be spoofed and should NOT be trusted without calling back to the 
+    /// MoneyMoov server for verification.
+    /// </summary>
+    public string SuccessWebHookUrl { get; set; } = string.Empty;
 }

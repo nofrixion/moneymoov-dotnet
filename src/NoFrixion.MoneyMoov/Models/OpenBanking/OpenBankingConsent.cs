@@ -24,6 +24,8 @@ public class OpenBankingConsent
     public string InstitutionID { get; set; } = string.Empty;
     public string EmailAddress { get; set; } = string.Empty;
     public bool IsEnabled { get; set; }
+    public string CallbackUrl { get; set; } = string.Empty;
+    public string SuccessWebHookUrl { get; set; } = string.Empty;
     public PaymentProcessorsEnum Provider { get; set; }
     public DateTimeOffset ExpiryDate { get; set; }
     public DateTimeOffset Inserted { get; set; }

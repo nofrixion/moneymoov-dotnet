@@ -28,12 +28,6 @@ namespace NoFrixion.MoneyMoov.Models
         /// </summary>
         [EnumMember(Value = "PAY_OUT")]
         PAYOUT,
-
-        /// <summary>
-        /// The payment request success event.
-        /// </summary>
-        [EnumMember(Value = "PAYMENT_REQUEST_SUCCESS")]
-        PAYMENTREQUESTSUCCESS
     }
 
     /// <summary>
