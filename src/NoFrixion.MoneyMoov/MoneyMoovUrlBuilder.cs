@@ -13,8 +13,6 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using LanguageExt.ClassInstances;
-
 namespace NoFrixion.MoneyMoov;
 
 public enum MoneyMoovResources
@@ -24,6 +22,8 @@ public enum MoneyMoovResources
     merchants,
 
     metadata,
+
+    openbanking,
 
     paymentrequests,
 
@@ -72,8 +72,8 @@ public static class MoneyMoovUrlBuilder
         public static string GetTokensUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.tokens}";
 
-         public static string GetUserRolesUrl(string moneyMoovBaseUrl, Guid merchantID)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.userroles}";
+        public static string GetUserRolesUrl(string moneyMoovBaseUrl, Guid merchantID)
+           => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.userroles}";
 
         public static string GetAccountsUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.accounts}";
@@ -101,6 +101,27 @@ public static class MoneyMoovUrlBuilder
     }
 
     /// <summary>
+    /// Available endpoint URLs for the Open Banking resources.
+    /// </summary>
+    public static class OpenBankingApi
+    {
+        public static string AccountsUrl(string moneyMoovBaseUrl, Guid consentID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/accounts/{consentID}";
+
+        public static string ConsentUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/consent";
+
+        public static string ConsentUrl(string moneyMoovBaseUrl, Guid consentID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/consent/{consentID}";
+
+        public static string ConsentsAllUrl(string moneyMoovBaseUrl, Guid merchantID, string emailAddress)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/consent/{merchantID}/{emailAddress}";
+
+        public static string TransactionsUrl(string moneyMoovBaseUrl, Guid consentID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/transactions/{consentID}";
+    }
+
+    /// <summary>
     /// Available endpoint URLs for the PaymentRequests resource.
     /// </summary>
     public static class PaymentRequestsApi
@@ -109,7 +130,7 @@ public static class MoneyMoovUrlBuilder
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}";
 
         //public static string DeleteUrl(string moneyMoovBaseUrl, Guid paymentRequestID)
-         //   => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}/{paymentRequestID}";
+        //   => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}/{paymentRequestID}";
 
         public static string GetByIDUrl(string moneyMoovBaseUrl, Guid paymentRequestID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}/{paymentRequestID}";
@@ -248,7 +269,7 @@ public static class MoneyMoovUrlBuilder
     {
         var url = $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.BENEFICIARIES_GETALL_ENDPOINT}";
 
-        if(merchantID != Guid.Empty)
+        if (merchantID != Guid.Empty)
         {
             url = url.Replace(MoneyApiEndPointParameters.MERCHANT_ID_PARAMETER, merchantID.ToString());
         }
