@@ -108,14 +108,14 @@ public static class MoneyMoovUrlBuilder
         public static string AccountsUrl(string moneyMoovBaseUrl, Guid consentID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/accounts/{consentID}";
 
-        public static string ConsentUrl(string moneyMoovBaseUrl)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/consent";
+        public static string ConsentsUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/consents";
 
-        public static string ConsentUrl(string moneyMoovBaseUrl, Guid consentID)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/consent/{consentID}";
+        public static string ConsentsUrl(string moneyMoovBaseUrl, Guid consentID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/consents/{consentID}";
 
         public static string ConsentsAllUrl(string moneyMoovBaseUrl, Guid merchantID, string emailAddress)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/consent/{merchantID}/{emailAddress}";
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/consents/{merchantID}/{emailAddress}";
 
         public static string TransactionsUrl(string moneyMoovBaseUrl, Guid consentID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/transactions/{consentID}";
