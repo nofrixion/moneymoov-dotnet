@@ -29,4 +29,24 @@ public class OpenBankingConsent
     public PaymentProcessorsEnum Provider { get; set; }
     public DateTimeOffset ExpiryDate { get; set; }
     public DateTimeOffset Inserted { get; set; }
+
+    public Uri GetSuccessWebhookUri()
+    {
+        if (string.IsNullOrEmpty(SuccessWebHookUrl))
+        {
+            return new Uri(MoneyMoovConstants.SUCCESS_WEBHOOK_BLACKHOLE_URI);
+        }
+        else
+        {
+            var successWebHookUri = new UriBuilder(SuccessWebHookUrl);
+
+            string successParams = $"id={ID}";
+
+            successWebHookUri.Query = string.IsNullOrEmpty(successWebHookUri.Query)
+                ? successParams
+                : successWebHookUri.Query + "&" + successParams;
+
+            return successWebHookUri.Uri;
+        }
+    }
 }

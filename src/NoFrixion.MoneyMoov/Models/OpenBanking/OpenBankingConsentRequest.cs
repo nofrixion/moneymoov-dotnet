@@ -50,7 +50,7 @@ public class OpenBankingConsentRequest
 
     /// <summary>
     /// Optional URL that will be called by the MoneyMoov server upon a successful open banking
-    /// authorisation. The webhook URL will pass a single parameter of "consentID". That ID can
+    /// authorisation. The webhook URL will pass a single parameter of "id". That ID can
     /// then be used in the MoneyMoov open banking actions to verify the operation. Note
     /// web hooks can easily be spoofed and should NOT be trusted without calling back to the 
     /// MoneyMoov server for verification.

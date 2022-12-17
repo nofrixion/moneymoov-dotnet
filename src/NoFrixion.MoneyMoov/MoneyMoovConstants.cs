@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: TransactionMetadata.cs
+// Filename: MoneyMoovConstants.cs
 //
 // Description: ??.
 //
@@ -15,7 +15,7 @@
 
 namespace NoFrixion.MoneyMoov;
 
-public class Constants
+public class MoneyMoovConstants
 {
     /// <summary>
     /// ??
@@ -26,4 +26,9 @@ public class Constants
     /// ??
     /// </summary>
     public const int HIGH_ROUND_TRANSACTION_AMOUNT_DEFINITION = 1000;
+
+    /// <summary>
+    /// For cases where the URI supplied doesn't need to be sent.
+    /// </summary>
+    public const string SUCCESS_WEBHOOK_BLACKHOLE_URI = "http://127.0.0.1";
 }

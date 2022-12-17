@@ -29,11 +29,6 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class PaymentRequest : IPaymentRequest
 {
-    /// <summary>
-    /// For cases where the URI supplied doesn't need to be sent.
-    /// </summary>
-    public const string SUCCESS_WEBHOOK_BLACKHOLE_URI = "http://127.0.0.1";
-
     public Guid ID { get; set; }
 
     public Guid MerchantID { get; set; }
@@ -291,7 +286,7 @@ public class PaymentRequest : IPaymentRequest
     {
         if (string.IsNullOrEmpty(SuccessWebHookUrl))
         {
-            return new Uri(SUCCESS_WEBHOOK_BLACKHOLE_URI);
+            return new Uri(MoneyMoovConstants.SUCCESS_WEBHOOK_BLACKHOLE_URI);
         }
         else
         {
