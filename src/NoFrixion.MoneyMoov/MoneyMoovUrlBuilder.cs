@@ -117,8 +117,8 @@ public static class MoneyMoovUrlBuilder
         public static string ConsentsAllUrl(string moneyMoovBaseUrl, Guid merchantID, string emailAddress)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/consents/{merchantID}/{emailAddress}";
 
-        public static string TransactionsUrl(string moneyMoovBaseUrl, Guid consentID)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/transactions/{consentID}";
+        public static string TransactionsUrl(string moneyMoovBaseUrl, Guid consentID, string accountID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/transactions/{consentID}/{accountID}";
     }
 
     /// <summary>
