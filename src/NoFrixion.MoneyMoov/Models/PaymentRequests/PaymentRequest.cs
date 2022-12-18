@@ -282,6 +282,26 @@ public class PaymentRequest : IPaymentRequest
         return !string.IsNullOrEmpty(SuccessWebHookUrl);
     }
 
+    public Uri GetSuccessWebhookUri()
+    {
+        if (string.IsNullOrEmpty(SuccessWebHookUrl))
+        {
+            return new Uri(MoneyMoovConstants.SUCCESS_WEBHOOK_BLACKHOLE_URI);
+        }
+        else
+        {
+            var successWebHookUri = new UriBuilder(SuccessWebHookUrl);
+
+            string successParams = $"id={ID}&orderid={OrderID ?? string.Empty}";
+
+            successWebHookUri.Query = string.IsNullOrEmpty(successWebHookUri.Query)
+                ? successParams
+                : successWebHookUri.Query + "&" + successParams;
+
+            return successWebHookUri.Uri;
+        }
+    }
+
     public static string GetCurrencySymbol(CurrencyTypeEnum currency) =>
      currency switch
      {
