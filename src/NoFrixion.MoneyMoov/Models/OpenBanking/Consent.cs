@@ -1,7 +1,7 @@
 ﻿// -----------------------------------------------------------------------------
-//  Filename: OpenBankingConsent.cs
+//  Filename: Consent.cs
 // 
-//  Description: Represetns an open banking consent token that, when authorised,
+//  Description: Represents an open banking consent token that, when authorised,
 //  can be used to call the open banking APIs, to retrieve account information,
 // list transactions etc.
 //
@@ -10,15 +10,15 @@
 // 
 //  History:
 //  15 Dec 2022  Arif Matin     Created, Belvedere Road, Dublin, Ireland.
-//  17 Dec 2022  Aaron Clauson  Renamed from OpenBanking to OpenBankingConsent.
+//  17 Dec 2022  Aaron Clauson  Renamed from OpenBanking to Consent.
 // 
 //  License:
 //  Proprietary NoFrixion.
 // -----------------------------------------------------------------------------
 
-namespace NoFrixion.MoneyMoov.Models;
+namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 
-public class OpenBankingConsent
+public class Consent
 {
     public Guid ID { get; set; }
     public string InstitutionID { get; set; } = string.Empty;

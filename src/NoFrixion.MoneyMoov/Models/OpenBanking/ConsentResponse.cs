@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------------
-//  Filename: OpenBankingConsentResponse.cs
+//  Filename: ConsentResponse.cs
 // 
 //  Description: The response for an open banking consent request.
 //
@@ -8,15 +8,15 @@
 // 
 //  History:
 //  15 Dec 2022  Arif Matin    Created, Harcourt Street, Dublin, Ireland.
-//  17 Dec 2022  Aaron Clauson Renamed from AccountAuthorisationResponse to OpenBankingConsentResponse.
+//  17 Dec 2022  Aaron Clauson Renamed from AccountAuthorisationResponse to ConsentResponse.
 // 
 //  License:
 //  Proprietary NoFrixion.
 // -----------------------------------------------------------------------------
 
-namespace NoFrixion.MoneyMoov.Models;
+namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 
-public class OpenBankingConsentResponse
+public class ConsentResponse
 {
     /// <summary>
     /// The ID of the open banking consent. Once the consent has been authorised this

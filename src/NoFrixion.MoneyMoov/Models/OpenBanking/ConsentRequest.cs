@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------------
-//  Filename: OpenBankingConsentRequest.cs
+//  Filename: ConsentRequest.cs
 // 
 //  Description: THe request fields needs when requesting an open banking consent token.
 //
@@ -8,7 +8,7 @@
 // 
 //  History:
 //  15 Dec 2022  Arif Matin    Created, Harcourt Street, Dublin, Ireland.
-//  17 Dec 2022  Aaron Clauson Renamed from AccountAuthorisationRequest to OpenBankingConsentRequest.
+//  17 Dec 2022  Aaron Clauson Renamed from AccountAuthorisationRequest toConsentRequest.
 // 
 //  License:
 //  Proprietary NoFrixion.
@@ -16,9 +16,9 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace NoFrixion.MoneyMoov.Models;
+namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 
-public class OpenBankingConsentRequest
+public class ConsentRequest
 {
     /// <summary>
     /// The email address that identifies the end user that will be authorising the 
