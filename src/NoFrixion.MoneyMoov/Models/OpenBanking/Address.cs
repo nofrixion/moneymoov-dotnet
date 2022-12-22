@@ -1,4 +1,5 @@
 
+using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models.OpenBanking;
@@ -7,71 +8,69 @@ namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 public partial class Address
 {
     /// <summary>
-    /// Gets or Sets AddressType
+    /// The type of the address.
     /// </summary>
-    [DataMember(Name = "addressType", EmitDefaultValue = false)]
+    [DataMember(Name = "addressType", EmitDefaultValue = true)]
     public AddressTypeEnum AddressType { get; set; }
     
     /// <summary>
-    /// __Optional__. The address line of the address
+    /// The address line of the address.
     /// </summary>
-    /// <value>__Optional__. The address line of the address</value>
     [DataMember(Name = "addressLines", EmitDefaultValue = false)]
-    public List<string> AddressLines { get; set; } = new List<string>();
+    public List<string>? AddressLines { get; set; }
 
     /// <summary>
-    /// __Optional__. The street name of the address
+    /// The street name of the address.
     /// </summary>
-    /// <value>__Optional__. The street name of the address</value>
+    [DefaultValue("")]
     [DataMember(Name = "streetName", EmitDefaultValue = false)]
     public string StreetName { get; set; } = string.Empty;
 
     /// <summary>
-    /// __Optional__. The building number of the address
+    /// The building number of the address.
     /// </summary>
-    /// <value>__Optional__. The building number of the address</value>
+    [DefaultValue("")]
     [DataMember(Name = "buildingNumber", EmitDefaultValue = false)]
     public string BuildingNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// __Optional__. The post code of the address
+    /// The post code of the address.
     /// </summary>
-    /// <value>__Optional__. The post code of the address</value>
+    [DefaultValue("")]
     [DataMember(Name = "postCode", EmitDefaultValue = false)]
     public string PostCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// __Optional__. The town name of the address
+    /// The town name of the address.
     /// </summary>
-    /// <value>__Optional__. The town name of the address</value>
+    [DefaultValue("")]
     [DataMember(Name = "townName", EmitDefaultValue = false)]
     public string TownName { get; set; } = string.Empty;
 
     /// <summary>
-    /// __Optional__. The list of counties for the address
+    /// The list of counties for the address.
     /// </summary>
-    /// <value>__Optional__. The list of counties for the address</value>
     [DataMember(Name = "county", EmitDefaultValue = false)]
-    public List<string> County { get; set; } = new List<string>();
+    public List<string>? County { get; set; }
 
     /// <summary>
-    /// __Conditional__. The 2-letter country code for the address. &lt;br&gt;&lt;br&gt;An &#x60;Institution&#x60; may require you to specify the &#x60;country&#x60; when used in the context of the &#x60;Payee&#x60; to be able to make a payment
+    /// The 2-letter country code for the address. Institution's; may require you to specify the country when used in the context of the Payee to be able to make a payment.
     /// </summary>
-    /// <value>__Conditional__. The 2-letter country code for the address. &lt;br&gt;&lt;br&gt;An &#x60;Institution&#x60; may require you to specify the &#x60;country&#x60; when used in the context of the &#x60;Payee&#x60; to be able to make a payment</value>
+    [DefaultValue("")]
     [DataMember(Name = "country", EmitDefaultValue = false)]
     public string Country { get; set; } = string.Empty;
 
     /// <summary>
-    /// __Optional__. The department for the address
+    /// The department for the address.
     /// </summary>
-    /// <value>__Optional__. The department for the address</value>
+    [DefaultValue("")]
     [DataMember(Name = "department", EmitDefaultValue = false)]
     public string Department { get; set; } = string.Empty;
 
     /// <summary>
-    /// __Optional__. The sub-department for the address
+    /// The sub-department for the address.
     /// </summary>
-    /// <value>__Optional__. The sub-department for the address</value>
+    [DefaultValue("")]
     [DataMember(Name = "subDepartment", EmitDefaultValue = false)]
     public string SubDepartment { get; set; } = string.Empty;
 }

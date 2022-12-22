@@ -5,28 +5,21 @@ using System.Text;
 
 namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 
-/// <summary>
-/// CreditLine
-/// </summary>
 [DataContract(Name = "CreditLine")]
 public partial class CreditLine
 {
     /// <summary>
-    /// Gets or Sets Type
+    /// Type of the credit line.
     /// </summary>
     [DataMember(Name = "type", EmitDefaultValue = false)]
     public CreditLineType? Type { get; set; }
 
     /// <summary>
-    /// Gets or Sets CreditLineAmount
+    /// The amount of the credit line.
     /// </summary>
     [DataMember(Name = "creditLineAmount", EmitDefaultValue = false)]
-    public Amount CreditLineAmount { get; set; } = new Amount();
+    public Amount? CreditLineAmount { get; set; } 
 
-    /// <summary>
-    /// Returns the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
@@ -37,10 +30,6 @@ public partial class CreditLine
         return sb.ToString();
     }
 
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
     public virtual string ToJson()
     {
         return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);

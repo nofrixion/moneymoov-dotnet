@@ -1,7 +1,7 @@
 
 using System.Runtime.Serialization;
 using System.Text;
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 
@@ -9,16 +9,12 @@ namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 public partial class AccountName
 {
     /// <summary>
-    /// The bank account holder&#39;s name given by the account owner.
+    /// The bank account holder's name given by the account owner.
     /// </summary>
-    /// <value>The bank account holder&#39;s name given by the account owner.</value>
+    [DefaultValue("")]
     [DataMember(Name = "name", EmitDefaultValue = false)]
     public string Name { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Returns the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
@@ -28,10 +24,6 @@ public partial class AccountName
         return sb.ToString();
     }
 
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
     public virtual string ToJson()
     {
         return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);

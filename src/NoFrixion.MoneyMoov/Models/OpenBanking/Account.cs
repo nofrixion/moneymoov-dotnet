@@ -1,7 +1,7 @@
 
+using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Text;
-using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 
@@ -12,7 +12,7 @@ public partial class Account
     public UsageType? UsageType { get; set; }
 
     /// <summary>
-    /// Gets or Sets AccountType
+    /// The type of account e.g. (Credit Card, Savings).
     /// </summary>
     [DataMember(Name = "accountType", EmitDefaultValue = false)]
     public AccountType? AccountType { get; set; }
@@ -20,80 +20,74 @@ public partial class Account
     /// <summary>
     /// Unique identifier of the account.
     /// </summary>
-    /// <value>Unique identifier of the account.</value>
-    [DataMember(Name = "id", EmitDefaultValue = false)]
+    [DataMember(Name = "id", EmitDefaultValue = true)]
     public string Id { get; set; } = string.Empty;
 
     /// <summary>
     /// Specifies the type of account e.g. (BUSINESS_CURRENT).
     /// </summary>
-    /// <value>Specifies the type of account e.g. (BUSINESS_CURRENT).</value>
+    [DefaultValue("")]
     [DataMember(Name = "type", EmitDefaultValue = false)]
     public string Type { get; set; } = string.Empty;
 
     /// <summary>
-    /// Product name as defined by the financial institution for this account
+    /// Product name as defined by the financial institution for this account.
     /// </summary>
-    /// <value>Product name as defined by the financial institution for this account</value>
+    [DefaultValue("")]
     [DataMember(Name = "description", EmitDefaultValue = false)]
     public string Description { get; set; } = string.Empty;
 
     /// <summary>
-    /// Main / headline balance for the account. &lt;br&gt;&lt;br&gt; Use of this field is recommended as fallback only. Instead, use of the typed balances (accountBalances) is recommended.
+    /// Main or headline balance for the account. Use of this field is recommended as fallback only. Instead, use of the typed balances (accountBalances) is recommended.
     /// </summary>
-    /// <value>Main / headline balance for the account. &lt;br&gt;&lt;br&gt; Use of this field is recommended as fallback only. Instead, use of the typed balances (accountBalances) is recommended.</value>
     [DataMember(Name = "balance", EmitDefaultValue = false)]
     public decimal Balance { get; set; }
 
     /// <summary>
-    /// Currency the bank account balance is denoted in. &lt;br&gt;&lt;br&gt; Specified as a 3-letter ISO 4217 currency code
+    /// Currency the bank account balance is denoted in. Specified as a 3-letter ISO 4217 currency code.
     /// </summary>
-    /// <value>Currency the bank account balance is denoted in. &lt;br&gt;&lt;br&gt; Specified as a 3-letter ISO 4217 currency code</value>
+    [DefaultValue("")]
     [DataMember(Name = "currency", EmitDefaultValue = false)]
     public string Currency { get; set; } = string.Empty;
 
     /// <summary>
-    /// Nickname of the account that was provided by the account owner. &lt;br&gt;&lt;br&gt; May be used to aid identification of the account.
+    /// Nickname of the account that was provided by the account owner. May be used to aid identification of the account.
     /// </summary>
-    /// <value>Nickname of the account that was provided by the account owner. &lt;br&gt;&lt;br&gt; May be used to aid identification of the account.</value>
+    [DefaultValue("")]
     [DataMember(Name = "nickname", EmitDefaultValue = false)]
     public string Nickname { get; set; } = string.Empty;
 
     /// <summary>
     /// Supplementary specifications that might be provided by the Bank. These provide further characteristics about the account.
     /// </summary>
-    /// <value>Supplementary specifications that might be provided by the Bank. These provide further characteristics about the account.</value>
+    [DefaultValue("")]
     [DataMember(Name = "details", EmitDefaultValue = false)]
     public string Details { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or Sets AccountNames
+    /// Optional account names set by the account holder.
     /// </summary>
     [DataMember(Name = "accountNames", EmitDefaultValue = false)]
-    public List<AccountName> AccountNames { get; set; } = new List<AccountName>();
+    public List<AccountName>? AccountNames { get; set; }
 
     /// <summary>
-    /// Gets or Sets AccountIdentifications
+    /// The canoncial identifiers for the account.
     /// </summary>
     [DataMember(Name = "accountIdentifications", EmitDefaultValue = false)]
-    public List<AccountIdentification> AccountIdentifications { get; set; } = new List<AccountIdentification>();
+    public List<AccountIdentification>? AccountIdentifications { get; set; }
 
     /// <summary>
-    /// Gets or Sets AccountBalances
+    /// The various balances for the account.
     /// </summary>
     [DataMember(Name = "accountBalances", EmitDefaultValue = false)]
-    public List<AccountBalance> AccountBalances { get; set; } = new List<AccountBalance>();
+    public List<AccountBalance>? AccountBalances { get; set; }
 
     /// <summary>
-    /// Gets or Sets ConsolidatedAccountInformation
+    /// Summary information regarding account balances of the overall account provided by the bank.
     /// </summary>
     [DataMember(Name = "consolidatedAccountInformation", EmitDefaultValue = false)]
-    public ConsolidatedAccountInformation ConsolidatedAccountInformation { get; set; } = new ConsolidatedAccountInformation();
+    public ConsolidatedAccountInformation? ConsolidatedAccountInformation { get; set; }
 
-    /// <summary>
-    /// Returns the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
@@ -115,10 +109,6 @@ public partial class Account
         return sb.ToString();
     }
 
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
     public virtual string ToJson()
     {
         return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
