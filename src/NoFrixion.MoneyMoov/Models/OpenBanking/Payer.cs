@@ -1,4 +1,5 @@
 
+using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -8,29 +9,21 @@ namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 public partial class Payer
 {
     /// <summary>
-    /// __Mandatory__. The account holder name of the Payer.
+    /// The account holder name of the Payer.
     /// </summary>
-    /// <value>__Mandatory__. The account holder name of the Payer.</value>
+    [DefaultValue("")]
     [DataMember(Name = "name", EmitDefaultValue = false)]
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
-    /// __Mandatory__. The account identifications that identify the &#x60;Payer&#x60; bank account.
+    /// The account identifications that identify the Payer; bank account.
     /// </summary>
-    /// <value>__Mandatory__. The account identifications that identify the &#x60;Payer&#x60; bank account.</value>
     [DataMember(Name = "accountIdentifications", IsRequired = true, EmitDefaultValue = true)]
-    public List<AccountIdentification> AccountIdentifications { get; set; } = new List<AccountIdentification>();
+    public List<AccountIdentification>? AccountIdentifications { get; set; }
 
-    /// <summary>
-    /// Gets or Sets Address
-    /// </summary>
     [DataMember(Name = "address", EmitDefaultValue = false)]
-    public Address Address { get; set; } = new Address();
+    public Address? Address { get; set; }
 
-    /// <summary>
-    /// Returns the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
@@ -42,10 +35,6 @@ public partial class Payer
         return sb.ToString();
     }
 
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
     public virtual string ToJson()
     {
         return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);

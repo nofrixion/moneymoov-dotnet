@@ -15,7 +15,7 @@
 
 using System.Runtime.CompilerServices;
 
-namespace MoneyMoov;
+namespace NoFrixion.MoneyMoov.UnitTests;
 
 public static class TypeExtensions
 {

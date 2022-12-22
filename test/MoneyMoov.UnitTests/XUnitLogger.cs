@@ -13,10 +13,11 @@
 // Proprietary NoFrixion.
 //-----------------------------------------------------------------------------
 
+using System;
 using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
 
-namespace NoFrixion.MoneyMoov.IntegrationTests;
+namespace NoFrixion.MoneyMoov.UnitTests;
 
 public class XunitLoggerProvider : ILoggerProvider
 {

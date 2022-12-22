@@ -8,7 +8,6 @@ namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 /// <summary>
 /// Specifies the type of the stated account balance.
 /// </summary>
-/// <value>Specifies the type of the stated account balance.</value>
 [JsonConverter(typeof(StringEnumConverter))]
 public enum AccountBalanceType
 {

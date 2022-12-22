@@ -1,18 +1,18 @@
 
 
+using System.Text;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 
-/// <summary>
-/// Transaction
-/// </summary>
 [DataContract(Name = "Transaction")]
 public partial class Transaction
 {
     [DataMember(Name = "status", EmitDefaultValue = false)]
     public TransactionStatusEnum? Status { get; set; }
 
+    [DefaultValue("")]
     [DataMember(Name = "id", EmitDefaultValue = false)]
     public string Id { get; set; } = string.Empty;
 
@@ -28,93 +28,102 @@ public partial class Transaction
     [DataMember(Name = "amount", EmitDefaultValue = false)]
     public decimal Amount { get; set; }
 
+    [DefaultValue("")]
     [DataMember(Name = "currency", EmitDefaultValue = false)]
     public string Currency { get; set; } = string.Empty;
 
     [DataMember(Name = "transactionAmount", EmitDefaultValue = false)]
-    public Amount TransactionAmount { get; set; } = new Amount();
+    public Amount? TransactionAmount { get; set; }
 
     [DataMember(Name = "grossAmount", EmitDefaultValue = false)]
-    public Amount GrossAmount { get; set; } = new Amount();
+    public Amount? GrossAmount { get; set; }
 
     [DataMember(Name = "currencyExchange", EmitDefaultValue = false)]
-    public CurrencyExchange CurrencyExchange { get; set; } = new CurrencyExchange();
+    public CurrencyExchange? CurrencyExchange { get; set; }
 
-    /// <summary>
-    /// Gets or Sets ChargeDetails
-    /// </summary>
     [DataMember(Name = "chargeDetails", EmitDefaultValue = false)]
-    public TransactionChargeDetails ChargeDetails { get; set; } = new TransactionChargeDetails();
+    public TransactionChargeDetails? ChargeDetails { get; set; }
 
-    /// <summary>
-    /// Gets or Sets Reference
-    /// </summary>
+    [DefaultValue("")]
     [DataMember(Name = "reference", EmitDefaultValue = false)]
     public string Reference { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Gets or Sets StatementReferences
-    /// </summary>
     [DataMember(Name = "statementReferences", EmitDefaultValue = false)]
-    public List<StatementReference> StatementReferences { get; set; } = new List<StatementReference>();
+    public List<StatementReference>? StatementReferences { get; set; }
 
-    /// <summary>
-    /// Gets or Sets Description
-    /// </summary>
+    [DefaultValue("")]
     [DataMember(Name = "description", EmitDefaultValue = false)]
     public string Description { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Gets or Sets TransactionInformation
-    /// </summary>
     [DataMember(Name = "transactionInformation", EmitDefaultValue = false)]
-    public List<string> TransactionInformation { get; set; } = new List<string>();
+    public List<string>? TransactionInformation { get; set; }
 
-    /// <summary>
-    /// Gets or Sets AddressDetails
-    /// </summary>
     [DataMember(Name = "addressDetails", EmitDefaultValue = false)]
-    public AddressDetails AddressDetails { get; set; } = new AddressDetails();
+    public AddressDetails? AddressDetails { get; set; }
 
-    /// <summary>
-    /// Gets or Sets IsoBankTransactionCode
-    /// </summary>
     [DataMember(Name = "isoBankTransactionCode", EmitDefaultValue = false)]
-    public IsoBankTransactionCode IsoBankTransactionCode { get; set; } = new IsoBankTransactionCode();
+    public IsoBankTransactionCode? IsoBankTransactionCode { get; set; }
 
-    /// <summary>
-    /// Gets or Sets ProprietaryBankTransactionCode
-    /// </summary>
     [DataMember(Name = "proprietaryBankTransactionCode", EmitDefaultValue = false)]
-    public ProprietaryBankTransactionCode ProprietaryBankTransactionCode { get; set; } = new ProprietaryBankTransactionCode();
+    public ProprietaryBankTransactionCode? ProprietaryBankTransactionCode { get; set; }
 
-    /// <summary>
-    /// Gets or Sets Balance
-    /// </summary>
     [DataMember(Name = "balance", EmitDefaultValue = false)]
-    public TransactionBalance Balance { get; set; } = new TransactionBalance();
+    public TransactionBalance? Balance { get; set; }
 
-    /// <summary>
-    /// Gets or Sets PayeeDetails
-    /// </summary>
     [DataMember(Name = "payeeDetails", EmitDefaultValue = false)]
-    public Payee PayeeDetails { get; set; } = new Payee();
+    public Payee? PayeeDetails { get; set; }
 
-    /// <summary>
-    /// Gets or Sets PayerDetails
-    /// </summary>
     [DataMember(Name = "payerDetails", EmitDefaultValue = false)]
-    public Payer PayerDetails { get; set; } = new Payer();
+    public Payer? PayerDetails { get; set; } 
 
     [DataMember(Name = "merchant", EmitDefaultValue = false)]
-    public Merchant Merchant { get; set; } = new Merchant();
+    public Merchant? Merchant { get; set; }
 
     [DataMember(Name = "enrichment", EmitDefaultValue = false)]
-    public Enrichment Enrichment { get; set; } = new Enrichment();
+    public Enrichment? Enrichment { get; set; }
 
     [DataMember(Name = "supplementaryData", EmitDefaultValue = false)]
-    public Object SupplementaryData { get; set; } = new object();
+    public Object? SupplementaryData { get; set; }
 
+    [DefaultValue("")]
     [DataMember(Name = "transactionMutability", EmitDefaultValue = false)]
     public string TransactionMutability { get; set; } = string.Empty;
+
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("class Transaction {\n");
+        sb.Append("  Id: ").Append(Id).Append("\n");
+        sb.Append("  Date: ").Append(Date).Append("\n");
+        sb.Append("  BookingDateTime: ").Append(BookingDateTime).Append("\n");
+        sb.Append("  ValueDateTime: ").Append(ValueDateTime).Append("\n");
+        sb.Append("  Status: ").Append(Status).Append("\n");
+        sb.Append("  Amount: ").Append(Amount).Append("\n");
+        sb.Append("  Currency: ").Append(Currency).Append("\n");
+        sb.Append("  TransactionAmount: ").Append(TransactionAmount).Append("\n");
+        sb.Append("  GrossAmount: ").Append(GrossAmount).Append("\n");
+        sb.Append("  CurrencyExchange: ").Append(CurrencyExchange).Append("\n");
+        sb.Append("  ChargeDetails: ").Append(ChargeDetails).Append("\n");
+        sb.Append("  Reference: ").Append(Reference).Append("\n");
+        sb.Append("  StatementReferences: ").Append(StatementReferences).Append("\n");
+        sb.Append("  Description: ").Append(Description).Append("\n");
+        sb.Append("  TransactionInformation: ").Append(TransactionInformation).Append("\n");
+        sb.Append("  AddressDetails: ").Append(AddressDetails).Append("\n");
+        sb.Append("  IsoBankTransactionCode: ").Append(IsoBankTransactionCode).Append("\n");
+        sb.Append("  ProprietaryBankTransactionCode: ").Append(ProprietaryBankTransactionCode).Append("\n");
+        sb.Append("  Balance: ").Append(Balance).Append("\n");
+        sb.Append("  PayeeDetails: ").Append(PayeeDetails).Append("\n");
+        sb.Append("  PayerDetails: ").Append(PayerDetails).Append("\n");
+        sb.Append("  Merchant: ").Append(Merchant).Append("\n");
+        sb.Append("  Enrichment: ").Append(Enrichment).Append("\n");
+        sb.Append("  SupplementaryData: ").Append(SupplementaryData).Append("\n");
+        sb.Append("  TransactionMutability: ").Append(TransactionMutability).Append("\n");
+        sb.Append("}\n");
+        return sb.ToString();
+    }
+
+    public virtual string ToJson()
+    {
+        return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
+    }
 }

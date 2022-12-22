@@ -79,4 +79,10 @@ public enum PaymentRequestEventTypesEnum
     /// A payer authentication failure callback for a card payment.
     /// </summary>
     card_payer_authentication_failure = 10,
+
+    /// <summary>
+    /// A payment initiation attempt was initiated. A webhook is sent out
+    /// when the status of the payment changes.
+    /// </summary>
+    pisp_webhook = 11,
 }
