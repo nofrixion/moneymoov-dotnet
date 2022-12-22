@@ -1,29 +1,21 @@
 
 using System.Runtime.Serialization;
 using System.Text;
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 
 [DataContract(Name = "ProprietaryBankTransactionCode")]
 public partial class ProprietaryBankTransactionCode
 {
-    /// <summary>
-    /// Gets or Sets Code
-    /// </summary>
+    [DefaultValue("")]
     [DataMember(Name = "code", EmitDefaultValue = false)]
     public string Code { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Gets or Sets Issuer
-    /// </summary>
+    [DefaultValue("")]
     [DataMember(Name = "issuer", EmitDefaultValue = false)]
     public string Issuer { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Returns the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
@@ -34,10 +26,6 @@ public partial class ProprietaryBankTransactionCode
         return sb.ToString();
     }
 
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
     public virtual string ToJson()
     {
         return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);

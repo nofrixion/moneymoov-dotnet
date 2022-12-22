@@ -14,16 +14,9 @@ public partial class TransactionBalance
     [DataMember(Name = "type", EmitDefaultValue = false)]
     public AccountBalanceType? Type { get; set; }
 
-    /// <summary>
-    /// Gets or Sets BalanceAmount
-    /// </summary>
     [DataMember(Name = "balanceAmount", EmitDefaultValue = false)]
-    public Amount BalanceAmount { get; set; } = new Amount();
+    public Amount? BalanceAmount { get; set; }
 
-    /// <summary>
-    /// Returns the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
@@ -34,10 +27,6 @@ public partial class TransactionBalance
         return sb.ToString();
     }
 
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
     public virtual string ToJson()
     {
         return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
