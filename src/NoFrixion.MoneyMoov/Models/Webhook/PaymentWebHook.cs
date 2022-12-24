@@ -13,14 +13,22 @@
 // -----------------------------------------------------------------------------
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace NoFrixion.MoneyMoov.Models;
 
 /// <summary>
 /// The payment webhook.
 /// </summary>
-public class PaymentWebHook : WebHook
+public class PaymentWebHook
 {
+    /// <summary>
+    /// Gets or sets the event.
+    /// </summary>
+    [JsonProperty("event")]
+    [JsonConverter(typeof(StringEnumConverter))]
+    public WebhookEventTypesEum Event { get; set; }
+
     /// <summary>
     /// Gets or sets the data.
     /// </summary>
