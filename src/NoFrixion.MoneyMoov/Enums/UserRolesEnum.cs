@@ -12,7 +12,7 @@
 // 19 July 2022 Saurav Maiti    Moved to Nofrixion.Common
 
 // License: 
-// Proprietary NoFrixion.
+// MIT.
 //-----------------------------------------------------------------------------
 
 namespace NoFrixion.MoneyMoov;

@@ -12,7 +12,7 @@
 // 30 Dec 2021 Aaron Clauson    Renamed from PaymentReceiveStatusEnum to PaymentRequestEventTypesEnum.
 // 
 // License:
-// Proprietary NoFrixion.
+// MIT.
 // -----------------------------------------------------------------------------
 
 namespace NoFrixion.MoneyMoov;
