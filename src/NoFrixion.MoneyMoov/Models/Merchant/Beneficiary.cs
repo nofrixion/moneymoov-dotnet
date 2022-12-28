@@ -114,20 +114,19 @@ public class Beneficiary : IValidatableObject
     /// represented as key-value pairs.</returns>
     public Dictionary<string, string> ToDictionary()
     {
-        var dict = new Dictionary<string, string>();
-
-        dict.Add(nameof(ID), ID.ToString());
-        dict.Add(nameof(MerchantID), MerchantID.ToString());
-        dict.Add(nameof(Name), Name ?? string.Empty);
-        dict.Add(nameof(YourReference), YourReference ?? string.Empty);
-        dict.Add(nameof(TheirReference), TheirReference ?? string.Empty);
-        dict.Add(nameof(DestinationAccountName), DestinationAccountName ?? string.Empty);
-        dict.Add(nameof(Currency), Currency ?? string.Empty);
-        dict.Add(nameof(Identifier) + "." + nameof(Identifier.Iban), Identifier?.Iban ?? string.Empty);
-        dict.Add(nameof(Identifier) + "." + nameof(Identifier.Number), Identifier?.Number ?? string.Empty);
-        dict.Add(nameof(Identifier) + "." + nameof(Identifier.SortCode), Identifier?.SortCode ?? string.Empty);
-        dict.Add(nameof(Identifier) + "." + nameof(Identifier.Type), Identifier?.Type.ToString() ?? string.Empty);
-
-        return dict;
+        return new Dictionary<string, string>
+        {
+            { nameof(ID), ID.ToString() },
+            { nameof(MerchantID), MerchantID.ToString() },
+            { nameof(Name), Name ?? string.Empty },
+            { nameof(YourReference), YourReference ?? string.Empty },
+            { nameof(TheirReference), TheirReference ?? string.Empty },
+            { nameof(DestinationAccountName), DestinationAccountName ?? string.Empty },
+            { nameof(Currency), Currency ?? string.Empty },
+            { nameof(Identifier) + "." + nameof(Identifier.Iban), Identifier?.Iban ?? string.Empty },
+            { nameof(Identifier) + "." + nameof(Identifier.Number), Identifier?.Number ?? string.Empty },
+            { nameof(Identifier) + "." + nameof(Identifier.SortCode), Identifier?.SortCode ?? string.Empty },
+            { nameof(Identifier) + "." + nameof(Identifier.Type), Identifier?.Type.ToString() ?? string.Empty }
+        };
     }
 }
