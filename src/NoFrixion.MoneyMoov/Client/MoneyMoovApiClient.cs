@@ -15,6 +15,7 @@
 
 using LanguageExt;
 using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
@@ -47,9 +48,9 @@ namespace NoFrixion.MoneyMoov
 
         private readonly HttpClient _httpClient;
 
-        public MoneyMoovApiClient(HttpClient httpClient)
+        public MoneyMoovApiClient(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
+            _httpClient = httpClientFactory.CreateClient(HTTP_CLIENT_NAME);
         }
 
         public Uri GetBaseUri()

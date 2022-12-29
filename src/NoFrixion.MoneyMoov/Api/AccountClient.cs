@@ -72,7 +72,7 @@ public class AccountClient : IAccountClient
     /// <returns>If successful, the newly created merchant token.</returns>
     public Task<MoneyMoovApiResponse<PaymentAccount>> CreateAccountAsync(string userAccessToken, PaymentAccountCreate account)
     {
-        var url = MoneyMoovUrlBuilder.AccountsApi.CreateAccountsApiUrl(_apiClient.GetBaseUri().ToString());
+        var url = MoneyMoovUrlBuilder.AccountsApi.AccountsUrl(_apiClient.GetBaseUri().ToString());
 
         var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(CreateAccountAsync));
 
