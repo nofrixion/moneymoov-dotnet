@@ -40,6 +40,12 @@ public class MerchantClient : IMerchantClient
     private readonly ILogger _logger;
     private readonly IMoneyMoovApiClient _apiClient;
 
+    public MerchantClient(string baseUri)
+    {
+        _apiClient = new MoneyMoovApiClient(baseUri);
+        _logger = NullLogger.Instance;
+    }
+
     public MerchantClient(IMoneyMoovApiClient apiClient)
     {
         _apiClient = apiClient;

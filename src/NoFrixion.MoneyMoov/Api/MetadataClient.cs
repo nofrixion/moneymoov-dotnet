@@ -40,6 +40,18 @@ public class MetadataClient : IMetadataClient
     private readonly ILogger _logger;
     private readonly IMoneyMoovApiClient _apiClient;
 
+    public MetadataClient()
+    {
+        _apiClient = new MoneyMoovApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+        _logger = NullLogger.Instance;
+    }
+
+    public MetadataClient(string baseUri)
+    {
+        _apiClient = new MoneyMoovApiClient(baseUri);
+        _logger = NullLogger.Instance;
+    }
+
     public MetadataClient(IMoneyMoovApiClient apiClient)
     {
         _apiClient = apiClient;

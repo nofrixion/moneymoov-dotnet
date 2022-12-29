@@ -37,6 +37,18 @@ public class PaymentRequestClient : IPaymentRequestClient
     private readonly ILogger _logger;
     private readonly IMoneyMoovApiClient _apiClient;
 
+    public PaymentRequestClient()
+    {
+        _apiClient = new MoneyMoovApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+        _logger = NullLogger.Instance;
+    }
+
+    public PaymentRequestClient(string baseUri)
+    {
+        _apiClient = new MoneyMoovApiClient(baseUri);
+        _logger = NullLogger.Instance;
+    }
+
     public PaymentRequestClient(IMoneyMoovApiClient apiClient)
     {
         _apiClient = apiClient;

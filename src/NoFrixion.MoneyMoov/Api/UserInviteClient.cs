@@ -31,6 +31,18 @@ public class UserInviteClient : IUserInviteClient
     private readonly ILogger _logger;
     private readonly IMoneyMoovApiClient _apiClient;
 
+    public UserInviteClient()
+    {
+        _apiClient = new MoneyMoovApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+        _logger = NullLogger.Instance;
+    }
+
+    public UserInviteClient(string baseUri)
+    {
+        _apiClient = new MoneyMoovApiClient(baseUri);
+        _logger = NullLogger.Instance;
+    }
+
     public UserInviteClient(IMoneyMoovApiClient apiClient)
     {
         _apiClient = apiClient;
@@ -45,7 +57,7 @@ public class UserInviteClient : IUserInviteClient
 
     /// <summary>
     /// Calls the MoneyMoov Merchant get user invite endpoint to get a single user invite by ID.
-    /// When called anonymously no personally identitifiable information will be returned. Calling
+    /// When called anonymously no personally identifiable information will be returned. Calling
     /// anonymously is useful to check if the user invite exists and that it hasn't expired.
     /// </summary>
     /// <param name="userInviteID">The ID of the user invite to retrieve.</param>
