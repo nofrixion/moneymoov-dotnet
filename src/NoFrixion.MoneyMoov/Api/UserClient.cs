@@ -50,7 +50,7 @@ public class UserClient : IUserClient
     /// <param name="inviteeEmailAddress">The email address of the user to invite.</param>
     public Task<MoneyMoovApiResponse> SendInviteAsync(string userAccessToken, Guid merchantID, string inviteeEmailAddress)
     {
-        var url = MoneyMoovUrlBuilder.UserApi.SendInviteApiUrl(_apiClient.GetBaseUri().ToString(), merchantID);
+        var url = MoneyMoovUrlBuilder.UserInvitesApi.CreateUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
         var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(SendInviteAsync));
 

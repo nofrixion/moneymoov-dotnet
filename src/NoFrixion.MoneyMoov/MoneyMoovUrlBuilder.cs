@@ -31,6 +31,8 @@ public enum MoneyMoovResources
 
     user,
 
+    userinvites,
+
     userroles
 }
 
@@ -144,8 +146,20 @@ public static class MoneyMoovUrlBuilder
     /// </summary>
     public static class UserApi
     {
-        public static string SendInviteApiUrl(string moneyMoovBaseUrl, Guid merchantID)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}/sendinvite/{merchantID}";
+        //public static string SendInviteApiUrl(string moneyMoovBaseUrl, Guid merchantID)
+        //    => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}/sendinvite/{merchantID}";
+    }
+
+    /// <summary>
+    /// Available endpoint URLs for the User Invites resource.
+    /// </summary>
+    public static class UserInvitesApi
+    {
+        public static string CreateUrl(string moneyMoovBaseUrl, Guid merchantID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.userinvites}/{merchantID}";
+
+        public static string GetUrl(string moneyMoovBaseUrl, Guid userInviteID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.userinvites}/{userInviteID}";
     }
 
     public static string AccountsApiUrl(string moneyMoovBaseUrl)
