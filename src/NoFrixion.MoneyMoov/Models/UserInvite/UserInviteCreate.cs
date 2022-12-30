@@ -36,7 +36,7 @@ public class UserInviteCreate
     /// Optional URL to provide to the invited user to inform them where to
     /// visit to accept the invite.
     /// </summary>
-    public string RegistrationUrl { get; set; } = string.Empty;
+    public string? RegistrationUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// If set to true an email will be sent to the invitee with instructions on
@@ -54,7 +54,7 @@ public class UserInviteCreate
         {
             { nameof(MerchantID), MerchantID.ToString() },
             { nameof(InviteeEmailAddress), InviteeEmailAddress },
-            { nameof(RegistrationUrl), RegistrationUrl },
+            { nameof(RegistrationUrl), RegistrationUrl ?? string.Empty },
             { nameof(SendInviteEmail), SendInviteEmail.ToString() }
         };
     }

@@ -1,29 +1,24 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: User.cs
+// Filename: UserCreate.cs
 //
-// Description: The business layer representation of a user entity record.
+// Description: Model used to create a new MoneyMov user.
 //
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)
 // 
 // History:
-// 25 Jan 2022  Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
+// 29 Dec 2022  Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
 //
 // License: 
 // MIT.
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class User
+public class UserCreate
 { 
-    public readonly static User Empty = new User();
-
-    public Guid ID { get; set; }
-
     [Required]
     public string FirstName { get; set; } = string.Empty;
 
@@ -35,30 +30,30 @@ public class User
     public string EmailAddress { get; set; } = string.Empty;
 
     /// <summary>
-    /// The IdentityUserID for a newly created user. This field is only required
-    /// when a new user is being created. It doesn't need to be sent.
+    /// The IdentityUserID from the NoFrixion Identity server.
     /// </summary>
-    [JsonIgnore]
+    [Required]
     public string IdentityUserID { get; set; } = string.Empty;
 
     /// <summary>
-    /// The company name specified by a newly registered sandbox user. This field
-    /// is only required when a new user is being created. It doesn't need to be sent. 
+    /// Optional ID of the invite that was originally sent to the registering
+    /// user.
     /// </summary>
-    [JsonIgnore]
-    public string CompanyName { get; set; } = string.Empty;
-
-    public bool IsEmpty() => ID == Guid.Empty && EmailAddress == string.Empty;
+    public Guid UserIniviteID { get; set; }
 
     /// <summary>
-    /// The merchant Id to add user role for a newly created user. This field
-    /// is only required when a new user is being created. It doesn't need to be sent. 
+    /// Places all the user create's properties into a dictionary.
     /// </summary>
-    [JsonIgnore]
-    public Guid MerchantID { get; set; }
-
-    /// <summary>
-    /// Flag indicating if a user has a pending invitation.
-    /// </summary>
-    public bool IsInvitee { get; set; }
+    /// <returns>A dictionary with all the non-collection properties represented as key-value pairs.</returns>
+    public Dictionary<string, string> ToDictionary()
+    {
+        return new Dictionary<string, string>
+        {
+            { nameof(FirstName), FirstName },
+            { nameof(LastName), LastName },
+            { nameof(EmailAddress), EmailAddress },
+            { nameof(IdentityUserID), IdentityUserID },
+            { nameof(UserIniviteID), UserIniviteID.ToString() },
+        };
+    }
 }

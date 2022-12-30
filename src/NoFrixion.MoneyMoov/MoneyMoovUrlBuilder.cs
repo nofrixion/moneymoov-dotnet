@@ -89,6 +89,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string MerchantUserRolesUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.userroles}";
+
+        public static string MerchantUserRoleUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.userroles}";
     }
 
     /// <summary>

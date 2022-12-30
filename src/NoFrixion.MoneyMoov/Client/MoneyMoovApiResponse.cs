@@ -103,6 +103,11 @@ public class MoneyMoovApiResponse<T> : MoneyMoovApiResponse, IApiResponse
     /// <value>The data.</value>
     public Option<T> Data { get; } = Option<T>.None;
 
+    /// <summary>
+    /// Attempts to get the result.
+    /// </summary>
+    public T? Result => Data.IsNone ? default : (T)Data;
+
     public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, HttpResponseHeaders headers)
         : base(statusCode, requestUri, headers)
     { }

@@ -28,7 +28,9 @@ public class UserInvite
     public string InviterLastName { get; set; } = string.Empty;
     public string InviterEmailAddress { get; set; } = string.Empty;
     public Guid MerchantID { get; set; }
+    public string RegistrationUrl { get; set; } = string.Empty;
     public DateTimeOffset LastInvited { get; set; }
+    public string MerchantName { get; set; } = string.Empty;
 
     public UserInviteStatusEnum Status
     {
