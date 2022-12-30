@@ -162,8 +162,8 @@ public static class MoneyMoovUrlBuilder
     /// </summary>
     public static class UserApi
     {
-        //public static string SendInviteApiUrl(string moneyMoovBaseUrl, Guid merchantID)
-        //    => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}/sendinvite/{merchantID}";
+        public static string UserApiUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}";
     }
 
     /// <summary>
