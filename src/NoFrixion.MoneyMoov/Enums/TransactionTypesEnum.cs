@@ -51,5 +51,5 @@ public enum TransactionTypesEnum
     /// The UK, Bankers Automated Clearing House network.
     /// </summary>
     [Display(Name = "Bankers Automated Clearing House")]
-    UK_BACS = 1,
+    UK_BACS = 4
 }
