@@ -8,54 +8,45 @@ namespace NoFrixion.MoneyMoov.Models
     public class Transaction
     {
         /// <summary>
-        /// Transaction id which always starts with 'T'.
+        /// Unique ID for the transaction.
         /// </summary>
-        [JsonProperty("transactionId")]
-        public string TransactionId { get; set; }
+        public Guid ID { get; set; }
 
         /// <summary>
-        /// Id of the Payout
-        /// <para>Only available for transaction type <see cref="TransactionType.PAYOUT"/></para>
+        /// Type of the transaction.
         /// </summary>
-        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
-        public Guid? Id { get; set; }
+        public TransactionTypesEnum Type { get; set; }
 
         /// <summary>
-        /// Type of the transaction
-        /// <para>Available options are <see cref="TransactionType.PAYOUT"/> and <see cref="TransactionType.PAYIN"/></para>
+        /// Amount of the transaction. Negative values indicate a pay out, positive
+        ///values a pay in.
         /// </summary>
-        [JsonProperty("type")]
-        public TransactionType Type { get; set; }
-
-        /// <summary>
-        /// Amount transfered
-        /// </summary>
-        [JsonProperty("amount")]
         public decimal Amount { get; set; }
 
         /// <summary>
-        /// Currency of amount
+        /// Currency of transaction.
         /// </summary>
-        [JsonProperty("currency")]
-        public string Currency { get; set; }
+        public CurrencyTypeEnum Currency { get; set; }
 
         /// <summary>
-        /// Description of the transaction
+        /// Description of the transaction.
         /// </summary>
-        [JsonProperty("description")]
         public string Description { get; set; }
 
         /// <summary>
-        /// Date when the transaction was created (in UTC)
+        /// Date when the transaction occurred.
         /// </summary>
-        [JsonProperty("createdAt")]
-        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset TransactionDate { get; set; }
 
         /// <summary>
-        /// Date when the transaction happened (in UTC)
+        /// Date when the transaction was inserted into the ledger.
         /// </summary>
-        [JsonProperty("date")]
-        public DateTimeOffset Date { get; set; }
+        public DateTimeOffset Inserted { get; set; }
+
+        /// <summary>
+        /// Balance on the account at the completion of the transaction being processed.
+        /// </summary>
+        public decimal Balance { get; set; }
 
         /// <summary>
         /// Account of who sent the transaction
@@ -68,17 +59,5 @@ namespace NoFrixion.MoneyMoov.Models
         /// </summary>
         [JsonProperty("to")]
         public AccountInfo To { get; set; }
-    }
-
-    public enum TransactionType
-    {
-        [EnumMember(Value = "NONE")]
-        NONE,
-
-        [EnumMember(Value = "PAY_IN")]
-        PAYIN,
-
-        [EnumMember(Value = "PAY_OUT")]
-        PAYOUT
     }
 }

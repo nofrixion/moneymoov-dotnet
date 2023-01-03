@@ -37,6 +37,18 @@ public class PaymentRequestClient : IPaymentRequestClient
     private readonly ILogger _logger;
     private readonly IMoneyMoovApiClient _apiClient;
 
+    public PaymentRequestClient()
+    {
+        _apiClient = new MoneyMoovApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+        _logger = NullLogger.Instance;
+    }
+
+    public PaymentRequestClient(string baseUri)
+    {
+        _apiClient = new MoneyMoovApiClient(baseUri);
+        _logger = NullLogger.Instance;
+    }
+
     public PaymentRequestClient(IMoneyMoovApiClient apiClient)
     {
         _apiClient = apiClient;
@@ -57,7 +69,7 @@ public class PaymentRequestClient : IPaymentRequestClient
     /// <returns>If successful, a payment request object.</returns>
     public Task<MoneyMoovApiResponse<PaymentRequest>> GetPaymentRequestAsync(string accessToken, Guid paymentRequestID)
     {
-        var url = MoneyMoovUrlBuilder.PaymentRequestsApi.GetByIDUrl(_apiClient.GetBaseUri().ToString(), paymentRequestID);
+        var url = MoneyMoovUrlBuilder.PaymentRequestsApi.PaymentRequestUrl(_apiClient.GetBaseUri().ToString(), paymentRequestID);
 
         var prob = _apiClient.CheckAccessToken(accessToken, nameof(GetPaymentRequestAsync));
 
@@ -96,7 +108,7 @@ public class PaymentRequestClient : IPaymentRequestClient
     /// <returns>If successful, the newly created merchant token.</returns>
     public Task<MoneyMoovApiResponse<PaymentRequest>> CreatePaymentRequestAsync(string accessToken, PaymentRequestCreate paymentRequestCreate)
     {
-        var url = MoneyMoovUrlBuilder.PaymentRequestsApi.CreateUrl(_apiClient.GetBaseUri().ToString());
+        var url = MoneyMoovUrlBuilder.PaymentRequestsApi.PaymentRequestsUrl(_apiClient.GetBaseUri().ToString());
 
         var prob = _apiClient.CheckAccessToken(accessToken, nameof(CreatePaymentRequestAsync));
 

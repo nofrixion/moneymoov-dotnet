@@ -35,10 +35,7 @@ public class PaymentRequestClientTests : MoneyMoovTestBase<PaymentRequestClientT
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var paymentRequestApiClient = new PaymentRequestClient(apiClient);
+        var paymentRequestApiClient = new PaymentRequestClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var paymentRequestCreate = new PaymentRequestCreate
         {
@@ -57,10 +54,7 @@ public class PaymentRequestClientTests : MoneyMoovTestBase<PaymentRequestClientT
         var paymentRequest = (PaymentRequest)createResponse.Data;
         Logger.LogDebug(System.Text.Json.JsonSerializer.Serialize(paymentRequest));
 
-        // Retrieve
         var getResponse = await paymentRequestApiClient.GetPaymentRequestAsync(SandboxMerchantAccessToken, paymentRequest.ID);
-
-        // TODO: This fails with a UserAccessToken when it should succeed.
 
         Assert.NotNull(getResponse);
         Assert.Equal(System.Net.HttpStatusCode.OK, getResponse.StatusCode);

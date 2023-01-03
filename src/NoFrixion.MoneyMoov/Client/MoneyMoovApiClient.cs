@@ -47,9 +47,21 @@ namespace NoFrixion.MoneyMoov
 
         private readonly HttpClient _httpClient;
 
-        public MoneyMoovApiClient(HttpClient httpClient)
+        public MoneyMoovApiClient()
         {
-            _httpClient = httpClient;
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+        }
+
+        public MoneyMoovApiClient(string baseUri)
+        {
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri(baseUri);
+        }
+
+        public MoneyMoovApiClient(IHttpClientFactory httpClientFactory)
+        {
+            _httpClient = httpClientFactory.CreateClient(HTTP_CLIENT_NAME);
         }
 
         public Uri GetBaseUri()

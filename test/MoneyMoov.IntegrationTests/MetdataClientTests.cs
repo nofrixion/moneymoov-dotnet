@@ -35,8 +35,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var apiClient = new MoneyMoovApiClient(HttpClientFactory.CreateClient());
-        var metadataApiClient = new MetadataClient(apiClient);
+        var metadataApiClient = new MetadataClient();
 
         var response = await metadataApiClient.GetVersionAsync();
 
@@ -58,10 +57,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var metadataApiClient = new MetadataClient(apiClient);
+        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await metadataApiClient.GetVersionAsync();
 
@@ -84,10 +80,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var metadataApiClient = new MetadataClient(apiClient);
+        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await metadataApiClient.WhoamiAsync(string.Empty);
 
@@ -108,10 +101,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var metadataApiClient = new MetadataClient(apiClient);
+        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await metadataApiClient.WhoamiAsync("xxx");
 
@@ -133,10 +123,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var metadataApiClient = new MetadataClient(apiClient);
+        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await metadataApiClient.WhoamiMerchantAsync(string.Empty);
 
@@ -157,10 +144,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var metadataApiClient = new MetadataClient(apiClient);
+        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await metadataApiClient.WhoamiMerchantAsync("xxx");
 
@@ -181,10 +165,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var metadataApiClient = new MetadataClient(apiClient);
+        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await metadataApiClient.WhoamiMerchantAsync(SandboxMerchantAccessToken);
 
@@ -205,10 +186,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var metadataApiClient = new MetadataClient(apiClient);
+        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await metadataApiClient.WhoamiAsync(SandboxUserAccessToken);
 
@@ -229,10 +207,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var metadataApiClient = new MetadataClient(apiClient);
+        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await metadataApiClient.EchoAsync("Alice", "Hello World");
 
@@ -253,10 +228,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var metadataApiClient = new MetadataClient(apiClient);
+        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await metadataApiClient.EchoJsonAsync("Alice", "Hello World");
 

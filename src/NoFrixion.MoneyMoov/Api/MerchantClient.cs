@@ -40,6 +40,12 @@ public class MerchantClient : IMerchantClient
     private readonly ILogger _logger;
     private readonly IMoneyMoovApiClient _apiClient;
 
+    public MerchantClient(string baseUri)
+    {
+        _apiClient = new MoneyMoovApiClient(baseUri);
+        _logger = NullLogger.Instance;
+    }
+
     public MerchantClient(IMoneyMoovApiClient apiClient)
     {
         _apiClient = apiClient;
@@ -61,7 +67,7 @@ public class MerchantClient : IMerchantClient
     /// <returns>If successful, a list of tokens for the merchant.</returns>
     public Task<MoneyMoovApiResponse<MerchantTokenPageResponse>> GetMerchantTokensAsync(string userAccessToken, Guid merchantID)
     {
-        var url = MoneyMoovUrlBuilder.MerchantsApi.GetTokensUrl(_apiClient.GetBaseUri().ToString(), merchantID);
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantTokensUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
         var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetMerchantTokensAsync));
 
@@ -80,7 +86,7 @@ public class MerchantClient : IMerchantClient
     /// <returns>If successful, the newly created merchant token.</returns>
     public Task<MoneyMoovApiResponse<MerchantToken>> CreateMerchantTokenAsync(string userAccessToken, TokenAdd token)
     {
-        var url = MoneyMoovUrlBuilder.MerchantsApi.CreateTokenUrl(_apiClient.GetBaseUri().ToString());
+        var url = MoneyMoovUrlBuilder.MerchantsApi.AllMerchantsTokensUrl(_apiClient.GetBaseUri().ToString());
 
         var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(CreateMerchantTokenAsync));
 
@@ -99,7 +105,7 @@ public class MerchantClient : IMerchantClient
     /// <returns>If successful, a list of tokens for the merchant.</returns>
     public Task<MoneyMoovApiResponse> DeleteMerchantTokenAsync(string userAccessToken, Guid tokenID)
     {
-        var url = MoneyMoovUrlBuilder.MerchantsApi.DeleteTokenUrl(_apiClient.GetBaseUri().ToString(), tokenID);
+        var url = MoneyMoovUrlBuilder.TokensApi.TokenUrl(_apiClient.GetBaseUri().ToString(), tokenID);
 
         var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(DeleteMerchantTokenAsync));
 
@@ -119,7 +125,7 @@ public class MerchantClient : IMerchantClient
     /// <returns>If successful, a list of the user role assignments for the merchant.</returns>
     public Task<MoneyMoovApiResponse<IEnumerable<UserRole>>> GetUserRolesAsync(string userAccessToken, Guid merchantID)
     {
-        var url = MoneyMoovUrlBuilder.MerchantsApi.GetUserRolesUrl(_apiClient.GetBaseUri().ToString(), merchantID);
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantUserRolesUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
         var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetUserRolesAsync));
 
@@ -138,7 +144,7 @@ public class MerchantClient : IMerchantClient
     /// <returns>If successful, a list of the payment accounts for the merchant.</returns>
     public Task<MoneyMoovApiResponse<IEnumerable<PaymentAccount>>> GetAccountsAsync(string userAccessToken, Guid merchantID)
     {
-        var url = MoneyMoovUrlBuilder.MerchantsApi.GetAccountsUrl(_apiClient.GetBaseUri().ToString(), merchantID);
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantAccountsUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
         var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetUserRolesAsync));
 
@@ -158,7 +164,7 @@ public class MerchantClient : IMerchantClient
     /// <returns>If successful, a list of the user invites for the merchant.</returns>
     public Task<MoneyMoovApiResponse<IEnumerable<UserInvite>>> GetUserInvitesAsync(string userAccessToken, Guid merchantID)
     {
-        var url = MoneyMoovUrlBuilder.MerchantsApi.GetUserInvitesUrl(_apiClient.GetBaseUri().ToString(), merchantID);
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantUserInvitesUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
         var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetUserRolesAsync));
 

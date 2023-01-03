@@ -44,12 +44,11 @@ public class PaymentAccountCreate
     /// represented as key-value pairs.</returns>
     public Dictionary<string, string> ToDictionary()
     {
-        var dict = new Dictionary<string, string>();
-
-        dict.Add(nameof(MerchantID), MerchantID.ToString());
-        dict.Add(nameof(Currency), Currency.ToString());
-        dict.Add(nameof(AccountName), AccountName ?? string.Empty);
-
-        return dict;
+        return new Dictionary<string, string>
+        {
+            { nameof(MerchantID), MerchantID.ToString() },
+            { nameof(Currency), Currency.ToString() },
+            { nameof(AccountName), AccountName ?? string.Empty }
+        };
     }
 }

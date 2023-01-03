@@ -14,7 +14,6 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -34,31 +33,5 @@ public class User
     [EmailAddress]
     public string EmailAddress { get; set; } = string.Empty;
 
-    /// <summary>
-    /// The IdentityUserID for a newly created user. This field is only required
-    /// when a new user is being created. It doesn't need to be sent.
-    /// </summary>
-    [JsonIgnore]
-    public string IdentityUserID { get; set; } = string.Empty;
-
-    /// <summary>
-    /// The company name specified by a newly registered sandbox user. This field
-    /// is only required when a new user is being created. It doesn't need to be sent. 
-    /// </summary>
-    [JsonIgnore]
-    public string CompanyName { get; set; } = string.Empty;
-
     public bool IsEmpty() => ID == Guid.Empty && EmailAddress == string.Empty;
-
-    /// <summary>
-    /// The merchant Id to add user role for a newly created user. This field
-    /// is only required when a new user is being created. It doesn't need to be sent. 
-    /// </summary>
-    [JsonIgnore]
-    public Guid MerchantID { get; set; }
-
-    /// <summary>
-    /// Flag indicating if a user has a pending invitation.
-    /// </summary>
-    public bool IsInvitee { get; set; }
 }

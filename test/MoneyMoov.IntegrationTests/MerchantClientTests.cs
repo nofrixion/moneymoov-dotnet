@@ -36,10 +36,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var merchantApiClient = new MerchantClient(apiClient);
+        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await merchantApiClient.GetUserRolesAsync(string.Empty, Guid.NewGuid());
 
@@ -60,10 +57,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var merchantApiClient = new MerchantClient(apiClient);
+        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await merchantApiClient.GetUserRolesAsync("xxx", Guid.NewGuid());
 
@@ -84,10 +78,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var merchantApiClient = new MerchantClient(apiClient);
+        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await merchantApiClient.GetUserRolesAsync(SandboxMerchantAccessToken, SandboxMerchantID);
 
@@ -106,10 +97,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var merchantApiClient = new MerchantClient(apiClient);
+        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await merchantApiClient.GetUserRolesAsync(SandboxUserAccessToken, SandboxMerchantID);
 
@@ -131,10 +119,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var merchantApiClient = new MerchantClient(apiClient);
+        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await merchantApiClient.GetMerchantTokensAsync(string.Empty, Guid.NewGuid());
 
@@ -155,10 +140,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var merchantApiClient = new MerchantClient(apiClient);
+        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await merchantApiClient.GetMerchantTokensAsync("xxx", Guid.NewGuid());
 
@@ -179,10 +161,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var merchantApiClient = new MerchantClient(apiClient);
+        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await merchantApiClient.GetMerchantTokensAsync(SandboxMerchantAccessToken, SandboxMerchantID);
 
@@ -201,10 +180,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var merchantApiClient = new MerchantClient(apiClient);
+        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await merchantApiClient.GetMerchantTokensAsync(SandboxUserAccessToken, SandboxMerchantID);
 
@@ -222,10 +198,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var httpClient = HttpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
-        var apiClient = new MoneyMoovApiClient(httpClient);
-        var merchantApiClient = new MerchantClient(apiClient);
+        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var tokenAdd = new TokenAdd
         {
@@ -243,7 +216,8 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
         Logger.LogDebug(System.Text.Json.JsonSerializer.Serialize(merchantToken));
 
         // Clean up.
-        var deleteResponse = await merchantApiClient.DeleteMerchantTokenAsync(SandboxUserAccessToken, merchantToken.ID);
+        var tokensApiClient = new TokensClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var deleteResponse = await tokensApiClient.DeleteTokenAsync(SandboxUserAccessToken, merchantToken.ID);
 
         Assert.NotNull(deleteResponse);
         Assert.Equal(System.Net.HttpStatusCode.OK, deleteResponse.StatusCode);

@@ -7,7 +7,7 @@
 // Aaron Clauson (aaron@nofrixion.com)
 // 
 // History:
-// 13 Dec 2022  Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
+// 30 Dec 2022  Aaron Clauson   Created, Harcourt St, Dublin, Ireland.
 //
 // License: 
 // MIT.
@@ -15,19 +15,31 @@
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using System.Net;
+using NoFrixion.MoneyMoov.Models;
 
 namespace NoFrixion.MoneyMoov;
 
 public interface IUserClient
 {
-    Task<MoneyMoovApiResponse> SendInviteAsync(string userAccessToken, Guid merchantID, string inviteeEmailAddress);
+    Task<MoneyMoovApiResponse<User>> CreateUserAsync(UserCreate userCreate);
 }
 
 public class UserClient : IUserClient
 {
     private readonly ILogger _logger;
     private readonly IMoneyMoovApiClient _apiClient;
+
+    public UserClient()
+    {
+        _apiClient = new MoneyMoovApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+        _logger = NullLogger.Instance;
+    }
+
+    public UserClient(string baseUri)
+    {
+        _apiClient = new MoneyMoovApiClient(baseUri);
+        _logger = NullLogger.Instance;
+    }
 
     public UserClient(IMoneyMoovApiClient apiClient)
     {
@@ -42,22 +54,13 @@ public class UserClient : IUserClient
     }
 
     /// <summary>
-    /// Calls the MoneyMoov account endpoint to create and send an email invite to register
-    /// and join a merchant account.
+    /// Calls the MoneyMoov Merchant get user endpoint create a new user record.
     /// </summary>
-    /// <param name="userAccessToken">A User scoped JWT access token.</param>
-    /// <param name="merchantID">The ID of the merchant the user is being invited to join.</param>
-    /// <param name="inviteeEmailAddress">The email address of the user to invite.</param>
-    public Task<MoneyMoovApiResponse> SendInviteAsync(string userAccessToken, Guid merchantID, string inviteeEmailAddress)
+    /// <param name="userCreate">The model containing the data about the new user to create.</param>
+    /// <returns>If successful, a user object.</returns>
+    public Task<MoneyMoovApiResponse<User>> CreateUserAsync(UserCreate userCreate)
     {
-        var url = MoneyMoovUrlBuilder.UserApi.SendInviteApiUrl(_apiClient.GetBaseUri().ToString(), merchantID);
-
-        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(SendInviteAsync));
-
-        return prob switch
-        {
-            var p when p.IsEmpty => _apiClient.PostAsync(url, userAccessToken, new FormUrlEncodedContent(new Dictionary<string,string> { { "inviteeEmailAddress", inviteeEmailAddress } })),
-            _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
-        };
-    }
+        var url = MoneyMoovUrlBuilder.UserApi.UserApiUrl(_apiClient.GetBaseUri().ToString());
+        return _apiClient.PostAsync<User>(url, new FormUrlEncodedContent(userCreate.ToDictionary()));
+    } 
 }
