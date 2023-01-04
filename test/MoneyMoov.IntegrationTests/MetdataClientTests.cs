@@ -42,7 +42,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         Assert.True(response.Data.IsSome);
-        Assert.True(response.ProblemDetails.IsEmpty);
+        Assert.True(response.Problem.IsEmpty);
 
         var version = (NoFrixionVersion)response.Data;
 
@@ -64,7 +64,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         Assert.True(response.Data.IsSome);
-        Assert.True(response.ProblemDetails.IsEmpty);
+        Assert.True(response.Problem.IsEmpty);
 
         var version = (NoFrixionVersion)response.Data;
 
@@ -87,9 +87,9 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.PreconditionFailed, response.StatusCode);
         Assert.True(response.Data.IsNone);
-        Assert.False(response.ProblemDetails.IsEmpty);
+        Assert.False(response.Problem.IsEmpty);
 
-        Logger.LogDebug(response.ProblemDetails.ToJson());
+        Logger.LogDebug(response.Problem.ToJson());
     }
 
     /// <summary>
@@ -108,9 +108,9 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
         Assert.True(response.Data.IsNone);
-        Assert.False(response.ProblemDetails.IsEmpty);
+        Assert.False(response.Problem.IsEmpty);
 
-        Logger.LogDebug(response.ProblemDetails.ToJson());
+        Logger.LogDebug(response.Problem.ToJson());
     }
 
 
@@ -130,9 +130,9 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.PreconditionFailed, response.StatusCode);
         Assert.True(response.Data.IsNone);
-        Assert.False(response.ProblemDetails.IsEmpty);
+        Assert.False(response.Problem.IsEmpty);
 
-        Logger.LogDebug(response.ProblemDetails.ToJson());
+        Logger.LogDebug(response.Problem.ToJson());
     }
 
     /// <summary>
@@ -151,9 +151,9 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
         Assert.True(response.Data.IsNone);
-        Assert.False(response.ProblemDetails.IsEmpty);
+        Assert.False(response.Problem.IsEmpty);
 
-        Logger.LogDebug(response.ProblemDetails.ToJson());
+        Logger.LogDebug(response.Problem.ToJson());
     }
 
     /// <summary>
@@ -172,7 +172,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         Assert.False(response.Data.IsNone);
-        Assert.True(response.ProblemDetails.IsEmpty);
+        Assert.True(response.Problem.IsEmpty);
 
         Logger.LogDebug(System.Text.Json.JsonSerializer.Serialize((Merchant)response.Data));
     }
@@ -193,7 +193,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         Assert.False(response.Data.IsNone);
-        Assert.True(response.ProblemDetails.IsEmpty);
+        Assert.True(response.Problem.IsEmpty);
 
         Logger.LogDebug(System.Text.Json.JsonSerializer.Serialize((User)response.Data));
     }
@@ -214,7 +214,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         Assert.True(response.Data.IsSome);
-        Assert.True(response.ProblemDetails.IsEmpty);
+        Assert.True(response.Problem.IsEmpty);
 
         Logger.LogDebug((string)response.Data);
     }
@@ -235,7 +235,7 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         Assert.True(response.Data.IsSome);
-        Assert.True(response.ProblemDetails.IsEmpty);
+        Assert.True(response.Problem.IsEmpty);
 
         response.Data.Match(
             Some: x =>

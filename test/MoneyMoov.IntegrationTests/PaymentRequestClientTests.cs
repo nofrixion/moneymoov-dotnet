@@ -49,7 +49,7 @@ public class PaymentRequestClientTests : MoneyMoovTestBase<PaymentRequestClientT
         Assert.NotNull(createResponse);
         Assert.Equal(System.Net.HttpStatusCode.Created, createResponse.StatusCode);
         Assert.True(createResponse.Data.IsSome);
-        Assert.True(createResponse.ProblemDetails.IsEmpty);
+        Assert.True(createResponse.Problem.IsEmpty);
 
         var paymentRequest = (PaymentRequest)createResponse.Data;
         Logger.LogDebug(System.Text.Json.JsonSerializer.Serialize(paymentRequest));
@@ -59,7 +59,7 @@ public class PaymentRequestClientTests : MoneyMoovTestBase<PaymentRequestClientT
         Assert.NotNull(getResponse);
         Assert.Equal(System.Net.HttpStatusCode.OK, getResponse.StatusCode);
         Assert.True(getResponse.Data.IsSome);
-        Assert.True(getResponse.ProblemDetails.IsEmpty);
+        Assert.True(getResponse.Problem.IsEmpty);
 
         var paymentRequest2 = (PaymentRequest)createResponse.Data;
         Logger.LogDebug(System.Text.Json.JsonSerializer.Serialize(paymentRequest2));

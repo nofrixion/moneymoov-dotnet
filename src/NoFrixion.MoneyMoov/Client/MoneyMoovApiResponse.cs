@@ -43,7 +43,7 @@ public interface IApiResponse
     /// Will be set for non 2xx responses and holds any available information about why the 
     /// request failed.
     /// </summary>
-    NoFrixionProblemDetails ProblemDetails { get; }
+    NoFrixionProblem Problem { get; }
 }
 
 /// <summary>
@@ -65,7 +65,7 @@ public class MoneyMoovApiResponse
     /// <value>HTTP headers</value>
     public Option<HttpResponseHeaders> Headers { get; }
 
-    public NoFrixionProblemDetails ProblemDetails { get; } = NoFrixionProblemDetails.Empty;
+    public NoFrixionProblem Problem { get; } = NoFrixionProblem.Empty;
 
     public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, HttpResponseHeaders headers)
     {
@@ -74,16 +74,16 @@ public class MoneyMoovApiResponse
         Headers = headers;
     }
 
-    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, NoFrixionProblemDetails problemDetails) :
-        this(statusCode, requestUri, Option<HttpResponseHeaders>.None, problemDetails)
+    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, NoFrixionProblem problem) :
+        this(statusCode, requestUri, Option<HttpResponseHeaders>.None, problem)
     { }
 
-    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, Option<HttpResponseHeaders> headers, NoFrixionProblemDetails problemDetails)
+    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, Option<HttpResponseHeaders> headers, NoFrixionProblem problem)
     {
         StatusCode = statusCode;
         RequestUri = requestUri ?? Option<Uri>.None;
         Headers = headers;
-        ProblemDetails = problemDetails;
+        Problem = problem;
     }
 
     public string ToJson()
@@ -125,11 +125,11 @@ public class MoneyMoovApiResponse<T> : MoneyMoovApiResponse, IApiResponse
         Data = data;
     }
 
-    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, NoFrixionProblemDetails problemDetails)
-    : base(statusCode, requestUri, problemDetails)
+    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, NoFrixionProblem problem)
+    : base(statusCode, requestUri, problem)
     { }
 
-    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, Option<HttpResponseHeaders> headers, NoFrixionProblemDetails problemDetails)
-        : base(statusCode, requestUri, headers, problemDetails)
+    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, Option<HttpResponseHeaders> headers, NoFrixionProblem problem)
+        : base(statusCode, requestUri, headers, problem)
     { }
  }

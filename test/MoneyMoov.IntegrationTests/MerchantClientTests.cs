@@ -43,9 +43,9 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.PreconditionFailed, response.StatusCode);
         Assert.True(response.Data.IsNone);
-        Assert.False(response.ProblemDetails.IsEmpty);
+        Assert.False(response.Problem.IsEmpty);
 
-        Logger.LogDebug(response.ProblemDetails.ToJson());
+        Logger.LogDebug(response.Problem.ToJson());
     }
 
     /// <summary>
@@ -64,9 +64,9 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
         Assert.True(response.Data.IsNone);
-        Assert.False(response.ProblemDetails.IsEmpty);
+        Assert.False(response.Problem.IsEmpty);
 
-        Logger.LogDebug(response.ProblemDetails.ToJson());
+        Logger.LogDebug(response.Problem.ToJson());
     }
 
     /// <summary>
@@ -85,7 +85,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
         Assert.True(response.Data.IsNone);
-        Assert.False(response.ProblemDetails.IsEmpty);
+        Assert.False(response.Problem.IsEmpty);
     }
 
     /// <summary>
@@ -104,7 +104,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         Assert.False(response.Data.IsNone);
-        Assert.True(response.ProblemDetails.IsEmpty);
+        Assert.True(response.Problem.IsEmpty);
 
         var userRoles = (List<UserRole>)response.Data;
         Assert.NotEmpty(userRoles);
@@ -126,9 +126,9 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.PreconditionFailed, response.StatusCode);
         Assert.True(response.Data.IsNone);
-        Assert.False(response.ProblemDetails.IsEmpty);
+        Assert.False(response.Problem.IsEmpty);
 
-        Logger.LogDebug(response.ProblemDetails.ToJson());
+        Logger.LogDebug(response.Problem.ToJson());
     }
 
     /// <summary>
@@ -147,9 +147,9 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
         Assert.True(response.Data.IsNone);
-        Assert.False(response.ProblemDetails.IsEmpty);
+        Assert.False(response.Problem.IsEmpty);
 
-        Logger.LogDebug(response.ProblemDetails.ToJson());
+        Logger.LogDebug(response.Problem.ToJson());
     }
 
     /// <summary>
@@ -168,7 +168,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
         Assert.True(response.Data.IsNone);
-        Assert.False(response.ProblemDetails.IsEmpty);
+        Assert.False(response.Problem.IsEmpty);
     }
 
     /// <summary>
@@ -187,7 +187,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         Assert.False(response.Data.IsNone);
-        Assert.True(response.ProblemDetails.IsEmpty);
+        Assert.True(response.Problem.IsEmpty);
     }
 
     /// <summary>
@@ -210,7 +210,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
         Assert.True(response.Data.IsSome);
-        Assert.True(response.ProblemDetails.IsEmpty);
+        Assert.True(response.Problem.IsEmpty);
 
         var merchantToken = (MerchantToken)response.Data;
         Logger.LogDebug(System.Text.Json.JsonSerializer.Serialize(merchantToken));
@@ -221,6 +221,6 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
 
         Assert.NotNull(deleteResponse);
         Assert.Equal(System.Net.HttpStatusCode.OK, deleteResponse.StatusCode);
-        Assert.True(deleteResponse.ProblemDetails.IsEmpty);
+        Assert.True(deleteResponse.Problem.IsEmpty);
     }
 }
