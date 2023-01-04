@@ -28,18 +28,18 @@ public class PaymentRequestClientTests : MoneyMoovTestBase<PaymentRequestClientT
     { }
 
     /// <summary>
-    /// Tests that a payment request can be created and retrieved on the sandbox cluster.
+    /// Tests that a payment request can be created and retrieved.
     /// </summary>
-    [Fact]
-    public async Task Create_And_Get_PaymentRequest_Sandbox_Test()
+    [Fact(Skip = "Need to generate a new non-expiring merchant token on dev.")]
+    public async Task Create_And_Get_PaymentRequest_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var paymentRequestApiClient = new PaymentRequestClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var paymentRequestApiClient = new PaymentRequestClient(MoneyMoovApiBaseUrl);
 
         var paymentRequestCreate = new PaymentRequestCreate
         {
-            Description = "Create_Payment_Request_Sandbox_Test_Delete_Me",
+            Description = "Create_Payment_Request_Test_Delete_Me",
             Amount = 2.0M,
             Currency = CurrencyTypeEnum.EUR,
             BaseOriginUrl = "https://localhost"

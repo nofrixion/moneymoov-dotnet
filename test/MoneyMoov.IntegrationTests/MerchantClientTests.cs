@@ -32,11 +32,11 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     /// the get user roles endpoint without an access token.
     /// </summary>
     [Fact]
-    public async Task Get_UserRoles_Sandbox_No_Token_Test()
+    public async Task Get_UserRoles_No_Token_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var merchantApiClient = new MerchantClient(MoneyMoovApiBaseUrl);
 
         var response = await merchantApiClient.GetUserRolesAsync(string.Empty, Guid.NewGuid());
 
@@ -53,11 +53,11 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     /// the get user roles endpoint without an invalid access token.
     /// </summary>
     [Fact]
-    public async Task Get_UserRoles_Sandbox_Invalid_Token_Test()
+    public async Task Get_UserRoles_Invalid_Token_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var merchantApiClient = new MerchantClient(MoneyMoovApiBaseUrl);
 
         var response = await merchantApiClient.GetUserRolesAsync("xxx", Guid.NewGuid());
 
@@ -74,11 +74,11 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     /// the get user roles endpoint with a merchant access token.
     /// </summary>
     [Fact]
-    public async Task Get_UserRoles_Sandbox_Unauthorised_Merchant_Token_Test()
+    public async Task Get_UserRoles_Unauthorised_Merchant_Token_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var merchantApiClient = new MerchantClient(MoneyMoovApiBaseUrl);
 
         var response = await merchantApiClient.GetUserRolesAsync(SandboxMerchantAccessToken, SandboxMerchantID);
 
@@ -92,12 +92,12 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     /// Tests that the a success response is received when calling the get user roles endpoint 
     /// with a user access token.
     /// </summary>
-    [Fact]
-    public async Task Get_UserRoles_Sandbox_User_Token_Success()
+    [Fact(Skip ="Need to generate a new non-expiring user token on dev.")]
+    public async Task Get_UserRoles_User_Token_Success()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var merchantApiClient = new MerchantClient(MoneyMoovApiBaseUrl);
 
         var response = await merchantApiClient.GetUserRolesAsync(SandboxUserAccessToken, SandboxMerchantID);
 
@@ -115,11 +115,11 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     /// the get merchant tokens endpoint without an access token.
     /// </summary>
     [Fact]
-    public async Task Get_MerchantTokens_Sandbox_No_Token_Test()
+    public async Task Get_MerchantTokens_No_Token_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var merchantApiClient = new MerchantClient(MoneyMoovApiBaseUrl);
 
         var response = await merchantApiClient.GetMerchantTokensAsync(string.Empty, Guid.NewGuid());
 
@@ -136,11 +136,11 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     /// the get merchant tokens endpoint without an invalid access token.
     /// </summary>
     [Fact]
-    public async Task Get_MerchantTokens_Sandbox_Invalid_Token_Test()
+    public async Task Get_MerchantTokens_Invalid_Token_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var merchantApiClient = new MerchantClient(MoneyMoovApiBaseUrl);
 
         var response = await merchantApiClient.GetMerchantTokensAsync("xxx", Guid.NewGuid());
 
@@ -157,11 +157,11 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     /// the get merchant tokens endpoint with a merchant access token.
     /// </summary>
     [Fact]
-    public async Task Get_MerchantTokens_Sandbox_Unauthorised_Merchant_Token_Test()
+    public async Task Get_MerchantTokens_Unauthorised_Merchant_Token_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var merchantApiClient = new MerchantClient(MoneyMoovApiBaseUrl);
 
         var response = await merchantApiClient.GetMerchantTokensAsync(SandboxMerchantAccessToken, SandboxMerchantID);
 
@@ -172,15 +172,15 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     }
 
     /// <summary>
-    /// Tests that the a success response is received when  the get merchant tokens 
+    /// Tests that the a success response is received when the get merchant tokens 
     /// endpoint with a user access token.
     /// </summary>
-    [Fact]
-    public async Task Get_MerchantTokens_Sandbox_User_Token_Success()
+    [Fact(Skip ="Need to generate a new non-expiring user token on dev.")]
+    public async Task Get_MerchantTokens_User_Token_Success()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var merchantApiClient = new MerchantClient(MoneyMoovApiBaseUrl);
 
         var response = await merchantApiClient.GetMerchantTokensAsync(SandboxUserAccessToken, SandboxMerchantID);
 
@@ -193,16 +193,16 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
     /// <summary>
     /// Tests that the create merchant token method can be correctly called on the sandbox cluster.
     /// </summary>
-    [Fact]
-    public async Task Create_And_Delete_Merchant_Token_Sandbox_Test()
+    [Fact(Skip ="Need to generate a new non-expiring user token on dev.")]
+    public async Task Create_And_Delete_Merchant_Token_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var merchantApiClient = new MerchantClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var merchantApiClient = new MerchantClient(MoneyMoovApiBaseUrl);
 
         var tokenAdd = new TokenAdd
         {
-            Description = "Create_Merchant_Token_Sandbox_Test_Delete_Me",
+            Description = "Create_Merchant_Token_Dev_Test_Delete_Me",
             MerchantID = SandboxMerchantID
         };
         var response = await merchantApiClient.CreateMerchantTokenAsync(SandboxUserAccessToken, tokenAdd);
@@ -216,7 +216,7 @@ public class MerchantClientTests : MoneyMoovTestBase<MerchantClientTests>
         Logger.LogDebug(System.Text.Json.JsonSerializer.Serialize(merchantToken));
 
         // Clean up.
-        var tokensApiClient = new TokensClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var tokensApiClient = new TokensClient(MoneyMoovApiBaseUrl);
         var deleteResponse = await tokensApiClient.DeleteTokenAsync(SandboxUserAccessToken, merchantToken.ID);
 
         Assert.NotNull(deleteResponse);

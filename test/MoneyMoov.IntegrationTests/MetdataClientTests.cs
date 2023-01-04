@@ -72,15 +72,37 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     }
 
     /// <summary>
+    /// Tests that the get version method can be correctly called on the app settings configured API URL.
+    /// </summary>
+    [Fact]
+    public async Task Get_Version_Custom_Test()
+    {
+        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
+
+        var metadataApiClient = new MetadataClient(MoneyMoovApiBaseUrl);
+
+        var response = await metadataApiClient.GetVersionAsync();
+
+        Assert.NotNull(response);
+        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+        Assert.True(response.Data.IsSome);
+        Assert.True(response.Problem.IsEmpty);
+
+        var version = (NoFrixionVersion)response.Data;
+
+        Logger.LogDebug(version.ToString());
+    }
+
+    /// <summary>
     /// Tests that the expected error response is received when an attempt is made to call
     /// the whoami endpoint without an access token.
     /// </summary>
     [Fact]
-    public async Task Whoami_Sandbox_No_Token_Test()
+    public async Task Whoami_No_Token_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var metadataApiClient = new MetadataClient(MoneyMoovApiBaseUrl);
 
         var response = await metadataApiClient.WhoamiAsync(string.Empty);
 
@@ -97,11 +119,11 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     /// the whoami endpoint without an invalid access token.
     /// </summary>
     [Fact]
-    public async Task Whoami_Sandbox_Invalid_Token_Test()
+    public async Task Whoami_Invalid_Token_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var metadataApiClient = new MetadataClient(MoneyMoovApiBaseUrl);
 
         var response = await metadataApiClient.WhoamiAsync("xxx");
 
@@ -119,11 +141,11 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     /// the whoami merchant endpoint without an access token.
     /// </summary>
     [Fact]
-    public async Task Whoami_Merchant_Sandbox_No_Token_Test()
+    public async Task Whoami_Merchant_No_Token_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var metadataApiClient = new MetadataClient(MoneyMoovApiBaseUrl);
 
         var response = await metadataApiClient.WhoamiMerchantAsync(string.Empty);
 
@@ -140,11 +162,11 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     /// the whoami merchant endpoint without an invalid access token.
     /// </summary>
     [Fact]
-    public async Task Whoami_Merchant_Sandbox_Invalid_Token_Test()
+    public async Task Whoami_Merchant_Invalid_Token_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var metadataApiClient = new MetadataClient(MoneyMoovApiBaseUrl);
 
         var response = await metadataApiClient.WhoamiMerchantAsync("xxx");
 
@@ -160,12 +182,12 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     /// Tests that the a success response is received when an attempt is made to call
     /// the whoami merchant endpoint without a valid access token.
     /// </summary>
-    [Fact]
-    public async Task Whoami_Merchant_Sandbox_Valid_Token_Test()
+    [Fact(Skip ="Need to generate a new non-expiring merchant token on dev.")]
+    public async Task Whoami_Merchant_Valid_Token_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var metadataApiClient = new MetadataClient(MoneyMoovApiBaseUrl);
 
         var response = await metadataApiClient.WhoamiMerchantAsync(SandboxMerchantAccessToken);
 
@@ -181,12 +203,12 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     /// Tests that the a success response is received when an attempt is made to call
     /// the whoami user endpoint without an valid access token.
     /// </summary>
-    [Fact]
-    public async Task Whoami_Sandbox_Valid_Token_Test()
+    [Fact(Skip ="Need to generate a new non-expiring user token on dev.")]
+    public async Task Whoami_Valid_Token_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var metadataApiClient = new MetadataClient(MoneyMoovApiBaseUrl);
 
         var response = await metadataApiClient.WhoamiAsync(SandboxUserAccessToken);
 
@@ -203,11 +225,11 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     /// using form URL encoding.
     /// </summary>
     [Fact]
-    public async Task Echo_Form_Encoding_Sandbox_Test()
+    public async Task Echo_Form_Encoding_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var metadataApiClient = new MetadataClient(MoneyMoovApiBaseUrl);
 
         var response = await metadataApiClient.EchoAsync("Alice", "Hello World");
 
@@ -224,11 +246,11 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     /// encoding.
     /// </summary>
     [Fact]
-    public async Task Echo_Json_Encoding_Sandbox_Test()
+    public async Task Echo_Json_Encoding_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var metadataApiClient = new MetadataClient(MoneyMoovApiBaseUrl);
 
         var response = await metadataApiClient.EchoJsonAsync("Alice", "Hello World");
 
