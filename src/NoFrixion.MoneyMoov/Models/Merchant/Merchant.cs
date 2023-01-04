@@ -51,7 +51,7 @@ public class Merchant
     public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
     /// <summary>
-    /// Geets the most appropriate display name for the merchant which
+    /// Gets the most appropriate display name for the merchant which
     /// means use the trading name if set and if not, default to the business name.
     /// </summary>
     /// <returns></returns>
