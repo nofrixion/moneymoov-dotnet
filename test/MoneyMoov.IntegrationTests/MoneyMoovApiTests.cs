@@ -35,6 +35,7 @@ public class MoneyMoovApiTests : MoneyMoovTestBase<MoneyMoovApiTests>
         Logger.LogDebug($"MerchantID={base.SandboxMerchantID}.");
         Logger.LogDebug($"Merchant Access Token={base.SandboxMerchantAccessToken?.Length()}.");
         Logger.LogDebug($"User Access Token={base.SandboxUserAccessToken?.Length()}.");
+        Logger.LogDebug($"MoneyMoov API Base URL={base.MoneyMoovApiBaseUrl}.");
     }
 
     /// <summary>
@@ -75,6 +76,32 @@ public class MoneyMoovApiTests : MoneyMoovTestBase<MoneyMoovApiTests>
           HttpClientFactory);
 
         moneyMoovApi.SetBaseUrl(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+
+        var response = await moneyMoovApi.MetadataClient().GetVersionAsync();
+
+        Assert.NotNull(response);
+        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+        Assert.True(response.Data.IsSome);
+
+        var version = (NoFrixionVersion)response.Data;
+
+        Logger.LogDebug(version.ToString());
+    }
+
+    /// <summary>
+    /// Tests that the get version method can be correctly called on the API under test.
+    /// </summary>
+    [Fact]
+    public async Task Get_Version_Test()
+    {
+        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
+
+        var moneyMoovApi = new MoneyMoovApi(
+          LoggerFactory.CreateLogger<MoneyMoovApi>(),
+          Configuration,
+          HttpClientFactory);
+
+        moneyMoovApi.SetBaseUrl(MoneyMoovApiBaseUrl);
 
         var response = await moneyMoovApi.MetadataClient().GetVersionAsync();
 
