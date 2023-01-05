@@ -20,7 +20,6 @@
 // MIT.
 // -----------------------------------------------------------------------------
 
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Runtime.Serialization;
@@ -31,7 +30,7 @@ namespace NoFrixion.MoneyMoov;
 /// <summary>
 /// Taken from ASP.NET Core MVC ProblemDetailsDefaults class. Using the same values for consistency.
 /// </summary>
-internal static class ProblemDefaults
+public static class ProblemDefaults
 {
     public static readonly Dictionary<int, (string Type, string Title)> Defaults = new()
     {
