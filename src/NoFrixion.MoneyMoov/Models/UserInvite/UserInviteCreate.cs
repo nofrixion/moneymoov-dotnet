@@ -35,7 +35,7 @@ public class UserInviteCreate
     /// <summary>
     /// Name of the user being invited.
     /// </summary>
-    public string InviteeName { get; set; } = string.Empty;
+    public string? InviteeName { get; set; } = string.Empty;
 
     /// <summary>
     /// Optional URL to provide to the invited user to inform them where to
@@ -61,7 +61,7 @@ public class UserInviteCreate
             { nameof(InviteeEmailAddress), InviteeEmailAddress },
             { nameof(RegistrationUrl), RegistrationUrl ?? string.Empty },
             { nameof(SendInviteEmail), SendInviteEmail.ToString() },
-            {nameof(InviteeName), InviteeName}
+            {nameof(InviteeName), InviteeName ?? string.Empty}
         };
     }
 }
