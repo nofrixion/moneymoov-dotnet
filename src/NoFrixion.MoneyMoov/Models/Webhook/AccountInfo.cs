@@ -31,14 +31,7 @@ namespace NoFrixion.MoneyMoov.Models
 
             if (Identifier != null)
             {
-                if (!string.IsNullOrEmpty(Identifier.Iban))
-                {
-                    displayText += " iban: " + Identifier.Iban;
-                }
-                else if(!string.IsNullOrEmpty(Identifier.Number))
-                {
-                    displayText += " sortcode: " + Identifier.SortCode + " account: " + Identifier.Number;
-                }
+                displayText += Identifier.GetDisplayString();
             }
 
             if(!string.IsNullOrEmpty(EmailAddress))
@@ -89,6 +82,22 @@ namespace NoFrixion.MoneyMoov.Models
         // Only available for IBAN type
         [JsonProperty("iban", NullValueHandling = NullValueHandling.Ignore)]
         public string? Iban { get; set; }
+
+        public string GetDisplayString()
+        {
+            if(Type == IdentifierType.IBAN)
+            {
+                return Type.ToString() + " " + Iban;
+            }
+            else if(Type == IdentifierType.SCAN)
+            {
+                return Type.ToString() + " " + SortCode + " " + Number;
+            }
+            else
+            {
+                return "Unknown account identifier type.";
+            }
+        }
     }
 
     public enum IdentifierType

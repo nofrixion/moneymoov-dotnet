@@ -93,4 +93,20 @@ public class PaymentAccount
     /// Display name for UI
     /// </summary>
     public string DisplayName => $"{AccountName} ({ID})";
+
+    public string GetDisplayString()
+    {
+        if (!string.IsNullOrEmpty(IBAN))
+        {
+            return "IBAN" + " " + IBAN;
+        }
+        else if (!string.IsNullOrEmpty(SortCode))
+        {
+            return "SCAN" + " " + SortCode + " " + AccountNumber;
+        }
+        else
+        {
+            return "Unknown account type.";
+        }
+    }
 }
