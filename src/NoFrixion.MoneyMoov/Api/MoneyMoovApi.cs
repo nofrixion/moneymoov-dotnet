@@ -63,7 +63,7 @@ public class MoneyMoovApi : IMoneyMoovApi
         }
         else
         {
-            _logger.LogError($"The base URI supplied to the MoneyMoov service was not a valid URI, {baseUrlStr}. Using default of {MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL}.");
+            //_logger.LogError($"The base URI supplied to the MoneyMoov service was not a valid URI, {baseUrlStr}. Using default of {MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL}.");
             _moneyMoovBaseUri = new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
         }
     }
@@ -88,12 +88,12 @@ public class MoneyMoovApi : IMoneyMoovApi
         }
     }
 
-    protected HttpClient GetHttpClient()
-    {
-        var httpClient = _httpClientFactory.CreateClient(MoneyMoovApiClient.HTTP_CLIENT_NAME);
-        httpClient.BaseAddress = _moneyMoovBaseUri;
-        return httpClient;
-    }
+    //protected HttpClient GetHttpClient()
+    //{
+    //    var httpClient = _httpClientFactory.CreateClient(MoneyMoovApiClient.HTTP_CLIENT_NAME);
+    //    httpClient.BaseAddress = _moneyMoovBaseUri;
+    //    return httpClient;
+    //}
 
     public IAccountClient AccountClient()
         => new AccountClient(new MoneyMoovApiClient(_httpClientFactory));

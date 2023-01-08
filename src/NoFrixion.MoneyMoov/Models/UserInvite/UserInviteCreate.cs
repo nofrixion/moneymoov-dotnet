@@ -33,6 +33,11 @@ public class UserInviteCreate
     public string InviteeEmailAddress { get; set; } = string.Empty;
 
     /// <summary>
+    /// Name of the user being invited.
+    /// </summary>
+    public string? InviteeName { get; set; } = string.Empty;
+
+    /// <summary>
     /// Optional URL to provide to the invited user to inform them where to
     /// visit to accept the invite.
     /// </summary>
@@ -55,7 +60,8 @@ public class UserInviteCreate
             { nameof(MerchantID), MerchantID.ToString() },
             { nameof(InviteeEmailAddress), InviteeEmailAddress },
             { nameof(RegistrationUrl), RegistrationUrl ?? string.Empty },
-            { nameof(SendInviteEmail), SendInviteEmail.ToString() }
+            { nameof(SendInviteEmail), SendInviteEmail.ToString() },
+            {nameof(InviteeName), InviteeName ?? string.Empty}
         };
     }
 }
