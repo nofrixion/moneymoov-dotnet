@@ -14,8 +14,6 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
-
 #nullable disable
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -77,28 +75,14 @@ public class Transaction
     public string TheirReference { get; set; }
 
     /// <summary>
-    /// For pay in (credit) transactions this will contain the information about the payer.
+    /// For a pay in (credit) the counterparty is entity who sent the payment. For a pay out (debit) the 
+    /// counterparty is the entity the payment is being made to.
     /// </summary>
-    [JsonProperty("from")]
-    public AccountInfo From { get; set; }
+    public Counterparty Counterparty { get; set; }
 
     /// <summary>
     /// For pay in (credit) transactions this will contain a descriptive string with the 
-    /// most important fields about the payer. This field is a summary of the data in the 
-    /// From field.
+    /// most important fields about the counterparty.
     /// </summary>
-    public string FromDisplayText { get; set; }
-
-    /// <summary>
-    /// For pay out (debit) transactions this will contain the information about the payee.
-    /// </summary>
-    [JsonProperty("to")]
-    public AccountInfo To { get; set; }
-
-    /// <summary>
-    /// For pay out (debit) transactions this will contain a descriptive string with the 
-    /// most important fields about the payee, or destination for the payment. This field 
-    /// is a summary of the data in the To field.
-    /// </summary>
-    public string ToDisplayText { get; set; }
+    public string CounterpartySummary { get; set; }
 }
