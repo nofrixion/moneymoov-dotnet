@@ -18,28 +18,28 @@ using Newtonsoft.Json.Converters;
 namespace NoFrixion.MoneyMoov;
 
 /// <summary>
-/// Defines Type
+/// Defines the different types of account identifiers that are supported.
 /// </summary>
 [JsonConverter(typeof(StringEnumConverter))]
 public enum AccountIdentifierType
 {
     /// <summary>
-    /// Enum SCAN for value: SCAN
+    /// For cases when the account identifier is not recognised.
+    /// </summary>
+    Unknown = 0,
+
+    /// <summary>
+    /// Sort code and account number. Used by the UK faster payments network.
     /// </summary>
     SCAN = 1,
 
     /// <summary>
-    /// Enum IBAN for value: IBAN
+    /// International bank account number. Used by the Single European Payment Area (SEPA) networks.
     /// </summary>
     IBAN = 2,
 
     /// <summary>
-    /// Enum DD for value: DD
+    /// Direct debit.
     /// </summary>
-    DD = 3,
-
-    /// <summary>
-    /// Enum INTL for value: INTL
-    /// </summary>
-    INTL = 4
+    DD = 3
 }

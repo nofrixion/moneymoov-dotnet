@@ -66,22 +66,26 @@ public class PaymentAccount
     /// <summary>
     /// The IBAN for EUR accounts. Will be empty for GBP accounts.
     /// </summary>
-    public string IBAN { get; set; }
+    [Obsolete("Please use the same named field on the Identifier property.")]
+    public string IBAN => Identifier?.IBAN ?? string.Empty;
 
     /// <summary>
     /// The sort code for GBP accounts. Will be empty for EUR accounts.
     /// </summary>
-    public string SortCode { get; set; }
+    [Obsolete("Please use the same named field on the Identifier property.")]
+    public string SortCode => Identifier?.SortCode ?? string.Empty;
 
     /// <summary>
     /// The account number for GBP accounts. Will be empty for EUR accounts.
     /// </summary>
-    public string AccountNumber { get; set; }
+    [Obsolete("Please use the same named field on the Identifier property.")]
+    public string AccountNumber => Identifier?.AccountNumber ?? string.Empty;
 
     /// <summary>
     /// Bank Identification Code.
     /// </summary>
-    public string Bic { get; set; }
+    [Obsolete("Please use the same named field on the Identifier property.")]
+    public string Bic => Identifier?.BIC ?? string.Empty;
 
     /// <summary>
     /// Name for the account
@@ -90,7 +94,21 @@ public class PaymentAccount
     public string AccountName { get; set; }
 
     /// <summary>
-    /// Display name for UI
+    /// The payment account identifier contains the information needed to access the account
+    /// via a payment network.
+    /// </summary>
+    public AccountIdentifier Identifier { get; set; }
+
+    /// <summary>
+    /// Gets a unique display name for the payment account. Useful for when payment accounts need to 
+    /// be listed.
     /// </summary>
     public string DisplayName => $"{AccountName} ({ID})";
+
+    /// <summary>
+    /// Gets a summary of the payments account's most important properties.
+    /// </summary>
+    /// <returns></returns>
+    public string Summary
+        => AccountName + (Identifier != null ? ", " + Identifier.Summary : string.Empty);
 }
