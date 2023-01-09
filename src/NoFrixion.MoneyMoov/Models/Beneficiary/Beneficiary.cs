@@ -64,7 +64,7 @@ public class Beneficiary : IValidatableObject
     /// Gets or Sets the beneficiary IBAN.
     /// </summary>
     [Required(ErrorMessage = "Identifier is required.")]
-    public Identifier? Identifier { get; set; }
+    public AccountIdentifier? Identifier { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -80,22 +80,22 @@ public class Beneficiary : IValidatableObject
             yield return new ValidationResult("The Payout currency was not recognised. Currently only EUR and GBP are supported.");
         }
 
-        if (Identifier?.Type == IdentifierType.NONE)
+        if (Identifier?.Type == AccountIdentifierType.Unknown)
         {
             yield return new ValidationResult($"Please use either IBAN or Number and Sort code as destination");
         }
 
-        if (Identifier?.Type == IdentifierType.IBAN && !PaymentsValidator.ValidateIBAN(Identifier?.Iban!))
+        if (Identifier?.Type == AccountIdentifierType.IBAN && !PaymentsValidator.ValidateIBAN(Identifier?.IBAN!))
         {
             yield return new ValidationResult("Destination IBAN is invalid, Please enter a valid IBAN.");
         }
 
-        if (Identifier?.Type == IdentifierType.IBAN && Currency != CurrencyTypeEnum.EUR.ToString())
+        if (Identifier?.Type == AccountIdentifierType.IBAN && Currency != CurrencyTypeEnum.EUR.ToString())
         {
             yield return new ValidationResult($"Currency {Currency} does not support type {Identifier?.Type}");
         }
 
-        if (Identifier?.Type == IdentifierType.SCAN && Currency != CurrencyTypeEnum.GBP.ToString())
+        if (Identifier?.Type == AccountIdentifierType.SCAN && Currency != CurrencyTypeEnum.GBP.ToString())
         {
             yield return new ValidationResult($"Currency {Currency} does not support type {Identifier?.Type}");
         }
@@ -123,8 +123,8 @@ public class Beneficiary : IValidatableObject
             { nameof(TheirReference), TheirReference ?? string.Empty },
             { nameof(DestinationAccountName), DestinationAccountName ?? string.Empty },
             { nameof(Currency), Currency ?? string.Empty },
-            { nameof(Identifier) + "." + nameof(Identifier.Iban), Identifier?.Iban ?? string.Empty },
-            { nameof(Identifier) + "." + nameof(Identifier.Number), Identifier?.Number ?? string.Empty },
+            { nameof(Identifier) + "." + nameof(Identifier.IBAN), Identifier?.IBAN ?? string.Empty },
+            { nameof(Identifier) + "." + nameof(Identifier.AccountNumber), Identifier?.AccountNumber ?? string.Empty },
             { nameof(Identifier) + "." + nameof(Identifier.SortCode), Identifier?.SortCode ?? string.Empty },
             { nameof(Identifier) + "." + nameof(Identifier.Type), Identifier?.Type.ToString() ?? string.Empty }
         };

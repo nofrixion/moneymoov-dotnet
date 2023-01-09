@@ -12,6 +12,9 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 #nullable disable
@@ -19,44 +22,59 @@ namespace NoFrixion.MoneyMoov.Models;
 public class AccountIdentifier
 {
     /// <summary>
-    /// Gets or Sets Type
+    /// The type of the account identifier.
     /// </summary>
-    public AccountIdentifierType? Type { get; set; }
+    [JsonConverter(typeof(StringEnumConverter))]
+    public AccountIdentifierType Type
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(IBAN))
+            {
+                return AccountIdentifierType.IBAN;
+            }
+
+            if (!string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber))
+            {
+                return AccountIdentifierType.SCAN;
+            }
+
+            // Return default
+            return AccountIdentifierType.Unknown;
+        }
+    }
 
     /// <summary>
-    /// Bank account Sort Code
-    /// </summary>
-    /// <value>Bank account Sort Code</value>
-    public string AccountNumber { get; set; }
-
-    /// <summary>
-    /// Gets or Sets Bic
-    /// </summary>
-    public string Bic { get; set; }
-
-    /// <summary>
-    /// Gets or Sets CountrySpecificDetails
-    /// </summary>
-    public CountrySpecificDetails CountrySpecificDetails { get; set; }
-
-    /// <summary>
-    /// Gets or Sets Currency
+    /// The currency for the account.
     /// </summary>
     public string Currency { get; set; }
 
     /// <summary>
-    /// Gets or Sets Iban
+    /// The Bank Identifier Code for an IBAN.
     /// </summary>
-    public string Iban { get; set; }
+    public string BIC { get; set; }
 
     /// <summary>
-    /// Bank account Sort Code
+    /// The International Bank Account Number for the identifier. Only applicable 
+    /// for IBAN identifiers.
     /// </summary>
-    /// <value>Bank account Sort Code</value>
+    public string IBAN { get; set; }
+
+    /// <summary>
+    /// The account Sort Code. Only applicable for SCAN identifiers.
+    /// </summary>
     public string SortCode { get; set; }
 
-    public override string ToString()
-    {
-        return $"{nameof(Type)}: {Type}, {nameof(AccountNumber)}: {AccountNumber}, {nameof(Bic)}: {Bic}, {nameof(CountrySpecificDetails)}: {CountrySpecificDetails}, {nameof(Currency)}: {Currency}, {nameof(Iban)}: {Iban}, {nameof(SortCode)}: {SortCode}";
-    }
+    /// <summary>
+    /// Bank account number. Only applicable for SCAN identifiers.
+    /// </summary>
+    public string AccountNumber { get; set; }
+
+    /// <summary>
+    /// Summary of the account identifier's most important properties.
+    /// </summary>
+    public string Summary =>   
+        Type == AccountIdentifierType.IBAN ? Type.ToString() + ": " + IBAN :
+        Type == AccountIdentifierType.SCAN ? Type.ToString() + ": " + SortCode + " / " + AccountNumber :
+         "Unknown account identifier type.";
 }
