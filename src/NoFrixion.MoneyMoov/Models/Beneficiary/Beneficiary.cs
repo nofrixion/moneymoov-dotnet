@@ -16,7 +16,6 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
-using NoFrixion.MoneyMoov.Validators;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -70,12 +69,12 @@ public class Beneficiary : IValidatableObject
     {
         Regex accountNameRegex = new Regex(@"^([^\p{L}0-9]*?[\p{L}0-9]){1,}['\.\-\/&\s]*");
 
-        if (!PaymentsValidator.IsValidAccountName(DestinationAccountName!))
+        if (!PayoutsValidator.IsValidAccountName(DestinationAccountName!))
         {
             yield return new ValidationResult($"Destination Account Name is invalid. It can only contain alaphanumberic characters plus the ' . - & and space characters.");
         }
 
-        if (!PaymentsValidator.ValidateCurrency(Currency!))
+        if (!PayoutsValidator.ValidateCurrency(Currency!))
         {
             yield return new ValidationResult("The Payout currency was not recognised. Currently only EUR and GBP are supported.");
         }
@@ -85,7 +84,7 @@ public class Beneficiary : IValidatableObject
             yield return new ValidationResult($"Please use either IBAN or Number and Sort code as destination");
         }
 
-        if (Identifier?.Type == AccountIdentifierType.IBAN && !PaymentsValidator.ValidateIBAN(Identifier?.IBAN!))
+        if (Identifier?.Type == AccountIdentifierType.IBAN && !PayoutsValidator.ValidateIBAN(Identifier?.IBAN!))
         {
             yield return new ValidationResult("Destination IBAN is invalid, Please enter a valid IBAN.");
         }
@@ -100,7 +99,7 @@ public class Beneficiary : IValidatableObject
             yield return new ValidationResult($"Currency {Currency} does not support type {Identifier?.Type}");
         }
 
-        if (!PaymentsValidator.ValidateTheirReference(TheirReference!))
+        if (!PayoutsValidator.ValidateTheirReference(TheirReference!, this.Identifier?.Type ?? AccountIdentifierType.Unknown))
         {
             yield return new ValidationResult("Reference is invalid, all characters can not be the same.");
         }

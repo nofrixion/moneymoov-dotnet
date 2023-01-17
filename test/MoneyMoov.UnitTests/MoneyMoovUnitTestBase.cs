@@ -13,7 +13,6 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
 
