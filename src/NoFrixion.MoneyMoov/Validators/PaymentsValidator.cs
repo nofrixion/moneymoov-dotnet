@@ -21,21 +21,54 @@ namespace NoFrixion.MoneyMoov.Validators;
 
 public static class PaymentsValidator
 {
+    /// <summary>
+    /// The minimum required legnth for the Their Reference field. Note that that length gets 
+    /// calcaulated after certain non-counter characters have been removed.
+    /// </summary>
+    public const int THEIR_REFERENCE_MINIMUM_LENGTH = 6;
+
+    /// <summary>
+    /// The maximum allowed legnth for the Their Reference field. Note that that length gets 
+    /// calcualted after certain non-counter characters have been removed.
+    /// </summary>
+    public const int THEIR_REFERENCE_MAXIMUM_LENGTH = 6;
+
+    /// <summary>
+    /// Validation regex for the destination account name field.
+    /// </summary>
+    public const string ACCOUNT_NAME_REGEX = @"^([^\p{L}0-9]*?[\p{L}0-9]){1,}['\.\-\/&\s]*";
+
+    /// <summary>
+    /// Validation reqex for the Their Reference field.
+    /// </summary>
+    public const string THEIR_REFERENCE_REGEX = @"^[A-Za-z0-9\-\.\/\& ]{6,}$";
+
+    /// <summary>
+    /// Certain characters in the Their Reference field are not counterd towards the minimum and
+    /// maximum length requirements. This regex indicates the list of allow characters that are NOT
+    /// counted.
+    /// </summary>
+    public const string THEIR_REFERENCE_NON_COUNTED_CHARS_REGEX = @"[\.\-/& ]";
+
+    /// <summary>
+    /// Validation regex for the destination IBAN field.
+    /// </summary>
+    public const string IBAN_REGEX = @"^[a-zA-Z]{2}[0-9]{2}([a-zA-Z0-9]){11,30}$";
+
     public static bool ValidateIBAN(string iban)
     {
-        var bankAccount = iban.ToUpper();
-
-        if (string.IsNullOrEmpty(bankAccount))
+        if (string.IsNullOrEmpty(iban))
         {
             return false;
         }
 
-        if (!Regex.IsMatch(bankAccount, "^[A-Z0-9]"))
+        var bankAccount = iban.ToUpper().Trim().Replace(" ", String.Empty);
+
+        if (!Regex.IsMatch(bankAccount, IBAN_REGEX))
         {
             return false;
         }
 
-        bankAccount = bankAccount.Replace(" ", String.Empty);
         string bank = bankAccount[4..] + bankAccount[..4];
 
         int asciiShift = 55;
@@ -64,21 +97,23 @@ public static class PaymentsValidator
         return checksum == 1;
     }
 
-    public static bool IsValidAccount(Regex accountRegex, string accountName)
+    public static bool IsValidAccountName(string accountName)
     {
-        return !string.IsNullOrEmpty(accountName) && accountRegex.IsMatch(accountName);
+        var accountNameRegex = new Regex(ACCOUNT_NAME_REGEX);
+
+        return !string.IsNullOrEmpty(accountName) && accountNameRegex.IsMatch(accountName);
     }
 
     public static bool ValidateTheirReference(string theirReference)
     {
-        Regex matchRegex = new Regex(@"^[A-Za-z0-9-\s\.\/& ]{6,}");
+        Regex matchRegex = new Regex(THEIR_REFERENCE_REGEX);
 
-        Regex replaceRegex = new Regex(@"[\.\-/& ]");
+        Regex replaceRegex = new Regex(THEIR_REFERENCE_NON_COUNTED_CHARS_REGEX);
         var refClean = replaceRegex.Replace(theirReference, "");
 
         //check at least 6 char is alphanumeric with total char less than 18
-        if (   refClean.Length < 6 
-            || theirReference.Length > 18 
+        if (   refClean.Length < THEIR_REFERENCE_MINIMUM_LENGTH
+            || theirReference.Length > THEIR_REFERENCE_MAXIMUM_LENGTH
             || !matchRegex.IsMatch(theirReference)) 
         {
             return false;

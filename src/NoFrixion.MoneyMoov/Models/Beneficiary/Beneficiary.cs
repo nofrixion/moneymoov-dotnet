@@ -70,9 +70,9 @@ public class Beneficiary : IValidatableObject
     {
         Regex accountNameRegex = new Regex(@"^([^\p{L}0-9]*?[\p{L}0-9]){1,}['\.\-\/&\s]*");
 
-        if (!PaymentsValidator.IsValidAccount(accountNameRegex, DestinationAccountName!))
+        if (!PaymentsValidator.IsValidAccountName(DestinationAccountName!))
         {
-            yield return new ValidationResult($"Destination Account Name is invalid. Must match format '{accountNameRegex}'");
+            yield return new ValidationResult($"Destination Account Name is invalid. It can only contain alaphanumberic characters plus the ' . - & and space characters.");
         }
 
         if (!PaymentsValidator.ValidateCurrency(Currency!))
