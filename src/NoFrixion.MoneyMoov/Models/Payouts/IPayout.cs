@@ -33,33 +33,40 @@ public interface IPayout
     /// </summary>
     Guid UserID { get; set; }
 
+    AccountIdentifierType Type { get; set; }
+
     /// <summary>
     /// Gets or Sets description of payout request
     /// </summary>
-    string? Description { get; set; }
+    string Description { get; set; }
 
     /// <summary>
     /// Gets or Sets Currency of payout request
     /// </summary>
-    string? Currency { get; set; }
+    CurrencyTypeEnum Currency { get; set; }
 
     /// <summary>
     /// Gets or Sets payout amount
     /// </summary>
-    decimal? Amount { get; set; }
+    decimal Amount { get; set; }
 
     /// <summary>
     /// Gets or Sets your reference ID
     /// </summary>
-    string? YourReference { get; set; }
-
-    /// <summary>
-    /// Gets or Sets the receiving account
-    /// </summary>
-    Counterparty? DestinationAccount { get; set; }
+    string YourReference { get; set; }
 
     /// <summary>
     /// Gets or Sets destination reference ID
     /// </summary>
-    string? TheirReference { get; set; }
+    string TheirReference { get; set; }
+
+    Guid DestinationAccountID { get; set; }
+
+    string DestinationIBAN { get; set; }
+
+    string DestinationAccountNumber { get; set; }
+
+    string DestinationSortCode { get; set; }
+
+    string DestinationAccountName { get; set; }
 }

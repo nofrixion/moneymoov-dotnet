@@ -19,6 +19,13 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public static class PaymentRequestValidator
 {
+    public static bool ValidatePaymentRequestCurrency(CurrencyTypeEnum currency, PaymentMethodTypeEnum paymentMethodTypes)
+    {
+        return !(currency == CurrencyTypeEnum.LBTC &&
+               (paymentMethodTypes.HasFlag(PaymentMethodTypeEnum.card) ||
+                paymentMethodTypes.HasFlag(PaymentMethodTypeEnum.pisp)));
+    }
+
     public static IEnumerable<ValidationResult> Validate(
         IPaymentRequest paymentRequest,
         ValidationContext validationContext)
@@ -48,7 +55,7 @@ public static class PaymentRequestValidator
             yield return new ValidationResult($"The amount was invalid. If a card token payment method is being used, the amount must be at least {PaymentsConstants.CARD_MINIMUM_PAYMENT_AMOUNT}.", new string[] { nameof(paymentRequest.Amount) });
         }
 
-        if (!PayoutsValidator.ValidatePaymentRequestCurrency(paymentRequest.Currency, paymentRequest.PaymentMethodTypes))
+        if (!ValidatePaymentRequestCurrency(paymentRequest.Currency, paymentRequest.PaymentMethodTypes))
         {
             yield return new ValidationResult($"One or more of the payment methods specified are not compatible with the {paymentRequest.Currency} currency.",
                 new string[] { nameof(PaymentMethodTypeEnum) });

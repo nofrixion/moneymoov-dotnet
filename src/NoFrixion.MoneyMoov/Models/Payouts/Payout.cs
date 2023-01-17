@@ -13,9 +13,11 @@
 //  Proprietary NoFrixion.
 // -----------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace NoFrixion.MoneyMoov.Models;
 
-public class Payout : IPayout
+public class Payout : IValidatableObject, IPayout
 {
     /// <summary>
     /// The ID for the payout.
@@ -35,37 +37,42 @@ public class Payout : IPayout
     /// <summary>
     /// Gets or Sets payout type
     /// </summary>
-    public AccountIdentifierType? Type { get; set; }
+    public AccountIdentifierType Type { get; set; }
 
     /// <summary>
     /// Gets or Sets description of payout request
     /// </summary>
-    public string? Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or Sets Currency of payout request
     /// </summary>
-    public string? Currency { get; set; }
+    public CurrencyTypeEnum Currency { get; set; }
 
     /// <summary>
     /// Gets or Sets payout amount
     /// </summary>
-    public decimal? Amount { get; set; }
+    public decimal Amount { get; set; }
 
     /// <summary>
     /// Gets or Sets your reference ID
     /// </summary>
-    public string? YourReference { get; set; }
-
-    /// <summary>
-    /// See <see cref="IPayout.DestinationAccount"/>
-    /// </summary>
-    public Counterparty? DestinationAccount { get; set; }
+    public string YourReference { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or Sets destination reference ID
     /// </summary>
-    public string? TheirReference { get; set; }
+    public string TheirReference { get; set; } = string.Empty;
+
+    public Guid DestinationAccountID { get; set; }
+
+    public string DestinationIBAN { get; set; } = string.Empty;
+
+    public string DestinationAccountNumber { get; set; } = string.Empty;
+
+    public string DestinationSortCode { get; set; } = string.Empty;
+
+    public string DestinationAccountName { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or Sets the status of payout request
@@ -101,4 +108,33 @@ public class Payout : IPayout
     /// The name of the account the payout is being made from.
     /// </summary>
     public string SourceAccountName { get; set; } = string.Empty;
+
+    public NoFrixionProblem Validate()
+    {
+        var context = new ValidationContext(this, serviceProvider: null, items: null);
+
+        List<ValidationResult> validationResults = new List<ValidationResult>();
+        bool isValid = Validator.TryValidateObject(this, context, validationResults, true);
+
+        if (isValid)
+        {
+            // If the property validations passed, apply the overall business validation rules.
+            var bizRulesvalidationResults = PayoutsValidator.Validate(this, context);
+            if (bizRulesvalidationResults.Count() > 0)
+            {
+                isValid = false;
+                validationResults ??= new List<ValidationResult>();
+                validationResults.AddRange(bizRulesvalidationResults);
+            }
+        }
+
+        return isValid ?
+            NoFrixionProblem.Empty :
+            new NoFrixionProblem("The Payout model had one or more validation errors.", validationResults);
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        return PayoutsValidator.Validate(this, validationContext);
+    }
 }

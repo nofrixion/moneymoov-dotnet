@@ -74,11 +74,6 @@ public class Beneficiary : IValidatableObject
             yield return new ValidationResult($"Destination Account Name is invalid. It can only contain alaphanumberic characters plus the ' . - & and space characters.");
         }
 
-        if (!PayoutsValidator.ValidateCurrency(Currency!))
-        {
-            yield return new ValidationResult("The Payout currency was not recognised. Currently only EUR and GBP are supported.");
-        }
-
         if (Identifier?.Type == AccountIdentifierType.Unknown)
         {
             yield return new ValidationResult($"Please use either IBAN or Number and Sort code as destination");

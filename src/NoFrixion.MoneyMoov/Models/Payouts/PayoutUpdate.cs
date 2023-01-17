@@ -18,27 +18,23 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class PayoutUpdate : IValidatableObject, IPayout
+public class PayoutUpdate
 {
-    public Guid ID { get; set; }
-
-    public Guid AccountID { get; set; }
-
-    public Guid UserID { get; set; }
+    public Guid? AccountID { get; set; }
 
     public AccountIdentifierType? Type { get; set; }
 
     public string? Description { get; set; }
 
-    public string? Currency { get; set; }
+    public CurrencyTypeEnum? Currency { get; set; }
 
     public decimal? Amount { get; set; }
 
     public string? YourReference { get; set; }
 
-    public Counterparty? DestinationAccount { get; set; }
+    public string? TheirReference { get; set; }
 
-    public string? DestinationAccountID { get; set; }
+    public Guid? DestinationAccountID { get; set; }
 
     public string? DestinationIBAN { get; set; }
 
@@ -47,35 +43,4 @@ public class PayoutUpdate : IValidatableObject, IPayout
     public string? DestinationSortCode { get; set; }
 
     public string? DestinationAccountName { get; set; }
-
-    public string? TheirReference { get; set; }
-
-    public NoFrixionProblem Validate()
-    {
-        var context = new ValidationContext(this, serviceProvider: null, items: null);
-
-        List<ValidationResult> validationResults = new List<ValidationResult>();
-        bool isValid = Validator.TryValidateObject(this, context, validationResults, true);
-
-        if (isValid)
-        {
-            // If the property validations passed, apply the overall business validation rules.
-            var bizRulesvalidationResults = PayoutsValidator.Validate(this, context);
-            if (bizRulesvalidationResults.Count() > 0)
-            {
-                isValid = false;
-                validationResults ??= new List<ValidationResult>();
-                validationResults.AddRange(bizRulesvalidationResults);
-            }
-        }
-
-        return isValid ?
-            NoFrixionProblem.Empty :
-            new NoFrixionProblem("The Payout update model had one or more validation errors.", validationResults);
-    }
-
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        return PayoutsValidator.Validate(this, validationContext);
-    }
 }
