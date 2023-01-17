@@ -229,7 +229,7 @@ public static class PayoutsValidator
             AccountIdentifierType.SCAN : AccountIdentifierType.IBAN))
         {
             yield return new ValidationResult("Their reference must consist of at least 6 alphanumeric characters that are not all the same. " +
-                "Optional, uncounted characters include space, hyphen(-), full stop (.), ampersand(&), and forward slash (/). Total of all characters must be less than 18.",
+                "Optional, uncounted characters include space, hyphen(-) and underscore (_). Total of all characters must be less than 18 for a SCAN payout and less than 140 for an IBAN payout.",
                 new string[] { nameof(payout.TheirReference) });
         }
     }

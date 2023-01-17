@@ -109,6 +109,9 @@ public class Payout : IValidatableObject, IPayout
     /// </summary>
     public string SourceAccountName { get; set; } = string.Empty;
 
+    public Counterparty? DestinationAccount { get; set; }
+
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
