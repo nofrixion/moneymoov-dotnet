@@ -41,6 +41,8 @@ public class UserCreate
     /// </summary>
     public Guid UserIniviteID { get; set; }
 
+    public string? Profile { get; set; }
+
     /// <summary>
     /// Places all the user create's properties into a dictionary.
     /// </summary>
@@ -54,6 +56,7 @@ public class UserCreate
             { nameof(EmailAddress), EmailAddress },
             { nameof(IdentityUserID), IdentityUserID },
             { nameof(UserIniviteID), UserIniviteID.ToString() },
+            {nameof(Profile), Profile ?? ""}
         };
     }
 }
