@@ -23,7 +23,7 @@ namespace NoFrixion.MoneyMoov;
 public interface IUserInviteClient
 {
     Task<MoneyMoovApiResponse> SendInviteAsync(string userAccessToken, Guid merchantID, string inviteeEmailAddress, string inviteRegistrationUrl,
-        bool sendInviteEmail, string inviteeName);
+        bool sendInviteEmail, string inviteeFirstName, string inviteeLastName);
 }
 
 public class UserInviteClient : IUserInviteClient
@@ -98,7 +98,8 @@ public class UserInviteClient : IUserInviteClient
         string inviteeEmailAddress, 
         string inviteRegistrationUrl, 
         bool sendInviteEmail,
-        string inviteeName)
+        string inviteeFirstName,
+        string inviteeLastName)
     {
         var url = MoneyMoovUrlBuilder.UserInvitesApi.UserInvitesUrl(_apiClient.GetBaseUri().ToString());
 
@@ -110,7 +111,8 @@ public class UserInviteClient : IUserInviteClient
             InviteeEmailAddress = inviteeEmailAddress,
             RegistrationUrl = inviteRegistrationUrl,
             SendInviteEmail = sendInviteEmail,
-            InviteeName = inviteeName
+            InviteeFirstName = inviteeFirstName,
+            InviteeLastName = inviteeLastName
         };
 
         return prob switch

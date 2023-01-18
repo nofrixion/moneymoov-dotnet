@@ -4,10 +4,16 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<AssemblyVersion>1.1.83.0</AssemblyVersion>
-	<FileVersion>1.1.83.0</FileVersion>
+	<AssemblyVersion>1.1.85.0</AssemblyVersion>
+	<FileVersion>1.1.85.0</FileVersion>
 	<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Validators\**" />
+    <EmbeddedResource Remove="Validators\**" />
+    <None Remove="Validators\**" />
+  </ItemGroup>
 
   <ItemGroup>
 	<PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
@@ -16,10 +22,6 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Validators\" />
   </ItemGroup>
 
 </Project>

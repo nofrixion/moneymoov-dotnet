@@ -26,6 +26,8 @@ public class UserInvite
     public string InviteeEmailAddress { get; set; } = string.Empty;
     public string InviterFirstName { get; set; } = string.Empty;
     public string InviterLastName { get; set; } = string.Empty;
+    public string? InviteeFirstName { get; set; } = string.Empty;
+    public string? InviteeLastName { get; set; } = string.Empty;
     public string InviterEmailAddress { get; set; } = string.Empty;
     public Guid MerchantID { get; set; }
     public string RegistrationUrl { get; set; } = string.Empty;

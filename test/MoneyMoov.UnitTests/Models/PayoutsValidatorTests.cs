@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: PaymentsValidatorTests.cs
+// Filename: PayoutsValidatorTests.cs
 //
-// Description: Unit tests for payment(payouts) validation logic.
+// Description: Unit tests for Payouts validation logic.
 //
 // Author(s):
 // Arif Matin (arif@nofrixion.com)
@@ -20,51 +20,26 @@ using Xunit.Abstractions;
 
 namespace NoFrixion.MoneyMoov.UnitTests;
 
-public class PaymentsValidatorTests
+public class PayoutsValidatorTests
 {
-    readonly ILogger<PaymentsValidatorTests> _logger;
+    readonly ILogger<PayoutsValidatorTests> _logger;
     private LoggerFactory _loggerFactory;
 
-    public PaymentsValidatorTests(ITestOutputHelper testOutputHelper)
+    public PayoutsValidatorTests(ITestOutputHelper testOutputHelper)
     {
         _loggerFactory = new LoggerFactory();
         _loggerFactory.AddProvider(new XunitLoggerProvider(testOutputHelper));
-        _logger = _loggerFactory.CreateLogger<PaymentsValidatorTests>();
+        _logger = _loggerFactory.CreateLogger<PayoutsValidatorTests>();
     }
-
-    /// <summary>
-    /// Checks the custom regex for the payout account name generates the same results as the 
-    /// OpenAPI generated regex generated from the Modulr swagger file.
-    /// </summary>
-    //[Theory]
-    //[InlineData("refe-12")]
-    //public void Validate_Account_Name_Custom_OpenApi(string accountName)
-    //{
-    //    PaymentDestination payDest = new PaymentDestination(accountNumber: "123456", 
-    //        name: accountName, 
-    //        emailAddress: "some@some.com", 
-    //        iban: "GB42MOCK00000070629907",
-    //        sortCode: "000000");
-
-    //    var context = new ValidationContext(payDest, serviceProvider: null, items: null);
-    //    List<ValidationResult>? validationResults = new List<ValidationResult>();
-    //    bool isValid = Validator.TryValidateObject(payDest, context, validationResults, true);
-
-    //    Assert.False(isValid);
-
-    //    foreach(var validationResult in validationResults)
-    //    {
-    //        _logger.LogDebug(validationResult.ErrorMessage);
-    //    }
-    //}
 
     /// <summary>
     /// Tests that a payout property TheirReference is validated successfully.
     /// </summary>
     [Theory]
     [InlineData("refe-12")]
+    [InlineData("&./refe-12")]
     [InlineData("r12 hsd-2")]
-    [InlineData("-sd73_sdf_48")]
+    [InlineData("-sd73/sdf.48&")]
     [InlineData("-sD7 K sdf -")]
     public void PaymentsValidator_ValidateTheirReference_Success(string theirReference)
     {
@@ -82,6 +57,7 @@ public class PaymentsValidatorTests
     [InlineData("-sD7!&K.sdf./", AccountIdentifierType.IBAN)]       //Invalid character '!'.
     [InlineData("ddddddddd", AccountIdentifierType.IBAN)]           //all same char
     [InlineData("Saldo F16 + F20", AccountIdentifierType.IBAN)]     // Invalid character '+'.
+    [InlineData("Saldo F16 _ F20", AccountIdentifierType.IBAN)]     // Invalid character '_'.
     public void PaymentsValidator_ValidateTheirReference_Fail(string theirReference, AccountIdentifierType identifierType)
     {
         var result = PayoutsValidator.ValidateTheirReference(theirReference, identifierType);
@@ -119,6 +95,35 @@ public class PaymentsValidatorTests
     public void PaymentsValidator_Validate_Account_Name_Fails(string accountName)
     {
         var result = PayoutsValidator.IsValidAccountName(accountName);
+
+        Assert.False(result);
+    }
+
+    /// <summary>
+    /// Tests that a payout property YourReference is validated successfully.
+    /// </summary>
+    [Theory]
+    [InlineData("")]
+    [InlineData("refe-12")]
+    [InlineData("r12 hsd-2")]
+    [InlineData("safe1234 wf fwef ew e ergerger g")]
+    public void PaymentsValidator_ValidateYourReference_Success(string yourReference)
+    {
+        var result = PayoutsValidator.ValidateYourReference(yourReference);
+
+        Assert.True(result);
+    }
+
+    /// <summary>
+    /// Tests that an invalid payout YourReference fails validation.
+    /// </summary>
+    [Theory]
+    [InlineData("re.e-1-")]             // Invalid char '.'. 
+    [InlineData("-sD7!&K.sdf./")]       //Invalid character '!'.
+    [InlineData("Saldo F16 + F20")]     // Invalid character '+'.
+    public void PaymentsValidator_ValidateYourReference_Fail(string yourReference)
+    {
+        var result = PayoutsValidator.ValidateYourReference(yourReference);
 
         Assert.False(result);
     }
