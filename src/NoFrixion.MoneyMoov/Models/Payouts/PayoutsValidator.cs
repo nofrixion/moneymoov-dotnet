@@ -43,6 +43,11 @@ public static class PayoutsValidator
     public const int THEIR_REFERENCE_IBAN_MAXIMUM_LENGTH = 139;
 
     /// <summary>
+    /// Maximum length of the Your, or External Reference, field.
+    /// </summary>
+    public const int YOUR_REFERENCE_MAXIMUM_LENGTH = 50;
+
+    /// <summary>
     /// Validation regex for the destination account name field.
     /// </summary
     /// <remarks>
@@ -61,12 +66,12 @@ public static class PayoutsValidator
     /// alphanumeric characters that are not all the same. Optional, uncounted characters include space, 
     /// hyphen(-), full stop (.), ampersand(&), and forward slash (/). Total of all characters must be less than 
     /// 18 for scan payment and 140 for an IBAN payment.
-    /// Somewhat contradictingly, validation error message states: External Reference can only have alphanumeric 
-    /// characters plus underscore, hyphen and space.
+    /// Somewhat misleadingly, the Reference field cannot contain a hyphen, the allowed characters are:
+    /// alpha numberic (including unicode), space, hyphen(-), full stop (.), ampersand(&), and forward slash (/). 
     /// </summary>
     /// <remarks>
     /// [^\W_] is actings as \w with the underscore character included. The upstream supplier does not permit
-    /// underscore in the Reference (Theirs) field but DOES in the External Reference (Yours).
+    /// underscore in the Reference (Theirs) field.
     /// </remarks>
     public const string THEIR_REFERENCE_REGEX = @"^([^\W_]|[[\.\-/&\s]){6,}$";
 
@@ -76,6 +81,14 @@ public static class PayoutsValidator
     /// counted.
     /// </summary>
     public const string THEIR_REFERENCE_NON_COUNTED_CHARS_REGEX = @"[\.\-/&\s]";
+
+    /// <summary>
+    /// The External Reference, or Your reference, field is the one that gets set locally on the 
+    /// payer's transaction record. It does not get sent out through the payment network.
+    /// The upstream supplier currently only support alphanumeric, space, hyphen(-) and underscore (_) characters.
+    /// An empty value is also supported.
+    /// </summary>
+    public const string YOUR_REFERENCE_REGEX = @"^[\w\-\s]*$";
 
     /// <summary>
     /// Validation regex for the destination IBAN field.
@@ -156,6 +169,24 @@ public static class PayoutsValidator
         return theirReference.ToCharArray().Distinct().Count() > 1;
     }
 
+    public static bool ValidateYourReference(string? yourReference)
+    {
+        if (string.IsNullOrEmpty(yourReference))
+        {
+            return true;
+        }
+
+        Regex matchRegex = new Regex(YOUR_REFERENCE_REGEX);
+
+        if ( yourReference.Length > YOUR_REFERENCE_MAXIMUM_LENGTH
+            || !matchRegex.IsMatch(yourReference))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     public static bool ValidatePaymentRequestAmount(decimal? amount, PaymentMethodTypeEnum paymentMethodTypes, CurrencyTypeEnum currency)
     {
         return paymentMethodTypes switch
@@ -229,9 +260,18 @@ public static class PayoutsValidator
         if (!ValidateTheirReference(payout.TheirReference, !string.IsNullOrEmpty(payout.DestinationAccountNumber) ? 
             AccountIdentifierType.SCAN : AccountIdentifierType.IBAN))
         {
-            yield return new ValidationResult("Their reference must consist of at least 6 alphanumeric characters that are not all the same. " +
-                "Optional, uncounted characters include space, hyphen(-) and underscore (_). Total of all characters must be less than 18 for a SCAN payout and less than 140 for an IBAN payout.",
+            yield return new ValidationResult("Their reference must consist of at least 6 alphanumeric characters that are not all the same " +
+                "(non alphaniumeric characters do not get counted towards this minimum value). " +
+                "The allowed characters are alphanumeric, space, hyphen(-), full stop (.), ampersand (&), and forward slash (/). " +
+                "Total of all characters must be less than 18 for a SCAN payout and less than 140 for an IBAN payout.",
                 new string[] { nameof(payout.TheirReference) });
+        }
+
+        if (!ValidateYourReference(payout.YourReference))
+        {
+            yield return new ValidationResult("Your reference can only contain alphanumeric, space, hyphen(-) and underscore (_) characters. " +
+            $"The maximum allowed length of the field is {YOUR_REFERENCE_MAXIMUM_LENGTH} characters.",
+            new string[] { nameof(payout.YourReference) });
         }
     }
 }

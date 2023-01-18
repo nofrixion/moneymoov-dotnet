@@ -98,4 +98,33 @@ public class PayoutsValidatorTests
 
         Assert.False(result);
     }
+
+    /// <summary>
+    /// Tests that a payout property YourReference is validated successfully.
+    /// </summary>
+    [Theory]
+    [InlineData("")]
+    [InlineData("refe-12")]
+    [InlineData("r12 hsd-2")]
+    [InlineData("safe1234 wf fwef ew e ergerger g")]
+    public void PaymentsValidator_ValidateYourReference_Success(string yourReference)
+    {
+        var result = PayoutsValidator.ValidateYourReference(yourReference);
+
+        Assert.True(result);
+    }
+
+    /// <summary>
+    /// Tests that an invalid payout YourReference fails validation.
+    /// </summary>
+    [Theory]
+    [InlineData("re.e-1-")]             // Invalid char '.'. 
+    [InlineData("-sD7!&K.sdf./")]       //Invalid character '!'.
+    [InlineData("Saldo F16 + F20")]     // Invalid character '+'.
+    public void PaymentsValidator_ValidateYourReference_Fail(string yourReference)
+    {
+        var result = PayoutsValidator.ValidateYourReference(yourReference);
+
+        Assert.False(result);
+    }
 }
