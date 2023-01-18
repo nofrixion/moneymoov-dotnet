@@ -76,5 +76,5 @@ public class AccountIdentifier
     public string Summary =>   
         Type == AccountIdentifierType.IBAN ? Type.ToString() + ": " + IBAN :
         Type == AccountIdentifierType.SCAN ? Type.ToString() + ": " + SortCode + " / " + AccountNumber :
-         "Unknown account identifier type.";
+         "No identifier.";
 }
