@@ -57,7 +57,7 @@ public static class PayoutsValidator
     public const string ACCOUNT_NAME_REGEX = @"^['\.\-\/&\s]*?\w+['\.\-\/&\s\w]*$";
 
     /// <summary>
-    /// Validation reqex for the Their, or external, Reference field. It  must consist of at least 6 
+    /// Validation reqex for the Their, or Reference, field. It  must consist of at least 6 
     /// alphanumeric characters that are not all the same. Optional, uncounted characters include space, 
     /// hyphen(-), full stop (.), ampersand(&), and forward slash (/). Total of all characters must be less than 
     /// 18 for scan payment and 140 for an IBAN payment.
@@ -65,9 +65,10 @@ public static class PayoutsValidator
     /// characters plus underscore, hyphen and space.
     /// </summary>
     /// <remarks>
-    /// 
+    /// [^\W_] is actings as \w with the underscore character included. The upstream supplier does not permit
+    /// underscore in the Reference (Theirs) field but DOES in the External Reference (Yours).
     /// </remarks>
-    public const string THEIR_REFERENCE_REGEX = @"^[\w\-_\s]{6,}$";
+    public const string THEIR_REFERENCE_REGEX = @"^([^\W_]|[[\.\-/&\s]){6,}$";
 
     /// <summary>
     /// Certain characters in the Their Reference field are not counterd towards the minimum and
