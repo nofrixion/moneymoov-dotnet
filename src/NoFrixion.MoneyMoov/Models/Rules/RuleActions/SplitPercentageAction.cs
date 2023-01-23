@@ -18,9 +18,9 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class SplitPercentageAction : RuleAction
 {
-    public AccountIdentifier FirstDestination { get; set; } = new AccountIdentifier();
+    public Counterparty FirstDestination { get; set; } = new Counterparty();
     public decimal FirstPercentage { get; set; }
-    public AccountIdentifier SecondDestination { get; set; } = new AccountIdentifier();
+    public Counterparty SecondDestination { get; set; } = new Counterparty();
     public decimal SecondPercentage { get; set; }  
     public decimal AmountToLeave { get; set; }
 }

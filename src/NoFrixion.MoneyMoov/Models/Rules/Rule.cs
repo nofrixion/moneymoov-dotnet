@@ -19,6 +19,8 @@ public class Rule
 {
     public Guid ID { get; set; }
     public Guid AccountID { get; set; }
+    public Guid UserID { get; set; }
+    public Guid ApproverID { get; set; }
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
     public RuleStatusEnum Status { get; set; }
