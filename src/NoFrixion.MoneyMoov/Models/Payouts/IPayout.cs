@@ -28,11 +28,6 @@ public interface IPayout
     /// </summary>
     Guid AccountID { get; set; }
 
-    /// <summary>
-    /// Gets or Sets User ID of who created the payout request
-    /// </summary>
-    Guid UserID { get; set; }
-
     AccountIdentifierType Type { get; set; }
 
     /// <summary>
