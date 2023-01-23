@@ -18,7 +18,7 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class SweepAction : RuleAction
 {
-    public AccountIdentifier Destination { get; set; } = new AccountIdentifier();
+    public Counterparty Destination { get; set; } = new Counterparty();
 
     public decimal AmountToLeave { get; set; }
 }
