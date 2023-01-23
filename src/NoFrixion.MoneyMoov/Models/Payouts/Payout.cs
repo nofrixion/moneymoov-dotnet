@@ -37,7 +37,7 @@ public class Payout : IValidatableObject, IPayout
     /// <summary>
     /// Gets the User ID of person that approved the payout.
     /// </summary>
-    public Guid ApproverID { get; set; }
+    public Guid? ApproverID { get; set; }
 
     /// <summary>
     /// Gets or Sets payout type
