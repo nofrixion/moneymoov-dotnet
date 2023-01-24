@@ -20,15 +20,16 @@ public class Rule
     public Guid ID { get; set; }
     public Guid AccountID { get; set; }
     public Guid UserID { get; set; }
-    public Guid ApproverID { get; set; }
+    public Guid? ApproverID { get; set; }
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
+    public bool IsEnabled { get; set; }
     public RuleStatusEnum Status { get; set; }
     public bool TriggerOnPayIn { get; set; }
     public bool TriggerOnPayOut { get; set; }
-    public string? TriggerCronExpression { get; }
-    public DateTimeOffset? StartAt { get; }
-    public DateTimeOffset? EndAt { get; }
+    public string TriggerCronExpression { get; set; } = string.Empty;
+    public DateTimeOffset? StartAt { get; set; }
+    public DateTimeOffset? EndAt { get; set; }
     public List<RuleAction> RuleActions { get; set; } = new List<RuleAction>();
     public string? ApproveUrl { get; set; }
     public string? ApproveHash { get; set; }

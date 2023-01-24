@@ -46,11 +46,6 @@ public class RuleCreate
     public bool IsEnabled { get; set; }
 
     /// <summary>
-    /// If set to true the rule will be schedule for an immediate execution.
-    /// </summary>
-    public bool DoImmediateExecution { get; set; }
-
-    /// <summary>
     /// Set to true if the rule execution should be triggered when the account 
     /// receives a pay in (credit).
     /// </summary>
@@ -66,23 +61,46 @@ public class RuleCreate
     /// If the rule should be executed on a recurring schedule this is the expression
     /// that sets the schedule. The expression uses a CRON format.
     /// </summary>
-    public string? TriggerCronExpression { get; }
+    public string? TriggerCronExpression { get; set; }
 
     /// <summary>
     /// Optional start time for rule executions. If this value is set the rule will not
     /// be triggered until the start time has been reached.
     /// </summary>
-    public DateTimeOffset? StartAt { get; }
+    public DateTimeOffset? StartAt { get; set; }
 
     /// <summary>
     /// Optional end time for rule executions. If this value is set the rule will not
     /// be triggered after the end time has been reached.
     /// </summary>
-    public DateTimeOffset? EndAt { get; }
+    public DateTimeOffset? EndAt { get; set; }
 
     /// <summary>
     /// A list of actions that the execution of the rule will invoke. All changes to the rule actions
     /// require an administrator to authorise.
     /// </summary>
-    public List<RuleAction> RuleActions { get; set; } = new List<RuleAction>();
+    [Required]
+    public string RuleActionsJson { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Places all the rule create model's properties into a dictionary.
+    /// </summary>
+    /// <returns>A dictionary ot string key value pairs.</returns>
+    public Dictionary<string, string> ToDictionary()
+    {
+        return new Dictionary<string, string>
+        {
+            { nameof(AccountID), AccountID.ToString() },
+            { nameof(Name), Name},
+            { nameof(Description), Description ?? string.Empty},
+            { nameof(OnExecutedWebHookUrl), OnExecutedWebHookUrl ?? string.Empty },
+            { nameof(IsEnabled), IsEnabled.ToString() },
+            { nameof(TriggerOnPayIn), TriggerOnPayIn.ToString() },
+            { nameof(TriggerOnPayOut), TriggerOnPayOut.ToString() },
+            { nameof(TriggerCronExpression), TriggerCronExpression ?? string.Empty },
+            { nameof(StartAt), StartAt != null ? StartAt.Value.ToString() : string.Empty },
+            { nameof(EndAt), EndAt != null ? EndAt.Value.ToString() : string.Empty },
+            { nameof(RuleActionsJson), RuleActionsJson ?? string.Empty},
+        };
+    }
 }
