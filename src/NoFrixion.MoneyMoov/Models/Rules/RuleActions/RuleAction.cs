@@ -13,16 +13,17 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-
 namespace NoFrixion.MoneyMoov.Models;
 
 public class RuleAction
 {
+    public static readonly RuleAction Empty = new RuleAction{ _isEmpty = true };
+    private bool _isEmpty;
+
     public int Priority { get; set; }
 
     public RuleActionsEnum ActionType { get; set; }
 
-    [Required]
-    public string ActionContentJson { get; set; } = string.Empty;
+    public bool IsEmpty()
+        => _isEmpty;
 }
