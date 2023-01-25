@@ -36,14 +36,14 @@ public class RuleCreate
     public string? Description { get; set; }
 
     /// <summary>
-    /// A webhook URL to invoke when a rule exection completes.
+    /// A webhook URL to invoke when a rule execution completes.
     /// </summary>
     public string? OnExecutedWebHookUrl { get; set; }
 
     /// <summary>
-    /// If set to false the rule will be disabled from executing.
+    /// If set to true the rule will be disabled from executing.
     /// </summary>
-    public bool IsEnabled { get; set; }
+    public bool IsDisabled { get; set; }
 
     /// <summary>
     /// Set to true if the rule execution should be triggered when the account 
@@ -80,12 +80,12 @@ public class RuleCreate
     /// will require an administrator to authorise.
     /// </summary>
     [Required]
-    public SweepAction SweepAction { get; set; } = SweepAction.Empty;
+    public SweepAction? SweepAction { get; set; }
 
     /// <summary>
     /// Places all the rule create model's properties into a dictionary.
     /// </summary>
-    /// <returns>A dictionary ot string key value pairs.</returns>
+    /// <returns>A dictionary of string key value pairs.</returns>
     public Dictionary<string, string> ToDictionary()
     {
         var dict = new Dictionary<string, string>
@@ -94,7 +94,7 @@ public class RuleCreate
             { nameof(Name), Name},
             { nameof(Description), Description ?? string.Empty},
             { nameof(OnExecutedWebHookUrl), OnExecutedWebHookUrl ?? string.Empty },
-            { nameof(IsEnabled), IsEnabled.ToString() },
+            { nameof(IsDisabled), IsDisabled.ToString() },
             { nameof(TriggerOnPayIn), TriggerOnPayIn.ToString() },
             { nameof(TriggerOnPayOut), TriggerOnPayOut.ToString() },
             { nameof(TriggerCronExpression), TriggerCronExpression ?? string.Empty },
@@ -102,9 +102,12 @@ public class RuleCreate
             { nameof(EndAt), EndAt != null ? EndAt.Value.ToString() : string.Empty }
         };
 
-        dict = dict.Concat(SweepAction.ToDictionary($"{nameof(SweepAction)}."))
-            .ToLookup(x => x.Key, x => x.Value)
-            .ToDictionary(x => x.Key, g => g.First());
+        if (SweepAction != null && !SweepAction.IsEmpty())
+        {
+            dict = dict.Concat(SweepAction.ToDictionary($"{nameof(SweepAction)}."))
+                .ToLookup(x => x.Key, x => x.Value)
+                .ToDictionary(x => x.Key, g => g.First());
+        }
 
         return dict;
     }

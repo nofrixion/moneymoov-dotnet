@@ -19,7 +19,8 @@ namespace NoFrixion.MoneyMoov.Models;
 public class SweepAction 
 {
     public static readonly SweepAction Empty = new SweepAction { _isEmpty = true };
-    private bool _isEmpty;
+    
+    private bool _isEmpty = false;
 
     public int Priority { get; set; }
 
