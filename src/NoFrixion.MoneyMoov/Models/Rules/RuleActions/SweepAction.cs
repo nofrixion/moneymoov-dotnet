@@ -16,9 +16,39 @@
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class SweepAction : RuleAction
+public class SweepAction 
 {
-    public Counterparty Destination { get; set; } = new Counterparty();
+    public static readonly SweepAction Empty = new SweepAction { _isEmpty = true };
+    private bool _isEmpty;
+
+    public int Priority { get; set; }
+
+    public RuleActionsEnum ActionType { get; set; }
+
+    public List<SweepDestination> Destinations { get; set; } = new List<SweepDestination>();
 
     public decimal AmountToLeave { get; set; }
+
+    public bool IsEmpty() => _isEmpty;
+
+    public Dictionary<string, string> ToDictionary(string keyPrefix)
+    {
+        var dict = new Dictionary<string, string>
+        {
+            { keyPrefix + nameof(Priority), Priority.ToString() },
+            { keyPrefix + nameof(ActionType), ActionType.ToString() },
+            { keyPrefix + nameof(AmountToLeave), AmountToLeave.ToString() }
+        };
+
+        for (int i = 0; i < Destinations.Count(); i++)
+        {
+            var destination = Destinations[i];
+
+            dict = dict.Concat(destination.ToDictionary(keyPrefix + nameof(Destinations) + $"[{i}]."))
+                .ToLookup(x => x.Key, x => x.Value)
+                .ToDictionary(x => x.Key, g => g.First());
+        }
+
+        return dict;
+    }
 }

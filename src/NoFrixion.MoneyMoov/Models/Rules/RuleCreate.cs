@@ -76,11 +76,11 @@ public class RuleCreate
     public DateTimeOffset? EndAt { get; set; }
 
     /// <summary>
-    /// A list of actions that the execution of the rule will invoke. All changes to the rule actions
-    /// require an administrator to authorise.
+    /// The sweep action parameters for the rule. Any changes to the sweep rule parameters
+    /// will require an administrator to authorise.
     /// </summary>
     [Required]
-    public string RuleActionsJson { get; set; } = string.Empty;
+    public SweepAction SweepAction { get; set; } = SweepAction.Empty;
 
     /// <summary>
     /// Places all the rule create model's properties into a dictionary.
@@ -88,7 +88,7 @@ public class RuleCreate
     /// <returns>A dictionary ot string key value pairs.</returns>
     public Dictionary<string, string> ToDictionary()
     {
-        return new Dictionary<string, string>
+        var dict = new Dictionary<string, string>
         {
             { nameof(AccountID), AccountID.ToString() },
             { nameof(Name), Name},
@@ -99,8 +99,13 @@ public class RuleCreate
             { nameof(TriggerOnPayOut), TriggerOnPayOut.ToString() },
             { nameof(TriggerCronExpression), TriggerCronExpression ?? string.Empty },
             { nameof(StartAt), StartAt != null ? StartAt.Value.ToString() : string.Empty },
-            { nameof(EndAt), EndAt != null ? EndAt.Value.ToString() : string.Empty },
-            { nameof(RuleActionsJson), RuleActionsJson ?? string.Empty},
+            { nameof(EndAt), EndAt != null ? EndAt.Value.ToString() : string.Empty }
         };
+
+        dict = dict.Concat(SweepAction.ToDictionary($"{nameof(SweepAction)}."))
+            .ToLookup(x => x.Key, x => x.Value)
+            .ToDictionary(x => x.Key, g => g.First());
+
+        return dict;
     }
 }

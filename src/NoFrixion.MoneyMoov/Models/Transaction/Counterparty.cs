@@ -19,7 +19,7 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class Counterparty
 {
-    public Guid? AccountId { get; set; }
+    public Guid? AccountID { get; set; }
 
     /// <summary>
     /// The name of the counterparty. For a person this should be their full name. For a 
@@ -48,4 +48,26 @@ public class Counterparty
     /// </summary>
     public string Summary
         => Name + (Identifier != null ? ", " + Identifier.Summary : string.Empty);
+
+    public virtual Dictionary<string, string> ToDictionary(string keyPrefix)
+    {
+        var dict = new Dictionary<string, string>
+        {
+             { keyPrefix + nameof(AccountID), AccountID != null ? AccountID.Value.ToString() : string.Empty},
+             { keyPrefix + nameof(Name), Name ?? string.Empty },
+             { keyPrefix + nameof(EmailAddress), EmailAddress ?? string.Empty },
+             { keyPrefix + nameof(PhoneNumber), PhoneNumber ?? string.Empty },
+        };
+
+        if(Identifier != null)
+        {
+            var identifierDict = Identifier.ToDictionary(keyPrefix + nameof(Identifier) + ".");
+
+            dict = dict.Concat(identifierDict)
+               .ToLookup(x => x.Key, x => x.Value)
+               .ToDictionary(x => x.Key, g => g.First());
+        }
+
+        return dict;
+    }
 }

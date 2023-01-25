@@ -30,7 +30,7 @@ public class Rule
     public string TriggerCronExpression { get; set; } = string.Empty;
     public DateTimeOffset? StartAt { get; set; }
     public DateTimeOffset? EndAt { get; set; }
-    public List<RuleAction> RuleActions { get; set; } = new List<RuleAction>();
+    public SweepAction SweepAction { get; set; } = SweepAction.Empty;
     public string? ApproveUrl { get; set; }
     public string? ApproveHash { get; set; }
     public string? OnExecutedWebHookUrl { get; set; }
