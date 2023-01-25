@@ -73,8 +73,8 @@ public class RuleUpdate
     public DateTimeOffset? EndAt { get; }
 
     /// <summary>
-    /// A list of actions that the execution of the rule will invoke. All changes to the rule actions
-    /// require an administrator to authorise.
+    /// The sweep action parameters for the rule. Any changes to the sweep rule parameters
+    /// will require an administrator to authorise.
     /// </summary>
-    public List<RuleAction>? RuleActions { get; set; }
+    public SweepAction? SweepAction { get; set; }
 }

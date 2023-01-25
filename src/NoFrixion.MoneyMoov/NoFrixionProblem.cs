@@ -304,7 +304,7 @@ public class NoFrixionProblem
             error += " Validation errors: ";
             foreach (var kvp in Errors)
             {
-                error += kvp.Key + ": " + kvp.Value;
+                error += kvp.Key + ": " + string.Join(',', kvp.Value);
             }
         }
 
@@ -338,7 +338,7 @@ public class NoFrixionProblem
             htmlError += "<ul>";
             foreach (var kvp in Errors)
             {
-                htmlError += $"<li>{kvp.Key}: {kvp.Value}<ul>";
+                htmlError += $"<li>{kvp.Key}: {string.Join(',', kvp.Value)}</li>";
             }
             htmlError += "</ul>";
         }

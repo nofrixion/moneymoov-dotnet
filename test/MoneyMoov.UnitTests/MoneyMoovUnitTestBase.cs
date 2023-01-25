@@ -20,14 +20,14 @@ namespace NoFrixion.MoneyMoov.UnitTests;
 
 public class MoneyMoovUnitTestBase<T> where T : class
 {
+    public LoggerFactory LoggerFactory { get; set; }
+
+    public ILogger Logger { get; set; }
+
     public MoneyMoovUnitTestBase(ITestOutputHelper testOutputHelper)
     {
         LoggerFactory = new LoggerFactory();
         LoggerFactory.AddProvider(new XunitLoggerProvider(testOutputHelper));
         Logger = LoggerFactory.CreateLogger<T>();
     }
-
-    public LoggerFactory LoggerFactory { get; set; }
-
-    public ILogger Logger { get; set; }
 }

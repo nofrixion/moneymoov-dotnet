@@ -77,4 +77,16 @@ public class AccountIdentifier
         Type == AccountIdentifierType.IBAN ? Type.ToString() + ": " + IBAN :
         Type == AccountIdentifierType.SCAN ? Type.ToString() + ": " + SortCode + " / " + AccountNumber :
          "No identifier.";
+
+    public virtual Dictionary<string, string> ToDictionary(string keyPrefix)
+    {
+        return new Dictionary<string, string>
+        {
+            { keyPrefix + nameof(Currency), Currency ?? string.Empty},
+            { keyPrefix + nameof(BIC), BIC ?? string.Empty},
+            { keyPrefix + nameof(IBAN), IBAN ?? string.Empty},
+            { keyPrefix + nameof(SortCode), SortCode ?? string.Empty},
+            { keyPrefix + nameof(AccountNumber), AccountNumber ?? string.Empty}
+        };
+    }
 }
