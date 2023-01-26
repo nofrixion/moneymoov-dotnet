@@ -52,4 +52,20 @@ public class SweepAction
 
         return dict;
     }
+
+    /// <summary>
+    /// The sweep action approval is only required if the destinations change. The approval hash
+    /// does not need to take into account non-destination related fields.
+    /// </summary>
+    public string GetDestinationApprovalHash()
+    {
+        string input = string.Empty;
+
+        foreach(var destination in Destinations)
+        {
+            input += destination.GetApprovalHash();
+        }
+
+        return input != string.Empty ? HashHelper.CreateHash(input) : string.Empty;
+    }
 }

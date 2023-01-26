@@ -89,4 +89,15 @@ public class AccountIdentifier
             { keyPrefix + nameof(AccountNumber), AccountNumber ?? string.Empty}
         };
     }
+
+    public string GetApprovalHash()
+    {
+        string input =
+            (!string.IsNullOrEmpty(Currency) ? Currency.ToString() : string.Empty) +
+            (!string.IsNullOrEmpty(BIC) ? BIC : string.Empty) +
+            (!string.IsNullOrEmpty(IBAN) ? IBAN : string.Empty) +
+            (!string.IsNullOrEmpty(SortCode) ? SortCode : string.Empty) +
+            (!string.IsNullOrEmpty(AccountNumber) ? AccountNumber : string.Empty);
+        return HashHelper.CreateHash(input);
+    }
 }

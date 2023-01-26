@@ -35,12 +35,7 @@ public class RuleUpdate
     /// <summary>
     /// If set to false the rule will be disabled from executing.
     /// </summary>
-    public bool? IsEnabled { get; set; }
-
-    /// <summary>
-    /// If set to true the rule will be schedule for an immediate execution.
-    /// </summary>
-    public bool? DoImmediateExecution { get; set; }
+    public bool? IsDisabled { get; set; }
 
     /// <summary>
     /// Set to true if the rule execution should be triggered when the account 
@@ -77,4 +72,32 @@ public class RuleUpdate
     /// will require an administrator to authorise.
     /// </summary>
     public SweepAction? SweepAction { get; set; }
+
+    /// <summary>
+    /// Places all the rule update model's properties into a dictionary.
+    /// </summary>
+    /// <returns>A dictionary of string key value pairs.</returns>
+    public Dictionary<string, string> ToDictionary()
+    {
+        var dict = new Dictionary<string, string>();
+
+        if (Name != null) dict.Add(nameof(Name), Name);
+        if (Description != null) dict.Add(nameof(Description), Description);
+        if (OnExecutedWebHookUrl != null) dict.Add(nameof(OnExecutedWebHookUrl), OnExecutedWebHookUrl);
+        if (IsDisabled != null) dict.Add(nameof(IsDisabled), IsDisabled.Value.ToString());
+        if (TriggerOnPayIn != null) dict.Add(nameof(TriggerOnPayIn), TriggerOnPayIn.Value.ToString());
+        if (TriggerOnPayOut != null) dict.Add(nameof(TriggerOnPayOut), TriggerOnPayOut.Value.ToString());
+        if (TriggerCronExpression != null) dict.Add(nameof(TriggerCronExpression), TriggerCronExpression);
+        if (StartAt != null) dict.Add(nameof(StartAt), StartAt.Value.ToString());
+        if (EndAt != null) dict.Add(nameof(EndAt), EndAt.Value.ToString());      
+
+        if (SweepAction != null && !SweepAction.IsEmpty())
+        {
+            dict = dict.Concat(SweepAction.ToDictionary($"{nameof(SweepAction)}."))
+                .ToLookup(x => x.Key, x => x.Value)
+                .ToDictionary(x => x.Key, g => g.First());
+        }
+
+        return dict;
+    }
 }
