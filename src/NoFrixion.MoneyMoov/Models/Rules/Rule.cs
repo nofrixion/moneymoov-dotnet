@@ -31,8 +31,13 @@ public class Rule
     public DateTimeOffset? StartAt { get; set; }
     public DateTimeOffset? EndAt { get; set; }
     public SweepAction SweepAction { get; set; } = SweepAction.Empty;
+
+    /// <summary>
+    /// If set this property holds the URL an approver needs to visit in order to
+    /// complete a strong authentication check in order to approve the rule.
+    /// </summary>
     public string? ApproveUrl { get; set; }
-    public string? ApproveHash { get; set; }
+
     public string? OnExecutedWebHookUrl { get; set; }
     public DateTimeOffset Inserted { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
