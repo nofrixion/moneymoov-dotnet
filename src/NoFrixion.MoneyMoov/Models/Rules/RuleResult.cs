@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: RulesResult.cs
+// Filename: RuleEvent.cs
 // 
-// Description: A model that represents the status fields produced by a MoneyMoov
+// Description: A model that represents an event produced by a MoneyMoov
 // Rule execution.
 // 
 // Author(s):
@@ -16,13 +16,17 @@
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class RuleResult
+public class RuleEvent
 {
     public Guid RuleID { get; set; }
 
-    public RuleResultsEnum Result { get; set; }
+    public RuleEventTypesEnum RuleEventType { get; set; }
 
-    public DateTimeOffset ExecutedAt { get; set; }
+    public DateTimeOffset Inserted { get; set; }
 
     public string? Message { get; set; }
+
+    public string? ErrorMessage { get; set; }
+
+    public string? RawResponse { get; set; }
 }

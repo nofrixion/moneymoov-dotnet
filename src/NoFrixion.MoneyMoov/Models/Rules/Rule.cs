@@ -23,7 +23,7 @@ public class Rule
     public Guid? ApproverID { get; set; }
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
-    public bool IsEnabled { get; set; }
+    public bool IsDisabled { get; set; }
     public RuleStatusEnum Status { get; set; }
     public bool TriggerOnPayIn { get; set; }
     public bool TriggerOnPayOut { get; set; }
