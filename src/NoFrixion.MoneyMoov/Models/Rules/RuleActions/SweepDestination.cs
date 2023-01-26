@@ -38,4 +38,13 @@ public class SweepDestination : Counterparty
 
         return dict;
     }
+
+    public override string GetApprovalHash()
+    {
+        string input = 
+            Math.Round(SweepPercentage, 2).ToString() +
+            Math.Round(SweepAmount, 2).ToString() +
+            base.GetApprovalHash();
+        return HashHelper.CreateHash(input);
+    }
 }
