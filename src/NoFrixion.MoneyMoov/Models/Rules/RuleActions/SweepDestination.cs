@@ -24,7 +24,7 @@ public class SweepDestination : Counterparty, IValidatableObject
     /// The percentage of the total funds in the account when the rule is exectued
     /// that should be swept to the destination.
     /// </summary>
-    [Range(0.01, 100.00)]
+    [Range(0, 100.00)]
     public decimal SweepPercentage { get; set; }
 
     /// <summary>
