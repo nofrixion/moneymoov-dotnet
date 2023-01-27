@@ -70,4 +70,15 @@ public class Counterparty
 
         return dict;
     }
+
+    public virtual string GetApprovalHash()
+    {
+        string input =
+            (AccountID != null && AccountID != Guid.Empty ? AccountID.ToString() : string.Empty) +
+            (!string.IsNullOrEmpty(Name) ? Name : string.Empty) +
+            (!string.IsNullOrEmpty(EmailAddress) ? EmailAddress : string.Empty) +
+            (!string.IsNullOrEmpty(PhoneNumber) ? PhoneNumber : string.Empty) +
+            (Identifier != null ? Identifier.GetApprovalHash() : string.Empty);
+        return HashHelper.CreateHash(input);
+    }
 }

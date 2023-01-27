@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: RuleResultsEnum.cs
+// Filename: RuleEventTypesEnum.cs
 // 
-// Description: A list of the result types a MoneyMoov rule execution can produce.
+// Description: A list of the event types a MoneyMoov rule execution can produce.
 // 
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)
@@ -19,7 +19,7 @@ using Newtonsoft.Json.Converters;
 namespace NoFrixion.MoneyMoov;
 
 [JsonConverter(typeof(StringEnumConverter))]
-public enum RuleResultsEnum
+public enum RuleEventTypesEnum
 {
     None,
 

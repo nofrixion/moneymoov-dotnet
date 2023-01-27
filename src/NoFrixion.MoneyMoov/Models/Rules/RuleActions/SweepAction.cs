@@ -14,12 +14,15 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace NoFrixion.MoneyMoov.Models;
 
-public class SweepAction 
+public class SweepAction : IValidatableObject
 {
     public static readonly SweepAction Empty = new SweepAction { _isEmpty = true };
-    private bool _isEmpty;
+    
+    private bool _isEmpty = false;
 
     public int Priority { get; set; }
 
@@ -50,5 +53,30 @@ public class SweepAction
         }
 
         return dict;
+    }
+
+    /// <summary>
+    /// The sweep action approval is only required if the destinations change. The approval hash
+    /// does not need to take into account non-destination related fields.
+    /// </summary>
+    public string GetDestinationApprovalHash()
+    {
+        string input = string.Empty;
+
+        foreach(var destination in Destinations)
+        {
+            input += destination.GetApprovalHash();
+        }
+
+        return input != string.Empty ? HashHelper.CreateHash(input) : string.Empty;
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (Destinations.Sum(x => x.SweepPercentage) > 100)
+        {
+            yield return new ValidationResult($"The sum of the percentages on the sweep destinations cannot exceed 100.",
+                new string[] { nameof(Destinations) });
+        }
     }
 }
