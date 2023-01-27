@@ -14,9 +14,11 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace NoFrixion.MoneyMoov.Models;
 
-public class SweepAction 
+public class SweepAction : IValidatableObject
 {
     public static readonly SweepAction Empty = new SweepAction { _isEmpty = true };
     
@@ -67,5 +69,14 @@ public class SweepAction
         }
 
         return input != string.Empty ? HashHelper.CreateHash(input) : string.Empty;
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (Destinations.Sum(x => x.SweepPercentage) > 100)
+        {
+            yield return new ValidationResult($"The sum of the percentages on the sweep destinations cannot exceed 100.",
+                new string[] { nameof(Destinations) });
+        }
     }
 }
