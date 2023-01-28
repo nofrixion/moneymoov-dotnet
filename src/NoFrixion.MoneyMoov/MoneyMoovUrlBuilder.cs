@@ -149,6 +149,18 @@ public static class MoneyMoovUrlBuilder
     }
 
     /// <summary>
+    /// Available endpoint URLs for the Rules resource.
+    /// </summary>
+    public static class RulesApi
+    {
+        public static string RulesUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.rules}";
+
+        public static string ApproveRuleUrl(string moneyMoovBaseUrl, Guid ruleID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.rules}/{ruleID}/approve";
+    }
+
+    /// <summary>
     /// Available endpoint URLs for the Tokens resource.
     /// </summary>
     public static class TokensApi

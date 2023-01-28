@@ -28,6 +28,8 @@ namespace NoFrixion.MoneyMoov
 
         Task<MoneyMoovApiResponse> PostAsync(string path, HttpContent content);
 
+        Task<MoneyMoovApiResponse> PostAsync(string path, string accessToken);
+
         Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, HttpContent content);
 
         Task<MoneyMoovApiResponse> PostAsync(string path, string accessToken, HttpContent content);
@@ -81,6 +83,9 @@ namespace NoFrixion.MoneyMoov
 
         public Task<MoneyMoovApiResponse> PostAsync(string path, string accessToken, HttpContent content)
             => ExecAsync(BuildRequest(HttpMethod.Post, path, accessToken, content));
+
+        public Task<MoneyMoovApiResponse> PostAsync(string path, string accessToken)
+            => ExecAsync(BuildRequest(HttpMethod.Post, path, accessToken, Option<HttpContent>.None));
 
         public Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content) 
             => ExecAsync<T>(BuildRequest(HttpMethod.Post, path, accessToken, content));

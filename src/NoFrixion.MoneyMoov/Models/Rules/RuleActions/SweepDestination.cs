@@ -54,8 +54,8 @@ public class SweepDestination : Counterparty, IValidatableObject
     public override string GetApprovalHash()
     {
         string input =
-            Math.Round(SweepPercentage, 2).ToString() +
-            Math.Round(SweepAmount, 2).ToString() +
+            Math.Round(SweepPercentage, 2).ToString("0.##") +
+            Math.Round(SweepAmount, 2).ToString("0.##") +
             Priority.ToString() +
             base.GetApprovalHash();
         return HashHelper.CreateHash(input);
