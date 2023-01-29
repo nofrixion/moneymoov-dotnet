@@ -41,4 +41,14 @@ public class Rule
     public string? OnExecutedWebHookUrl { get; set; }
     public DateTimeOffset Inserted { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
+
+    /// <summary>
+    /// The approval hash is used when approving the rule and to detect when critical
+    /// fields change.
+    /// </summary>
+    public string GeApprovalHash()
+    {
+        string input = ID.ToString() + SweepAction.GetDestinationApprovalHash();
+        return HashHelper.CreateHash(input);
+    }
 }
