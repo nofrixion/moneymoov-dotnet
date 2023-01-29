@@ -18,6 +18,8 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class RuleEvent
 {
+    public Guid ID { get; set; }
+
     public Guid RuleID { get; set; }
 
     public RuleEventTypesEnum RuleEventType { get; set; }
