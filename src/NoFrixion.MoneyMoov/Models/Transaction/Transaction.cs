@@ -85,4 +85,9 @@ public class Transaction
     /// most important fields about the counterparty.
     /// </summary>
     public string CounterpartySummary { get; set; }
+
+    /// <summary>
+    /// Balance left on the account after the transaction.
+    /// </summary>
+    public decimal Balance { get; set; }
 }
