@@ -13,9 +13,11 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace NoFrixion.MoneyMoov.Models;
 
-public class Rule
+public class Rule : IValidatableObject
 {
     public Guid ID { get; set; }
     public Guid AccountID { get; set; }
@@ -41,6 +43,11 @@ public class Rule
     public string? OnExecutedWebHookUrl { get; set; }
     public DateTimeOffset Inserted { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
+    
+    /// <summary>
+    /// The most recent transaction date when the rule was last run.
+    /// </summary>
+    public DateTimeOffset LastRunAtTransactionDate { get; set; }
 
     /// <summary>
     /// The approval hash is used when approving the rule and to detect when critical
@@ -50,5 +57,26 @@ public class Rule
     {
         string input = ID.ToString() + SweepAction.GetDestinationApprovalHash();
         return HashHelper.CreateHash(input);
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if ((TriggerOnPayIn || TriggerOnPayOut) && !string.IsNullOrEmpty(TriggerCronExpression))
+        {
+            yield return new ValidationResult($"A payin and/or payout trigger cannot be set at the same time as a CRON expression trigger.",
+                new string[] { nameof(TriggerCronExpression) });
+        }
+    }
+
+    public NoFrixionProblem Validate()
+    {
+        var context = new ValidationContext(this, serviceProvider: null, items: null);
+
+        List<ValidationResult> validationResults = new List<ValidationResult>();
+        bool isValid = Validator.TryValidateObject(this, context, validationResults, true);
+
+        return isValid ?
+            NoFrixionProblem.Empty :
+            new NoFrixionProblem("The Rule had one or more validation errors.", validationResults);
     }
 }
