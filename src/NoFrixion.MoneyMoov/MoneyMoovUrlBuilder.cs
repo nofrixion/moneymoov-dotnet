@@ -304,6 +304,6 @@ public static class MoneyMoovUrlBuilder
 
     public static string AccountTransactionStatementApiUrl(string moneyMoovBaseUrl, string accountId)
     {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.STATEMENTS_ENDPOINT}/{accountId}";
+        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.ACCOUNTS_ENDPOINT}/{accountId}/statement";
     }
 }
