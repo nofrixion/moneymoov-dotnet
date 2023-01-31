@@ -71,13 +71,9 @@ public class Rule : IValidatableObject
 
         if (!IsNullOrEmpty(TriggerCronExpression))
         {
-            var validationResult = ValidateCronExpression(TriggerCronExpression);
-
-            // Validate the cron expression using QuartzNet
-            if (!IsNullOrEmpty(validationResult))
+            if (!CronExpression.IsValidExpression(TriggerCronExpression))
             {
-                // The cron expression is invalid.
-                yield return new ValidationResult($"Invalid TriggerCronExpression. {validationResult}. Please refer to https://www.quartz-scheduler.net/documentation/quartz-3.x/how-tos/crontrigger.html#introduction",
+                yield return new ValidationResult($"Invalid TriggerCronExpression. Please refer to https://www.quartz-scheduler.net/documentation/quartz-3.x/how-tos/crontrigger.html#examples for valid examples.",
                     new string[] { nameof(TriggerCronExpression) });
             }
         }
@@ -93,25 +89,5 @@ public class Rule : IValidatableObject
         return isValid ?
             NoFrixionProblem.Empty :
             new NoFrixionProblem("The Rule had one or more validation errors.", validationResults);
-    }
-
-    /// <summary>
-    /// Validates a cron expression using the QuartzNet lib
-    /// </summary>
-    /// <param name="expression">The cron expression to validate</param>
-    /// <returns>An error message if the validation fails.</returns>
-    public string ValidateCronExpression(string expression)
-    {
-        try
-        {
-            var cronExpression = new CronExpression(TriggerCronExpression);
-        }
-        catch (FormatException ex)
-        {
-            // The cron expression is invalid.
-            return ex.Message;
-        }
-
-        return Empty;
     }
 }
