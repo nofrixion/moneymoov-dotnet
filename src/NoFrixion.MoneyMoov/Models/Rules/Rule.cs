@@ -14,6 +14,8 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using Quartz;
+using static System.String;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -23,13 +25,13 @@ public class Rule : IValidatableObject
     public Guid AccountID { get; set; }
     public Guid UserID { get; set; }
     public Guid? ApproverID { get; set; }
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = Empty;
     public string? Description { get; set; }
     public bool IsDisabled { get; set; }
     public RuleStatusEnum Status { get; set; }
     public bool TriggerOnPayIn { get; set; }
     public bool TriggerOnPayOut { get; set; }
-    public string TriggerCronExpression { get; set; } = string.Empty;
+    public string TriggerCronExpression { get; set; } = Empty;
     public DateTimeOffset? StartAt { get; set; }
     public DateTimeOffset? EndAt { get; set; }
     public SweepAction SweepAction { get; set; } = SweepAction.Empty;
@@ -61,10 +63,19 @@ public class Rule : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if ((TriggerOnPayIn || TriggerOnPayOut) && !string.IsNullOrEmpty(TriggerCronExpression))
+        if ((TriggerOnPayIn || TriggerOnPayOut) && !IsNullOrEmpty(TriggerCronExpression))
         {
             yield return new ValidationResult($"A payin and/or payout trigger cannot be set at the same time as a CRON expression trigger.",
                 new string[] { nameof(TriggerCronExpression) });
+        }
+
+        if (!IsNullOrEmpty(TriggerCronExpression))
+        {
+            if (!CronExpression.IsValidExpression(TriggerCronExpression))
+            {
+                yield return new ValidationResult($"Invalid TriggerCronExpression. Please refer to https://www.quartz-scheduler.net/documentation/quartz-3.x/how-tos/crontrigger.html#examples for valid examples.",
+                    new string[] { nameof(TriggerCronExpression) });
+            }
         }
     }
 
