@@ -30,7 +30,18 @@ public class SweepAction : IValidatableObject
 
     public List<SweepDestination> Destinations { get; set; } = new List<SweepDestination>();
 
+    /// <summary>
+    /// The amount to leave in the account once the seep has been processed.
+    /// A value of zero means sweep all funds.
+    /// </summary>
     public decimal AmountToLeave { get; set; }
+
+    /// <summary>
+    /// The minimum amount that must be availabe in order for the sweep to be run.
+    /// For example, setting to 1000 means the rule will not execute if the funds
+    /// avaialble are less than 1000.
+    /// </summary>
+    public decimal MinimumAmountToRunAt { get; set; }
 
     public bool IsEmpty() => _isEmpty;
 
@@ -40,7 +51,8 @@ public class SweepAction : IValidatableObject
         {
             { keyPrefix + nameof(Priority), Priority.ToString() },
             { keyPrefix + nameof(ActionType), ActionType.ToString() },
-            { keyPrefix + nameof(AmountToLeave), AmountToLeave.ToString() }
+            { keyPrefix + nameof(AmountToLeave), AmountToLeave.ToString() },
+            { keyPrefix + nameof(MinimumAmountToRunAt), MinimumAmountToRunAt.ToString() }
         };
 
         for (int i = 0; i < Destinations.Count(); i++)
