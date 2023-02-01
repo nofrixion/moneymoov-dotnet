@@ -47,4 +47,9 @@ public enum PaymentResultEnum
     /// For card payments the payment was voided prior to settlement.
     /// </summary>
     Voided,
+
+    /// <summary>
+    /// For PISP payments, the authorization was successful but the amount is yet to be settled in the respective account.
+    /// </summary>
+    Authorized
 }
