@@ -13,8 +13,6 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using NoFrixion.MoneyMoov;
-
 namespace NoFrixion.MoneyMoov.Models;
 
 public class PaymentRequestPayment
