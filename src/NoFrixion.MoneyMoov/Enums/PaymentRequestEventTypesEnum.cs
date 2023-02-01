@@ -85,4 +85,9 @@ public enum PaymentRequestEventTypesEnum
     /// when the status of the payment changes.
     /// </summary>
     pisp_webhook = 11,
+
+    /// <summary>
+    /// A successful PISP attempt was verified and settled through modulr transaction.
+    /// </summary>
+    pisp_settle = 12
 }

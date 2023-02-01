@@ -60,4 +60,10 @@ public static class PaymentsConstants
     /// Dummy sort code used in dev and sandbox.
     /// </summary>
     public const string DUMMY_SORT_CODE = "040002";
+
+    public const string PISP_REFERENCE_PREFIX = "pisp";
+
+    public const int PISP_REFERENCE_MAX_LENGTH = 18;
+
+    public const string PISP_SETTLED_STATUS = "SETTLED";
 }
