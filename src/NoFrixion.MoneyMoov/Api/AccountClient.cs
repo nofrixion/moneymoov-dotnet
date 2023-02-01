@@ -24,7 +24,7 @@ public interface IAccountClient
 {
     //Task<MoneyMoovApiResponse<IEnumerable<PaymentAccount>>> GetAccountsAsync(string userAccessToken, Guid merchantID);
 
-    Task<MoneyMoovApiResponse<PaymentAccount>> CreateAccountAsync(string userAccessToken, PaymentAccountCreate token);
+    Task<MoneyMoovApiResponse<PaymentAccount>> CreateAccountAsync(string userAccessToken, PaymentAccountCreate accountCreate);
 }
 
 public class AccountClient : IAccountClient
@@ -70,7 +70,7 @@ public class AccountClient : IAccountClient
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="account">The details of the token to create.</param>
     /// <returns>If successful, the newly created merchant token.</returns>
-    public Task<MoneyMoovApiResponse<PaymentAccount>> CreateAccountAsync(string userAccessToken, PaymentAccountCreate account)
+    public Task<MoneyMoovApiResponse<PaymentAccount>> CreateAccountAsync(string userAccessToken, PaymentAccountCreate accountCreate)
     {
         var url = MoneyMoovUrlBuilder.AccountsApi.AccountsUrl(_apiClient.GetBaseUri().ToString());
 
@@ -78,7 +78,7 @@ public class AccountClient : IAccountClient
 
         return prob switch
         {
-            var p when p.IsEmpty => _apiClient.PostAsync<PaymentAccount>(url, userAccessToken, new FormUrlEncodedContent(account.ToDictionary())),
+            var p when p.IsEmpty => _apiClient.PostAsync<PaymentAccount>(url, userAccessToken, new FormUrlEncodedContent(accountCreate.ToDictionary())),
             _ => Task.FromResult(new MoneyMoovApiResponse<PaymentAccount>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }

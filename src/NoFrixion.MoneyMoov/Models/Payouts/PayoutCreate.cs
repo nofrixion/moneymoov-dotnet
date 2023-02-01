@@ -27,8 +27,6 @@ public class PayoutCreate : IValidatableObject, IPayout
     [Required(ErrorMessage = "AccountID is required.")]
     public Guid AccountID { get; set; }
 
-    public Guid UserID { get; set; }
-
     public AccountIdentifierType Type { get; set; }
 
     public string Description { get; set; } = string.Empty;
@@ -86,5 +84,30 @@ public class PayoutCreate : IValidatableObject, IPayout
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         return PayoutsValidator.Validate(this, validationContext);
+    }
+
+    /// <summary>
+    /// Places all the payout's properties into a dictionary.
+    /// </summary>
+    /// <returns>A dictionary with all the payout's non-collection properties 
+    /// represented as key-value pairs.</returns>
+    public Dictionary<string, string> ToDictionary()
+    {
+        return new Dictionary<string, string>
+        {
+            { nameof(ID), ID.ToString() },
+            { nameof(AccountID), AccountID.ToString() },
+            { nameof(Type), Type.ToString() },
+            { nameof(Description), Description },
+            { nameof(Currency), Currency.ToString() },
+            { nameof(Amount), Amount.ToString() },
+            { nameof(YourReference), YourReference },
+            { nameof(TheirReference), TheirReference },
+            { nameof(DestinationAccountID), DestinationAccountID.ToString() },
+            { nameof(DestinationIBAN), DestinationIBAN },
+            { nameof(DestinationAccountNumber), DestinationAccountNumber },
+            { nameof(DestinationSortCode), DestinationSortCode },
+            { nameof(DestinationAccountName), DestinationAccountName },
+        };
     }
 }

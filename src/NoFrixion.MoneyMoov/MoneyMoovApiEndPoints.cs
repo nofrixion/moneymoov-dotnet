@@ -118,4 +118,9 @@ public static class MoneyMoovApiEndPoints
     /// The URL to access the main NoFrixion MoneyMoov Transactions API.
     /// </summary>
     public const string TRANSACTIONS_ENDPOINT = "transactions";
+
+    /// <summary>
+    /// The URL to access account statement generation actions.
+    /// </summary>
+    public const string STATEMENTS_ENDPOINT = "statement";
 }
