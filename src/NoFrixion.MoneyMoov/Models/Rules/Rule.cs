@@ -77,6 +77,14 @@ public class Rule : IValidatableObject
                     new string[] { nameof(TriggerCronExpression) });
             }
         }
+
+        if (SweepAction != null)
+        {
+            foreach (var err in SweepAction.Validate(validationContext))
+            {
+                yield return err;
+            }
+        }
     }
 
     public NoFrixionProblem Validate()

@@ -15,6 +15,7 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -89,6 +90,14 @@ public class SweepAction : IValidatableObject
         {
             yield return new ValidationResult($"The sum of the percentages on the sweep destinations cannot exceed 100.",
                 new string[] { nameof(Destinations) });
+        }
+
+        foreach(var dest in Destinations)
+        {
+            foreach(var err in dest.Validate(validationContext))
+            {
+                yield return err;
+            }
         }
     }
 }
