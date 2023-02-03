@@ -98,4 +98,9 @@ public class Counterparty
                 new string[] { nameof(Identifier) });
         }
     }
+
+    public override string ToString()
+    {
+        return $"Identifier: {Identifier}";
+    }
 }
