@@ -15,6 +15,8 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class Counterparty
@@ -80,5 +82,25 @@ public class Counterparty
             (!string.IsNullOrEmpty(PhoneNumber) ? PhoneNumber : string.Empty) +
             (Identifier != null ? Identifier.GetApprovalHash() : string.Empty);
         return HashHelper.CreateHash(input);
+    }
+
+    public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (Identifier == null)
+        {
+            yield return new ValidationResult($"The identifier must be set with the desintation account details for a counterparty.",
+                new string[] { nameof(Identifier) });
+        }
+
+        if (Identifier != null && Identifier.Type == AccountIdentifierType.Unknown)
+        {
+            yield return new ValidationResult($"The counterparty identifier must have either an IBAN or account number and sort code set.",
+                new string[] { nameof(Identifier) });
+        }
+    }
+
+    public override string ToString()
+    {
+        return $"Identifier: {Identifier}";
     }
 }

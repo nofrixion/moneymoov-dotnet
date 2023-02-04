@@ -23,7 +23,7 @@ public class Rule : IValidatableObject
 {
     public Guid ID { get; set; }
     public Guid AccountID { get; set; }
-    public Guid UserID { get; set; }
+    public Guid? UserID { get; set; }
     public Guid? ApproverID { get; set; }
     public string Name { get; set; } = Empty;
     public string? Description { get; set; }
@@ -75,6 +75,14 @@ public class Rule : IValidatableObject
             {
                 yield return new ValidationResult($"Invalid TriggerCronExpression. Please refer to https://www.quartz-scheduler.net/documentation/quartz-3.x/how-tos/crontrigger.html#examples for valid examples.",
                     new string[] { nameof(TriggerCronExpression) });
+            }
+        }
+
+        if (SweepAction != null)
+        {
+            foreach (var err in SweepAction.Validate(validationContext))
+            {
+                yield return err;
             }
         }
     }

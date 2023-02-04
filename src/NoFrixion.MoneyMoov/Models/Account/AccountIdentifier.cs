@@ -100,4 +100,9 @@ public class AccountIdentifier
             (!string.IsNullOrEmpty(AccountNumber) ? AccountNumber : string.Empty);
         return HashHelper.CreateHash(input);
     }
+
+    public override string ToString()
+    {
+        return $"Type: {Type}, Currency: {Currency}, BIC: {BIC}, IBAN: {IBAN}, SortCode: {SortCode}, AccountNumber: {AccountNumber}, Summary: {Summary}";
+    }
 }

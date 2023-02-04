@@ -14,6 +14,9 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
+
 namespace NoFrixion.MoneyMoov;
 
 public enum JurisdictionEnum
@@ -21,15 +24,18 @@ public enum JurisdictionEnum
     /// <summary>
     /// Ireland.
     /// </summary>
+    [Display(Name = "Ireland")]
     IE,
 
     /// <summary>
     /// United Kingdom.
     /// </summary>
+    [Display(Name = "United Kingdom")]
     UK,
 
     /// <summary>
     /// European Union, other than Ireland.
     /// </summary>
+    [Display(Name = "European Union")]
     EU
 }

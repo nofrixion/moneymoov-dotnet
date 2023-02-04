@@ -108,13 +108,27 @@ public class PaymentRequestResult
 
             foreach(var payEvent in orderedEvents)
             {
-                if(payEvent.EventType == PaymentRequestEventTypesEnum.pisp_callback &&
-                    (payEvent.Status == PISP_PLAID_SUCCESS_STATUS ||
-                     payEvent.Status == PISP_PLAID_INITIATED_STATUS ||
-                     payEvent.Status == PISP_PLAID_INPUT_NEEDED_STATUS ||
-                     payEvent.Status == PISP_MODULR_SUCCESS_STATUS ||
-                     payEvent.Status == PISP_YAPILY_COMPLETED_STATUS ||
-                     payEvent.Status == PISP_YAPILY_PENDING_STATUS))
+                if (payEvent.EventType == PaymentRequestEventTypesEnum.pisp_settle)
+                {
+                    // Successfully settled payment initiation.
+                    Payments.Add(
+                        new PaymentRequestPayment
+                        {
+                            PaymentRequestID = PaymentRequestID,
+                            OccurredAt = payEvent.Inserted,
+                            PaymentMethod = PaymentMethodTypeEnum.pisp,
+                            Amount = Math.Round(payEvent.Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                            Currency = payEvent.Currency
+                        });
+                }
+                else if ((payEvent.EventType == PaymentRequestEventTypesEnum.pisp_callback ||
+                          payEvent.EventType == PaymentRequestEventTypesEnum.pisp_webhook) &&
+                         (payEvent.Status == PISP_PLAID_SUCCESS_STATUS ||
+                          payEvent.Status == PISP_PLAID_INITIATED_STATUS ||
+                          payEvent.Status == PISP_PLAID_INPUT_NEEDED_STATUS ||
+                          payEvent.Status == PISP_MODULR_SUCCESS_STATUS ||
+                          payEvent.Status == PISP_YAPILY_COMPLETED_STATUS ||
+                          payEvent.Status == PISP_YAPILY_PENDING_STATUS))
                 {
                     // Successfully authorised payment initiation.
                     Payments.Add(
@@ -123,7 +137,7 @@ public class PaymentRequestResult
                             PaymentRequestID = PaymentRequestID,
                             OccurredAt = payEvent.Inserted,
                             PaymentMethod = PaymentMethodTypeEnum.pisp,
-                            Amount = Math.Round(payEvent.Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                            Amount = 0, // this is considered as authorized rather than settlement hence amount is 0.
                             Currency = payEvent.Currency
                         });
                 }
@@ -206,6 +220,7 @@ public class PaymentRequestResult
                 _ when paymentRequest.Amount == 0 => PaymentResultEnum.FullyPaid,
                 _ when Amount > 0 && Amount < paymentRequest.Amount => PaymentResultEnum.PartiallyPaid,
                 _ when Payments.Count > 0 && Payments.All(x => x.CardIsVoided) => PaymentResultEnum.Voided,
+                _ when Payments.Count > 0 && Amount == 0 && Payments.All(x=>x.PaymentMethod == PaymentMethodTypeEnum.pisp) => PaymentResultEnum.Authorized,
                 _ => PaymentResultEnum.None
             };
         }

@@ -61,8 +61,13 @@ public class SweepDestination : Counterparty, IValidatableObject
         return HashHelper.CreateHash(input);
     }
 
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
+        foreach(var err in base.Validate(validationContext))
+        {
+            yield return err;
+        }
+
         if(SweepAmount > 0 && SweepPercentage > 0)
         {
             yield return new ValidationResult($"A sweep destination can only have one of {nameof(SweepAmount)} or {nameof(SweepPercentage)} greater than zero, not both.", 
@@ -73,6 +78,18 @@ public class SweepDestination : Counterparty, IValidatableObject
         {
             yield return new ValidationResult($"A sweep destination must have one of {nameof(SweepAmount)} or {nameof(SweepPercentage)} greater than zero.",
                 new string[] { nameof(SweepAmount), nameof(SweepPercentage) });
+        }
+
+        if(Identifier== null)
+        {
+            yield return new ValidationResult($"The destination identifier details must be set for a sweep destination.",
+                new string[] { nameof(Identifier) });
+        }
+
+        if (string.IsNullOrEmpty(Identifier?.Currency))
+        {
+            yield return new ValidationResult($"The destination identifier currency must be set.",
+                new string[] { nameof(Identifier.Currency) });
         }
     }
 }
