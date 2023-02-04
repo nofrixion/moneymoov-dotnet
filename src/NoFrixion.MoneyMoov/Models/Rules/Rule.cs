@@ -23,7 +23,7 @@ public class Rule : IValidatableObject
 {
     public Guid ID { get; set; }
     public Guid AccountID { get; set; }
-    public Guid UserID { get; set; }
+    public Guid? UserID { get; set; }
     public Guid? ApproverID { get; set; }
     public string Name { get; set; } = Empty;
     public string? Description { get; set; }
