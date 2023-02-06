@@ -13,6 +13,8 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Models;
+
 namespace NoFrixion.MoneyMoov;
 
 public enum MoneyMoovResources
@@ -146,6 +148,15 @@ public static class MoneyMoovUrlBuilder
 
         public static string GetByOrderIDUrl(string moneyMoovBaseUrl, string orderID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}/getbyorderid/{orderID}";
+    }
+
+    /// <summary>
+    /// Available endpoint URLs for the Payouts resource.
+    /// </summary>
+    public static class PayoutsApi
+    {
+        public static string PayoutsUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}";
     }
 
     /// <summary>
