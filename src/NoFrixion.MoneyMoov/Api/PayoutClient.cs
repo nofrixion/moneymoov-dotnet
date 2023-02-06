@@ -22,7 +22,7 @@ namespace NoFrixion.MoneyMoov;
 
 public interface IPayoutClient
 {
-    Task<MoneyMoovApiResponse> CreatePayoutAsync(string userAccessToken, PayoutCreate payoutCreate);
+    Task<MoneyMoovApiResponse<Payout>> CreatePayoutAsync(string userAccessToken, PayoutCreate payoutCreate);
 }
 
 public class PayoutClient : IPayoutClient
