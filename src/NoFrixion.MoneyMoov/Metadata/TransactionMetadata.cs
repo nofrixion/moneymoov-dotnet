@@ -183,4 +183,9 @@ public class TransactionMetadata
     /// Whether the metadata is for a Payin or Payout
     /// </summary>
     public TransactionCreditTypesEnum Type { get; set; }
+
+    /// <summary>
+    /// Average amount ever received
+    /// </summary>
+    public decimal AverageAmountEverReceived { get; set; }
 }
