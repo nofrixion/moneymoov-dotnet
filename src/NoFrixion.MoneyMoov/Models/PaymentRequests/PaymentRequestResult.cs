@@ -14,6 +14,7 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Models.PaymentRequests;
 namespace NoFrixion.MoneyMoov.Models;
 
 public class PaymentRequestResult
@@ -89,9 +90,12 @@ public class PaymentRequestResult
     /// </summary>
     public List<PaymentRequestPayment> Payments { get; set; }
 
+    public List<PaymentRequestAuthorization> PispAuthorizations { get; set; }
+
     public PaymentRequestResult()
     {
         Payments = new List<PaymentRequestPayment>();
+        PispAuthorizations = new List<PaymentRequestAuthorization>();
     }
 
     public PaymentRequestResult(PaymentRequest paymentRequest)
@@ -99,6 +103,9 @@ public class PaymentRequestResult
         PaymentRequestID = paymentRequest.ID;
         RequestedAmount = paymentRequest.Amount;
         Payments = new List<PaymentRequestPayment>();
+        PispAuthorizations = new List<PaymentRequestAuthorization>();
+
+        bool pispAuthorizedEvent = false;
 
         if(paymentRequest != null &&
            paymentRequest.Events != null &&
@@ -131,15 +138,23 @@ public class PaymentRequestResult
                           payEvent.Status == PISP_YAPILY_PENDING_STATUS))
                 {
                     // Successfully authorised payment initiation.
-                    Payments.Add(
-                        new PaymentRequestPayment
-                        {
-                            PaymentRequestID = PaymentRequestID,
-                            OccurredAt = payEvent.Inserted,
-                            PaymentMethod = PaymentMethodTypeEnum.pisp,
-                            Amount = 0, // this is considered as authorized rather than settlement hence amount is 0.
-                            Currency = payEvent.Currency
-                        });
+                    if (!string.IsNullOrEmpty(payEvent.PispPaymentInitiationID) && !PispAuthorizations.Any(
+                            x => x.PispPaymentInitiationID == payEvent.PispPaymentInitiationID))
+                    {
+                        PispAuthorizations.Add(
+                            new PaymentRequestAuthorization
+                                {
+                                    PaymentRequestID = PaymentRequestID,
+                                    OccurredAt = payEvent.Inserted,
+                                    PaymentMethod = PaymentMethodTypeEnum.pisp,
+                                    Amount =
+                                        Math.Round(payEvent.Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                                    Currency = payEvent.Currency,
+                                    PispPaymentInitiationID = payEvent.PispPaymentInitiationID
+                                });
+                    }
+
+                    pispAuthorizedEvent = true;
                 }
                 else if(payEvent.EventType == PaymentRequestEventTypesEnum.lightning_invoice_paid)
                 {
@@ -220,18 +235,28 @@ public class PaymentRequestResult
                 _ when paymentRequest.Amount == 0 => PaymentResultEnum.FullyPaid,
                 _ when Amount > 0 && Amount < paymentRequest.Amount => PaymentResultEnum.PartiallyPaid,
                 _ when Payments.Count > 0 && Payments.All(x => x.CardIsVoided) => PaymentResultEnum.Voided,
-                _ when Payments.Count > 0 && Amount == 0 && Payments.All(x=>x.PaymentMethod == PaymentMethodTypeEnum.pisp) => PaymentResultEnum.Authorized,
+                _ when Amount == 0 && pispAuthorizedEvent => PaymentResultEnum.Authorized,
                 _ => PaymentResultEnum.None
             };
         }
     }
 
+    /// <summary>
+    /// Returns the amount that is remaining to be settled.
+    /// </summary>
+    /// <returns></returns>
+    public decimal PispAmountAuthorized() =>
+        // subtracting total settled amount from total authorized amount will return the remaining amount yet to be settled.
+        decimal.Subtract(PispAuthorizations.Where(x => x.Currency == Currency).Sum(x => x.Amount),
+            Payments.Where(x => x.Currency == Currency && x.PaymentMethod == PaymentMethodTypeEnum.pisp)
+                .Sum(x => x.Amount));
+
     public decimal AmountOutstanding() =>
         Currency switch
-        {
-            CurrencyTypeEnum.BTC or CurrencyTypeEnum.LBTC => RequestedAmount - Amount,
-            _ => Math.Round(RequestedAmount - Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES)
-        };
+            {
+                CurrencyTypeEnum.BTC or CurrencyTypeEnum.LBTC => RequestedAmount - Amount,
+                _ => Math.Round(RequestedAmount - (Amount + PispAmountAuthorized()), PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES)
+            };
 
     /// <summary>
     /// Applies a cap on the amount a partial payment can be for to avoid exceeding
@@ -243,12 +268,12 @@ public class PaymentRequestResult
     {
         if (amountRequested > decimal.Zero)
         {
-            decimal outstandingAmount = RequestedAmount - Amount;
+            decimal outstandingAmount = this.AmountOutstanding();
             return amountRequested > outstandingAmount ? outstandingAmount : amountRequested;
         }
         else
         {
-            return RequestedAmount - Amount;
+            return this.AmountOutstanding();
         }
     }
 }

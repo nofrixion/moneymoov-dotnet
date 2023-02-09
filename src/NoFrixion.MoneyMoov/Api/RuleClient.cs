@@ -44,7 +44,7 @@ public class RuleClient : IRuleClient
     /// Calls the MoneyMoov Rule endpoint to approve a rule for execution.
     /// </summary>
     /// <param name="userAccessStrongToken">A User scoped JWT strong access token.</param>
-    /// <param name="ruleID">The ID fo the rule being authorised, must match the token.</param>
+    /// <param name="ruleID">The ID of the rule being authorised, must match the token.</param>
     /// <returns>An API response indicating the result of the approval attempt.</returns>
     public Task<MoneyMoovApiResponse> ApproveRuleAsync(string userAccessStrongToken, Guid ruleID)
     {
