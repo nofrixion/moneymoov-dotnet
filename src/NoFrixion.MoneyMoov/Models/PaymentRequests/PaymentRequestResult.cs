@@ -139,7 +139,8 @@ public class PaymentRequestResult
                 {
                     // Successfully authorised payment initiation.
                     if (!string.IsNullOrEmpty(payEvent.PispPaymentInitiationID) && !PispAuthorizations.Any(
-                            x => x.PispPaymentInitiationID == payEvent.PispPaymentInitiationID))
+                            x => x.PispPaymentInitiationID == payEvent.PispPaymentInitiationID)
+                        && payEvent.Amount != decimal.Zero)
                     {
                         PispAuthorizations.Add(
                             new PaymentRequestAuthorization
