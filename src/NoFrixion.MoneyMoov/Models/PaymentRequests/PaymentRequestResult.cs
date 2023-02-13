@@ -30,16 +30,6 @@ public class PaymentRequestResult
     public const string PISP_PLAID_INITIATED_STATUS = "PaymentStatusInitiated";
 
     /// <summary>
-    /// An alternative status returned by Plaid when a PIS payment is successfully initiated in production.
-    /// </summary>
-    /// <remarks>
-    /// Plaid description from https://plaid.com/docs/api/products/payment-initiation/#payment_initiationconsentpaymentexecute:
-    /// PAYMENT_STATUS_INPUT_NEEDED: This is the initial state of all payments. It indicates that the payment is waiting on user input to continue processing. 
-    /// A payment may re-enter this state later on if further input is needed.
-    /// </remarks>
-    public const string PISP_PLAID_INPUT_NEEDED_STATUS = "PaymentStatusInputNeeded";
-
-    /// <summary>
     /// The status returned from Plaid when a PIS payment is successfully initiated.
     /// </summary>
     public const string PISP_PLAID_SUCCESS_STATUS = "PaymentStatusExecuted";
@@ -132,14 +122,18 @@ public class PaymentRequestResult
                           payEvent.EventType == PaymentRequestEventTypesEnum.pisp_webhook) &&
                          (payEvent.Status == PISP_PLAID_SUCCESS_STATUS ||
                           payEvent.Status == PISP_PLAID_INITIATED_STATUS ||
-                          payEvent.Status == PISP_PLAID_INPUT_NEEDED_STATUS ||
                           payEvent.Status == PISP_MODULR_SUCCESS_STATUS ||
                           payEvent.Status == PISP_YAPILY_COMPLETED_STATUS ||
                           payEvent.Status == PISP_YAPILY_PENDING_STATUS))
                 {
                     // Successfully authorised payment initiation.
-                    if (!string.IsNullOrEmpty(payEvent.PispPaymentInitiationID) && !PispAuthorizations.Any(
-                            x => x.PispPaymentInitiationID == payEvent.PispPaymentInitiationID))
+                    if (!string.IsNullOrEmpty(payEvent.PispPaymentInitiationID) && 
+                        !PispAuthorizations.Any(x => x.PispPaymentInitiationID == payEvent.PispPaymentInitiationID) &&
+                        (
+                            (payEvent.Currency == CurrencyTypeEnum.EUR && payEvent.Amount > PaymentsConstants.PISP_MINIMUM_EUR_PAYMENT_AMOUNT) ||
+                            (payEvent.Currency == CurrencyTypeEnum.GBP && payEvent.Amount > PaymentsConstants.PISP_MINIMUM_GBP_PAYMENT_AMOUNT)
+                        ) 
+                        ) 
                     {
                         PispAuthorizations.Add(
                             new PaymentRequestAuthorization
@@ -147,8 +141,7 @@ public class PaymentRequestResult
                                     PaymentRequestID = PaymentRequestID,
                                     OccurredAt = payEvent.Inserted,
                                     PaymentMethod = PaymentMethodTypeEnum.pisp,
-                                    Amount =
-                                        Math.Round(payEvent.Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                                    Amount = Math.Round(payEvent.Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
                                     Currency = payEvent.Currency,
                                     PispPaymentInitiationID = payEvent.PispPaymentInitiationID
                                 });
