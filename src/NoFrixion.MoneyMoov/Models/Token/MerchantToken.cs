@@ -14,6 +14,10 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using Newtonsoft.Json.Converters;
+using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 #nullable disable
@@ -25,6 +29,10 @@ public class MerchantToken
     public Guid MerchantID { get; set; }
 
     public string Description { get; set; }
+
+    [EnumDataType(typeof(MerchantTokenPermissionsEnum))]
+    [JsonConverter(typeof(StringEnumConverter))]
+    public MerchantTokenPermissionsEnum Permissions { get; set; }
 
     public DateTimeOffset Inserted { get; set; }
 
