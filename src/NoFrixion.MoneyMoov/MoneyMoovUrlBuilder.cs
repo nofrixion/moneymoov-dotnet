@@ -155,6 +155,9 @@ public static class MoneyMoovUrlBuilder
     /// </summary>
     public static class PayoutsApi
     {
+        public static string PayoutUrl(string moneyMoovBaseUrl, Guid payoutID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/{payoutID}";
+
         public static string PayoutsUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}";
     }
@@ -164,6 +167,9 @@ public static class MoneyMoovUrlBuilder
     /// </summary>
     public static class RulesApi
     {
+        public static string RuleUrl(string moneyMoovBaseUrl, Guid ruleID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.rules}/{ruleID}";
+
         public static string RulesUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.rules}";
 
