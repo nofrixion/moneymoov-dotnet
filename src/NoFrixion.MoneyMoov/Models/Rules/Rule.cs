@@ -42,7 +42,24 @@ public class Rule : IValidatableObject
     /// </summary>
     public string? ApproveUrl { get; set; }
 
-    public string? OnExecutedWebHookUrl { get; set; }
+    /// <summary>
+    /// Optional URL to receive an HTTP request with the rule details when the rule status changes to 
+    /// approved. The webhook payload will contain the full Rule object.
+    /// </summary>
+    public string? OnApprovedWebHookUrl { get; set; }
+
+    /// <summary>
+    /// Optional URL to receive an HTTP request when a rule execution attempt fails. The webhook 
+    /// payload will contain a NoFrixionPorblem object.
+    /// </summary>
+    public string? OnExecutionErrorWebHookUrl { get; set; }
+
+    /// <summary>
+    /// Optional URL to receive an HTTP request when a rule execution attempt succeeds. The webhook 
+    /// payload will contain a ?.
+    /// </summary>
+    public string? OnExecutionSuccessWebHookUrl { get; set; }
+
     public DateTimeOffset Inserted { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
     
