@@ -50,13 +50,13 @@ public class Rule : IValidatableObject
 
     /// <summary>
     /// Optional URL to receive an HTTP request when a rule execution attempt fails. The webhook 
-    /// payload will contain a NoFrixionPorblem object.
+    /// payload will contain a Problem object.
     /// </summary>
     public string? OnExecutionErrorWebHookUrl { get; set; }
 
     /// <summary>
     /// Optional URL to receive an HTTP request when a rule execution attempt succeeds. The webhook 
-    /// payload will contain a ?.
+    /// payload will contain a list of any payouts that were submitted for teh rule execution.
     /// </summary>
     public string? OnExecutionSuccessWebHookUrl { get; set; }
 
