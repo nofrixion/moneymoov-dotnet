@@ -61,6 +61,23 @@ public class Rule : IValidatableObject
         return HashHelper.CreateHash(input);
     }
 
+    private bool IsCronExpressionScheduledMoreThanXMinutes(string cronExpression, int minutes)
+    {
+        var interval = TimeSpan.FromMinutes(minutes);
+
+        // Parse the cron expression
+        var cron = new CronExpression(cronExpression);
+
+        // Get the next 2 scheduled dates/times for the cron expression
+        var now = DateTime.Now;
+        var next1 = cron.GetNextValidTimeAfter(now);
+        var next2 = cron.GetNextValidTimeAfter(next1 ?? now);
+
+        // If the interval between the next 2 scheduled dates is less than X minutes,
+        // the cron expression will run more frequently than every X minutes
+        return (next2 - next1) >= interval;
+    }
+
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if ((TriggerOnPayIn || TriggerOnPayOut) && !IsNullOrEmpty(TriggerCronExpression))
@@ -76,7 +93,18 @@ public class Rule : IValidatableObject
                 yield return new ValidationResult($"Invalid TriggerCronExpression. Please refer to https://www.quartz-scheduler.net/documentation/quartz-3.x/how-tos/crontrigger.html#examples for valid examples.",
                     new string[] { nameof(TriggerCronExpression) });
             }
+            else
+            {
+                const int MIN_CRON_INTERVAL_MINUTES = 15;
+                if (!IsCronExpressionScheduledMoreThanXMinutes(TriggerCronExpression, MIN_CRON_INTERVAL_MINUTES))
+                {
+                    yield return new ValidationResult($"Invalid TriggerCronExpression. The minimum interval between rule executions is {MIN_CRON_INTERVAL_MINUTES} minutes.",
+                        new string[] { nameof(TriggerCronExpression) });
+                }
+            }
         }
+
+
 
         if (SweepAction != null)
         {
