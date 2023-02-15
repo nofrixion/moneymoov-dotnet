@@ -33,6 +33,7 @@ public class UserInvite
     public string RegistrationUrl { get; set; } = string.Empty;
     public DateTimeOffset LastInvited { get; set; }
     public string MerchantName { get; set; } = string.Empty;
+    public string Message { get; set; } = string.Empty;
 
     public UserInviteStatusEnum Status
     {
