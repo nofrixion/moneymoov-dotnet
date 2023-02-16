@@ -286,7 +286,7 @@ public class PaymentRequest : IPaymentRequest
     {
         if (string.IsNullOrEmpty(SuccessWebHookUrl))
         {
-            return new Uri(MoneyMoovConstants.SUCCESS_WEBHOOK_BLACKHOLE_URI);
+            return new Uri(MoneyMoovConstants.WEBHOOK_BLACKHOLE_URI);
         }
         else
         {

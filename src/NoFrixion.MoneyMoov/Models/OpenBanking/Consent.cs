@@ -25,7 +25,14 @@ public class Consent
     public string EmailAddress { get; set; } = string.Empty;
     public bool IsEnabled { get; set; }
     public string CallbackUrl { get; set; } = string.Empty;
+
+    /// <summary>
+    /// A web hook URL to send an HTTP request to when the open banking consent
+    /// is successfuly authorised. This web hook lets the calling application 
+    /// know when a consent is ready to be used.
+    /// </summary>
     public string SuccessWebHookUrl { get; set; } = string.Empty;
+
     public PaymentProcessorsEnum Provider { get; set; }
     public DateTimeOffset ExpiryDate { get; set; }
     public DateTimeOffset Inserted { get; set; }
@@ -34,7 +41,7 @@ public class Consent
     {
         if (string.IsNullOrEmpty(SuccessWebHookUrl))
         {
-            return new Uri(MoneyMoovConstants.SUCCESS_WEBHOOK_BLACKHOLE_URI);
+            return new Uri(MoneyMoovConstants.WEBHOOK_BLACKHOLE_URI);
         }
         else
         {
