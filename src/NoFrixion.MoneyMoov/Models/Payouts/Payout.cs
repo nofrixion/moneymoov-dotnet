@@ -32,7 +32,7 @@ public class Payout : IValidatableObject, IPayout
     /// <summary>
     /// Gets or Sets User ID of who created the payout request
     /// </summary>
-    public Guid UserID { get; set; }
+    public Guid? UserID { get; set; }
 
     /// <summary>
     /// Gets the User ID of person that approved the payout.
@@ -78,6 +78,8 @@ public class Payout : IValidatableObject, IPayout
     public string DestinationSortCode { get; set; } = string.Empty;
 
     public string DestinationAccountName { get; set; } = string.Empty;
+
+    public string MerchantTokenDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or Sets the status of payout request
