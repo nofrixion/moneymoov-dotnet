@@ -36,9 +36,22 @@ public class RuleCreate
     public string? Description { get; set; }
 
     /// <summary>
-    /// A webhook URL to invoke when a rule execution completes.
+    /// Optional URL to receive an HTTP request with the rule details when the rule status changes to 
+    /// approved. The webhook payload will contain the full Rule object.
     /// </summary>
-    public string? OnExecutedWebHookUrl { get; set; }
+    public string? OnApprovedWebHookUrl { get; set; }
+
+    /// <summary>
+    /// Optional URL to receive an HTTP request when a rule execution attempt fails. The webhook 
+    /// payload will contain a NoFrixionPorblem object.
+    /// </summary>
+    public string? OnExecutionErrorWebHookUrl { get; set; }
+
+    /// <summary>
+    /// Optional URL to receive an HTTP request when a rule execution attempt succeeds. The webhook 
+    /// payload will contain a ?.
+    /// </summary>
+    public string? OnExecutionSuccessWebHookUrl { get; set; }
 
     /// <summary>
     /// If set to true the rule will be disabled from executing.
@@ -93,7 +106,9 @@ public class RuleCreate
             { nameof(AccountID), AccountID.ToString() },
             { nameof(Name), Name},
             { nameof(Description), Description ?? string.Empty},
-            { nameof(OnExecutedWebHookUrl), OnExecutedWebHookUrl ?? string.Empty },
+            { nameof(OnApprovedWebHookUrl), OnApprovedWebHookUrl ?? string.Empty },
+            { nameof(OnExecutionErrorWebHookUrl), OnExecutionErrorWebHookUrl ?? string.Empty },
+            { nameof(OnExecutionSuccessWebHookUrl), OnExecutionSuccessWebHookUrl ?? string.Empty },
             { nameof(IsDisabled), IsDisabled.ToString() },
             { nameof(TriggerOnPayIn), TriggerOnPayIn.ToString() },
             { nameof(TriggerOnPayOut), TriggerOnPayOut.ToString() },
