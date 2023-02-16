@@ -56,7 +56,7 @@ public class Rule : IValidatableObject
 
     /// <summary>
     /// Optional URL to receive an HTTP request when a rule execution attempt succeeds. The webhook 
-    /// payload will contain a list of any payouts that were submitted for teh rule execution.
+    /// payload will contain a list of any payouts that were submitted for the rule execution.
     /// </summary>
     public string? OnExecutionSuccessWebHookUrl { get; set; }
 
