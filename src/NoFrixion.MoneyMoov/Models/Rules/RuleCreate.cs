@@ -96,6 +96,11 @@ public class RuleCreate
     public SweepAction? SweepAction { get; set; }
 
     /// <summary>
+    /// If set this secret will be used to sign Web Hook requests.
+    /// </summary>
+    public string? WebHookSecret { get; set; }
+
+    /// <summary>
     /// Places all the rule create model's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary of string key value pairs.</returns>
@@ -114,7 +119,8 @@ public class RuleCreate
             { nameof(TriggerOnPayOut), TriggerOnPayOut.ToString() },
             { nameof(TriggerCronExpression), TriggerCronExpression ?? string.Empty },
             { nameof(StartAt), StartAt != null ? StartAt.Value.ToString() : string.Empty },
-            { nameof(EndAt), EndAt != null ? EndAt.Value.ToString() : string.Empty }
+            { nameof(EndAt), EndAt != null ? EndAt.Value.ToString() : string.Empty },
+            { nameof(WebHookSecret), WebHookSecret ?? string.Empty }
         };
 
         if (SweepAction != null && !SweepAction.IsEmpty())

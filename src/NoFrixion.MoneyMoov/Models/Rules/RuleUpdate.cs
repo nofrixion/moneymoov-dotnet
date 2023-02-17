@@ -87,6 +87,11 @@ public class RuleUpdate
     public SweepAction? SweepAction { get; set; }
 
     /// <summary>
+    /// If set this secret will be used to sign Web Hook requests.
+    /// </summary>
+    public string? WebHookSecret { get; set; }
+
+    /// <summary>
     /// Places all the rule update model's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary of string key value pairs.</returns>
@@ -104,7 +109,8 @@ public class RuleUpdate
         if (TriggerOnPayOut != null) dict.Add(nameof(TriggerOnPayOut), TriggerOnPayOut.Value.ToString());
         if (TriggerCronExpression != null) dict.Add(nameof(TriggerCronExpression), TriggerCronExpression);
         if (StartAt != null) dict.Add(nameof(StartAt), StartAt.Value.ToString());
-        if (EndAt != null) dict.Add(nameof(EndAt), EndAt.Value.ToString());      
+        if (EndAt != null) dict.Add(nameof(EndAt), EndAt.Value.ToString());
+        if (WebHookSecret != null) dict.Add(nameof(WebHookSecret), WebHookSecret);
 
         if (SweepAction != null && !SweepAction.IsEmpty())
         {

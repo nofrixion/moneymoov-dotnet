@@ -60,6 +60,11 @@ public class Rule : IValidatableObject
     /// </summary>
     public string? OnExecutionSuccessWebHookUrl { get; set; }
 
+    /// <summary>
+    /// If set this secret will be used to sign Web Hook requests.
+    /// </summary>
+    public string? WebHookSecret { get; set; }
+
     public DateTimeOffset Inserted { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
     
