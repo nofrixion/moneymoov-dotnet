@@ -154,8 +154,6 @@ namespace NoFrixion.MoneyMoov
         {
             if (response.IsSuccessStatusCode && response.Content.Headers.ContentLength > 0)
             {
-                var respContent = await response.Content.ReadAsStringAsync();
-
                 var result = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(),
                     new Newtonsoft.Json.JsonSerializerSettings
                     { 
