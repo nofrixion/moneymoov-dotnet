@@ -154,7 +154,12 @@ namespace NoFrixion.MoneyMoov
         {
             if (response.IsSuccessStatusCode && response.Content.Headers.ContentLength > 0)
             {
-                var result = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+                var result = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(),
+                    new Newtonsoft.Json.JsonSerializerSettings
+                    { 
+                        ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace 
+                    }
+                );
 
                 return result != null ?
                     new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers, result) :
@@ -165,7 +170,11 @@ namespace NoFrixion.MoneyMoov
             {
                 string contentStr = await response.Content.ReadAsStringAsync();
 
-                var problemDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<NoFrixionProblem>(contentStr);
+                var problemDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<NoFrixionProblem>(contentStr,
+                    new Newtonsoft.Json.JsonSerializerSettings
+                    {
+                        ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace
+                    });
 
                 if(problemDetails == null)
                 {

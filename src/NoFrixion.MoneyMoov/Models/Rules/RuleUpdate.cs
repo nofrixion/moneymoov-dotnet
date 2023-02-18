@@ -28,9 +28,22 @@ public class RuleUpdate
     public string? Description { get; set; }
 
     /// <summary>
-    /// A webhook URL to invoke when a rule exection completes.
+    /// Optional URL to receive an HTTP request with the rule details when the rule status changes to 
+    /// approved. The webhook payload will contain the full Rule object.
     /// </summary>
-    public string? OnExecutedWebHookUrl { get; set; }
+    public string? OnApprovedWebHookUrl { get; set; }
+
+    /// <summary>
+    /// Optional URL to receive an HTTP request when a rule execution attempt fails. The webhook 
+    /// payload will contain a NoFrixionPorblem object.
+    /// </summary>
+    public string? OnExecutionErrorWebHookUrl { get; set; }
+
+    /// <summary>
+    /// Optional URL to receive an HTTP request when a rule execution attempt succeeds. The webhook 
+    /// payload will contain a ?.
+    /// </summary>
+    public string? OnExecutionSuccessWebHookUrl { get; set; }
 
     /// <summary>
     /// If set to false the rule will be disabled from executing.
@@ -74,6 +87,11 @@ public class RuleUpdate
     public SweepAction? SweepAction { get; set; }
 
     /// <summary>
+    /// If set this secret will be used to sign Web Hook requests.
+    /// </summary>
+    public string? WebHookSecret { get; set; }
+
+    /// <summary>
     /// Places all the rule update model's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary of string key value pairs.</returns>
@@ -83,13 +101,16 @@ public class RuleUpdate
 
         if (Name != null) dict.Add(nameof(Name), Name);
         if (Description != null) dict.Add(nameof(Description), Description);
-        if (OnExecutedWebHookUrl != null) dict.Add(nameof(OnExecutedWebHookUrl), OnExecutedWebHookUrl);
+        if (OnApprovedWebHookUrl != null) dict.Add(nameof(OnApprovedWebHookUrl), OnApprovedWebHookUrl);
+        if (OnExecutionErrorWebHookUrl != null) dict.Add(nameof(OnExecutionErrorWebHookUrl), OnExecutionErrorWebHookUrl);
+        if (OnExecutionSuccessWebHookUrl != null) dict.Add(nameof(OnExecutionSuccessWebHookUrl), OnExecutionSuccessWebHookUrl);
         if (IsDisabled != null) dict.Add(nameof(IsDisabled), IsDisabled.Value.ToString());
         if (TriggerOnPayIn != null) dict.Add(nameof(TriggerOnPayIn), TriggerOnPayIn.Value.ToString());
         if (TriggerOnPayOut != null) dict.Add(nameof(TriggerOnPayOut), TriggerOnPayOut.Value.ToString());
         if (TriggerCronExpression != null) dict.Add(nameof(TriggerCronExpression), TriggerCronExpression);
         if (StartAt != null) dict.Add(nameof(StartAt), StartAt.Value.ToString());
-        if (EndAt != null) dict.Add(nameof(EndAt), EndAt.Value.ToString());      
+        if (EndAt != null) dict.Add(nameof(EndAt), EndAt.Value.ToString());
+        if (WebHookSecret != null) dict.Add(nameof(WebHookSecret), WebHookSecret);
 
         if (SweepAction != null && !SweepAction.IsEmpty())
         {

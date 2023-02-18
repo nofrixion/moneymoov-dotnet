@@ -23,6 +23,8 @@ namespace NoFrixion.MoneyMoov;
 public interface IPayoutClient
 {
     Task<MoneyMoovApiResponse<Payout>> CreatePayoutAsync(string userAccessToken, PayoutCreate payoutCreate);
+
+    Task<MoneyMoovApiResponse<Payout>> GetPayoutAsync(string userAccessToken, Guid payoutID);
 }
 
 public class PayoutClient : IPayoutClient
@@ -59,6 +61,25 @@ public class PayoutClient : IPayoutClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PostAsync<Payout>(url, userAccessToken, new FormUrlEncodedContent(payoutCreate.ToDictionary())),
+            _ => Task.FromResult(new MoneyMoovApiResponse<Payout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov payout endpoint to get a single payout by ID.
+    /// </summary>
+    /// <param name="userAccessToken">A User scoped JWT access token.</param>
+    /// <param name="payoutID">The ID of the payout to retrieve.</param>
+    /// <returns>If successful, a payout object.</returns>
+    public Task<MoneyMoovApiResponse<Payout>> GetPayoutAsync(string userAccessToken, Guid payoutID)
+    {
+        var url = MoneyMoovUrlBuilder.PayoutsApi.PayoutUrl(_apiClient.GetBaseUri().ToString(), payoutID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetPayoutAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<Payout>(url, userAccessToken),
             _ => Task.FromResult(new MoneyMoovApiResponse<Payout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }

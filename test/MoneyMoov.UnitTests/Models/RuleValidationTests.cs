@@ -69,4 +69,47 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
 
         Assert.NotEmpty(problem.Errors);
     }
+
+    [Theory]
+    [InlineData("0 0/15 * * * ?", true)] // Will succeed as the new value is greater or equal than 15 minutes.
+    [InlineData("0 0/10 * * * ?", false)] // Will fail as the new value is less than 15 minutes.
+    [InlineData("0 0 8 ? * MON-FRI *", true)] // Cron expression is every weekday at 8am. Will succeed as the new value is greater or equal than 15 minutes.
+    public void Rule_ValidateCronExpression(string cronExpression, bool shouldSucceed)
+    {
+
+        var rule = new Rule
+        {
+            TriggerCronExpression = cronExpression,
+            SweepAction = new SweepAction
+            {
+                Priority = 1,
+                AmountToLeave = 1.00M,
+                MinimumAmountToRunAt = 99.00M,
+                ActionType = RuleActionsEnum.Sweep,
+                Destinations = new List<SweepDestination>
+                {
+                    new SweepDestination
+                    {
+                        SweepPercentage = 100,
+                        Name = "Jane Doe",
+                        Identifier = new AccountIdentifier
+                        {
+                            Currency = "EUR",
+                            IBAN = "IEMOCK123456779"
+                        }
+                    }
+                }
+            }
+        };
+
+        var problem = rule.Validate();
+
+        foreach (var err in problem.Errors)
+        {
+            Logger.LogDebug(Newtonsoft.Json.JsonConvert.SerializeObject(err));
+        }
+
+        Assert.Equal(problem.Errors.Count == 0, shouldSucceed);
+
+    }
 }

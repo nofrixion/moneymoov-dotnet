@@ -30,5 +30,5 @@ public class MoneyMoovConstants
     /// <summary>
     /// For cases where the URI supplied doesn't need to be sent.
     /// </summary>
-    public const string SUCCESS_WEBHOOK_BLACKHOLE_URI = "http://127.0.0.1";
+    public const string WEBHOOK_BLACKHOLE_URI = "http://127.0.0.1";
 }

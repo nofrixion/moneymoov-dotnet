@@ -20,6 +20,7 @@
 // MIT.
 // -----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Runtime.Serialization;
@@ -127,7 +128,14 @@ public class NoFrixionNotFoundProblem : NoFrixionProblem
 
 public class NoFrixionProblem
 {
-    public static NoFrixionProblem Empty = new NoFrixionProblem { _isEmpty = true };
+    private static NoFrixionProblem _empty = new NoFrixionProblem { _isEmpty = true };
+    public static NoFrixionProblem Empty
+    {
+        get
+        {
+            return _empty;
+        }
+    }
     private bool _isEmpty = false;
 
     /// <summary>
@@ -195,7 +203,7 @@ public class NoFrixionProblem
     /// when the parameter on a controller action fails validation.
     /// </summary>
     [JsonPropertyName("errors")]
-    public Dictionary<string, string[]> Errors { get; } = new Dictionary<string, string[]>();
+    public Dictionary<string, string[]> Errors { get; set; } = new Dictionary<string, string[]>();
 
     [JsonIgnore]
     [IgnoreDataMember]
@@ -344,5 +352,15 @@ public class NoFrixionProblem
         }
 
         return htmlError;
+    }
+
+    public static NoFrixionProblem FromJson(string json)
+    {
+       return Newtonsoft.Json.JsonConvert.DeserializeObject<NoFrixionProblem>(json,
+            new Newtonsoft.Json.JsonSerializerSettings
+            {
+                ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace
+            }) 
+            ?? NoFrixionProblem.Empty;
     }
 }

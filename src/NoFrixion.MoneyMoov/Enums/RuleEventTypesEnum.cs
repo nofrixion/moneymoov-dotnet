@@ -23,7 +23,18 @@ public enum RuleEventTypesEnum
 {
     None,
 
-    Success,
+    /// <summary>
+    /// The rule was executed successfully.
+    /// </summary>
+    ExecutionSuccess,
 
-    Error,
+    /// <summary>
+    /// The rule was executed and returned an error.
+    /// </summary>
+    ExecutionError,
+
+    /// <summary>
+    /// The rule status changed to approved.
+    /// </summary>
+    Approved,
 }

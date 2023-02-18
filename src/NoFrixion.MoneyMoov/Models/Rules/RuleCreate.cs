@@ -36,9 +36,22 @@ public class RuleCreate
     public string? Description { get; set; }
 
     /// <summary>
-    /// A webhook URL to invoke when a rule execution completes.
+    /// Optional URL to receive an HTTP request with the rule details when the rule status changes to 
+    /// approved. The webhook payload will contain the full Rule object.
     /// </summary>
-    public string? OnExecutedWebHookUrl { get; set; }
+    public string? OnApprovedWebHookUrl { get; set; }
+
+    /// <summary>
+    /// Optional URL to receive an HTTP request when a rule execution attempt fails. The webhook 
+    /// payload will contain a NoFrixionPorblem object.
+    /// </summary>
+    public string? OnExecutionErrorWebHookUrl { get; set; }
+
+    /// <summary>
+    /// Optional URL to receive an HTTP request when a rule execution attempt succeeds. The webhook 
+    /// payload will contain a ?.
+    /// </summary>
+    public string? OnExecutionSuccessWebHookUrl { get; set; }
 
     /// <summary>
     /// If set to true the rule will be disabled from executing.
@@ -83,6 +96,11 @@ public class RuleCreate
     public SweepAction? SweepAction { get; set; }
 
     /// <summary>
+    /// If set this secret will be used to sign Web Hook requests.
+    /// </summary>
+    public string? WebHookSecret { get; set; }
+
+    /// <summary>
     /// Places all the rule create model's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary of string key value pairs.</returns>
@@ -93,13 +111,16 @@ public class RuleCreate
             { nameof(AccountID), AccountID.ToString() },
             { nameof(Name), Name},
             { nameof(Description), Description ?? string.Empty},
-            { nameof(OnExecutedWebHookUrl), OnExecutedWebHookUrl ?? string.Empty },
+            { nameof(OnApprovedWebHookUrl), OnApprovedWebHookUrl ?? string.Empty },
+            { nameof(OnExecutionErrorWebHookUrl), OnExecutionErrorWebHookUrl ?? string.Empty },
+            { nameof(OnExecutionSuccessWebHookUrl), OnExecutionSuccessWebHookUrl ?? string.Empty },
             { nameof(IsDisabled), IsDisabled.ToString() },
             { nameof(TriggerOnPayIn), TriggerOnPayIn.ToString() },
             { nameof(TriggerOnPayOut), TriggerOnPayOut.ToString() },
             { nameof(TriggerCronExpression), TriggerCronExpression ?? string.Empty },
             { nameof(StartAt), StartAt != null ? StartAt.Value.ToString() : string.Empty },
-            { nameof(EndAt), EndAt != null ? EndAt.Value.ToString() : string.Empty }
+            { nameof(EndAt), EndAt != null ? EndAt.Value.ToString() : string.Empty },
+            { nameof(WebHookSecret), WebHookSecret ?? string.Empty }
         };
 
         if (SweepAction != null && !SweepAction.IsEmpty())

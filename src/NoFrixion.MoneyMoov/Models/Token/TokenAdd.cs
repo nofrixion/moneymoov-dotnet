@@ -12,7 +12,8 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using LanguageExt;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
@@ -33,6 +34,10 @@ public class TokenAdd : IValidatableObject
     /// </summary>
     [Required(ErrorMessage = "Description is required")]
     public string Description { get; set; }
+
+    [EnumDataType(typeof(MerchantTokenPermissionsEnum))]
+    [JsonConverter(typeof(StringEnumConverter))]
+    public MerchantTokenPermissionsEnum Permissions { get; set; } = MerchantTokenPermissionsEnum.CreatePaymentRequest;
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -76,6 +81,7 @@ public class TokenAdd : IValidatableObject
 
         dict.Add(nameof(MerchantID), MerchantID.ToString());
         dict.Add(nameof(Description), Description.ToString());
+        dict.Add(nameof(Permissions), Permissions.ToString());
 
         return dict;
     }

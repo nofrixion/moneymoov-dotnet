@@ -15,14 +15,20 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models;
 
 public class SweepAction : IValidatableObject
 {
-    public static readonly SweepAction Empty = new SweepAction { _isEmpty = true };
-    
+    private static SweepAction _empty = new SweepAction { _isEmpty = true };
+    public static SweepAction Empty
+    {
+        get
+        {
+            return _empty;
+        }
+    }
+
     private bool _isEmpty = false;
 
     public int Priority { get; set; }
@@ -38,9 +44,9 @@ public class SweepAction : IValidatableObject
     public decimal AmountToLeave { get; set; }
 
     /// <summary>
-    /// The minimum amount that must be availabe in order for the sweep to be run.
+    /// The minimum amount that must be available in order for the sweep to be run.
     /// For example, setting to 1000 means the rule will not execute if the funds
-    /// avaialble are less than 1000.
+    /// available are less than 1000.
     /// </summary>
     public decimal MinimumAmountToRunAt { get; set; }
 
@@ -76,7 +82,7 @@ public class SweepAction : IValidatableObject
     {
         string input = string.Empty;
 
-        foreach(var destination in Destinations)
+        foreach (var destination in Destinations)
         {
             input += destination.GetApprovalHash();
         }
@@ -92,9 +98,9 @@ public class SweepAction : IValidatableObject
                 new string[] { nameof(Destinations) });
         }
 
-        foreach(var dest in Destinations)
+        foreach (var dest in Destinations)
         {
-            foreach(var err in dest.Validate(validationContext))
+            foreach (var err in dest.Validate(validationContext))
             {
                 yield return err;
             }
