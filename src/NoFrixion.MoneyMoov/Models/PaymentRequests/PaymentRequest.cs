@@ -261,6 +261,9 @@ public class PaymentRequest : IPaymentRequest
     public decimal DisplayAmount() =>
         IsFiat(Currency) ? Math.Round(Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES) : Amount;
 
+
+    public string? NotificationEmailAdresses { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
