@@ -14,6 +14,7 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -49,6 +50,9 @@ public class PaymentRequestUpdate
     public string? CardProcessorMerchantID { get; set; }
     [EmailAddress]
     public string? CustomerEmailAddress { get; set; }
+
+    [EmailAddressMultiple(ErrorMessage = "One or more of the email addresses are invalid. Addresses can be separated by a comma, semi-colon or space.")]
+    public string? NotificationEmailAddresses { get; set; }
 
     /// <summary>
     /// Places all the payment request's properties into a dictionary. Useful for testing
@@ -86,6 +90,7 @@ public class PaymentRequestUpdate
         if (PispRecipientReference != null) dict.Add(nameof(PispRecipientReference), PispRecipientReference);
         if (CardProcessorMerchantID != null) dict.Add(nameof(CardProcessorMerchantID), CardProcessorMerchantID);
         if (CustomerEmailAddress != null) dict.Add(nameof(CustomerEmailAddress), CustomerEmailAddress ?? string.Empty);
+        if (NotificationEmailAddresses != null) dict.Add(nameof(NotificationEmailAddresses), NotificationEmailAddresses ?? string.Empty);
 
         return dict;
     }
