@@ -133,11 +133,11 @@ public class PaymentRequestResult
                           payEvent.Status == PISP_YAPILY_PENDING_STATUS))
                 {
                     // Successfully authorised payment initiation.
-                    if (!string.IsNullOrEmpty(payEvent.PispPaymentInitiationID) && 
+                    if (!string.IsNullOrEmpty(payEvent.PispPaymentInitiationID) &&
                         !PispAuthorizations.Any(x => x.PispPaymentInitiationID == payEvent.PispPaymentInitiationID) &&
                         (
-                            (payEvent.Currency == CurrencyTypeEnum.EUR && payEvent.Amount > PaymentsConstants.PISP_MINIMUM_EUR_PAYMENT_AMOUNT) ||
-                            (payEvent.Currency == CurrencyTypeEnum.GBP && payEvent.Amount > PaymentsConstants.PISP_MINIMUM_GBP_PAYMENT_AMOUNT)
+                            (payEvent.Currency == CurrencyTypeEnum.EUR && payEvent.Amount >= PaymentsConstants.PISP_MINIMUM_EUR_PAYMENT_AMOUNT) ||
+                            (payEvent.Currency == CurrencyTypeEnum.GBP && payEvent.Amount >= PaymentsConstants.PISP_MINIMUM_GBP_PAYMENT_AMOUNT)
                         ) 
                         ) 
                     {
