@@ -82,6 +82,11 @@ public class PaymentRequestResult
 
     public List<PaymentRequestAuthorization> PispAuthorizations { get; set; }
 
+    /// <summary>
+    /// The customer id
+    /// </summary>
+    public string? CustomerID { get; set; }
+
     public PaymentRequestResult()
     {
         Payments = new List<PaymentRequestPayment>();
@@ -94,6 +99,7 @@ public class PaymentRequestResult
         RequestedAmount = paymentRequest.Amount;
         Payments = new List<PaymentRequestPayment>();
         PispAuthorizations = new List<PaymentRequestAuthorization>();
+        CustomerID = paymentRequest.CustomerID;
 
         bool pispAuthorizedEvent = false;
 
