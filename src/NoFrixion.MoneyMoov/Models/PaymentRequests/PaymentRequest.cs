@@ -262,7 +262,7 @@ public class PaymentRequest : IPaymentRequest
         IsFiat(Currency) ? Math.Round(Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES) : Amount;
 
 
-    public string? NotificationEmailAdresses { get; set; }
+    public string? NotificationEmailAddresses { get; set; }
 
     public NoFrixionProblem Validate()
     {
