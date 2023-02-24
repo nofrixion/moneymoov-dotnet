@@ -44,16 +44,16 @@ public class AccountClient : IAccountClient
         _logger = logger;
     }
 
-    /// <summary>
-    /// Calls the MoneyMoov Merchant get accounts endpoint to get the list of all the merchant's
-    /// payment accounts.
-    /// </summary>
-    /// <param name="userAccessToken">A User scoped JWT access token.</param>
-    /// <param name="merchantID">The ID of the merchant to get the payment accounts for.</param>
-    /// <returns>If successful, a list of payment accounts for the merchant.</returns>
+    ///// <summary>
+    ///// Calls the MoneyMoov Merchant get accounts endpoint to get the list of all the merchant's
+    ///// payment accounts.
+    ///// </summary>
+    ///// <param name="userAccessToken">A User scoped JWT access token.</param>
+    ///// <param name="merchantID">The ID of the merchant to get the payment accounts for.</param>
+    ///// <returns>If successful, a list of payment accounts for the merchant.</returns>
     //public Task<MoneyMoovApiResponse<IEnumerable<PaymentAccount>>> GetAccountsAsync(string userAccessToken, Guid merchantID)
     //{
-    //    var url = MoneyMoovUrlBuilder.AccountsApi.GetAccountsApiUrl(_apiClient.GetBaseUri().ToString(), merchantID);
+    //    var url = MoneyMoovUrlBuilder.AccountsApi.AccountsUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
     //    var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetAccountsAsync));
 

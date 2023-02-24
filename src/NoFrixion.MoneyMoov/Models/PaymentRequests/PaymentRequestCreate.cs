@@ -13,9 +13,10 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using NoFrixion.MoneyMoov.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -283,6 +284,9 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
 
     [JsonIgnore]
     public string? LightningInvoice { get; set; }
+
+    [EmailAddressMultiple(ErrorMessage = "One or more of the email addresses are invalid. Addresses can be separated by a comma, semi-colon or space.")]
+    public string? NotificationEmailAddresses { get; set; }
 
     public NoFrixionProblem Validate()
     {

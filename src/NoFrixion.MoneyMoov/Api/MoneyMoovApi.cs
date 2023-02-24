@@ -30,6 +30,8 @@ public interface IMoneyMoovApi
 
     IPaymentRequestClient PaymentRequestClient();
 
+    IPayoutClient PayoutClient();
+
     IUserInviteClient UserInviteClient();
 }
 
@@ -106,6 +108,9 @@ public class MoneyMoovApi : IMoneyMoovApi
 
     public IPaymentRequestClient PaymentRequestClient()
         => new PaymentRequestClient(new MoneyMoovApiClient(_httpClientFactory));
+
+    public IPayoutClient PayoutClient()
+        => new PayoutClient(new MoneyMoovApiClient(_httpClientFactory));
 
     public IUserInviteClient UserInviteClient()
         => new UserInviteClient(new MoneyMoovApiClient(_httpClientFactory));
