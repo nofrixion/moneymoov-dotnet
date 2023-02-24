@@ -57,6 +57,13 @@ public class PayoutCreate : IValidatableObject, IPayout
 
     public string DestinationAccountName { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Optional field to associate the payout with the invoice from an external 
+    /// application such as Xero. The InvoiceID needs to be unqiue for for each
+    /// account.
+    /// </summary>
+    public string InvoiceID { get; set; } = string.Empty;
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
@@ -108,6 +115,7 @@ public class PayoutCreate : IValidatableObject, IPayout
             { nameof(DestinationAccountNumber), DestinationAccountNumber },
             { nameof(DestinationSortCode), DestinationSortCode },
             { nameof(DestinationAccountName), DestinationAccountName },
+            { nameof(InvoiceID), InvoiceID }
         };
     }
 }

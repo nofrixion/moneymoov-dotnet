@@ -118,6 +118,12 @@ public class Payout : IValidatableObject, IPayout
 
     public Counterparty? DestinationAccount { get; set; }
 
+    /// <summary>
+    /// Optional field to associate the payout with the invoice from an external 
+    /// application such as Xero. The InvoiceID needs to be unqiue for for each
+    /// account.
+    /// </summary>
+    public string InvoiceID { get; set; } = string.Empty;
 
     public NoFrixionProblem Validate()
     {
