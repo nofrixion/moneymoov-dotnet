@@ -23,21 +23,21 @@ namespace NoFrixion.MoneyMoov.Models;
 public static class PayoutsValidator
 {
     /// <summary>
-    /// The minimum required legnth for the Their Reference field. Note that that length gets 
-    /// calcaulated after certain non-counter characters have been removed.
+    /// The minimum required length for the Their Reference field. Note that length gets 
+    /// calculated after certain non-counter characters have been removed.
     /// </summary>
     public const int THEIR_REFERENCE_MINIMUM_LENGTH = 6;
 
     /// <summary>
-    /// The maximum allowed legnth for the Their Reference field for sort code
-    /// and account number (SCAN) payments . Note that that length gets calculated after 
+    /// The maximum allowed length for the Their Reference field for sort code
+    /// and account number (SCAN) payments . Note that length gets calculated after 
     /// certain non-counter characters have been removed.
     /// </summary>
     public const int THEIR_REFERENCE_SCAN_MAXIMUM_LENGTH = 17;
 
     /// <summary>
-    /// The maximum allowed legnth for the Their Reference field for International Bank Account Number
-    /// (IBAN) payments . Note that that length gets calculated after / certain non-counter characters 
+    /// The maximum allowed length for the Their Reference field for International Bank Account Number
+    /// (IBAN) payments . Note that length gets calculated after / certain non-counter characters 
     /// have been removed.
     /// </summary>
     public const int THEIR_REFERENCE_IBAN_MAXIMUM_LENGTH = 139;
@@ -67,7 +67,7 @@ public static class PayoutsValidator
     /// hyphen(-), full stop (.), ampersand(&), and forward slash (/). Total of all characters must be less than 
     /// 18 for scan payment and 140 for an IBAN payment.
     /// Somewhat misleadingly, the Reference field cannot contain a hyphen, the allowed characters are:
-    /// alpha numberic (including unicode), space, hyphen(-), full stop (.), ampersand(&), and forward slash (/). 
+    /// alpha numeric (including unicode), space, hyphen(-), full stop (.), ampersand(&), and forward slash (/). 
     /// </summary>
     /// <remarks>
     /// [^\W_] is actings as \w with the underscore character included. The upstream supplier does not permit
@@ -76,7 +76,7 @@ public static class PayoutsValidator
     public const string THEIR_REFERENCE_REGEX = @"^([^\W_]|[[\.\-/&\s]){6,}$";
 
     /// <summary>
-    /// Certain characters in the Their Reference field are not counterd towards the minimum and
+    /// Certain characters in the Their Reference field are not counted towards the minimum and
     /// maximum length requirements. This regex indicates the list of allow characters that are NOT
     /// counted.
     /// </summary>
@@ -187,19 +187,7 @@ public static class PayoutsValidator
         return true;
     }
 
-    public static bool ValidatePaymentRequestAmount(decimal? amount, PaymentMethodTypeEnum paymentMethodTypes, CurrencyTypeEnum currency)
-    {
-        return paymentMethodTypes switch
-        {
-            _ when paymentMethodTypes.HasFlag(PaymentMethodTypeEnum.pisp) && currency == CurrencyTypeEnum.EUR => amount >= PaymentsConstants.PISP_MINIMUM_EUR_PAYMENT_AMOUNT,
-            _ when paymentMethodTypes.HasFlag(PaymentMethodTypeEnum.pisp) && currency == CurrencyTypeEnum.GBP => amount >= PaymentsConstants.PISP_MINIMUM_GBP_PAYMENT_AMOUNT,
-            _ when paymentMethodTypes.HasFlag(PaymentMethodTypeEnum.cardtoken) => amount >= PaymentsConstants.CARD_MINIMUM_PAYMENT_AMOUNT,
-            _ when paymentMethodTypes.HasFlag(PaymentMethodTypeEnum.card) => amount == decimal.Zero || amount >= PaymentsConstants.CARD_MINIMUM_PAYMENT_AMOUNT,
-            _ => amount >= decimal.Zero
-        };
-    }
-
-    public static IEnumerable<ValidationResult> Validate(IPayout payout, ValidationContext validationContext)
+    public static IEnumerable<ValidationResult> Validate(Payout payout, ValidationContext validationContext)
     {
         if (payout == null)
         {
@@ -218,7 +206,7 @@ public static class PayoutsValidator
         
         if (!IsValidAccountName(payout.DestinationAccountName))
         {
-            yield return new ValidationResult($"Destination Account Name is invalid. It can only contain alaphanumberic characters plus the ' . - & and space characters.",
+            yield return new ValidationResult($"Destination Account Name is invalid. It can only contain alphanumeric characters plus the ' . - & and space characters.",
                 new string[] { nameof(payout.DestinationAccountName) });
         }
 
@@ -260,7 +248,7 @@ public static class PayoutsValidator
         if (!ValidateTheirReference(payout.TheirReference, payout.Type))
         {
             yield return new ValidationResult("Their reference must consist of at least 6 alphanumeric characters that are not all the same " +
-                "(non alphaniumeric characters do not get counted towards this minimum value). " +
+                "(non alphanumeric characters do not get counted towards this minimum value). " +
                 "The allowed characters are alphanumeric, space, hyphen(-), full stop (.), ampersand (&), and forward slash (/). " +
                 "Total of all characters must be less than 18 for a SCAN payout and less than 140 for an IBAN payout.",
                 new string[] { nameof(payout.TheirReference) });

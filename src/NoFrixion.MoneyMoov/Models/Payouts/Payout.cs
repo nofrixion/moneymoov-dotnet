@@ -17,7 +17,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class Payout : IValidatableObject, IPayout
+public class Payout : IValidatableObject
 {
     /// <summary>
     /// The ID for the payout.

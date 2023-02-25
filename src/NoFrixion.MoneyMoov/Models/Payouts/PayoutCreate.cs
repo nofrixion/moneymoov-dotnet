@@ -20,10 +20,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class PayoutCreate : IValidatableObject, IPayout
+public class PayoutCreate
 {
-    public Guid ID { get; set; }
-
     [Required(ErrorMessage = "AccountID is required.")]
     public Guid AccountID { get; set; }
 
@@ -59,39 +57,10 @@ public class PayoutCreate : IValidatableObject, IPayout
 
     /// <summary>
     /// Optional field to associate the payout with the invoice from an external 
-    /// application such as Xero. The InvoiceID needs to be unqiue for for each
+    /// application such as Xero. The InvoiceID needs to be unique for each
     /// account.
     /// </summary>
     public string InvoiceID { get; set; } = string.Empty;
-
-    public NoFrixionProblem Validate()
-    {
-        var context = new ValidationContext(this, serviceProvider: null, items: null);
-
-        List<ValidationResult> validationResults = new List<ValidationResult>();
-        bool isValid = Validator.TryValidateObject(this, context, validationResults, true);
-
-        if (isValid)
-        {
-            // If the property validations passed, apply the overall business validation rules.
-            var bizRulesvalidationResults = PayoutsValidator.Validate(this, context);
-            if (bizRulesvalidationResults.Count() > 0)
-            {
-                isValid = false;
-                validationResults ??= new List<ValidationResult>();
-                validationResults.AddRange(bizRulesvalidationResults);
-            }
-        }
-
-        return isValid ?
-            NoFrixionProblem.Empty :
-            new NoFrixionProblem("The Payout create model had one or more validation errors.", validationResults);
-    }
-
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        return PayoutsValidator.Validate(this, validationContext);
-    }
 
     /// <summary>
     /// Places all the payout's properties into a dictionary.
@@ -102,7 +71,6 @@ public class PayoutCreate : IValidatableObject, IPayout
     {
         return new Dictionary<string, string>
         {
-            { nameof(ID), ID.ToString() },
             { nameof(AccountID), AccountID.ToString() },
             { nameof(Type), Type.ToString() },
             { nameof(Description), Description },
