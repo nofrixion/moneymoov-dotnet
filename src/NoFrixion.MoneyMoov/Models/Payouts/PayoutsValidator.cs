@@ -257,8 +257,7 @@ public static class PayoutsValidator
             yield return new ValidationResult($"Currency {payout.Currency} cannot be used with SCAN destinations.", new string[] { nameof(payout.Currency) });
         }
 
-        if (!ValidateTheirReference(payout.TheirReference, !string.IsNullOrEmpty(payout.DestinationAccountNumber) ? 
-            AccountIdentifierType.SCAN : AccountIdentifierType.IBAN))
+        if (!ValidateTheirReference(payout.TheirReference, payout.Type))
         {
             yield return new ValidationResult("Their reference must consist of at least 6 alphanumeric characters that are not all the same " +
                 "(non alphaniumeric characters do not get counted towards this minimum value). " +
