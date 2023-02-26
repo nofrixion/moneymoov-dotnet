@@ -63,6 +63,16 @@ public class PayoutCreate
     public string InvoiceID { get; set; } = string.Empty;
 
     /// <summary>
+    /// If set to true the payout will get created even if the business validation 
+    /// rules fail. The basic data validation rules must still pass. The original 
+    /// purpose of this flag was to allow payouts to be created from i3rd party applications,
+    /// such as Xero, that may not have things like an IBAN set for a supplier.
+    /// The missing information must be filled, either by an update from the 3rd party
+    /// application, or manually, before the payout can be submitted for processing.
+    /// </summary>
+    public bool AllowIncomplete { get; set; } = false;
+
+    /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payout's non-collection properties 
@@ -83,7 +93,8 @@ public class PayoutCreate
             { nameof(DestinationAccountNumber), DestinationAccountNumber },
             { nameof(DestinationSortCode), DestinationSortCode },
             { nameof(DestinationAccountName), DestinationAccountName },
-            { nameof(InvoiceID), InvoiceID }
+            { nameof(InvoiceID), InvoiceID },
+            { nameof(AllowIncomplete), AllowIncomplete.ToString() },
         };
     }
 }

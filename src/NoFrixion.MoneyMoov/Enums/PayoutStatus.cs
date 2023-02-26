@@ -74,5 +74,12 @@ public enum PayoutStatus
     /// resubmit the payment they should clone it and try again.
     /// </summary>
     [EnumMember(Value = "FAILED")]
-    FAILED = 7
+    FAILED = 7,
+
+    /// <summary>
+    /// The payout is missing some crucial input fields and cannot be submitted
+    /// until they are provided.
+    /// </summary>
+    [EnumMember(Value = "PENDING_INPUT")]
+    PENDING_INPUT = 8
 }
