@@ -36,6 +36,8 @@ namespace NoFrixion.MoneyMoov
 
         Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content);
 
+        Task<MoneyMoovApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content);
+
         Task<MoneyMoovApiResponse> DeleteAsync(string path, string accessToken);
 
         Uri GetBaseUri();
@@ -89,6 +91,9 @@ namespace NoFrixion.MoneyMoov
 
         public Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content) 
             => ExecAsync<T>(BuildRequest(HttpMethod.Post, path, accessToken, content));
+
+        public Task<MoneyMoovApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content)
+            => ExecAsync<T>(BuildRequest(HttpMethod.Put, path, accessToken, content));
 
         public Task<MoneyMoovApiResponse> DeleteAsync(string path, string accessToken)
             => ExecAsync(BuildRequest(HttpMethod.Delete, path, accessToken, Option<HttpContent>.None));
