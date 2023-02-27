@@ -71,9 +71,13 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
     }
 
     [Theory]
-    [InlineData("0 0/15 * * * ?", true)] // Will succeed as the new value is greater or equal than 15 minutes.
-    [InlineData("0 0/10 * * * ?", false)] // Will fail as the new value is less than 15 minutes.
-    [InlineData("0 0 8 ? * MON-FRI *", true)] // Cron expression is every weekday at 8am. Will succeed as the new value is greater or equal than 15 minutes.
+    [InlineData("0 0/15 * * * ?", false)] // Will fail as the new value is less than 60 minutes.
+    [InlineData("0 0/10 * * * ?", false)] // Will fail as the new value is less than 60 minutes.
+    [InlineData("0 0 * ? * *", true)] // Will succeed as the expressions runs every hour.
+    [InlineData("0 0 */2 ? * *", true)] //Will succeed as the expressions runs every two hour.
+    [InlineData("0 0 0/1 ? * * *", true)] //Will succeed as the expressions runs every hour.
+    [InlineData("0 0 0 * * ?", true)] //Will succeed as the expressions runs every day at midnight - 12am.
+    [InlineData("0 0 8 ? * MON-FRI *", true)] // Cron expression is every weekday at 8am. Will succeed as the new value is greater or equal than 60 minutes.
     public void Rule_ValidateCronExpression(string cronExpression, bool shouldSucceed)
     {
 
