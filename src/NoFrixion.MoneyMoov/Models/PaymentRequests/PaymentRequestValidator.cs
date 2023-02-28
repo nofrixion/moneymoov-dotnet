@@ -36,21 +36,21 @@ public static class PaymentRequestValidator
         }
         if (paymentRequest.PaymentMethodTypes.HasFlag(PaymentMethodTypeEnum.pisp) &&
             paymentRequest.Currency == CurrencyTypeEnum.EUR &&
-            !PayoutsValidator.ValidatePaymentRequestAmount(paymentRequest.Amount, paymentRequest.PaymentMethodTypes, paymentRequest.Currency))
+            !ValidateAmount(paymentRequest.Amount, paymentRequest.PaymentMethodTypes, paymentRequest.Currency))
         {
             yield return new ValidationResult($"The amount was invalid. If a PISP payment method is being used, the amount must be at least EUR {PaymentsConstants.PISP_MINIMUM_EUR_PAYMENT_AMOUNT}.", new string[] { nameof(paymentRequest.Amount) });
         }
         else if (paymentRequest.PaymentMethodTypes.HasFlag(PaymentMethodTypeEnum.pisp) &&
             paymentRequest.Currency == CurrencyTypeEnum.GBP &&
-            !PayoutsValidator.ValidatePaymentRequestAmount(paymentRequest.Amount, paymentRequest.PaymentMethodTypes, paymentRequest.Currency))
+            !ValidateAmount(paymentRequest.Amount, paymentRequest.PaymentMethodTypes, paymentRequest.Currency))
         {
             yield return new ValidationResult($"The amount was invalid. If a PISP payment method is being used, the amount must be at least GBP {PaymentsConstants.PISP_MINIMUM_GBP_PAYMENT_AMOUNT}.", new string[] { nameof(paymentRequest.Amount) });
         }
-        else if (paymentRequest.PaymentMethodTypes.HasFlag(PaymentMethodTypeEnum.card) && !PayoutsValidator.ValidatePaymentRequestAmount(paymentRequest.Amount, paymentRequest.PaymentMethodTypes, paymentRequest.Currency))
+        else if (paymentRequest.PaymentMethodTypes.HasFlag(PaymentMethodTypeEnum.card) && !ValidateAmount(paymentRequest.Amount, paymentRequest.PaymentMethodTypes, paymentRequest.Currency))
         {
             yield return new ValidationResult($"The amount was invalid. If a card payment method is being used, the amount must be at least {PaymentsConstants.CARD_MINIMUM_PAYMENT_AMOUNT}.", new string[] { nameof(paymentRequest.Amount) });
         }
-        else if (paymentRequest.PaymentMethodTypes.HasFlag(PaymentMethodTypeEnum.cardtoken) && !PayoutsValidator.ValidatePaymentRequestAmount(paymentRequest.Amount, paymentRequest.PaymentMethodTypes, paymentRequest.Currency))
+        else if (paymentRequest.PaymentMethodTypes.HasFlag(PaymentMethodTypeEnum.cardtoken) && !ValidateAmount(paymentRequest.Amount, paymentRequest.PaymentMethodTypes, paymentRequest.Currency))
         {
             yield return new ValidationResult($"The amount was invalid. If a card token payment method is being used, the amount must be at least {PaymentsConstants.CARD_MINIMUM_PAYMENT_AMOUNT}.", new string[] { nameof(paymentRequest.Amount) });
         }
@@ -121,6 +121,18 @@ public static class PaymentRequestValidator
             yield return new ValidationResult($"The {nameof(paymentRequest.CustomerEmailAddress)} must be set when the {nameof(paymentRequest.CardCreateToken)} is set.",
                 new string[] { nameof(paymentRequest.CustomerEmailAddress) });
         }
+    }
+
+    public static bool ValidateAmount(decimal? amount, PaymentMethodTypeEnum paymentMethodTypes, CurrencyTypeEnum currency)
+    {
+        return paymentMethodTypes switch
+        {
+            _ when paymentMethodTypes.HasFlag(PaymentMethodTypeEnum.pisp) && currency == CurrencyTypeEnum.EUR => amount >= PaymentsConstants.PISP_MINIMUM_EUR_PAYMENT_AMOUNT,
+            _ when paymentMethodTypes.HasFlag(PaymentMethodTypeEnum.pisp) && currency == CurrencyTypeEnum.GBP => amount >= PaymentsConstants.PISP_MINIMUM_GBP_PAYMENT_AMOUNT,
+            _ when paymentMethodTypes.HasFlag(PaymentMethodTypeEnum.cardtoken) => amount >= PaymentsConstants.CARD_MINIMUM_PAYMENT_AMOUNT,
+            _ when paymentMethodTypes.HasFlag(PaymentMethodTypeEnum.card) => amount == decimal.Zero || amount >= PaymentsConstants.CARD_MINIMUM_PAYMENT_AMOUNT,
+            _ => amount >= decimal.Zero
+        };
     }
 }
 

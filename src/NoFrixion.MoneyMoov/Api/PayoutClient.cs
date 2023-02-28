@@ -25,6 +25,10 @@ public interface IPayoutClient
     Task<MoneyMoovApiResponse<Payout>> CreatePayoutAsync(string userAccessToken, PayoutCreate payoutCreate);
 
     Task<MoneyMoovApiResponse<Payout>> GetPayoutAsync(string userAccessToken, Guid payoutID);
+
+    Task<MoneyMoovApiResponse<Payout>> GetPayoutByInvoiceIDAsync(string merchantAccessToken, string invoiceID);
+
+    Task<MoneyMoovApiResponse<Payout>> UpdatePayoutAsync(string accessToken, Guid payoutID, PayoutUpdate payoutUpdate);
 }
 
 public class PayoutClient : IPayoutClient
@@ -80,6 +84,45 @@ public class PayoutClient : IPayoutClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<Payout>(url, userAccessToken),
+            _ => Task.FromResult(new MoneyMoovApiResponse<Payout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov payout endpoint to get a single payout by invoice ID. This method
+    /// requires a merchant access token as invoice ID's are only unqiue across a single merchant.
+    /// </summary>
+    /// <param name="invoiceID">The invoice ID of the payout to retrieve.</param>
+    /// <returns>If successful, a payout object.</returns>
+    public Task<MoneyMoovApiResponse<Payout>> GetPayoutByInvoiceIDAsync(string merchantAccessToken, string invoiceID)
+    {
+        var url = MoneyMoovUrlBuilder.PayoutsApi.GetByInvoiceIDUrl(_apiClient.GetBaseUri().ToString(), invoiceID);
+
+        var prob = _apiClient.CheckAccessToken(merchantAccessToken, nameof(GetPayoutByInvoiceIDAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<Payout>(url, merchantAccessToken),
+            _ => Task.FromResult(new MoneyMoovApiResponse<Payout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov Payout endpoint to update an existing payout.
+    /// </summary>
+    /// <param name="accessToken">The uer, or merchant, access token updatinging the payout.</param>
+    /// <param name="payoutID">The ID of the payout to update.</param>
+    /// <param name="payoutUpdate">A model with the details of the payout fileds being updated.</param>
+    /// <returns>An API response indicating the result of the update attempt.</returns>
+    public Task<MoneyMoovApiResponse<Payout>> UpdatePayoutAsync(string userAccessToken, Guid payoutID, PayoutUpdate payoutUpdate)
+    {
+        var url = MoneyMoovUrlBuilder.PayoutsApi.PayoutUrl(_apiClient.GetBaseUri().ToString(), payoutID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(UpdatePayoutAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PutAsync<Payout>(url, userAccessToken, new FormUrlEncodedContent(payoutUpdate.ToDictionary())),
             _ => Task.FromResult(new MoneyMoovApiResponse<Payout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }

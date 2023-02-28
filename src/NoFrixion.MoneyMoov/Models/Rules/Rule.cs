@@ -117,7 +117,7 @@ public class Rule : IValidatableObject
             }
             else
             {
-                const int MIN_CRON_INTERVAL_MINUTES = 15;
+                const int MIN_CRON_INTERVAL_MINUTES = 60;
                 if (!IsCronExpressionScheduledMoreThanXMinutes(TriggerCronExpression, MIN_CRON_INTERVAL_MINUTES))
                 {
                     yield return new ValidationResult($"Invalid TriggerCronExpression. The minimum interval between rule executions is {MIN_CRON_INTERVAL_MINUTES} minutes.",
