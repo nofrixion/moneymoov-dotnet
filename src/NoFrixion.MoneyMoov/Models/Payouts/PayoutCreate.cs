@@ -25,7 +25,7 @@ public class PayoutCreate
 
     public AccountIdentifierType Type { get; set; }
 
-    public string Description { get; set; } = string.Empty;
+    public string? Description { get; set; }
 
     [Required(ErrorMessage = "Currency is required.")]
     public CurrencyTypeEnum Currency { get; set; }
@@ -108,7 +108,7 @@ public class PayoutCreate
     /// application such as Xero. The InvoiceID needs to be unique for each
     /// account.
     /// </summary>
-    public string InvoiceID { get; set; } = string.Empty;
+    public string? InvoiceID { get; set; }
 
     /// <summary>
     /// If set to true the payout will get created even if the business validation 
@@ -131,12 +131,12 @@ public class PayoutCreate
         {
             { nameof(AccountID), AccountID.ToString() },
             { nameof(Type), Type.ToString() },
-            { nameof(Description), Description },
+            { nameof(Description), Description ?? string.Empty },
             { nameof(Currency), Currency.ToString() },
             { nameof(Amount), Amount.ToString() },
             { nameof(YourReference), YourReference },
             { nameof(TheirReference), TheirReference },
-            { nameof(InvoiceID), InvoiceID },
+            { nameof(InvoiceID), InvoiceID ?? string.Empty },
             { nameof(AllowIncomplete), AllowIncomplete.ToString() },
         };
 
