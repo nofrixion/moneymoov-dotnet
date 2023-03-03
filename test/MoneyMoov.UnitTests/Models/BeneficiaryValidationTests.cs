@@ -40,11 +40,14 @@ public class BeneficairyValidationTests : MoneyMoovUnitTestBase<BeneficairyValid
             Name = "Test",
             YourReference = "Your-Ref-123",
             TheirReference = "Their-Ref-123",
-            DestinationAccountName = "Test Dest",
             Currency = CurrencyTypeEnum.EUR,
-            Identifier = new AccountIdentifier
-            {
-                IBAN = "GB42MOCK00000070629907"
+            DestinationAccount = new Counterparty
+            { 
+                Name = "Test Dest",
+                Identifier = new AccountIdentifier
+                {
+                    IBAN = "GB42MOCK00000070629907"
+                }
             }
         };
 
@@ -75,7 +78,7 @@ public class BeneficairyValidationTests : MoneyMoovUnitTestBase<BeneficairyValid
         }
 
         Assert.NotEmpty(problem.Errors);
-        Assert.Equal(5, problem.Errors.Count);
+        Assert.Equal(4, problem.Errors.Count);
     }
 
     /// <summary>
@@ -93,11 +96,14 @@ public class BeneficairyValidationTests : MoneyMoovUnitTestBase<BeneficairyValid
             Name = "Test",
             YourReference = "Your-Ref-123",
             TheirReference = "XXXX",
-            DestinationAccountName = "Test Dest",
             Currency = CurrencyTypeEnum.EUR,
-            Identifier = new AccountIdentifier
+            DestinationAccount = new Counterparty
             {
-                IBAN = "GB42MOCK00000070629907"
+                Name = "Test Dest",
+                Identifier = new AccountIdentifier
+                {
+                    IBAN = "GB42MOCK00000070629907"
+                }
             }
         };
         var problem = beneficiary.Validate();
@@ -128,11 +134,14 @@ public class BeneficairyValidationTests : MoneyMoovUnitTestBase<BeneficairyValid
             Name = "Test",
             YourReference = "€5",
             TheirReference = "Their-Ref-123",
-            DestinationAccountName = "Test Dest",
             Currency = CurrencyTypeEnum.EUR,
-            Identifier = new AccountIdentifier
+            DestinationAccount = new Counterparty
             {
-                IBAN = "GB42MOCK00000070629907"
+                Name = "Test Dest",
+                Identifier = new AccountIdentifier
+                {
+                    IBAN = "GB42MOCK00000070629907"
+                }
             }
         };
         var problem = beneficiary.Validate();

@@ -14,7 +14,6 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using LanguageExt.Pretty;
 using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -44,20 +43,13 @@ public class Beneficiary : IValidatableObject
     [Required(ErrorMessage = "Their Reference is required.")]
     public string TheirReference { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Destination Account Name is required.")]
-    public string DestinationAccountName { get; set; } = string.Empty;
-
     /// <summary>
     /// Gets or Sets the currency.
     /// </summary>
     [Required(ErrorMessage = "Currency is required.")]
     public CurrencyTypeEnum Currency { get; set; }
 
-    /// <summary>
-    /// Gets or Sets the beneficiary IBAN.
-    /// </summary>
-    [Required(ErrorMessage = "Identifier is required.")]
-    public AccountIdentifier? Identifier { get; set; }
+    public Counterparty? DestinationAccount { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -73,6 +65,14 @@ public class Beneficiary : IValidatableObject
         List<ValidationResult> validationResults = new List<ValidationResult>();
         bool isValid = Validator.TryValidateObject(this, context, validationResults, true);
 
+        // Apply biz validation rules.
+        var bizValidationResults = Validate(context);
+        if(bizValidationResults.Count() > 0)
+        {
+            isValid = false;
+            validationResults.AddRange(bizValidationResults);
+        }
+
         return isValid ?
             NoFrixionProblem.Empty :
             new NoFrixionProblem($"The {nameof(Beneficiary)} had one or more validation errors.", validationResults);
@@ -86,20 +86,24 @@ public class Beneficiary : IValidatableObject
     /// represented as key-value pairs.</returns>
     public Dictionary<string, string> ToDictionary()
     {
-        return new Dictionary<string, string>
+        var dict = new Dictionary<string, string>
         {
             { nameof(ID), ID.ToString() },
             { nameof(MerchantID), MerchantID.ToString() },
             { nameof(Name), Name },
             { nameof(YourReference), YourReference },
             { nameof(TheirReference), TheirReference },
-            { nameof(DestinationAccountName), DestinationAccountName },
-            { nameof(Currency), Currency.ToString() },
-            { nameof(Identifier) + "." + nameof(Identifier.IBAN), Identifier?.IBAN ?? string.Empty },
-            { nameof(Identifier) + "." + nameof(Identifier.AccountNumber), Identifier?.AccountNumber ?? string.Empty },
-            { nameof(Identifier) + "." + nameof(Identifier.SortCode), Identifier?.SortCode ?? string.Empty },
-            { nameof(Identifier) + "." + nameof(Identifier.Type), Identifier?.Type.ToString() ?? string.Empty }
+            { nameof(Currency), Currency.ToString() }
         };
+
+        if (DestinationAccount != null)
+        {
+            dict = dict.Concat(DestinationAccount.ToDictionary($"{nameof(DestinationAccount)}."))
+                .ToLookup(x => x.Key, x => x.Value)
+                .ToDictionary(x => x.Key, g => g.First());
+        }
+
+        return dict;
     }
 
     /// <summary>
@@ -112,25 +116,11 @@ public class Beneficiary : IValidatableObject
         return new Payout
         {
             ID = Guid.NewGuid(),
-            Type = Identifier?.Type ?? AccountIdentifierType.Unknown,
+            Type = DestinationAccount?.Identifier?.Type ?? AccountIdentifierType.Unknown,
             Currency = Currency,
             YourReference = YourReference,
             TheirReference = TheirReference,
-            DestinationAccountName = DestinationAccountName,
-            DestinationAccountNumber = Identifier?.AccountNumber ?? string.Empty,
-            DestinationIBAN = Identifier?.IBAN ?? string.Empty,
-            DestinationSortCode = Identifier?.SortCode ?? string.Empty,
-            DestinationAccount = new Counterparty
-            {
-                Name = DestinationAccountName,
-                Identifier = new AccountIdentifier
-                {
-                    IBAN = Identifier?.IBAN ?? string.Empty,
-                    SortCode = Identifier?.SortCode ?? string.Empty,
-                    AccountNumber = Identifier?.AccountNumber ?? string.Empty,
-                    Currency = Currency.ToString()
-                }
-            },
+            DestinationAccount = DestinationAccount
         };
     }
 }
