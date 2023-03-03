@@ -69,15 +69,63 @@ public class Payout : IValidatableObject
     /// </summary>
     public string TheirReference { get; set; } = string.Empty;
 
-    public Guid DestinationAccountID { get; set; }
+    [Obsolete("Please use DestinationAccount.")]
+    public Guid? DestinationAccountID 
+    {
+        get => DestinationAccount?.AccountID;
+        set
+        {
+            DestinationAccount ??= new Counterparty();
+            DestinationAccount.AccountID = value;
+        }
+    }
 
-    public string DestinationIBAN { get; set; } = string.Empty;
+    [Obsolete("Please use DestinationAccount.")]
+    public string? DestinationIBAN
+    {
+        get => DestinationAccount?.Identifier?.IBAN;
+        set
+        {
+            DestinationAccount ??= new Counterparty();
+            DestinationAccount.Identifier ??= new AccountIdentifier();
+            DestinationAccount.Identifier.IBAN = value;
+        }
+    }
 
-    public string DestinationAccountNumber { get; set; } = string.Empty;
+    [Obsolete("Please use DestinationAccount.")]
+    public string? DestinationAccountNumber
+    {
+        get => DestinationAccount?.Identifier?.AccountNumber;
+        set
+        {
+            DestinationAccount ??= new Counterparty();
+            DestinationAccount.Identifier ??= new AccountIdentifier();
+            DestinationAccount.Identifier.AccountNumber = value;
+        }
+    }
 
-    public string DestinationSortCode { get; set; } = string.Empty;
+    [Obsolete("Please use DestinationAccount.")]
+    public string? DestinationSortCode
+    {
+        get => DestinationAccount?.Identifier?.SortCode;
+        set
+        {
+            DestinationAccount ??= new Counterparty();
+            DestinationAccount.Identifier ??= new AccountIdentifier();
+            DestinationAccount.Identifier.SortCode = value;
+        }
+    }
 
-    public string DestinationAccountName { get; set; } = string.Empty;
+    [Obsolete("Please use DestinationAccount.")]
+    public string? DestinationAccountName
+    {
+        get => DestinationAccount?.Name;
+        set
+        {
+            DestinationAccount ??= new Counterparty();
+            DestinationAccount.Name = value;
+        }
+    }
 
     public string MerchantTokenDescription { get; set; } = string.Empty;
 

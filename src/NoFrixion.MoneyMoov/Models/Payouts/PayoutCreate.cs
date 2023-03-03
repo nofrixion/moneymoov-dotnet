@@ -16,8 +16,6 @@
 
 using System.ComponentModel.DataAnnotations;
 
-#nullable disable
-
 namespace NoFrixion.MoneyMoov.Models;
 
 public class PayoutCreate
@@ -45,15 +43,65 @@ public class PayoutCreate
     [Required(ErrorMessage = "Their Reference is required.")]
     public string TheirReference { get; set; } = string.Empty;
 
-    public Guid DestinationAccountID { get; set; }
+    [Obsolete("Please use DestinationAccount.")]
+    public Guid? DestinationAccountID
+    {
+        get => DestinationAccount?.AccountID;
+        set
+        {
+            DestinationAccount ??= new Counterparty();
+            DestinationAccount.AccountID = value;
+        }
+    }
 
-    public string DestinationIBAN { get; set; } = string.Empty;
+    [Obsolete("Please use DestinationAccount.")]
+    public string? DestinationIBAN
+    {
+        get => DestinationAccount?.Identifier?.IBAN;
+        set
+        {
+            DestinationAccount ??= new Counterparty();
+            DestinationAccount.Identifier ??= new AccountIdentifier();
+            DestinationAccount.Identifier.IBAN = value;
+        }
+    }
 
-    public string DestinationAccountNumber { get; set; } = string.Empty;
+    [Obsolete("Please use DestinationAccount.")]
+    public string? DestinationAccountNumber
+    {
+        get => DestinationAccount?.Identifier?.AccountNumber;
+        set
+        {
+            DestinationAccount ??= new Counterparty();
+            DestinationAccount.Identifier ??= new AccountIdentifier();
+            DestinationAccount.Identifier.AccountNumber = value;
+        }
+    }
 
-    public string DestinationSortCode { get; set; } = string.Empty;
+    [Obsolete("Please use DestinationAccount.")]
+    public string? DestinationSortCode
+    {
+        get => DestinationAccount?.Identifier?.SortCode;
+        set
+        {
+            DestinationAccount ??= new Counterparty();
+            DestinationAccount.Identifier ??= new AccountIdentifier();
+            DestinationAccount.Identifier.SortCode = value;
+        }
+    }
 
-    public string DestinationAccountName { get; set; } = string.Empty;
+    [Obsolete("Please use DestinationAccount.")]
+    public string? DestinationAccountName
+    {
+        get => DestinationAccount?.Name;
+        set
+        {
+            DestinationAccount ??= new Counterparty();
+            DestinationAccount.Name = value;
+        }
+    }
+
+    public Counterparty? DestinationAccount { get; set; }
 
     /// <summary>
     /// Optional field to associate the payout with the invoice from an external 
@@ -79,7 +127,7 @@ public class PayoutCreate
     /// represented as key-value pairs.</returns>
     public Dictionary<string, string> ToDictionary()
     {
-        return new Dictionary<string, string>
+        var dict = new Dictionary<string, string>
         {
             { nameof(AccountID), AccountID.ToString() },
             { nameof(Type), Type.ToString() },
@@ -88,13 +136,17 @@ public class PayoutCreate
             { nameof(Amount), Amount.ToString() },
             { nameof(YourReference), YourReference },
             { nameof(TheirReference), TheirReference },
-            { nameof(DestinationAccountID), DestinationAccountID.ToString() },
-            { nameof(DestinationIBAN), DestinationIBAN },
-            { nameof(DestinationAccountNumber), DestinationAccountNumber },
-            { nameof(DestinationSortCode), DestinationSortCode },
-            { nameof(DestinationAccountName), DestinationAccountName },
             { nameof(InvoiceID), InvoiceID },
             { nameof(AllowIncomplete), AllowIncomplete.ToString() },
         };
+
+        if (DestinationAccount != null)
+        {
+            dict = dict.Concat(DestinationAccount.ToDictionary($"{nameof(DestinationAccount)}."))
+                .ToLookup(x => x.Key, x => x.Value)
+                .ToDictionary(x => x.Key, g => g.First());
+        }
+
+        return dict;
     }
 }
