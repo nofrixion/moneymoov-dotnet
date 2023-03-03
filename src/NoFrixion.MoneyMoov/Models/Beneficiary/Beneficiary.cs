@@ -29,19 +29,14 @@ public class Beneficiary : IValidatableObject
     public Guid MerchantID { get; set; }
 
     /// <summary>
-    /// Gets or Sets the beneficiary name.
+    /// The descriptive name for the beneficiary.
     /// </summary>
     [Required(ErrorMessage = "Name is required.")]
     public string Name { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Gets or Sets the beneficiary reference.
-    /// </summary>
-    [Required(ErrorMessage = "Your Reference is required.")]
-    public string YourReference { get; set; } = string.Empty;
+    public string? YourReference { get; set; }
 
-    [Required(ErrorMessage = "Their Reference is required.")]
-    public string TheirReference { get; set; } = string.Empty;
+    public string? TheirReference { get; set; }
 
     /// <summary>
     /// Gets or Sets the currency.
@@ -49,12 +44,16 @@ public class Beneficiary : IValidatableObject
     [Required(ErrorMessage = "Currency is required.")]
     public CurrencyTypeEnum Currency { get; set; }
 
-    public Counterparty? DestinationAccount { get; set; }
+    public Counterparty? Destination { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         var payout = ToPayout();
         payout.Amount = 0.01M;
+        // Use dummy valid values for references. Beneficiaries can have invalid references as
+        // they will be forced to fix them when the payout is created.
+        payout.TheirReference = "GoodRef";
+        payout.YourReference = "GoodRef";
         return payout.Validate(validationContext);
     }
 
@@ -91,14 +90,14 @@ public class Beneficiary : IValidatableObject
             { nameof(ID), ID.ToString() },
             { nameof(MerchantID), MerchantID.ToString() },
             { nameof(Name), Name },
-            { nameof(YourReference), YourReference },
-            { nameof(TheirReference), TheirReference },
+            { nameof(YourReference), YourReference ?? string.Empty },
+            { nameof(TheirReference), TheirReference ?? string.Empty},
             { nameof(Currency), Currency.ToString() }
         };
 
-        if (DestinationAccount != null)
+        if (Destination != null)
         {
-            dict = dict.Concat(DestinationAccount.ToDictionary($"{nameof(DestinationAccount)}."))
+            dict = dict.Concat(Destination.ToDictionary($"{nameof(Destination)}."))
                 .ToLookup(x => x.Key, x => x.Value)
                 .ToDictionary(x => x.Key, g => g.First());
         }
@@ -107,7 +106,7 @@ public class Beneficiary : IValidatableObject
     }
 
     /// <summary>
-    /// Maps the benficiary to a Payout. Used for creating a new Payout and also validating the 
+    /// Maps the beneficiary to a Payout. Used for creating a new Payout and also validating the 
     /// Beneficiary.
     /// </summary>
     /// <returns>A new Payout object.</returns>
@@ -116,11 +115,11 @@ public class Beneficiary : IValidatableObject
         return new Payout
         {
             ID = Guid.NewGuid(),
-            Type = DestinationAccount?.Identifier?.Type ?? AccountIdentifierType.Unknown,
+            Type = Destination?.Identifier?.Type ?? AccountIdentifierType.Unknown,
             Currency = Currency,
-            YourReference = YourReference,
-            TheirReference = TheirReference,
-            DestinationAccount = DestinationAccount
+            YourReference = YourReference ?? string.Empty,
+            TheirReference = TheirReference ?? string.Empty,
+            Destination = Destination
         };
     }
 }

@@ -199,42 +199,42 @@ public static class PayoutsValidator
             yield return new ValidationResult("The payment amount must be more than 0.", new string[] { nameof(payout.Amount) });
         }
 
-        if (payout.DestinationAccount == null)
+        if (payout.Destination == null)
         {
-            yield return new ValidationResult("Destination Account required", new string[] { nameof(payout.DestinationAccount) });
+            yield return new ValidationResult("Destination account required.", new string[] { nameof(payout.Destination) });
         }
 
-        if (payout.DestinationAccount != null && payout.DestinationAccount?.Identifier == null)
+        if (payout.Destination != null && payout.Destination?.Identifier == null)
         {
-            yield return new ValidationResult("Destination Account Identifier required", new string[] { nameof(payout.DestinationAccount.Identifier) });
+            yield return new ValidationResult("Destination account identifier required.", new string[] { nameof(payout.Destination.Identifier) });
         }
 
-        if (string.IsNullOrEmpty(payout.DestinationAccount?.Name))
+        if (string.IsNullOrEmpty(payout.Destination?.Name))
         {
-            yield return new ValidationResult("Destination account name required", new string[] { nameof(payout.DestinationAccount.Name) });
+            yield return new ValidationResult("Destination account name required.", new string[] { nameof(payout.Destination.Name) });
         }
         
-        if (payout.DestinationAccount?.Name != null && !IsValidAccountName(payout.DestinationAccount?.Name ?? string.Empty))
+        if (payout.Destination?.Name != null && !IsValidAccountName(payout.Destination?.Name ?? string.Empty))
         {
-            yield return new ValidationResult($"Destination Account Name is invalid. It can only contain alphanumeric characters plus the ' . - & and space characters.",
-                new string[] { nameof(payout.DestinationAccount.Name) });
+            yield return new ValidationResult($"Destination account name is invalid. It can only contain alphanumeric characters plus the ' . - & and space characters.",
+                new string[] { nameof(payout.Destination.Name) });
         }
 
-        if (payout.DestinationAccount != null && !(payout.Type == AccountIdentifierType.IBAN || payout.Type == AccountIdentifierType.SCAN))
+        if (payout.Destination != null && !(payout.Type == AccountIdentifierType.IBAN || payout.Type == AccountIdentifierType.SCAN))
         {
-            yield return new ValidationResult("Only payouts of type IBAN or SCAN are supported.", new string[] { nameof(payout.Type) });
+            yield return new ValidationResult("Only destination types of IBAN or SCAN are supported.", new string[] { nameof(payout.Type) });
         }
 
-        if (payout.Type == AccountIdentifierType.IBAN && payout.DestinationAccount?.Identifier != null &&
-            string.IsNullOrEmpty(payout.DestinationAccount?.Identifier?.IBAN ?? string.Empty))
+        if (payout.Type == AccountIdentifierType.IBAN && payout.Destination?.Identifier != null &&
+            string.IsNullOrEmpty(payout.Destination?.Identifier?.IBAN ?? string.Empty))
         {
-            yield return new ValidationResult("The destination account IBAN must be specified for an IBAN payout type.", new string[] { nameof(payout.DestinationAccount.Identifier.IBAN) });
+            yield return new ValidationResult("The destination account IBAN must be specified for an IBAN payout type.", new string[] { nameof(payout.Destination.Identifier.IBAN) });
         }
 
-        if (payout.Type == AccountIdentifierType.IBAN && payout.DestinationAccount?.Identifier != null && 
-            !ValidateIBAN(payout.DestinationAccount?.Identifier?.IBAN ?? string.Empty))
+        if (payout.Type == AccountIdentifierType.IBAN && payout.Destination?.Identifier != null && 
+            !ValidateIBAN(payout.Destination?.Identifier?.IBAN ?? string.Empty))
         {
-            yield return new ValidationResult("Destination IBAN is invalid, Please enter a valid IBAN.", new string[] { nameof(payout.DestinationAccount.Identifier.IBAN) });
+            yield return new ValidationResult("Destination IBAN is invalid, Please enter a valid IBAN.", new string[] { nameof(payout.Destination.Identifier.IBAN) });
         }
 
         if (payout.Type == AccountIdentifierType.IBAN && payout.Currency != CurrencyTypeEnum.EUR)
@@ -242,16 +242,16 @@ public static class PayoutsValidator
             yield return new ValidationResult($"Currency {payout.Currency} cannot be used with IBAN destinations.", new string[] { nameof(payout.Currency) });
         }
 
-        if (payout.Type == AccountIdentifierType.SCAN && payout.DestinationAccount?.Identifier != null &&
-            string.IsNullOrEmpty(payout.DestinationAccount?.Identifier?.SortCode))
+        if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
+            string.IsNullOrEmpty(payout.Destination?.Identifier?.SortCode))
         {
-            yield return new ValidationResult("Sort code required for a SCAN payout type.", new string[] { nameof(payout.DestinationAccount.Identifier.SortCode) });
+            yield return new ValidationResult("Destination sort code required for a SCAN payout type.", new string[] { nameof(payout.Destination.Identifier.SortCode) });
         }
 
-        if (payout.Type == AccountIdentifierType.SCAN && payout.DestinationAccount?.Identifier != null &&
-            string.IsNullOrEmpty(payout.DestinationAccount?.Identifier?.AccountNumber))
+        if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
+            string.IsNullOrEmpty(payout.Destination?.Identifier?.AccountNumber))
         {
-            yield return new ValidationResult("Account Number is required for a SCAN payout type.", new string[] { nameof(payout.DestinationAccount.Identifier.AccountNumber) });
+            yield return new ValidationResult("Destination account number is required for a SCAN payout type.", new string[] { nameof(payout.Destination.Identifier.AccountNumber) });
         }
 
         if (payout.Type == AccountIdentifierType.SCAN && payout.Currency != CurrencyTypeEnum.GBP)
