@@ -43,65 +43,72 @@ public class PayoutCreate
     [Required(ErrorMessage = "Their Reference is required.")]
     public string TheirReference { get; set; } = string.Empty;
 
-    [Obsolete("Please use DestinationAccount.")]
+    [Obsolete("Please use Destination.")]
     public Guid? DestinationAccountID
     {
-        get => DestinationAccount?.AccountID;
+        get => Destination?.AccountID;
         set
         {
-            DestinationAccount ??= new Counterparty();
-            DestinationAccount.AccountID = value;
+            Destination ??= new Counterparty();
+            Destination.AccountID = value;
         }
     }
 
-    [Obsolete("Please use DestinationAccount.")]
+    [Obsolete("Please use Destination.")]
     public string? DestinationIBAN
     {
-        get => DestinationAccount?.Identifier?.IBAN;
+        get => Destination?.Identifier?.IBAN;
         set
         {
-            DestinationAccount ??= new Counterparty();
-            DestinationAccount.Identifier ??= new AccountIdentifier();
-            DestinationAccount.Identifier.IBAN = value;
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier.IBAN = value;
         }
     }
 
-    [Obsolete("Please use DestinationAccount.")]
+    [Obsolete("Please use Destination.")]
     public string? DestinationAccountNumber
     {
-        get => DestinationAccount?.Identifier?.AccountNumber;
+        get => Destination?.Identifier?.AccountNumber;
         set
         {
-            DestinationAccount ??= new Counterparty();
-            DestinationAccount.Identifier ??= new AccountIdentifier();
-            DestinationAccount.Identifier.AccountNumber = value;
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier.AccountNumber = value;
         }
     }
 
-    [Obsolete("Please use DestinationAccount.")]
+    [Obsolete("Please use Destination.")]
     public string? DestinationSortCode
     {
-        get => DestinationAccount?.Identifier?.SortCode;
+        get => Destination?.Identifier?.SortCode;
         set
         {
-            DestinationAccount ??= new Counterparty();
-            DestinationAccount.Identifier ??= new AccountIdentifier();
-            DestinationAccount.Identifier.SortCode = value;
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier.SortCode = value;
         }
     }
 
-    [Obsolete("Please use DestinationAccount.")]
+    [Obsolete("Please use Destination.")]
     public string? DestinationAccountName
     {
-        get => DestinationAccount?.Name;
+        get => Destination?.Name;
         set
         {
-            DestinationAccount ??= new Counterparty();
-            DestinationAccount.Name = value;
+            Destination ??= new Counterparty();
+            Destination.Name = value;
         }
     }
 
-    public Counterparty? DestinationAccount { get; set; }
+    [Obsolete("Please use Destination.")]
+    public Counterparty? DestinationAccount
+    {
+        get => Destination;
+        set => Destination = value;
+    }
+
+    public Counterparty? Destination { get; set; }
 
     /// <summary>
     /// Optional field to associate the payout with the invoice from an external 
@@ -140,9 +147,9 @@ public class PayoutCreate
             { nameof(AllowIncomplete), AllowIncomplete.ToString() },
         };
 
-        if (DestinationAccount != null)
+        if (Destination != null)
         {
-            dict = dict.Concat(DestinationAccount.ToDictionary($"{nameof(DestinationAccount)}."))
+            dict = dict.Concat(Destination.ToDictionary($"{nameof(Destination)}."))
                 .ToLookup(x => x.Key, x => x.Value)
                 .ToDictionary(x => x.Key, g => g.First());
         }
