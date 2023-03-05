@@ -69,15 +69,63 @@ public class Payout : IValidatableObject
     /// </summary>
     public string TheirReference { get; set; } = string.Empty;
 
-    public Guid DestinationAccountID { get; set; }
+    [Obsolete("Please use Destination.")]
+    public Guid? DestinationAccountID
+    {
+        get => Destination?.AccountID;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.AccountID = value;
+        }
+    }
 
-    public string DestinationIBAN { get; set; } = string.Empty;
+    [Obsolete("Please use Destination.")]
+    public string? DestinationIBAN
+    {
+        get => Destination?.Identifier?.IBAN;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier.IBAN = value;
+        }
+    }
 
-    public string DestinationAccountNumber { get; set; } = string.Empty;
+    [Obsolete("Please use Destination.")]
+    public string? DestinationAccountNumber
+    {
+        get => Destination?.Identifier?.AccountNumber;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier.AccountNumber = value;
+        }
+    }
 
-    public string DestinationSortCode { get; set; } = string.Empty;
+    [Obsolete("Please use Destination.")]
+    public string? DestinationSortCode
+    {
+        get => Destination?.Identifier?.SortCode;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier.SortCode = value;
+        }
+    }
 
-    public string DestinationAccountName { get; set; } = string.Empty;
+    [Obsolete("Please use Destination.")]
+    public string? DestinationAccountName
+    {
+        get => Destination?.Name;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Name = value;
+        }
+    }
 
     public string MerchantTokenDescription { get; set; } = string.Empty;
 
@@ -116,11 +164,18 @@ public class Payout : IValidatableObject
     /// </summary>
     public string SourceAccountName { get; set; } = string.Empty;
 
-    public Counterparty? DestinationAccount { get; set; }
+    [Obsolete("Please use Destination.")]
+    public Counterparty? DestinationAccount
+    {
+        get => Destination;
+        set => Destination = value;
+    }
+
+public Counterparty? Destination { get; set; }
 
     /// <summary>
     /// Optional field to associate the payout with the invoice from an external 
-    /// application such as Xero. The InvoiceID needs to be unqiue for for each
+    /// application such as Xero. The InvoiceID needs to be unique for each
     /// account.
     /// </summary>
     public string InvoiceID { get; set; } = string.Empty;
