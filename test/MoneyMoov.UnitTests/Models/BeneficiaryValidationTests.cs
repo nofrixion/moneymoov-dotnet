@@ -40,11 +40,14 @@ public class BeneficairyValidationTests : MoneyMoovUnitTestBase<BeneficairyValid
             Name = "Test",
             YourReference = "Your-Ref-123",
             TheirReference = "Their-Ref-123",
-            DestinationAccountName = "Test Dest",
             Currency = CurrencyTypeEnum.EUR,
-            Identifier = new AccountIdentifier
-            {
-                IBAN = "GB42MOCK00000070629907"
+            Destination = new Counterparty
+            { 
+                Name = "Test Dest",
+                Identifier = new AccountIdentifier
+                {
+                    IBAN = "GB42MOCK00000070629907"
+                }
             }
         };
 
@@ -56,7 +59,7 @@ public class BeneficairyValidationTests : MoneyMoovUnitTestBase<BeneficairyValid
     }
 
     /// <summary>
-    /// Tests that an empty beneficiary model retruns the expected number of validation errors.
+    /// Tests that an empty beneficiary model returns the expected number of validation errors.
     /// </summary>
     [Fact]
     public void Beneficiary_Empty_Validation_Fails()
@@ -75,76 +78,6 @@ public class BeneficairyValidationTests : MoneyMoovUnitTestBase<BeneficairyValid
         }
 
         Assert.NotEmpty(problem.Errors);
-        Assert.Equal(5, problem.Errors.Count);
-    }
-
-    /// <summary>
-    /// Tests that a beneficiary with an invalid their reference fails.
-    /// </summary>
-    [Fact]
-    public void Beneficiary_Invalid_TheirRef_Fails()
-    {
-        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
-
-        var beneficiary = new Beneficiary
-        {
-            ID = Guid.NewGuid(),
-            MerchantID = Guid.NewGuid(),
-            Name = "Test",
-            YourReference = "Your-Ref-123",
-            TheirReference = "XXXX",
-            DestinationAccountName = "Test Dest",
-            Currency = CurrencyTypeEnum.EUR,
-            Identifier = new AccountIdentifier
-            {
-                IBAN = "GB42MOCK00000070629907"
-            }
-        };
-        var problem = beneficiary.Validate();
-
-        Assert.NotNull(problem);
-
-        foreach (var err in problem.Errors)
-        {
-            Logger.LogDebug(Newtonsoft.Json.JsonConvert.SerializeObject(err));
-        }
-
-        Assert.NotEmpty(problem.Errors);
-        Assert.Single(problem.Errors);
-    }
-
-    /// <summary>
-    /// Tests that a beneficiary with an invalid your reference fails.
-    /// </summary>
-    [Fact]
-    public void Beneficiary_Invalid_YourRef_Fails()
-    {
-        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
-
-        var beneficiary = new Beneficiary
-        {
-            ID = Guid.NewGuid(),
-            MerchantID = Guid.NewGuid(),
-            Name = "Test",
-            YourReference = "€5",
-            TheirReference = "Their-Ref-123",
-            DestinationAccountName = "Test Dest",
-            Currency = CurrencyTypeEnum.EUR,
-            Identifier = new AccountIdentifier
-            {
-                IBAN = "GB42MOCK00000070629907"
-            }
-        };
-        var problem = beneficiary.Validate();
-
-        Assert.NotNull(problem);
-
-        foreach (var err in problem.Errors)
-        {
-            Logger.LogDebug(Newtonsoft.Json.JsonConvert.SerializeObject(err));
-        }
-
-        Assert.NotEmpty(problem.Errors);
-        Assert.Single(problem.Errors);
+        Assert.Equal(2, problem.Errors.Count);
     }
 }

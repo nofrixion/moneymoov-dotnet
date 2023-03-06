@@ -59,4 +59,10 @@ public class PaymentRequestMinimal
     /// The jwk containing the public key
     /// </summary>
     public string? Jwk { get; set; }
+
+    /// <summary>
+    /// The payment methods that the payment request supports. When setting using form data
+    /// should be supplied as a comma separated list, for example "card, pisp, lightning, applePay".
+    /// </summary>
+    public PaymentMethodTypeEnum PaymentMethods { get; set; }
 }

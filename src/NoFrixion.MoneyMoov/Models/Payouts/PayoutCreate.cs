@@ -16,8 +16,6 @@
 
 using System.ComponentModel.DataAnnotations;
 
-#nullable disable
-
 namespace NoFrixion.MoneyMoov.Models;
 
 public class PayoutCreate
@@ -27,7 +25,7 @@ public class PayoutCreate
 
     public AccountIdentifierType Type { get; set; }
 
-    public string Description { get; set; } = string.Empty;
+    public string? Description { get; set; }
 
     [Required(ErrorMessage = "Currency is required.")]
     public CurrencyTypeEnum Currency { get; set; }
@@ -45,22 +43,79 @@ public class PayoutCreate
     [Required(ErrorMessage = "Their Reference is required.")]
     public string TheirReference { get; set; } = string.Empty;
 
-    public Guid DestinationAccountID { get; set; }
+    [Obsolete("Please use Destination.")]
+    public Guid? DestinationAccountID
+    {
+        get => Destination?.AccountID;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.AccountID = value;
+        }
+    }
 
-    public string DestinationIBAN { get; set; } = string.Empty;
+    [Obsolete("Please use Destination.")]
+    public string? DestinationIBAN
+    {
+        get => Destination?.Identifier?.IBAN;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier.IBAN = value;
+        }
+    }
 
-    public string DestinationAccountNumber { get; set; } = string.Empty;
+    [Obsolete("Please use Destination.")]
+    public string? DestinationAccountNumber
+    {
+        get => Destination?.Identifier?.AccountNumber;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier.AccountNumber = value;
+        }
+    }
 
-    public string DestinationSortCode { get; set; } = string.Empty;
+    [Obsolete("Please use Destination.")]
+    public string? DestinationSortCode
+    {
+        get => Destination?.Identifier?.SortCode;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier.SortCode = value;
+        }
+    }
 
-    public string DestinationAccountName { get; set; } = string.Empty;
+    [Obsolete("Please use Destination.")]
+    public string? DestinationAccountName
+    {
+        get => Destination?.Name;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Name = value;
+        }
+    }
+
+    [Obsolete("Please use Destination.")]
+    public Counterparty? DestinationAccount
+    {
+        get => Destination;
+        set => Destination = value;
+    }
+
+    public Counterparty? Destination { get; set; }
 
     /// <summary>
     /// Optional field to associate the payout with the invoice from an external 
     /// application such as Xero. The InvoiceID needs to be unique for each
     /// account.
     /// </summary>
-    public string InvoiceID { get; set; } = string.Empty;
+    public string? InvoiceID { get; set; }
 
     /// <summary>
     /// If set to true the payout will get created even if the business validation 
@@ -79,22 +134,26 @@ public class PayoutCreate
     /// represented as key-value pairs.</returns>
     public Dictionary<string, string> ToDictionary()
     {
-        return new Dictionary<string, string>
+        var dict = new Dictionary<string, string>
         {
             { nameof(AccountID), AccountID.ToString() },
             { nameof(Type), Type.ToString() },
-            { nameof(Description), Description },
+            { nameof(Description), Description ?? string.Empty },
             { nameof(Currency), Currency.ToString() },
             { nameof(Amount), Amount.ToString() },
             { nameof(YourReference), YourReference },
             { nameof(TheirReference), TheirReference },
-            { nameof(DestinationAccountID), DestinationAccountID.ToString() },
-            { nameof(DestinationIBAN), DestinationIBAN },
-            { nameof(DestinationAccountNumber), DestinationAccountNumber },
-            { nameof(DestinationSortCode), DestinationSortCode },
-            { nameof(DestinationAccountName), DestinationAccountName },
-            { nameof(InvoiceID), InvoiceID },
+            { nameof(InvoiceID), InvoiceID ?? string.Empty },
             { nameof(AllowIncomplete), AllowIncomplete.ToString() },
         };
+
+        if (Destination != null)
+        {
+            dict = dict.Concat(Destination.ToDictionary($"{nameof(Destination)}."))
+                .ToLookup(x => x.Key, x => x.Value)
+                .ToDictionary(x => x.Key, g => g.First());
+        }
+
+        return dict;
     }
 }

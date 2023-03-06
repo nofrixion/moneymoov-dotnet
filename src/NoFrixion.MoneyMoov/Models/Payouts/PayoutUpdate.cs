@@ -32,15 +32,72 @@ public class PayoutUpdate
 
     public string? TheirReference { get; set; }
 
-    public Guid? DestinationAccountID { get; set; }
+    [Obsolete("Please use Destination.")]
+    public Guid? DestinationAccountID
+    {
+        get => Destination?.AccountID;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.AccountID = value;
+        }
+    }
 
-    public string? DestinationIBAN { get; set; }
+    [Obsolete("Please use Destination.")]
+    public string? DestinationIBAN
+    {
+        get => Destination?.Identifier?.IBAN;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier.IBAN = value;
+        }
+    }
 
-    public string? DestinationAccountNumber { get; set; }
+    [Obsolete("Please use Destination.")]
+    public string? DestinationAccountNumber
+    {
+        get => Destination?.Identifier?.AccountNumber;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier.AccountNumber = value;
+        }
+    }
 
-    public string? DestinationSortCode { get; set; }
+    [Obsolete("Please use Destination.")]
+    public string? DestinationSortCode
+    {
+        get => Destination?.Identifier?.SortCode;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier.SortCode = value;
+        }
+    }
 
-    public string? DestinationAccountName { get; set; }
+    [Obsolete("Please use Destination.")]
+    public string? DestinationAccountName
+    {
+        get => Destination?.Name;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Name = value;
+        }
+    }
+
+    [Obsolete("Please use Destination.")]
+    public Counterparty? DestinationAccount
+    {
+        get => Destination;
+        set => Destination = value;
+    }
+
+    public Counterparty? Destination { get; set; }
 
     /// <summary>
     /// If set to true the payout will get updated even if the business validation 
@@ -67,12 +124,14 @@ public class PayoutUpdate
         if (Amount != null) dict.Add(nameof(Amount), Amount.Value.ToString());
         if (YourReference != null) dict.Add(nameof(YourReference), YourReference.ToString());
         if (TheirReference != null) dict.Add(nameof(TheirReference), TheirReference.ToString());
-        if (DestinationAccountID != null) dict.Add(nameof(DestinationAccountID), DestinationAccountID.Value.ToString());
-        if (DestinationIBAN != null) dict.Add(nameof(DestinationIBAN), DestinationIBAN.ToString());
-        if (DestinationAccountNumber != null) dict.Add(nameof(DestinationAccountNumber), DestinationAccountNumber.ToString());
-        if (DestinationSortCode != null) dict.Add(nameof(DestinationSortCode), DestinationSortCode.ToString());
-        if (DestinationAccountName != null) dict.Add(nameof(DestinationAccountName), DestinationAccountName.ToString()); ;
         if (AllowIncomplete != null) dict.Add(nameof(AllowIncomplete), AllowIncomplete.Value.ToString());
+
+        if (Destination != null)
+        {
+            dict = dict.Concat(Destination.ToDictionary($"{nameof(Destination)}."))
+                .ToLookup(x => x.Key, x => x.Value)
+                .ToDictionary(x => x.Key, g => g.First());
+        }
 
         return dict;
     }
