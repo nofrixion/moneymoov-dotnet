@@ -1,11 +1,14 @@
 ﻿namespace NoFrixion.MoneyMoov.Metadata;
 
+#nullable disable
 public class TransactionMetadata
 {
     /// <summary>
     /// Amount to be send
     /// </summary>
     public decimal Amount { get; set; }
+
+    public CurrencyTypeEnum Currency { get; set; }
 
     /// <summary>
     /// Account balance before executing the transaction
@@ -20,7 +23,23 @@ public class TransactionMetadata
     /// <summary>
     /// /// Account description which sent the transaction - Not needed to apply any rule, this is for display purposes.
     /// </summary>
-    public string? AccountName { get; set; }
+    public string AccountName { get; set; }
+
+    public string CounterPartyIdentifierIban { get; set; }
+
+    public string CounterPartyIdentifierBic { get; set; }
+
+    public string CounterPartyIdentifierAccountNumber { get; set; }
+
+    public string CounterPartyIdentifierSortCode { get; set; }
+
+    public string CounterPartyName { get; set; }
+
+    public string Reference { get; set; }
+
+    public string CounterPartyCountryCode { get; set; }
+
+    public DateTimeOffset SupplierInsertedDate { get; set; }
 
     /// <summary>
     /// Account balance after executing the transaction (considering that is successful). This value should be the `AccountBalance` less the `Amount`.
@@ -149,15 +168,9 @@ public class TransactionMetadata
     public int HighRoundTransactionsToday { get; set; }
 
     /// <summary>
-    /// Country code of the recipient
-    /// <para>Ex: IE, GB, ES, FR</para>
-    /// </summary>
-    public string RecipientCountryCode { get; set; } = "";
-
-    /// <summary>
     /// If the acount sent a transaction to the recipient country before
     /// </summary>
-    public bool HadSentTransactionToCountryBefore { get; set; }
+    public bool HadSentTransactionToIBANBefore { get; set; }
 
     /// <summary>
     /// Average amount ever sent to any recipient
