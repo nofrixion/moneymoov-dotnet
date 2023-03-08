@@ -111,4 +111,10 @@ public class PaymentAccount
     /// <returns></returns>
     public string Summary
         => AccountName + (Identifier != null ? ", " + Identifier.Summary : string.Empty);
+
+    /// <summary>
+    /// Flag for default account for a currency. If there are multiple accounts for a currency,
+    /// a default account can be selected for that currency.
+    /// </summary>
+    public bool IsDefault { get; set; }
 }
