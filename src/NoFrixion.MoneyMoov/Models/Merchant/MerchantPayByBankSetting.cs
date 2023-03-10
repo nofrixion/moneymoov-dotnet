@@ -1,7 +1,7 @@
 ﻿// -----------------------------------------------------------------------------
-//  Filename: MerchantPisBankSetting.cs
+//  Filename: MerchantPayByBankSetting.cs
 // 
-//  Description: Model representing an individual PIS bank setting.
+//  Description: Model representing an individual bank payment setting.
 // 
 //  Author(s):
 //  Axel Granillo (axel@nofrixion.com)
@@ -10,7 +10,7 @@
 //  08 03 2023  Axel Granillo   Created, Remote, Mexico City, Mexico.
 // 
 //  License:
-//  Proprietary NoFrixion.
+//  MIT.
 // -----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
@@ -20,9 +20,9 @@ using Newtonsoft.Json.Converters;
 namespace NoFrixion.MoneyMoov.Models;
 
 /// <summary>
-/// Represents an individual PIS bank setting.
+/// Represents an individual bank payment setting.
 /// </summary>
-public class MerchantPisBankSetting
+public class MerchantPayByBankSetting
 {
     /// <summary>
     /// ID of the bank to be configured for the merchant.
@@ -47,7 +47,7 @@ public class MerchantPisBankSetting
     public CurrencyTypeEnum Currency { get; set; }
 
     /// <summary>
-    /// Name of the PIS processor for the bank.
+    /// Name of the bank payment processor.
     /// </summary>
     public string? Processor { get; set; }
 

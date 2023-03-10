@@ -1,7 +1,7 @@
 ﻿// -----------------------------------------------------------------------------
-//  Filename: MerchantPisBankSettings.cs
+//  Filename: MerchantPayByBankSettings.cs
 // 
-//  Description: Model representing a collectino of merchant PIS bank settings:
+//  Description: Model representing a collection of merchant bank payment settings:
 // 
 //  Author(s):
 //  Axel Granillo (axel@nofrixion.com)
@@ -10,15 +10,15 @@
 //  08 03 2023  Axel Granillo   Created, Remote, Mexico City, Mexico.
 // 
 //  License:
-//  Proprietary NoFrixion.
+//  MIT.
 // -----------------------------------------------------------------------------
 
 namespace NoFrixion.MoneyMoov.Models;
 
 /// <summary>
-/// Represents a collection of merchant PIS bank settings.
+/// Represents a collection of merchant bank payment settings.
 /// </summary>
-public class MerchantPisBankSettings
+public class MerchantPayByBankSettings
 {
     /// <summary>
     /// Merchant to which the settings will be configured.
@@ -26,7 +26,7 @@ public class MerchantPisBankSettings
     public Guid MerchantID { get; set; }
 
     /// <summary>
-    /// Collection of PIS bank settings.
+    /// Collection of bank payment settings.
     /// </summary>
-    public IEnumerable<MerchantPisBankSetting> PisBankSettings { get; set; } = new List<MerchantPisBankSetting>();
+    public IEnumerable<MerchantPayByBankSetting> PayByBankSettings { get; set; } = new List<MerchantPayByBankSetting>();
 }

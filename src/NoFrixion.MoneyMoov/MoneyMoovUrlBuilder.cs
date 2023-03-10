@@ -20,6 +20,8 @@ namespace NoFrixion.MoneyMoov;
 public enum MoneyMoovResources
 {
     accounts,
+    
+    banksettings,
 
     beneficiaries,
 
@@ -34,8 +36,6 @@ public enum MoneyMoovResources
     paymentrequests,
 
     payouts,
-
-    pissettings,
 
     rules,
 
@@ -98,7 +98,7 @@ public static class MoneyMoovUrlBuilder
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.userroles}";
         
         public static string MerchantBankSettings(string moneyMoovBaseUrl, Guid merchantID)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.pissettings}";
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.banksettings}";
     }
 
     /// <summary>
