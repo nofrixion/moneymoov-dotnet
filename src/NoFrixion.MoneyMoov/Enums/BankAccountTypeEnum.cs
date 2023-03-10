@@ -10,7 +10,7 @@
 //  08 03 2023  Axel Granillo   Created, Remote, Mexico City, Mexico.
 // 
 //  License:
-//  Proprietary NoFrixion.
+//  MIT.
 // -----------------------------------------------------------------------------
 
 using System.Runtime.Serialization;
