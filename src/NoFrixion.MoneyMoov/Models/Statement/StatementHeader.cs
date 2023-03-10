@@ -10,7 +10,7 @@
 //  25 01 2023  Axel Granillo   Created, Remote, Mexico City, Mexico.
 // 
 //  License:
-//  Proprietary NoFrixion.
+//  MIT.
 // -----------------------------------------------------------------------------
 
 #nullable disable
