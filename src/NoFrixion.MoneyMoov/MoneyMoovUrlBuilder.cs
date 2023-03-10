@@ -35,6 +35,8 @@ public enum MoneyMoovResources
 
     payouts,
 
+    pissettings,
+
     rules,
 
     tokens,
@@ -47,7 +49,7 @@ public enum MoneyMoovResources
 
     userroles,
 
-    webhooks,
+    webhooks
 }
 
 
@@ -94,6 +96,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string MerchantUserRoleUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.userroles}";
+        
+        public static string MerchantBankSettings(string moneyMoovBaseUrl, Guid merchantID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.pissettings}";
     }
 
     /// <summary>
