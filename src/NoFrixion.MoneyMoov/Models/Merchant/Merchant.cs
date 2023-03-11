@@ -69,6 +69,11 @@ public class Merchant
     public JurisdictionEnum Jurisdiction { get; set; }
 
     /// <summary>
+    /// The version of the hosted payment page to use with the merchant.
+    /// </summary>
+    public int HostedPayVersion { get; set; }
+
+    /// <summary>
     /// The list of users that have been assigned a role on the merchant.
     /// </summary>
     public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
