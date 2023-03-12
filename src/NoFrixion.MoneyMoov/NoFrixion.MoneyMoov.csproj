@@ -10,11 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Webhook\**" />
     <Compile Remove="Validators\**" />
-    <EmbeddedResource Remove="Models\Webhook\**" />
     <EmbeddedResource Remove="Validators\**" />
-    <None Remove="Models\Webhook\**" />
     <None Remove="Validators\**" />
   </ItemGroup>
 
