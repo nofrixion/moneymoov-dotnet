@@ -74,6 +74,12 @@ public class Merchant
     public int HostedPayVersion { get; set; }
 
     /// <summary>
+    /// The maximum number of web hooks that can be created for the Merchant.
+    /// To increase the limit contact support.
+    /// </summary>
+    public int WebHookLimit { get; set; }
+
+    /// <summary>
     /// The list of users that have been assigned a role on the merchant.
     /// </summary>
     public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
