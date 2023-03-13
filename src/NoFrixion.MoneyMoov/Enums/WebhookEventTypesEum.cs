@@ -8,7 +8,7 @@
 // Aaron Clauson (aaron@nofrixion.com)
 // 
 // History:
-// 24 Dec 2022  Aaron Clauson    Renamed from WebHook to PWebhookEventTypesEum.
+// 24 Dec 2022  Aaron Clauson    Renamed from WebHook to WebhookEventTypesEum.
 // 
 // License:
 // MIT.
