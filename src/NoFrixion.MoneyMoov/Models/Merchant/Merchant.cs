@@ -85,6 +85,12 @@ public class Merchant
     public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
     /// <summary>
+    /// An optional list of descriptive tags that can be used on merchant entities
+    /// such as payment requests.
+    /// </summary>
+    public List<Tag> Tags { get; set; } = new List<Tag>();
+
+    /// <summary>
     /// Gets the most appropriate display name for the merchant which
     /// means use the trading name if set and if not, default to the business name.
     /// </summary>
