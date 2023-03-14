@@ -28,7 +28,12 @@ public class MerchantPayByBankSetting
     /// ID of the bank to be configured for the merchant.
     /// </summary>
     public Guid BankID { get; set; }
-    
+
+    /// <summary>
+    /// Name of the Bank/Institution.  
+    /// </summary>
+    public string? BankName { get; set; }
+
     /// <summary>
     /// Order in which this setting will appear in the UI.
     /// </summary>
