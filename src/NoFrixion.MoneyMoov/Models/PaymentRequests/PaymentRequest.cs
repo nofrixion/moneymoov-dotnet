@@ -227,6 +227,11 @@ public class PaymentRequest : IPaymentRequest
 
     public List<CardCustomerToken> TokenisedCards { get; set; } = new List<CardCustomerToken>();
 
+    /// <summary>
+    /// An optional list of descriptive tags attached to the payment request.
+    /// </summary>
+    public List<Tag> Tags { get; set; } = new List<Tag>();
+
     public PaymentRequestResult Result { get; set; } = new PaymentRequestResult { Result = PaymentResultEnum.None };
 
     /// <summary>
@@ -260,7 +265,6 @@ public class PaymentRequest : IPaymentRequest
     /// <returns>The decimal amount to display for the payment request's currency.</returns>
     public decimal DisplayAmount() =>
         IsFiat(Currency) ? Math.Round(Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES) : Amount;
-
 
     public string? NotificationEmailAddresses { get; set; }
 
