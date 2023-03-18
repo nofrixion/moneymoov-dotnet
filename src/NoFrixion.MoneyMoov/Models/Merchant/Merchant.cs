@@ -69,9 +69,26 @@ public class Merchant
     public JurisdictionEnum Jurisdiction { get; set; }
 
     /// <summary>
+    /// The version of the hosted payment page to use with the merchant.
+    /// </summary>
+    public int HostedPayVersion { get; set; }
+
+    /// <summary>
+    /// The maximum number of web hooks that can be created for the Merchant.
+    /// To increase the limit contact support.
+    /// </summary>
+    public int WebHookLimit { get; set; }
+
+    /// <summary>
     /// The list of users that have been assigned a role on the merchant.
     /// </summary>
     public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
+
+    /// <summary>
+    /// An optional list of descriptive tags that can be used on merchant entities
+    /// such as payment requests.
+    /// </summary>
+    public List<Tag> Tags { get; set; } = new List<Tag>();
 
     /// <summary>
     /// Gets the most appropriate display name for the merchant which

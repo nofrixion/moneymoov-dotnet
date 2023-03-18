@@ -20,6 +20,8 @@ namespace NoFrixion.MoneyMoov;
 public enum MoneyMoovResources
 {
     accounts,
+    
+    banksettings,
 
     beneficiaries,
 
@@ -47,7 +49,7 @@ public enum MoneyMoovResources
 
     userroles,
 
-    webhooks,
+    webhooks
 }
 
 
@@ -83,6 +85,9 @@ public static class MoneyMoovUrlBuilder
         public static string MerchantAccountsUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.accounts}";
 
+        public static string MerchantBankSettings(string moneyMoovBaseUrl, Guid merchantID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.banksettings}";
+
         public static string MerchantTokensUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.tokens}";
 
@@ -94,6 +99,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string MerchantUserRoleUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.userroles}";
+        
+        public static string MerchantWebHooksUrl(string moneyMoovBaseUrl, Guid merchantID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.webhooks}";
     }
 
     /// <summary>
@@ -211,6 +219,21 @@ public static class MoneyMoovUrlBuilder
 
         public static string UserInviteUrl(string moneyMoovBaseUrl, Guid userInviteID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.userinvites}/{userInviteID}";
+    }
+
+    /// <summary>
+    /// Available endpoint URLs for the merchant webhooks resource.
+    /// </summary>
+    public static class WebhooksApi
+    {
+        public static string WebhookUrl(string moneyMoovBaseUrl, Guid id)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.webhooks}/{id}";
+
+        public static string WebhooksUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.webhooks}";
+
+        public static string AllWebhooksUrl(string moneyMoovBaseUrl, Guid merchantID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.webhooks}/{merchantID}";
     }
 
     public static string AccountStatementApiUrl(string moneyMoovBaseUrl, string? accountId = null)
