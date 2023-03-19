@@ -32,9 +32,6 @@ public class MoneyMoovApiTests : MoneyMoovTestBase<MoneyMoovApiTests>
     public void Get_ConfigSettings_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
-        Logger.LogDebug($"MerchantID={base.SandboxMerchantID}.");
-        Logger.LogDebug($"Merchant Access Token={base.SandboxMerchantAccessToken?.Length()}.");
-        Logger.LogDebug($"User Access Token={base.SandboxUserAccessToken?.Length()}.");
         Logger.LogDebug($"MoneyMoov API Base URL={base.MoneyMoovApiBaseUrl}.");
     }
 

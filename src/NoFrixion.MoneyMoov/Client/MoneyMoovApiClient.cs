@@ -63,6 +63,11 @@ namespace NoFrixion.MoneyMoov
             _httpClient.BaseAddress = new Uri(baseUri);
         }
 
+        public MoneyMoovApiClient(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         public MoneyMoovApiClient(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient(HTTP_CLIENT_NAME);
