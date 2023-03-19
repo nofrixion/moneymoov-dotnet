@@ -19,6 +19,8 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class WebhookCreate : IValidatableObject
 {
+    public const int SECRET_MAX_LENGTH = 32;
+
     public Guid ID { get; set; }
 
     [Required]
@@ -41,7 +43,10 @@ public class WebhookCreate : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        yield return ValidationResult.Success!;
+        if (Secret?.Length > SECRET_MAX_LENGTH)
+        {
+            yield return new ValidationResult($"The Secret string was too long. The Secret maximum length is {SECRET_MAX_LENGTH} characters.");
+        }
     }
 
     public Dictionary<string, string> ToDictionary()
