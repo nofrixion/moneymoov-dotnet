@@ -32,7 +32,13 @@ public interface IMoneyMoovApi
 
     IPayoutClient PayoutClient();
 
+    IRuleClient RuleClient();
+
+    IUserClient UserClient();
+
     IUserInviteClient UserInviteClient();
+
+    IWebhookClient WebhookClient();
 }
 
 public class MoneyMoovApi : IMoneyMoovApi
@@ -90,13 +96,6 @@ public class MoneyMoovApi : IMoneyMoovApi
         }
     }
 
-    //protected HttpClient GetHttpClient()
-    //{
-    //    var httpClient = _httpClientFactory.CreateClient(MoneyMoovApiClient.HTTP_CLIENT_NAME);
-    //    httpClient.BaseAddress = _moneyMoovBaseUri;
-    //    return httpClient;
-    //}
-
     public IAccountClient AccountClient()
         => new AccountClient(new MoneyMoovApiClient(_httpClientFactory));
 
@@ -112,6 +111,15 @@ public class MoneyMoovApi : IMoneyMoovApi
     public IPayoutClient PayoutClient()
         => new PayoutClient(new MoneyMoovApiClient(_httpClientFactory));
 
+    public IRuleClient RuleClient()
+        => new RuleClient(new MoneyMoovApiClient(_httpClientFactory));
+
+    public IUserClient UserClient()
+        => new UserClient(new MoneyMoovApiClient(_httpClientFactory));
+
     public IUserInviteClient UserInviteClient()
         => new UserInviteClient(new MoneyMoovApiClient(_httpClientFactory));
+
+    public IWebhookClient WebhookClient()
+        => new WebhookClient(new MoneyMoovApiClient(_httpClientFactory));
 }

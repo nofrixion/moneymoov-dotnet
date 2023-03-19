@@ -16,12 +16,13 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NoFrixion.MoneyMoov.Models;
+using System.Net;
 
 namespace NoFrixion.MoneyMoov;
 
 public interface IWebhookClient
 {
-    Task<MoneyMoovApiResponse<Webhook>> CreateWebhookAsync(WebhookCreate webhookCreate);
+    Task<MoneyMoovApiResponse<Webhook>> CreateWebhookAsync(string userAccessToken, WebhookCreate webhookCreate);
 }
 
 public class WebhookClient : IWebhookClient
@@ -56,11 +57,19 @@ public class WebhookClient : IWebhookClient
     /// <summary>
     /// Calls the MoneyMoov Merchant get user endpoint create a new webhook record.
     /// </summary>
+    /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="webHookCreate">The model containing the data about the new webhook to create.</param>
     /// <returns>If successful, a webhook object.</returns>
-    public Task<MoneyMoovApiResponse<Webhook>> CreateWebhookAsync(WebhookCreate webHookCreate)
+    public Task<MoneyMoovApiResponse<Webhook>> CreateWebhookAsync(string userAccessToken, WebhookCreate webHookCreate)
     {
         var url = MoneyMoovUrlBuilder.WebhooksApi.WebhooksUrl(_apiClient.GetBaseUri().ToString());
-        return _apiClient.PostAsync<Webhook>(url, new FormUrlEncodedContent(webHookCreate.ToDictionary()));
+        
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(CreateWebhookAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PostAsync<Webhook>(url, userAccessToken, new FormUrlEncodedContent(webHookCreate.ToDictionary())),
+            _ => Task.FromResult(new MoneyMoovApiResponse<Webhook>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
     } 
 }
