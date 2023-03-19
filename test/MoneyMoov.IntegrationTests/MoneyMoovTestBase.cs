@@ -26,9 +26,6 @@ public class MoneyMoovTestBase<T> where T : class
         public HttpClient CreateClient(string name) => new HttpClient();
     }
 
-    protected readonly Guid SandboxMerchantID;
-    protected readonly string SandboxMerchantAccessToken;
-    protected readonly string SandboxUserAccessToken;
     protected readonly string MoneyMoovApiBaseUrl;
 
     public MoneyMoovTestBase(ITestOutputHelper testOutputHelper)
@@ -41,10 +38,6 @@ public class MoneyMoovTestBase<T> where T : class
 
         HttpClientFactory = new DefaultHttpClientFactory();
 
-        var merchantID = Configuration["MoneyMoov:SandboxMerchantID"];
-        SandboxMerchantID = string.IsNullOrEmpty(merchantID) ? Guid.Empty : Guid.Parse(merchantID);
-        SandboxMerchantAccessToken = Configuration["MoneyMoov:SandboxMerchantAccessToken"];
-        SandboxUserAccessToken = Configuration["MoneyMoov:SandboxUserAccessToken"];
         MoneyMoovApiBaseUrl = Configuration["NoFrixion:MoneyMoovApiBaseUrl"];
     }
 
