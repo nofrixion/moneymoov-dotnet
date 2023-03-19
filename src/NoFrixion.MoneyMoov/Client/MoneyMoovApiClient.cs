@@ -15,6 +15,7 @@
 
 using LanguageExt;
 using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
@@ -49,32 +50,27 @@ namespace NoFrixion.MoneyMoov
     {
         public const string HTTP_CLIENT_NAME = "moneymoov";
 
-        private readonly HttpClient _httpClient;
+        public HttpClient HttpClient { get; set; }
 
         public MoneyMoovApiClient()
         {
-            _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+            HttpClient = new HttpClient();
+            HttpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
         }
 
         public MoneyMoovApiClient(string baseUri)
         {
-            _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri(baseUri);
-        }
-
-        public MoneyMoovApiClient(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
+            HttpClient = new HttpClient();
+            HttpClient.BaseAddress = new Uri(baseUri);
         }
 
         public MoneyMoovApiClient(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClientFactory.CreateClient(HTTP_CLIENT_NAME);
+            HttpClient = httpClientFactory.CreateClient(HTTP_CLIENT_NAME);
         }
 
         public Uri GetBaseUri()
-            => _httpClient.BaseAddress ?? new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+            => HttpClient.BaseAddress ?? new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
 
         public Task<MoneyMoovApiResponse<T>> GetAsync<T>(string path)
             => ExecAsync<T>(BuildRequest(HttpMethod.Get, path, string.Empty, Option<HttpContent>.None));
@@ -203,7 +199,7 @@ namespace NoFrixion.MoneyMoov
             HttpRequestMessage req,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            var response = await _httpClient.SendAsync(req, cancellationToken).ConfigureAwait(false);
+            var response = await HttpClient.SendAsync(req, cancellationToken).ConfigureAwait(false);
             return await ToApiResponse(response, req.RequestUri);
         }
 
@@ -211,7 +207,7 @@ namespace NoFrixion.MoneyMoov
             HttpRequestMessage req,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            var response = await _httpClient.SendAsync(req, cancellationToken).ConfigureAwait(false);
+            var response = await HttpClient.SendAsync(req, cancellationToken).ConfigureAwait(false);
             return await ToApiResponse<T>(response, req.RequestUri);
         }
     }
