@@ -41,10 +41,7 @@ public class WebhookCreate : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (Secret?.Length != 32)
-        {
-            yield return new ValidationResult("Invalid Secret provided. Secret must be 32 characters long.");
-        }
+        yield return ValidationResult.Success!;
     }
 
     public Dictionary<string, string> ToDictionary()
