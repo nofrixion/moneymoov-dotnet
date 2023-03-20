@@ -35,15 +35,13 @@ public class Webhook
 
     public string? EmailAddress { get; set; }
 
-    public static string GetSignature(string secret, string payload)
+    public static string GetSignature(string secret, byte[] payloadBytes)
     {
-        var encoding = new System.Text.ASCIIEncoding();
-        byte[] keyByte = encoding.GetBytes(secret);
-        byte[] payloadByte = encoding.GetBytes(payload);
+        byte[] keyByte = ASCIIEncoding.UTF8.GetBytes(secret);
 
         using (var hmac = new HMACSHA256(keyByte))
         {
-            byte[] hashMessage = hmac.ComputeHash(payloadByte);
+            byte[] hashMessage = hmac.ComputeHash(payloadBytes);
             var hashMsg = Convert.ToBase64String(hashMessage);
             return Convert.ToBase64String(hashMessage);
         }
