@@ -12,6 +12,11 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using LanguageExt.ClassInstances;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class Webhook
@@ -29,4 +34,18 @@ public class Webhook
     public bool IsActive { get; set; } = true;
 
     public string? EmailAddress { get; set; }
+
+    public static string GetSignature(string secret, string payload)
+    {
+        var encoding = new System.Text.ASCIIEncoding();
+        byte[] keyByte = encoding.GetBytes(secret);
+        byte[] payloadByte = encoding.GetBytes(payload);
+
+        using (var hmac = new HMACSHA256(keyByte))
+        {
+            byte[] hashMessage = hmac.ComputeHash(payloadByte);
+            var hashMsg = Convert.ToBase64String(hashMessage);
+            return Convert.ToBase64String(hashMessage);
+        }
+    }
 }
