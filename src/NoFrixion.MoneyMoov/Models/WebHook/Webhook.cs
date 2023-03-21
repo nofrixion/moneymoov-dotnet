@@ -12,8 +12,6 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using LanguageExt.ClassInstances;
-using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -21,6 +19,12 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class Webhook
 {
+    /// <summary>
+    /// The name of the HTTP header that the MoneyMoov API server sets for teh webhook's
+    /// payload signature.
+    /// </summary>
+    public const string MONEYMOOV_SIGNATURE_HEADER = "x-moneymoov-signature";
+
     public Guid ID { get; set; }
 
     public WebhookEventTypesEum Type { get; set; }
