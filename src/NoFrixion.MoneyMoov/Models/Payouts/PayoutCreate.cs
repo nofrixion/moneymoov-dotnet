@@ -11,7 +11,7 @@
 //  10 Dec 2022  Aaron Clauson  Renamed to PayoutCreate.
 // 
 //  License:
-//  Proprietary NoFrixion.
+//  MIT.
 // -----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
