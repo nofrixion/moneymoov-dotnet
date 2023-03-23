@@ -23,6 +23,8 @@ namespace NoFrixion.MoneyMoov;
 public interface IWebhookClient
 {
     Task<MoneyMoovApiResponse<Webhook>> CreateWebhookAsync(string userAccessToken, WebhookCreate webhookCreate);
+
+    Task<MoneyMoovApiResponse<IEnumerable<Webhook>>> GetWebhooksAsync(string userAccessToken, Guid merchantID);
 }
 
 public class WebhookClient : IWebhookClient
@@ -55,7 +57,7 @@ public class WebhookClient : IWebhookClient
     }
 
     /// <summary>
-    /// Calls the MoneyMoov Merchant get user endpoint create a new webhook record.
+    /// Calls the MoneyMoov Merchant webhooks endpoint create a new webhook.
     /// </summary>
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="webHookCreate">The model containing the data about the new webhook to create.</param>
@@ -71,5 +73,24 @@ public class WebhookClient : IWebhookClient
             var p when p.IsEmpty => _apiClient.PostAsync<Webhook>(url, userAccessToken, new FormUrlEncodedContent(webHookCreate.ToDictionary())),
             _ => Task.FromResult(new MoneyMoovApiResponse<Webhook>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
-    } 
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov Merchant webhooks endpoint to retrieve all a merchant's existing webhooks.
+    /// </summary>
+    /// <param name="userAccessToken">A User scoped JWT access token.</param>
+    /// <param name="merhcantID">The merchant ID to get the webhooks for.</param>
+    /// <returns>If successful, a list of webhooks.</returns>
+    public Task<MoneyMoovApiResponse<IEnumerable<Webhook>>> GetWebhooksAsync(string userAccessToken, Guid merchantID)
+    {
+        var url = MoneyMoovUrlBuilder.WebhooksApi.AllWebhooksUrl(_apiClient.GetBaseUri().ToString(), merchantID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetWebhooksAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<IEnumerable<Webhook>> (url, userAccessToken),
+            _ => Task.FromResult(new MoneyMoovApiResponse<IEnumerable<Webhook>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
 }

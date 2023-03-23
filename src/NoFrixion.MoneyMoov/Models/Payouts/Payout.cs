@@ -10,7 +10,7 @@
 //  12 Dec 2022  Aaron Clauson  Renamed from PortalPayout to Payout.
 // 
 //  License:
-//  Proprietary NoFrixion.
+//  MIT.
 // -----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
