@@ -90,6 +90,8 @@ public class Merchant
     /// </summary>
     public List<Tag> Tags { get; set; } = new List<Tag>();
 
+    public List<PaymentAccount> PaymentAccounts { get; set; } = new List<PaymentAccount>();
+
     /// <summary>
     /// Gets the most appropriate display name for the merchant which
     /// means use the trading name if set and if not, default to the business name.
