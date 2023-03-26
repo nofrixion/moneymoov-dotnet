@@ -171,7 +171,7 @@ public class Payout : IValidatableObject
         set => Destination = value;
     }
 
-public Counterparty? Destination { get; set; }
+    public Counterparty? Destination { get; set; }
 
     /// <summary>
     /// Optional field to associate the payout with the invoice from an external 

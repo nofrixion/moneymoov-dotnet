@@ -127,4 +127,40 @@ public class PayoutsValidatorTests
 
         Assert.False(result);
     }
+
+    /// <summary>
+    /// Validates that a payout with an invalid IBAN returns the corect result.
+    /// </summary>
+    [Fact]
+    public void Validate_Payout_Invalid_IBAN_Fails()
+    {
+        var payout = new Payout
+        {
+            ID = Guid.NewGuid(),
+            AccountID = Guid.Parse("B2DBB4E1-5F8A-4B07-82A0-EB033E6F3421"),
+            Type = AccountIdentifierType.IBAN,
+            Description = "Xero Invoice fgfg from Demo Company (Global).",
+            Currency = CurrencyTypeEnum.EUR,
+            Amount = 11.00M,
+            YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            TheirReference = "Placeholder",
+            Status = PayoutStatus.PENDING_INPUT,
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            Destination = new Counterparty
+            {
+                Name = "Joe Bloggs",
+                Identifier = new AccountIdentifier
+                {
+                    IBAN = "IE36ULSB98501017331006"
+                }
+            }
+        };
+
+        var result = payout.Validate();
+
+        _logger.LogDebug(result.ToTextErrorMessage());
+
+        Assert.False(result.IsEmpty);
+        Assert.Single(result.Errors);
+    }
 }

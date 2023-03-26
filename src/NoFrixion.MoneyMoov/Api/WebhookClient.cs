@@ -24,6 +24,8 @@ public interface IWebhookClient
 {
     Task<MoneyMoovApiResponse<Webhook>> CreateWebhookAsync(string userAccessToken, WebhookCreate webhookCreate);
 
+    Task<MoneyMoovApiResponse> DeleteWebhookAsync(string accessToken, Guid webhookID);
+
     Task<MoneyMoovApiResponse<IEnumerable<Webhook>>> GetWebhooksAsync(string userAccessToken, Guid merchantID);
 }
 
@@ -91,6 +93,24 @@ public class WebhookClient : IWebhookClient
         {
             var p when p.IsEmpty => _apiClient.GetAsync<IEnumerable<Webhook>> (url, userAccessToken),
             _ => Task.FromResult(new MoneyMoovApiResponse<IEnumerable<Webhook>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov Merchant delete webhook endpoint to delete an existing webhook.
+    /// </summary>
+    /// <param name="accessToken">A User scoped JWT access token.</param>
+    /// <param name="webhookID">The ID of the webhook to delete.</param>
+    public Task<MoneyMoovApiResponse> DeleteWebhookAsync(string accessToken, Guid webhookID)
+    {
+        var url = MoneyMoovUrlBuilder.WebhooksApi.WebhookUrl(_apiClient.GetBaseUri().ToString(), webhookID);
+
+        var prob = _apiClient.CheckAccessToken(accessToken, nameof(DeleteWebhookAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.DeleteAsync(url, accessToken),
+            _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }
