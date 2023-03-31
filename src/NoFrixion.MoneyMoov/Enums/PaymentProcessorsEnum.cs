@@ -55,6 +55,11 @@ public enum PaymentProcessorsEnum
     /// <summary>
     /// Yapily payment initiation processor. 
     /// </summary>
-    Yapily
+    Yapily,
+
+    /// <summary>
+    /// Nofrixion payment initiation processor.
+    /// </summary>
+    Nofrixion
 }
 

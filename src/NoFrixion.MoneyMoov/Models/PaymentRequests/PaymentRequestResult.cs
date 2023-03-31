@@ -124,13 +124,10 @@ public class PaymentRequestResult
                             Currency = payEvent.Currency
                         });
                 }
-                else if ((payEvent.EventType == PaymentRequestEventTypesEnum.pisp_callback ||
-                          payEvent.EventType == PaymentRequestEventTypesEnum.pisp_webhook) &&
-                         (payEvent.Status == PISP_PLAID_SUCCESS_STATUS ||
-                          payEvent.Status == PISP_PLAID_INITIATED_STATUS ||
-                          payEvent.Status == PISP_MODULR_SUCCESS_STATUS ||
-                          payEvent.Status == PISP_YAPILY_COMPLETED_STATUS ||
-                          payEvent.Status == PISP_YAPILY_PENDING_STATUS))
+                else if
+                    ((payEvent.EventType == PaymentRequestEventTypesEnum.pisp_callback
+                      || payEvent.EventType == PaymentRequestEventTypesEnum.pisp_webhook) && payEvent.Status != null
+                     && PispSuccessStatuses().Contains(payEvent.Status))
                 {
                     // Successfully authorised payment initiation.
                     if (!string.IsNullOrEmpty(payEvent.PispPaymentInitiationID) &&
@@ -138,8 +135,8 @@ public class PaymentRequestResult
                         (
                             (payEvent.Currency == CurrencyTypeEnum.EUR && payEvent.Amount >= PaymentsConstants.PISP_MINIMUM_EUR_PAYMENT_AMOUNT) ||
                             (payEvent.Currency == CurrencyTypeEnum.GBP && payEvent.Amount >= PaymentsConstants.PISP_MINIMUM_GBP_PAYMENT_AMOUNT)
-                        ) 
-                        ) 
+                        )
+                       )
                     {
                         PispAuthorizations.Add(
                             new PaymentRequestAuthorization
@@ -238,6 +235,22 @@ public class PaymentRequestResult
                 _ => PaymentResultEnum.None
             };
         }
+    }
+
+    private List<string> PispSuccessStatuses()
+    {
+        return new List<string>
+                   {
+                       PISP_PLAID_SUCCESS_STATUS,
+                       PISP_PLAID_INITIATED_STATUS,
+                       PISP_MODULR_SUCCESS_STATUS,
+                       PISP_YAPILY_COMPLETED_STATUS,
+                       PISP_YAPILY_PENDING_STATUS,
+                       PayoutStatus.QUEUED.ToString(),
+                       PayoutStatus.QUEUED_UPSTREAM.ToString(),
+                       PayoutStatus.PENDING.ToString(),
+                       PayoutStatus.PROCESSED.ToString()
+                   };
     }
 
     /// <summary>
