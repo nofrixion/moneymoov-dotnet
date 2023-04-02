@@ -80,6 +80,12 @@ public class Merchant
     public int WebHookLimit { get; set; }
 
     /// <summary>
+    /// Indicates if a QR Code containing the payment link should be displayed
+    /// on the hosted payment page.
+    /// </summary>
+    public bool DisplayQrOnHostedPay { get; set; }
+
+    /// <summary>
     /// The list of users that have been assigned a role on the merchant.
     /// </summary>
     public List<UserRole> UserRoles { get; set; } = new List<UserRole>();

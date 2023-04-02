@@ -66,4 +66,6 @@ public static class PaymentsConstants
     public const int PISP_REFERENCE_MAX_LENGTH = 18;
 
     public const string PISP_SETTLED_STATUS = "SETTLED";
+
+    public const string NOFRIXION_OPEN_BANKING_PROVIDER_ID = "nofrixion";
 }
