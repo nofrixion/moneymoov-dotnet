@@ -57,7 +57,7 @@ public class MoneyMoovApi : IMoneyMoovApi
         _config = configuration;
         _httpClientFactory = httpClientFactory;
 
-        string baseUrlStr = configuration[MoneyMoovConfigKeys.NOFRIXION_MONEYMOOV_API_BASE_URL];
+        string baseUrlStr = configuration[MoneyMoovConfigKeys.NOFRIXION_MONEYMOOV_API_BASE_URL] ?? string.Empty;
 
         if (string.IsNullOrEmpty(baseUrlStr))
         {
