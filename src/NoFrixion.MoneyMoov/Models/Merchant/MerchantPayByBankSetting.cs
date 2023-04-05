@@ -62,6 +62,11 @@ public class MerchantPayByBankSetting
     public string? ProviderID { get; set; }
 
     /// <summary>
+    /// Message relating to specific bank.  
+    /// </summary>
+    public string? Message { get; set; }
+
+    /// <summary>
     /// Whether the bank supports Personal or Business type accounts.
     /// </summary>
     [EnumDataType(typeof(BankAccountTypeEnum))]
