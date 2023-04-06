@@ -57,19 +57,17 @@ public class MerchantPayByBankSetting
     public string? Processor { get; set; }
 
     /// <summary>
-    /// ID that the processor uses to identify the bank.
+    /// ID that the processor uses to identify the bank (personal accounts).
     /// </summary>
-    public string? ProviderID { get; set; }
+    public string? PersonalInstitutionID { get; set; }
+
+    /// <summary>
+    /// ID that the processor uses to identify the bank (business accounts).
+    /// </summary>
+    public string? BusinessInstitutionID { get; set; }
 
     /// <summary>
     /// Message relating to specific bank.  
     /// </summary>
     public string? Message { get; set; }
-
-    /// <summary>
-    /// Whether the bank supports Personal or Business type accounts.
-    /// </summary>
-    [EnumDataType(typeof(BankAccountTypeEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
-    public BankAccountTypeEnum AccountType { get; set; }
 }
