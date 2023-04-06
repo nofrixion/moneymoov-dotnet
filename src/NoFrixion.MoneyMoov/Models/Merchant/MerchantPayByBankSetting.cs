@@ -65,4 +65,9 @@ public class MerchantPayByBankSetting
     /// ID that the processor uses to identify the bank (business accounts).
     /// </summary>
     public string? BusinessInstitutionID { get; set; }
+
+    /// <summary>
+    /// Message relating to specific bank.  
+    /// </summary>
+    public string? Message { get; set; }
 }
