@@ -78,9 +78,9 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
     [InlineData("0 0 0/1 ? * * *", true)] //Will succeed as the expressions runs every hour.
     [InlineData("0 0 0 * * ?", true)] //Will succeed as the expressions runs every day at midnight - 12am.
     [InlineData("0 0 8 ? * MON-FRI *", true)] // Cron expression is every weekday at 8am. Will succeed as the new value is greater or equal than 60 minutes.
+    [InlineData("0 0 9 2 * ?", true)] // 9am on the 2nd day of the month.
     public void Rule_ValidateCronExpression(string cronExpression, bool shouldSucceed)
     {
-
         var rule = new Rule
         {
             TriggerCronExpression = cronExpression,
@@ -114,6 +114,5 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
         }
 
         Assert.Equal(problem.Errors.Count == 0, shouldSucceed);
-
     }
 }

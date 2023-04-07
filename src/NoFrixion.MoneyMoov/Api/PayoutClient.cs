@@ -28,6 +28,8 @@ public interface IPayoutClient
 
     Task<MoneyMoovApiResponse<Payout>> GetPayoutByInvoiceIDAsync(string merchantAccessToken, string invoiceID);
 
+    Task<MoneyMoovApiResponse> SubmitPayoutAsync(string strongUserAccessToken, Guid payoutID);
+
     Task<MoneyMoovApiResponse<Payout>> UpdatePayoutAsync(string accessToken, Guid payoutID, PayoutUpdate payoutUpdate);
 }
 
@@ -108,11 +110,33 @@ public class PayoutClient : IPayoutClient
     }
 
     /// <summary>
+    /// Calls the MoneyMoov Payout endpoint to submit an existing payout for processing. This call initiates
+    /// the movement of money.
+    /// </summary>
+    /// <param name="strongUserAccessToken">The strong user access token authroised to submit payout. Strong
+    /// tokens can only be acquired from a strong customer authentication flow, are short lived (typically 5 minute expiry)
+    /// and are specific to the payout being submitted.</param>
+    /// <param name="payoutID">The ID of the payout to submit for processing.</param>
+    /// <returns>An API response indicating the result of the submit attempt.</returns>
+    public Task<MoneyMoovApiResponse> SubmitPayoutAsync(string strongUserAccessToken, Guid payoutID)
+    {
+        var url = MoneyMoovUrlBuilder.PayoutsApi.SubmitPayoutUrl(_apiClient.GetBaseUri().ToString(), payoutID);
+
+        var prob = _apiClient.CheckAccessToken(strongUserAccessToken, nameof(UpdatePayoutAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PostAsync(url, strongUserAccessToken),
+            _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
     /// Calls the MoneyMoov Payout endpoint to update an existing payout.
     /// </summary>
-    /// <param name="accessToken">The uer, or merchant, access token updatinging the payout.</param>
+    /// <param name="accessToken">The user, or merchant, access token updating the payout.</param>
     /// <param name="payoutID">The ID of the payout to update.</param>
-    /// <param name="payoutUpdate">A model with the details of the payout fileds being updated.</param>
+    /// <param name="payoutUpdate">A model with the details of the payout fields being updated.</param>
     /// <returns>An API response indicating the result of the update attempt.</returns>
     public Task<MoneyMoovApiResponse<Payout>> UpdatePayoutAsync(string userAccessToken, Guid payoutID, PayoutUpdate payoutUpdate)
     {
