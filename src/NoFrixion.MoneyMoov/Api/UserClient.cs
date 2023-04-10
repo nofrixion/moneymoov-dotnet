@@ -16,12 +16,15 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NoFrixion.MoneyMoov.Models;
+using System.Net;
 
 namespace NoFrixion.MoneyMoov;
 
 public interface IUserClient
 {
     Task<MoneyMoovApiResponse<User>> CreateUserAsync(UserCreate userCreate);
+
+    Task<MoneyMoovApiResponse<UserToken>> UpdateUserTokenAsync(string accessToken, Guid userTokenID, UserTokenUpdate UserTokenUpdate);
 }
 
 public class UserClient : IUserClient
@@ -62,5 +65,25 @@ public class UserClient : IUserClient
     {
         var url = MoneyMoovUrlBuilder.UserApi.UserApiUrl(_apiClient.GetBaseUri().ToString());
         return _apiClient.PostAsync<User>(url, new FormUrlEncodedContent(userCreate.ToDictionary()));
-    } 
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov User endpoint to update an existing user token.
+    /// </summary>
+    /// <param name="accessToken">The user access token updating the application user token.</param>
+    /// <param name="userTokenD">The ID of the user token to update.</param>
+    /// <param name="userTokenUpdate">A model with the details of the user token fields being updated.</param>
+    /// <returns>An API response indicating the result of the update attempt.</returns>
+    public Task<MoneyMoovApiResponse<UserToken>> UpdateUserTokenAsync(string userAccessToken, Guid userTokenID, UserTokenUpdate userTokenUpdate)
+    {
+        var url = MoneyMoovUrlBuilder.UserApi.UserTokenApiUrl(_apiClient.GetBaseUri().ToString(), userTokenID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(UpdateUserTokenAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PutAsync<UserToken>(url, userAccessToken, new FormUrlEncodedContent(userTokenUpdate.ToDictionary())),
+            _ => Task.FromResult(new MoneyMoovApiResponse<UserToken>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
 }
