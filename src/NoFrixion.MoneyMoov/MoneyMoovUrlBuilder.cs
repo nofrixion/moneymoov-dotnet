@@ -171,6 +171,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string GetByInvoiceIDUrl(string moneyMoovBaseUrl, string invoiceID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/getbyinvoiceid/{invoiceID}";
+
+        public static string SubmitPayoutUrl(string moneyMoovBaseUrl, Guid payoutID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/submit/{payoutID}";
     }
 
     /// <summary>
@@ -207,6 +210,12 @@ public static class MoneyMoovUrlBuilder
     {
         public static string UserApiUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}";
+
+        public static string UserTokensApiUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}/{MoneyMoovResources.tokens}";
+
+        public static string UserTokenApiUrl(string moneyMoovBaseUrl, Guid userTokenID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}/{MoneyMoovResources.tokens}/{userTokenID}";
     }
 
     /// <summary>

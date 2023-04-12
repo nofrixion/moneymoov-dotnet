@@ -65,4 +65,9 @@ public class PaymentRequestMinimal
     /// should be supplied as a comma separated list, for example "card, pisp, lightning, applePay".
     /// </summary>
     public PaymentMethodTypeEnum PaymentMethods { get; set; }
+
+    /// <summary>
+    /// This is the error returned from the bank which is recorded in payment request events.
+    /// </summary>
+    public string PispError { get; set; } = string.Empty;
 }

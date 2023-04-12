@@ -63,7 +63,7 @@ public static class PaymentsConstants
 
     public const string PISP_REFERENCE_PREFIX = "pisp";
 
-    public const int PISP_REFERENCE_MAX_LENGTH = 18;
+    public const int PISP_REFERENCE_MAX_LENGTH = 17;
 
     public const string PISP_SETTLED_STATUS = "SETTLED";
 
