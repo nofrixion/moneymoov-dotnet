@@ -70,4 +70,9 @@ public class MerchantPayByBankSetting
     /// Message relating to specific bank.  
     /// </summary>
     public string? Message { get; set; }
+
+    /// <summary>
+    /// Optional image URL to be displayed with the message.
+    /// </summary>
+    public string? MessageImageUrl { get; set; }
 }
