@@ -208,4 +208,29 @@ public class Payout : IValidatableObject
     {
         return PayoutsValidator.Validate(this, validationContext);
     }
+
+    /// <summary>
+    /// Gets a hash of the critical fields for an external payout. This hash is
+    /// used to ensure a payout 's details are not modified between the time the
+    /// approval is given and the time the payout is actioned.
+    /// </summary>
+    /// <returns>A hash of the payout's critical fields.</returns>
+    public string GetApprovalHash()
+    {
+        if (Destination == null)
+        {
+            return string.Empty;
+        }
+        else
+        {
+            string input =
+                AccountID.ToString() +
+                Currency +
+                Math.Round(Amount, 2).ToString() +
+                Destination.GetApprovalHash() +
+                Status.ToString();
+
+            return HashHelper.CreateHash(input);
+        }
+    }
 }

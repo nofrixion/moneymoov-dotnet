@@ -333,12 +333,7 @@ public class NoFrixionProblem
 
         if (!string.IsNullOrEmpty(Title))
         {
-            htmlError = $"<p><strong>{Title}</strong></p>";
-        }
-
-        if (!string.IsNullOrEmpty(Detail))
-        {
-            htmlError += $"<p>{Detail}</p>";
+            htmlError = $"<p><strong>{Title}</strong>: {Detail}</p>";
         }
 
         if (Errors.Count > 0)
