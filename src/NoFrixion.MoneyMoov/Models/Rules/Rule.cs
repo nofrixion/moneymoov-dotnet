@@ -77,7 +77,7 @@ public class Rule : IValidatableObject
     /// The approval hash is used when approving the rule and to detect when critical
     /// fields change.
     /// </summary>
-    public string GeApprovalHash()
+    public string GetApprovalHash()
     {
         string input = ID.ToString() + SweepAction.GetDestinationApprovalHash();
         return HashHelper.CreateHash(input);
