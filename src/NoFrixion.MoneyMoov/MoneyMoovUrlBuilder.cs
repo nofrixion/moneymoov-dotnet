@@ -13,8 +13,6 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using NoFrixion.MoneyMoov.Models;
-
 namespace NoFrixion.MoneyMoov;
 
 public enum MoneyMoovResources
@@ -22,6 +20,8 @@ public enum MoneyMoovResources
     accounts,
     
     banksettings,
+
+    batch,
 
     beneficiaries,
 
@@ -174,6 +174,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string SubmitPayoutUrl(string moneyMoovBaseUrl, Guid payoutID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/submit/{payoutID}";
+
+        public static string BatchPayoutsUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/{MoneyMoovResources.batch}";
     }
 
     /// <summary>
