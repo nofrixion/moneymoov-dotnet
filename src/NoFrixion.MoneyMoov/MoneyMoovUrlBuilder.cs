@@ -175,8 +175,11 @@ public static class MoneyMoovUrlBuilder
         public static string SubmitPayoutUrl(string moneyMoovBaseUrl, Guid payoutID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/submit/{payoutID}";
 
-        public static string BatchPayoutsUrl(string moneyMoovBaseUrl)
+        public static string BatchPayoutUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/{MoneyMoovResources.batch}";
+
+        public static string BatchPayoutUrl(string moneyMoovBaseUrl, Guid batchPayoutID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/{MoneyMoovResources.batch}/{batchPayoutID}";
     }
 
     /// <summary>
