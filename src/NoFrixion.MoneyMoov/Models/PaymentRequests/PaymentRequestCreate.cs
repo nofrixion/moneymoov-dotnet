@@ -288,6 +288,11 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     [EmailAddressMultiple(ErrorMessage = "One or more of the email addresses are invalid. Addresses can be separated by a comma, semi-colon or space.")]
     public string? NotificationEmailAddresses { get; set; }
 
+    /// <summary>
+    /// The ID of the bank that is set as the priority bank for display on pay element.
+    /// </summary>
+    public Guid? PriorityBankID { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
