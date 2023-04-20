@@ -37,6 +37,8 @@ public interface IPayoutClient
     Task<MoneyMoovApiResponse<BatchPayout>> GetBatchPayoutAsync(string userAccessToken, Guid batchPayoutID);
 
     Task<MoneyMoovApiResponse<BatchPayout>> CreateBatchPayoutAsync(string userAccessToken, List<Guid> payoutIDs);
+
+    Task<MoneyMoovApiResponse> SubmitBatchPayoutAsync(string strongUserAccessToken, Guid batchPayoutID);
 }
 
 public class PayoutClient : IPayoutClient
@@ -128,7 +130,7 @@ public class PayoutClient : IPayoutClient
     {
         var url = MoneyMoovUrlBuilder.PayoutsApi.SubmitPayoutUrl(_apiClient.GetBaseUri().ToString(), payoutID);
 
-        var prob = _apiClient.CheckAccessToken(strongUserAccessToken, nameof(UpdatePayoutAsync));
+        var prob = _apiClient.CheckAccessToken(strongUserAccessToken, nameof(SubmitPayoutAsync));
 
         return prob switch
         {
@@ -193,6 +195,28 @@ public class PayoutClient : IPayoutClient
         {
             var p when p.IsEmpty => _apiClient.PostAsync<BatchPayout>(url, userAccessToken, JsonContent.Create(payoutIDs)),
             _ => Task.FromResult(new MoneyMoovApiResponse<BatchPayout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov Payout endpoint to submit a batch payout for processing. This call initiates
+    /// the movement of money.
+    /// </summary>
+    /// <param name="strongUserAccessToken">The strong user access token authorised to submit the batch payout. Strong
+    /// tokens can only be acquired from a strong customer authentication flow, are short lived (typically 5 minute expiry)
+    /// and are specific to the batch payout being submitted.</param>
+    /// <param name="batchPayoutID">The ID of the batch payout to submit for processing.</param>
+    /// <returns>An API response indicating the result of the submit attempt.</returns>
+    public Task<MoneyMoovApiResponse> SubmitBatchPayoutAsync(string strongUserAccessToken, Guid batchPayoutID)
+    {
+        var url = MoneyMoovUrlBuilder.PayoutsApi.SubmitBatchPayoutUrl(_apiClient.GetBaseUri().ToString(), batchPayoutID);
+
+        var prob = _apiClient.CheckAccessToken(strongUserAccessToken, nameof(SubmitBatchPayoutAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PostAsync(url, strongUserAccessToken),
+            _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }

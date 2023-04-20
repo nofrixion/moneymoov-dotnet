@@ -210,8 +210,8 @@ public class Payout : IValidatableObject
     }
 
     /// <summary>
-    /// Gets a hash of the critical fields for an external payout. This hash is
-    /// used to ensure a payout 's details are not modified between the time the
+    /// Gets a hash of the critical fields for the payout. This hash is
+    /// used to ensure a payout's details are not modified between the time the
     /// approval is given and the time the payout is actioned.
     /// </summary>
     /// <returns>A hash of the payout's critical fields.</returns>
