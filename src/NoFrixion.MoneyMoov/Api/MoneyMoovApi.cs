@@ -15,12 +15,13 @@
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace NoFrixion.MoneyMoov;
 
 public interface IMoneyMoovApi
 {
-    bool SetBaseUrl(string url);
+    //bool SetBaseUrl(string url);
 
     IAccountClient AccountClient();
 
@@ -43,57 +44,60 @@ public interface IMoneyMoovApi
 
 public class MoneyMoovApi : IMoneyMoovApi
 {
-    private readonly ILogger _logger;
-    private readonly IConfiguration _config;
-    private readonly IHttpClientFactory _httpClientFactory;
-    private Uri _moneyMoovBaseUri;
-
-    public MoneyMoovApi(
-        ILogger<MoneyMoovApi> logger,
-        IConfiguration configuration,
-        IHttpClientFactory httpClientFactory)
+    private sealed class MoneyMoovHttpClientFactory : IHttpClientFactory, IDisposable
     {
-        _logger = logger;
-        _config = configuration;
-        _httpClientFactory = httpClientFactory;
+        private readonly HttpClient _httpClient;
+        private bool _disposed;
 
-        string baseUrlStr = configuration[MoneyMoovConfigKeys.NOFRIXION_MONEYMOOV_API_BASE_URL];
+        public MoneyMoovHttpClientFactory(Uri baseUri)
+        {
+            var handler = new HttpClientHandler();
+            _httpClient = new HttpClient(handler, disposeHandler: true);
+            _httpClient.BaseAddress = baseUri;
+        }
 
-        if (string.IsNullOrEmpty(baseUrlStr))
+        public HttpClient CreateClient(string name)
         {
-            _moneyMoovBaseUri = new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
-            //_logger.LogDebug($"{nameof(MoneyMoovApi)} created with default base URI of {_moneyMoovBaseUri}.");
+            if (_disposed) throw new ObjectDisposedException(nameof(MoneyMoovHttpClientFactory));
+            return _httpClient;
         }
-        else if (Uri.TryCreate(baseUrlStr, UriKind.Absolute, out var baseUri))
+
+        public void Dispose()
         {
-            _moneyMoovBaseUri = baseUri;
-            //_logger.LogDebug($"{nameof(MoneyMoovApi)} created with base URI of {_moneyMoovBaseUri}.");
-        }
-        else
-        {
-            //_logger.LogError($"The base URI supplied to the MoneyMoov service was not a valid URI, {baseUrlStr}. Using default of {MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL}.");
-            _moneyMoovBaseUri = new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+            if (!_disposed)
+            {
+                _httpClient.Dispose();
+                _disposed = true;
+            }
         }
     }
 
-    /// <summary>
-    /// Attempts to update the base URL of the MoneyMoov API for this service to use.
-    /// </summary>
-    /// <param name="url">The new base URL to set.</param>
-    /// <returns>True if the URL was successfully updated, otherwise false.</returns>
-    public bool SetBaseUrl(string url)
+    private readonly IHttpClientFactory _httpClientFactory;
+
+    public MoneyMoovApi(IHttpClientFactory httpClientFactory)
     {
-        if (!string.IsNullOrEmpty(url) && Uri.TryCreate(url, UriKind.Absolute, out var baseUri))
+        _httpClientFactory = httpClientFactory;
+    }
+
+    /// <summary>
+    /// Default constructor that uses the production MoneyMoov API.
+    /// </summary>
+    public MoneyMoovApi()
+    {
+        _httpClientFactory = new MoneyMoovHttpClientFactory(
+            new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL));
+    }
+
+    public MoneyMoovApi(string url)
+    {
+        if (Uri.TryCreate(url, UriKind.Absolute, out var baseUri))
         {
-            _moneyMoovBaseUri = baseUri;
-            //_logger.LogDebug($"{nameof(MoneyMoovApi)} updated base URI to {_moneyMoovBaseUri}.");
-            return true;
+            _httpClientFactory = new MoneyMoovHttpClientFactory(baseUri);
         }
         else
         {
-            _logger.LogWarning($"The base URI supplied was not a valid URI. It should be in the format {MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL}. Base URI was not updated.");
-            return false;
-        }
+            throw new ArgumentException("The url string supplied to the MoneyMoovApi client was not recognised as a valid URL.", nameof(url));
+        }        
     }
 
     public IAccountClient AccountClient()

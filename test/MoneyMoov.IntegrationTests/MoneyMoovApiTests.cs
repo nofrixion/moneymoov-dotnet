@@ -43,10 +43,7 @@ public class MoneyMoovApiTests : MoneyMoovTestBase<MoneyMoovApiTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var moneyMoovApi = new MoneyMoovApi(
-            LoggerFactory.CreateLogger<MoneyMoovApi>(),
-            Configuration,
-            HttpClientFactory);
+        var moneyMoovApi = new MoneyMoovApi(HttpClientFactory);
 
         var response = await moneyMoovApi.MetadataClient().GetVersionAsync();
 
@@ -67,12 +64,7 @@ public class MoneyMoovApiTests : MoneyMoovTestBase<MoneyMoovApiTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var moneyMoovApi = new MoneyMoovApi(
-          LoggerFactory.CreateLogger<MoneyMoovApi>(),
-          Configuration,
-          HttpClientFactory);
-
-        moneyMoovApi.SetBaseUrl(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+        var moneyMoovApi = new MoneyMoovApi(HttpClientFactory);
 
         var response = await moneyMoovApi.MetadataClient().GetVersionAsync();
 
@@ -93,12 +85,7 @@ public class MoneyMoovApiTests : MoneyMoovTestBase<MoneyMoovApiTests>
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        var moneyMoovApi = new MoneyMoovApi(
-          LoggerFactory.CreateLogger<MoneyMoovApi>(),
-          Configuration,
-          HttpClientFactory);
-
-        moneyMoovApi.SetBaseUrl(MoneyMoovApiBaseUrl);
+        var moneyMoovApi = new MoneyMoovApi(HttpClientFactory);
 
         var response = await moneyMoovApi.MetadataClient().GetVersionAsync();
 
