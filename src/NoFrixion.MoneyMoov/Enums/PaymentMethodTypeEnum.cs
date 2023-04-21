@@ -45,5 +45,10 @@ public enum PaymentMethodTypeEnum
     /// <summary>
     /// Pay with Apple Pay
     /// </summary>
-    applePay = 16
+    applePay = 16,
+
+    /// <summary>
+    /// Pay with Google Pay
+    /// </summary>
+    googlePay = 32
 }
