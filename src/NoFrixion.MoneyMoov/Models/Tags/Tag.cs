@@ -26,3 +26,5 @@ public class Tag
     public DateTimeOffset Inserted { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
 }
+
+    
