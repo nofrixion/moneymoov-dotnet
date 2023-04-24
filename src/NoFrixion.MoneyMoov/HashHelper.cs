@@ -12,6 +12,7 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -35,14 +36,16 @@ public static class HashHelper
         using var sha256Hash = SHA256.Create();
         byte[] data = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
 
-        var sBuilder = new StringBuilder();
+        //    var sBuilder = new StringBuilder();
 
-        foreach (var b in data)
-        {
-            sBuilder.Append(b.ToString("x2"));
-        }
+        //    foreach (var b in data)
+        //    {
+        //        sBuilder.Append(b.ToString("x2"));
+        //    }
 
-        return sBuilder.ToString();
+        //    return sBuilder.ToString();
+
+        return Base64UrlEncoder.Encode(data);
     }
 
     /// <summary>

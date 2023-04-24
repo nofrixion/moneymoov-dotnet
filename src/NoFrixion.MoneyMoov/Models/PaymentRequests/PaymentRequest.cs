@@ -238,7 +238,12 @@ public class PaymentRequest : IPaymentRequest
     /// The jwk containing the public key used to verify the signature of the payment request.
     /// </summary>
     public string? Jwk { get; set; }
-    
+
+    /// <summary>
+    /// The ID of the bank that is set as the priority bank for display on pay element.
+    /// </summary>
+    public Guid? PriorityBankID { get; set; }
+
     /// <summary>
     /// Attempts to get the billing address for this payment request.
     /// </summary>
