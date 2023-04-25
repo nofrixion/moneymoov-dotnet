@@ -245,6 +245,12 @@ public class PaymentRequest : IPaymentRequest
     public Guid? PriorityBankID { get; set; }
 
     /// <summary>
+    /// A generic field to contain any additional data that the merchant wishes to store against the payment request.
+    /// E.g. product or service information.
+    /// </summary>
+    public string? Title { get; set; }
+    
+    /// <summary>
     /// Attempts to get the billing address for this payment request.
     /// </summary>
     /// <returns>The billing address or null if it's not set.</returns>
