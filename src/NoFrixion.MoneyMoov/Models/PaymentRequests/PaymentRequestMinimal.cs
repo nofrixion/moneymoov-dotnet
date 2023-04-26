@@ -75,4 +75,6 @@ public class PaymentRequestMinimal
     /// This is the error returned from the bank which is recorded in payment request events.
     /// </summary>
     public string PispError { get; set; } = string.Empty;
+
+    public Guid? PriorityBankID { get; set; }
 }
