@@ -77,4 +77,9 @@ public class PaymentRequestMinimal
     public string PispError { get; set; } = string.Empty;
 
     public Guid? PriorityBankID { get; set; }
+
+    /// <summary>
+    /// Merchant ID from Google Pay
+    /// </summary>
+    public string? GooglePayMerchantID { get; set; }
 }
