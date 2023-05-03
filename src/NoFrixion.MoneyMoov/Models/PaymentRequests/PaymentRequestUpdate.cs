@@ -53,6 +53,8 @@ public class PaymentRequestUpdate
 
     [EmailAddressMultiple(ErrorMessage = "One or more of the email addresses are invalid. Addresses can be separated by a comma, semi-colon or space.")]
     public string? NotificationEmailAddresses { get; set; }
+    public string? Title { get; set; }
+    public string? PartialPaymentSteps { get; set; }
 
     /// <summary>
     /// Places all the payment request's properties into a dictionary. Useful for testing
@@ -91,6 +93,8 @@ public class PaymentRequestUpdate
         if (CardProcessorMerchantID != null) dict.Add(nameof(CardProcessorMerchantID), CardProcessorMerchantID);
         if (CustomerEmailAddress != null) dict.Add(nameof(CustomerEmailAddress), CustomerEmailAddress ?? string.Empty);
         if (NotificationEmailAddresses != null) dict.Add(nameof(NotificationEmailAddresses), NotificationEmailAddresses ?? string.Empty);
+        if (Title != null) dict.Add(nameof(Title), Title);
+        if (PartialPaymentSteps != null) dict.Add(nameof(PartialPaymentSteps), PartialPaymentSteps);
 
         return dict;
     }

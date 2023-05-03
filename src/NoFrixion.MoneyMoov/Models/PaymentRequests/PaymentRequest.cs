@@ -249,7 +249,13 @@ public class PaymentRequest : IPaymentRequest
     /// E.g. product or service information.
     /// </summary>
     public string? Title { get; set; }
-    
+
+    /// <summary>
+    /// An optional comma separated list of parital payment amounts. The amounts represent guidance, or suggestions, as to
+    /// how the payer will be requested to make payment steps.
+    /// </summary>
+    public string? PartialPaymentSteps { get; set; }
+
     /// <summary>
     /// Attempts to get the billing address for this payment request.
     /// </summary>

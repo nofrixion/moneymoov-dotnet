@@ -299,6 +299,12 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// </summary>
     public string? Title { get; set; }
 
+    /// <summary>
+    /// An optional comma separated list of parital payment amounts. The amounts represent guidance, or suggestions, as to
+    /// how the payer will be requested to make payment steps.
+    /// </summary>
+    public string? PartialPaymentSteps { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
@@ -370,7 +376,8 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(UseHostedPaymentPage), UseHostedPaymentPage.ToString());
         dict.Add(nameof(SuccessWebHookUrl), SuccessWebHookUrl ?? string.Empty);
         dict.Add(nameof(Title), Title ?? string.Empty);
-        
+        dict.Add(nameof(PartialPaymentSteps), PartialPaymentSteps ?? string.Empty);
+
         return dict;
     }
 }

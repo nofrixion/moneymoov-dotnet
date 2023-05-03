@@ -59,4 +59,6 @@ public interface IPaymentRequest
     public string? LightningInvoice { get; set; }
     
     public string? Title { get; set; }
+
+    public string? PartialPaymentSteps { get; set; }
 }
