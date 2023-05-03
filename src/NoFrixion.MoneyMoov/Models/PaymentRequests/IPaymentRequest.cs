@@ -57,4 +57,6 @@ public interface IPaymentRequest
     public bool UseHostedPaymentPage { get; set; }
 
     public string? LightningInvoice { get; set; }
+    
+    public string? Title { get; set; }
 }

@@ -284,7 +284,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
 
     [JsonIgnore]
     public string? LightningInvoice { get; set; }
-
+    
     [EmailAddressMultiple(ErrorMessage = "One or more of the email addresses are invalid. Addresses can be separated by a comma, semi-colon or space.")]
     public string? NotificationEmailAddresses { get; set; }
 
@@ -292,6 +292,12 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// The ID of the bank that is set as the priority bank for display on pay element.
     /// </summary>
     public Guid? PriorityBankID { get; set; }
+
+    /// <summary>
+    /// A generic field to contain any additional data that the merchant wishes to store against the payment request.
+    /// E.g. product or service information.
+    /// </summary>
+    public string? Title { get; set; }
 
     public NoFrixionProblem Validate()
     {
@@ -363,7 +369,8 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(PartialPaymentMethod), PartialPaymentMethod.ToString());
         dict.Add(nameof(UseHostedPaymentPage), UseHostedPaymentPage.ToString());
         dict.Add(nameof(SuccessWebHookUrl), SuccessWebHookUrl ?? string.Empty);
-
+        dict.Add(nameof(Title), Title ?? string.Empty);
+        
         return dict;
     }
 }
