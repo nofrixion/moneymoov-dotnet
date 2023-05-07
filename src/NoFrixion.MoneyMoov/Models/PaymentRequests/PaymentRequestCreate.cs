@@ -300,8 +300,8 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     public string? Title { get; set; }
 
     /// <summary>
-    /// An optional comma separated list of parital payment amounts. The amounts represent guidance, or suggestions, as to
-    /// how the payer will be requested to make payment steps.
+    /// An optional comma separated list of partial payment amounts. The amounts represent guidance, or suggestions, as to
+    /// how the payer will be requested to make partial payments.
     /// </summary>
     public string? PartialPaymentSteps { get; set; }
 
