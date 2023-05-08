@@ -249,7 +249,13 @@ public class PaymentRequest : IPaymentRequest
     /// E.g. product or service information.
     /// </summary>
     public string? Title { get; set; }
-    
+
+    /// <summary>
+    /// An optional comma separated list of partial payment amounts. The amounts represent guidance, or suggestions, as to
+    /// how the payer will be requested to make partial payments.
+    /// </summary>
+    public string? PartialPaymentSteps { get; set; }
+
     /// <summary>
     /// Attempts to get the billing address for this payment request.
     /// </summary>
