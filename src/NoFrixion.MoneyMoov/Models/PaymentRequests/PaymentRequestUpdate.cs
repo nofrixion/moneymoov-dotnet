@@ -57,6 +57,11 @@ public class PaymentRequestUpdate
     public string? PartialPaymentSteps { get; set; }
 
     /// <summary>
+    /// An optional list of tag ids to add to the payment request
+    /// </summary>
+    public List<Guid>? TagIds { get; set; }
+    
+    /// <summary>
     /// Places all the payment request's properties into a dictionary. Useful for testing
     /// when HTML form encoding is required.
     /// </summary>
