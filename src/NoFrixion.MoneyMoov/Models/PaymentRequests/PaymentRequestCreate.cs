@@ -305,6 +305,11 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// </summary>
     public string? PartialPaymentSteps { get; set; }
 
+    /// <summary>
+    /// An optional list of tag ids to add to the payment request
+    /// </summary>
+    public List<Guid>? TagIds { get; set; }
+    
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
