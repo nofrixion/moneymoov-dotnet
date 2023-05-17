@@ -92,8 +92,8 @@ public enum PaymentRequestEventTypesEnum
     pisp_settle = 12,
 
     /// <summary>
-    /// A PISP attempt failed as funds did not arrive within the expected timeframe after
-    /// payer authorisation.
+    /// A PISP attempt was authorised but then funds failed to settle after an expiry
+    /// period (typically 2 business days).
     /// </summary>
     pisp_settle_failure = 13
 }
