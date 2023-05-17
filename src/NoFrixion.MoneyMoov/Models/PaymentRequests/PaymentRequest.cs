@@ -22,6 +22,7 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -368,7 +369,83 @@ public class PaymentRequest : IPaymentRequest
         }
         else
         {
+            var paymentAttempts = new List<PaymentRequestPaymentAttempt>();
 
+            // Get PIS attempts.
+            var pispAttempts = Events.Where(x => !string.IsNullOrEmpty(x.PispPaymentInitiationID) &&
+                 (x.EventType == PaymentRequestEventTypesEnum.pisp_initiate) ||
+                 (x.EventType == PaymentRequestEventTypesEnum.pisp_callback) ||
+                 (x.EventType == PaymentRequestEventTypesEnum.pisp_webhook) ||
+                 (x.EventType == PaymentRequestEventTypesEnum.pisp_settle) ||
+                 (x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure))
+                .OrderBy(x => x.Inserted)
+                .GroupBy(x => x.PispPaymentInitiationID)
+            .ToList();
+
+            foreach(var pispAttempt in pispAttempts)
+            {
+                // The pisp_initiate event should always be present but if for some reason it's not the first callback or
+                // webhook will also hold the required information.
+                var initiateEvent =
+                    pispAttempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_initiate).FirstOrDefault() ??
+                    pispAttempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_callback).FirstOrDefault() ??
+                    pispAttempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_webhook).FirstOrDefault();
+
+                if (initiateEvent != null)
+                {
+                    var paymentAttempt = new PaymentRequestPaymentAttempt
+                    {
+                        AttemptKey = pispAttempt.Key ?? string.Empty,
+                        PaymentRequestID = initiateEvent.PaymentRequestID,
+                        InitiatedAt = initiateEvent.Inserted,
+                        PaymentMethod = PaymentMethodTypeEnum.pisp,
+                        Currency = initiateEvent.Currency,
+                        PaymentProcessor = initiateEvent.PaymentProcessorName
+                    };
+
+                    foreach(var pispCallbackOrWebhook in pispAttempt.Where(x =>
+                        x.EventType == PaymentRequestEventTypesEnum.pisp_callback ||
+                        x.EventType == PaymentRequestEventTypesEnum.pisp_webhook))
+                    {
+                        var authorisationEvent = pispCallbackOrWebhook switch
+                        {
+                            PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.Modulr
+                                && cbk.Status == PaymentRequestResult.PISP_MODULR_SUCCESS_STATUS => cbk,
+                            PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.Nofrixion
+                            && (cbk.Status == PayoutStatus.QUEUED.ToString() ||
+                                cbk.Status == PayoutStatus.QUEUED_UPSTREAM.ToString() ||
+                                cbk.Status == PayoutStatus.PENDING.ToString() ||
+                                cbk.Status == PayoutStatus.PROCESSED.ToString()) => cbk,
+                            PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.Plaid
+                                && (cbk.Status == PaymentRequestResult.PISP_PLAID_INITIATED_STATUS ||
+                                    cbk.Status == PaymentRequestResult.PISP_PLAID_SUCCESS_STATUS) => cbk,
+                            PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.Yapily
+                                && cbk.Status == PaymentRequestResult.PISP_YAPILY_PENDING_STATUS => cbk,
+                            _ => null
+                        };
+
+                        if(authorisationEvent != null)
+                        {
+                            paymentAttempt.AuthorisedAt = authorisationEvent.Inserted;
+                            paymentAttempt.AuthorisedAmount = authorisationEvent.Amount;
+                        }
+
+                        if(pispAttempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle))
+                        {
+                            var settleEvent = pispAttempt.First(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle);
+
+                            paymentAttempt.SettledAt = settleEvent.Inserted;
+                            paymentAttempt.SettledAmount = settleEvent.Amount;
+                        }
+                    }
+
+                    paymentAttempts.Add(paymentAttempt);
+                }
+            }
+
+            // TODO: Add similar logic for card and lightning payments.
+
+            return paymentAttempts;
         }
     }
 }

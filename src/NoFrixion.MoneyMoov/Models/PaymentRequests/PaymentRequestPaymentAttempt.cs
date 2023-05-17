@@ -21,15 +21,31 @@ namespace NoFrixion.MoneyMoov.Models;
 public class PaymentRequestPaymentAttempt
 {
     /// <summary>
+    /// For pay by bank attempts this is the ID that gets set on all the events (initiate,
+    /// callback, webhook &, settlement) for the same attempt. For cards and lightning different
+    /// fields are used to group payment request events.
+    /// </summary>
+    public string AttemptKey { get; set; } = string.Empty;
+
+    /// <summary>
     /// The ID of the payment request the result is for.
     /// </summary>
     public Guid PaymentRequestID { get; set; }
 
     /// <summary>
-    /// Timestamp the payment occurred. For cards this will be the time the
-    /// original authorisation occurred.
+    /// Timestamp the payment was initiated at.
     /// </summary>
-    public DateTimeOffset OccurredAt { get; set; }
+    public DateTimeOffset InitiatedAt { get; set; }
+
+    /// <summary>
+    /// If the attempt was authorised this is the timestamp it occurred at.
+    /// </summary>
+    public DateTimeOffset? AuthorisedAt { get; set; }
+
+    /// <summary>
+    /// If the attempt was settled this is the timestamp it occurred at.
+    /// </summary>
+    public DateTimeOffset? SettledAt { get; set; }
 
     /// <summary>
     /// The payment type for the received money.
@@ -37,9 +53,19 @@ public class PaymentRequestPaymentAttempt
     public PaymentMethodTypeEnum PaymentMethod { get; set; }
 
     /// <summary>
-    /// The authorised payment amount.
+    /// The payment amount attempted.
     /// </summary>
-    public decimal Amount { get; set; }
+    public decimal AttemptedAmount { get; set; }
+
+    /// <summary>
+    /// The payment amount that was authorised by the payer.
+    /// </summary>
+    public decimal AuthorisedAmount { get; set; }
+
+    /// <summary>
+    /// The funds that were received from the payer.
+    /// </summary>
+    public decimal SettledAmount { get; set; }
 
     /// <summary>
     /// The authorised payment currency.
@@ -50,10 +76,4 @@ public class PaymentRequestPaymentAttempt
     /// The card processor that was used for the payment event.
     /// </summary>
     public PaymentProcessorsEnum PaymentProcessor { get; set; } = PaymentProcessorsEnum.None;
-
-    /// <summary>
-    /// For pay by bank attempts this is the ID that gets set on all the events (initiate,
-    /// callback, webhoo &, settlement) for the same attempt.
-    /// </summary>
-    public string? PispPaymentInitiationID { get; set; }
 }
