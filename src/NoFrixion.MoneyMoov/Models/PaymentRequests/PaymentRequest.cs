@@ -353,4 +353,22 @@ public class PaymentRequest : IPaymentRequest
             CurrencyTypeEnum.BTC or CurrencyTypeEnum.LBTC => false,
             _ => true
         };
+
+    /// <summary>
+    /// Groups the payment request events into a list of payment attempts. Most payment methods 
+    /// result in multiple events. This method can be used to understand how the events correspond
+    /// to payment attempts.
+    /// </summary>
+    /// <returns>A list of payment request attempts.</returns>
+    public List<PaymentRequestPaymentAttempt> GetPaymentAttempts()
+    {
+        if (Events == null || Events.Count == 0)
+        {
+            return new List<PaymentRequestPaymentAttempt>();
+        }
+        else
+        {
+
+        }
+    }
 }
