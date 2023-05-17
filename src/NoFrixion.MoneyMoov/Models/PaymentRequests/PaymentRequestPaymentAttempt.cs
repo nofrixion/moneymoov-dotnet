@@ -48,6 +48,12 @@ public class PaymentRequestPaymentAttempt
     public DateTimeOffset? SettledAt { get; set; }
 
     /// <summary>
+    /// If the attempt failed to settled after the expected settlement time this
+    /// is the timestamp the failure was recorded at.
+    /// </summary>
+    public DateTimeOffset? SettleFailedAt { get; set; }
+
+    /// <summary>
     /// The payment type for the received money.
     /// </summary>
     public PaymentMethodTypeEnum PaymentMethod { get; set; }
@@ -76,4 +82,20 @@ public class PaymentRequestPaymentAttempt
     /// The card processor that was used for the payment event.
     /// </summary>
     public PaymentProcessorsEnum PaymentProcessor { get; set; } = PaymentProcessorsEnum.None;
+
+    public PaymentResultEnum Status
+    {
+        get
+        {
+            return this switch
+            {
+                var att when att.SettledAmount > 0 && att.SettledAmount == att.AttemptedAmount => PaymentResultEnum.FullyPaid,
+                var att when att.SettledAmount > 0 && att.SettledAmount > att.AttemptedAmount => PaymentResultEnum.OverPaid,
+                var att when att.SettledAmount > 0 && att.SettledAmount < att.AttemptedAmount => PaymentResultEnum.PartiallyPaid,
+                var att when att.SettleFailedAt != null => PaymentResultEnum.None,
+                var att when att.AuthorisedAt != null => PaymentResultEnum.Authorized,
+                _ => PaymentResultEnum.None
+            };
+        }
+    }
 }

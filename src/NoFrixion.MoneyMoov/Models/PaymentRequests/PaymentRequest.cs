@@ -159,7 +159,7 @@ public class PaymentRequest : IPaymentRequest
     /// <summary>
     /// Bitcoin Lightning invoice for the payment request.
     /// </summary>
-    public string? LightningInvoice {  get; set; }
+    public string? LightningInvoice { get; set; }
 
     /// <summary>
     /// The current status of the payment request. Will be set to FullyPaid when the full
@@ -382,7 +382,7 @@ public class PaymentRequest : IPaymentRequest
                 .GroupBy(x => x.PispPaymentInitiationID)
             .ToList();
 
-            foreach(var pispAttempt in pispAttempts)
+            foreach (var pispAttempt in pispAttempts)
             {
                 // The pisp_initiate event should always be present but if for some reason it's not the first callback or
                 // webhook will also hold the required information.
@@ -400,10 +400,11 @@ public class PaymentRequest : IPaymentRequest
                         InitiatedAt = initiateEvent.Inserted,
                         PaymentMethod = PaymentMethodTypeEnum.pisp,
                         Currency = initiateEvent.Currency,
+                        AttemptedAmount = Amount,
                         PaymentProcessor = initiateEvent.PaymentProcessorName
                     };
 
-                    foreach(var pispCallbackOrWebhook in pispAttempt.Where(x =>
+                    foreach (var pispCallbackOrWebhook in pispAttempt.Where(x =>
                         x.EventType == PaymentRequestEventTypesEnum.pisp_callback ||
                         x.EventType == PaymentRequestEventTypesEnum.pisp_webhook))
                     {
@@ -420,23 +421,31 @@ public class PaymentRequest : IPaymentRequest
                                 && (cbk.Status == PaymentRequestResult.PISP_PLAID_INITIATED_STATUS ||
                                     cbk.Status == PaymentRequestResult.PISP_PLAID_SUCCESS_STATUS) => cbk,
                             PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.Yapily
-                                && cbk.Status == PaymentRequestResult.PISP_YAPILY_PENDING_STATUS => cbk,
+                                && (cbk.Status == PaymentRequestResult.PISP_YAPILY_PENDING_STATUS ||
+                                   cbk.Status == PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS) => cbk,
                             _ => null
                         };
 
-                        if(authorisationEvent != null)
+                        if (authorisationEvent != null)
                         {
                             paymentAttempt.AuthorisedAt = authorisationEvent.Inserted;
                             paymentAttempt.AuthorisedAmount = authorisationEvent.Amount;
+                            break;
                         }
+                    }
 
-                        if(pispAttempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle))
-                        {
-                            var settleEvent = pispAttempt.First(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle);
+                    if (pispAttempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle))
+                    {
+                        var settleEvent = pispAttempt.First(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle);
 
-                            paymentAttempt.SettledAt = settleEvent.Inserted;
-                            paymentAttempt.SettledAmount = settleEvent.Amount;
-                        }
+                        paymentAttempt.SettledAt = settleEvent.Inserted;
+                        paymentAttempt.SettledAmount = settleEvent.Amount;
+                    }
+                    else if (pispAttempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure))
+                    {
+                        var settleFailedEvent = pispAttempt.First(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure);
+
+                        paymentAttempt.SettleFailedAt = settleFailedEvent.Inserted;
                     }
 
                     paymentAttempts.Add(paymentAttempt);
