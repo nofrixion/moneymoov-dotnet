@@ -151,8 +151,9 @@ public class PaymentRequest : IPaymentRequest
     public PaymentProcessorsEnum PaymentProcessor { get; set; } = PaymentProcessorsEnum.CyberSource;
 
     /// <summary>
-    /// For Payment Initiation payments this is the reference that will appear on
-    /// the recipients transaction record.
+    /// For Payment Initiation payments this is the reference that will be requested to used as the reference 
+    /// on the payee's transaction record. Note that it is not guaranteed that the sending bank will use this
+    /// reference and in practice it has been observed to be supported by only half to two thirds of banks.
     /// </summary>
     public string? PispRecipientReference { get; set; }
 
@@ -382,20 +383,20 @@ public class PaymentRequest : IPaymentRequest
                 .GroupBy(x => x.PispPaymentInitiationID)
             .ToList();
 
-            foreach (var pispAttempt in pispAttempts)
+            foreach (var attempt in pispAttempts)
             {
                 // The pisp_initiate event should always be present but if for some reason it's not the first callback or
                 // webhook will also hold the required information.
                 var initiateEvent =
-                    pispAttempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_initiate).FirstOrDefault() ??
-                    pispAttempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_callback).FirstOrDefault() ??
-                    pispAttempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_webhook).FirstOrDefault();
+                    attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_initiate).FirstOrDefault() ??
+                    attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_callback).FirstOrDefault() ??
+                    attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_webhook).FirstOrDefault();
 
                 if (initiateEvent != null)
                 {
                     var paymentAttempt = new PaymentRequestPaymentAttempt
                     {
-                        AttemptKey = pispAttempt.Key ?? string.Empty,
+                        AttemptKey = attempt.Key ?? string.Empty,
                         PaymentRequestID = initiateEvent.PaymentRequestID,
                         InitiatedAt = initiateEvent.Inserted,
                         PaymentMethod = PaymentMethodTypeEnum.pisp,
@@ -404,7 +405,7 @@ public class PaymentRequest : IPaymentRequest
                         PaymentProcessor = initiateEvent.PaymentProcessorName
                     };
 
-                    foreach (var pispCallbackOrWebhook in pispAttempt.Where(x =>
+                    foreach (var pispCallbackOrWebhook in attempt.Where(x =>
                         x.EventType == PaymentRequestEventTypesEnum.pisp_callback ||
                         x.EventType == PaymentRequestEventTypesEnum.pisp_webhook))
                     {
@@ -434,19 +435,42 @@ public class PaymentRequest : IPaymentRequest
                         }
                     }
 
-                    if (pispAttempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle))
+                    if (attempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle))
                     {
-                        var settleEvent = pispAttempt.First(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle);
+                        var settleEvent = attempt.First(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle);
 
                         paymentAttempt.SettledAt = settleEvent.Inserted;
                         paymentAttempt.SettledAmount = settleEvent.Amount;
                     }
-                    else if (pispAttempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure))
+                    else if (attempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure))
                     {
-                        var settleFailedEvent = pispAttempt.First(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure);
+                        var settleFailedEvent = attempt.First(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure);
 
                         paymentAttempt.SettleFailedAt = settleFailedEvent.Inserted;
                     }
+
+                    paymentAttempts.Add(paymentAttempt);
+                }
+
+                // Check for orphaned settlement events. Orphaned settlements can occur where a payin transaction is matched to the
+                // PispRecipientReference on a payment request but not to any off the PISP payment request events.
+                var orphanedSettlements = Events.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle
+                && (string.IsNullOrEmpty(x.PispPaymentInitiationID) || !paymentAttempts.Any(y => y.AttemptKey == x.PispPaymentInitiationID)))
+                .OrderBy(x => x.Inserted)
+                .ToList();
+
+                foreach (var orphanedSettlement in orphanedSettlements)
+                {
+                    var paymentAttempt = new PaymentRequestPaymentAttempt
+                    {
+                        AttemptKey = orphanedSettlement.PispPaymentInitiationID ?? string.Empty,
+                        PaymentRequestID = orphanedSettlement.PaymentRequestID,
+                        SettledAt = orphanedSettlement.Inserted,
+                        PaymentMethod = PaymentMethodTypeEnum.pisp,
+                        Currency = orphanedSettlement.Currency,
+                        SettledAmount = Amount,
+                        PaymentProcessor = orphanedSettlement.PaymentProcessorName
+                    };
 
                     paymentAttempts.Add(paymentAttempt);
                 }
