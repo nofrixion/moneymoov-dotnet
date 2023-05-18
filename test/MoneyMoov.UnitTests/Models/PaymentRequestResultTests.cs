@@ -597,15 +597,16 @@ public class PaymentRequestResultTests
         entity.Amount = 120;
 
         var yapilyInitiatedEvent = new PaymentRequestEvent
-                                       {
-                                           ID = Guid.NewGuid(),
-                                           PaymentRequestID = entity.ID,
-                                           Amount = entity.Amount,
-                                           Currency = entity.Currency,
-                                           Inserted = DateTime.UtcNow-new TimeSpan(0, 0, 3),
-                                           EventType = PaymentRequestEventTypesEnum.pisp_initiate,
-                                           PispPaymentInitiationID = pispPaymentInititionID1,
-                                           Status = "COMPLETED"
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow-new TimeSpan(0, 0, 3),
+            EventType = PaymentRequestEventTypesEnum.pisp_initiate,
+            PispPaymentInitiationID = pispPaymentInititionID1,
+            Status = "COMPLETED",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
         };
         var yapilyCompletedEvent = new PaymentRequestEvent
         {
@@ -616,7 +617,8 @@ public class PaymentRequestResultTests
             Inserted = DateTime.UtcNow - new TimeSpan(0, 0, 2),
             EventType = PaymentRequestEventTypesEnum.pisp_callback,
             PispPaymentInitiationID = pispPaymentInititionID1,
-            Status = "COMPLETED"
+            Status = "COMPLETED",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
         };
         var yapilyCompletedWebhookEvent = new PaymentRequestEvent
         {
@@ -627,7 +629,8 @@ public class PaymentRequestResultTests
             Inserted = DateTime.UtcNow,
             PispPaymentInitiationID = pispPaymentInititionID1,
             EventType = PaymentRequestEventTypesEnum.pisp_webhook,
-            Status = PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS
+            Status = PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS,
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
         };
 
         entity.Events = new List<PaymentRequestEvent> { yapilyCompletedWebhookEvent, yapilyInitiatedEvent, yapilyCompletedEvent};
@@ -730,7 +733,8 @@ public class PaymentRequestResultTests
             Inserted = now - new TimeSpan(0, 0, 10),
             EventType = PaymentRequestEventTypesEnum.pisp_initiate,
             PispPaymentInitiationID = pispPaymentInititionID1,
-            Status = "AWAITINGAUTHORIZATION"
+            Status = "AWAITINGAUTHORIZATION",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
         };
 
         entity.Events.Add(yapilyInitiatedEvent);
@@ -746,7 +750,8 @@ public class PaymentRequestResultTests
             Inserted = now - new TimeSpan(0, 0, 9),
             EventType = PaymentRequestEventTypesEnum.pisp_callback,
             PispPaymentInitiationID = pispPaymentInititionID1,
-            Status = string.Empty
+            Status = string.Empty,
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
         };
 
         entity.Events.Add(yapilyCallbackEvent);
@@ -762,7 +767,8 @@ public class PaymentRequestResultTests
             Inserted = now - new TimeSpan(0, 0, 8),
             EventType = PaymentRequestEventTypesEnum.pisp_callback,
             PispPaymentInitiationID = pispPaymentInititionID1,
-            Status = PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS
+            Status = PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS,
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
         };
 
         entity.Events.Add(yapilyCallbackEvent2);
@@ -794,7 +800,8 @@ public class PaymentRequestResultTests
             Inserted = now - new TimeSpan(0, 0, 6),
             EventType = PaymentRequestEventTypesEnum.pisp_webhook,
             PispPaymentInitiationID = pispPaymentInititionID1,
-            Status = PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS
+            Status = PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS,
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
         };
 
         entity.Events.Add(yapilyWebhookEvent);
@@ -824,7 +831,9 @@ public class PaymentRequestResultTests
                                            Currency = entity.Currency,
                                            Inserted = DateTime.UtcNow,
                                            EventType = PaymentRequestEventTypesEnum.pisp_callback,
-                                           Status = PayoutStatus.PENDING.ToString()
+                                           Status = PayoutStatus.PENDING.ToString(),
+                                           PaymentProcessorName = PaymentProcessorsEnum.Nofrixion,
+                                           PispPaymentInitiationID = "xxx"
                                        };
         var nofrixionQueuedEvent = new PaymentRequestEvent
                                      {
@@ -834,8 +843,10 @@ public class PaymentRequestResultTests
                                          Currency = entity.Currency,
                                          Inserted = DateTime.UtcNow,
                                          EventType = PaymentRequestEventTypesEnum.pisp_callback,
-                                         Status = PayoutStatus.QUEUED.ToString()
-                                     };
+                                         Status = PayoutStatus.QUEUED.ToString(),
+                                         PaymentProcessorName = PaymentProcessorsEnum.Nofrixion,
+                                         PispPaymentInitiationID = "xxx"
+                                    };
 
         entity.Events = new List<PaymentRequestEvent> { nofrixionPendingEvent, nofrixionQueuedEvent };
 
@@ -1002,5 +1013,73 @@ public class PaymentRequestResultTests
         Assert.Equal(0, result.Amount);
         Assert.Equal(entity.Currency, result.Currency);
         Assert.Equal(PaymentResultEnum.None, result.Result);
+    }
+
+    /// <summary>
+    /// Tests that if pisp attempts is Authorized, funds don't arrive resulting in a settlement failure
+    /// event and then funds do subsequently arrive the status is correctly set to FullyPaid.
+    /// </summary>
+    [Fact]
+    public void Nofrixion_Pisp_Settlment_Overrules_Failure_FullyPaid_Result_Status()
+    {
+        var entity = GetTestPaymentRequest();
+
+        string pispPaymentID = "xxx";
+
+        var pispInitiate = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow.AddDays(-5),
+            EventType = PaymentRequestEventTypesEnum.pisp_initiate,
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily,
+            Status = PaymentRequestResult.PISP_YAPILY_PENDING_STATUS,
+            PispPaymentInitiationID = pispPaymentID
+        };
+
+        var callbackEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow.AddDays(-4),
+            EventType = PaymentRequestEventTypesEnum.pisp_callback,
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily,
+            Status = PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS,
+            PispPaymentInitiationID = pispPaymentID
+        };
+
+        var setlementFailedEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_settle_failure,
+            Status = PaymentsConstants.PISP_FAILED_STATUS,
+            PispPaymentInitiationID = pispPaymentID
+        };
+
+        var settlementEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_settle,
+            Status = PaymentsConstants.PISP_SETTLED_STATUS,
+            PispPaymentInitiationID = pispPaymentID,
+            Amount = entity.Amount,
+            Currency = entity.Currency
+        };
+
+        entity.Events = new List<PaymentRequestEvent> { pispInitiate, callbackEvent, setlementFailedEvent, settlementEvent };
+
+        var result = new PaymentRequestResult(entity);
+
+        Assert.Equal(entity.Amount, result.Amount);
+        Assert.Equal(entity.Currency, result.Currency);
+        Assert.Equal(PaymentResultEnum.FullyPaid, result.Result);
     }
 }
