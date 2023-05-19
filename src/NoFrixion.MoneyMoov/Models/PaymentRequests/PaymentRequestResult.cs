@@ -268,21 +268,21 @@ public class PaymentRequestResult
         }
     }
 
-    private List<string> PispSuccessStatuses()
-    {
-        return new List<string>
-                   {
-                       PISP_PLAID_SUCCESS_STATUS,
-                       PISP_PLAID_INITIATED_STATUS,
-                       PISP_MODULR_SUCCESS_STATUS,
-                       PISP_YAPILY_COMPLETED_STATUS,
-                       PISP_YAPILY_PENDING_STATUS,
-                       PayoutStatus.QUEUED.ToString(),
-                       PayoutStatus.QUEUED_UPSTREAM.ToString(),
-                       PayoutStatus.PENDING.ToString(),
-                       PayoutStatus.PROCESSED.ToString()
-                   };
-    }
+    //private List<string> PispSuccessStatuses()
+    //{
+    //    return new List<string>
+    //               {
+    //                   PISP_PLAID_SUCCESS_STATUS,
+    //                   PISP_PLAID_INITIATED_STATUS,
+    //                   PISP_MODULR_SUCCESS_STATUS,
+    //                   PISP_YAPILY_COMPLETED_STATUS,
+    //                   PISP_YAPILY_PENDING_STATUS,
+    //                   PayoutStatus.QUEUED.ToString(),
+    //                   PayoutStatus.QUEUED_UPSTREAM.ToString(),
+    //                   PayoutStatus.PENDING.ToString(),
+    //                   PayoutStatus.PROCESSED.ToString()
+    //               };
+    //}
 
     ///// <summary>
     ///// Returns the amount that is remaining to be settled.

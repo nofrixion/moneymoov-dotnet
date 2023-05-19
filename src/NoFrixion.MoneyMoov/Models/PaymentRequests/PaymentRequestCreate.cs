@@ -246,8 +246,9 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     public bool CardIgnoreCVN { get; set; }
 
     /// <summary>
-    /// For Payment Initiation payments this is the reference that will appear on
-    /// the recipients transaction record.
+    /// For Payment Initiation payments this is the reference that will be requested to used as the reference 
+    /// on the payee's transaction record. Note that it is not guaranteed that the sending bank will use this
+    /// reference and in practice it has been observed to be supported by only half to two thirds of banks.
     /// </summary>
     [RegularExpression(@"^([a-zA-Z0-9 ]{6,18})$",
         ErrorMessage = @"The recipient reference must be between 6 and 18 characters and can only contain alphanumeric characters and space.")]
