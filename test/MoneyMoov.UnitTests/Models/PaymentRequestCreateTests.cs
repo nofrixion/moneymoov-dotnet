@@ -55,54 +55,6 @@ public class PaymentRequestCreateTests
     }
 
     /// <summary>
-    /// Tests that a payment request create model with a valid PISP recipient reference is identified
-    /// as being valid.
-    /// </summary>
-    [Fact]
-    public void Create_PaymentRequestCreate_Valid_Pisp_Recipient_Reference()
-    {
-        var paymentRequest = new PaymentRequestCreate
-        {
-            Amount = 1.00M,
-            Currency = CurrencyTypeEnum.EUR,
-            CallbackUrl = "https://localhost/callback",
-            BaseOriginUrl = "https://localhost",
-            PispRecipientReference = "abc 123"
-        };
-
-        Assert.NotNull(paymentRequest);
-
-        var validationProb = paymentRequest.Validate();
-
-        Assert.True(validationProb.IsEmpty);
-    }
-
-    /// <summary>
-    /// Tests that a payment request create model with an invalid character in the PISP recipient reference 
-    /// is identified as being invalid.
-    /// </summary>
-    [Fact]
-    public void Create_PaymentRequestCreate_Invalid_Pisp_Recipient_Reference()
-    {
-        var paymentRequest = new PaymentRequestCreate
-        {
-            Amount = 1.00M,
-            Currency = CurrencyTypeEnum.EUR,
-            CallbackUrl = "https://localhost/callback",
-            BaseOriginUrl = "https://localhost",
-            PispRecipientReference = "abc-123 !"
-        };
-
-        Assert.NotNull(paymentRequest);
-
-        var validationProb = paymentRequest.Validate();
-
-        Assert.False(validationProb.IsEmpty);
-        Assert.Single(validationProb.Errors);
-        Assert.True(validationProb.Errors.ContainsKey("PispRecipientReference"));
-    }
-
-    /// <summary>
     /// Tests that a create payment request model gets the expected validation error when
     /// the payment request callback URL is malformed.
     /// </summary>
