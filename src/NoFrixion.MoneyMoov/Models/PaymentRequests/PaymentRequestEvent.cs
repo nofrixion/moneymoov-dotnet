@@ -102,6 +102,12 @@ public class PaymentRequestEvent
     public PaymentProcessorsEnum PaymentProcessorName { get; set; }
 
     /// <summary>
+    /// For payment initiation attempts some providers (e.g. Modulr) will return two status fields. The first
+    /// status field is from the provider and the second is from the bank.
+    /// </summary>
+    public string? PispBankStatus { get; set; }
+
+    /// <summary>
     /// Gets the amount to display with the correct number of decimal places based on the currency type. 
     /// </summary>
     /// <returns>The decimal amount to display for the payment request's currency.</returns>
