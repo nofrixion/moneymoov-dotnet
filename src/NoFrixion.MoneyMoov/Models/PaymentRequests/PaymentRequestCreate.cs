@@ -247,11 +247,12 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
 
     /// <summary>
     /// For Payment Initiation payments this is the reference that will be requested to used as the reference 
-    /// on the payee's transaction record. Note that it is not guaranteed that the sending bank will use this
+    /// on the your transaction record. Note that it is not guaranteed that the sending bank will use this
     /// reference and in practice it has been observed to be supported by only half to two thirds of banks.
     /// </summary>
-    [RegularExpression(@"^([a-zA-Z0-9 ]{6,18})$",
-        ErrorMessage = @"The recipient reference must be between 6 and 18 characters and can only contain alphanumeric characters and space.")]
+    //[RegularExpression(@"^([a-zA-Z0-9 ]{6,18})$",
+    //ErrorMessage = @"The recipient reference must be between 6 and 18 characters and can only contain alphanumeric characters and space.")]
+    [Obsolete("This field will be set automatically to ensure the best chance of matching a payin to a payment reuqest.")]
     public string? PispRecipientReference { get; set; }
 
     /// <summary>
@@ -365,7 +366,6 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(CardIgnoreCVN), CardIgnoreCVN.ToString());
         dict.Add(nameof(CardNoPayerAuthentication), CardNoPayerAuthentication.ToString());
         dict.Add(nameof(PispAccountID), PispAccountID?.ToString() ?? string.Empty);
-        dict.Add(nameof(PispRecipientReference), PispRecipientReference ?? string.Empty);
         dict.Add(nameof(ShippingFirstName), ShippingFirstName ?? string.Empty);
         dict.Add(nameof(ShippingLastName), ShippingLastName ?? string.Empty);
         dict.Add(nameof(ShippingAddressLine1), ShippingAddressLine1 ?? string.Empty);
