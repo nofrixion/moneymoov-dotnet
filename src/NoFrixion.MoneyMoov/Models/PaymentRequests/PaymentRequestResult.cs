@@ -41,6 +41,16 @@ public class PaymentRequestResult
     public const string PISP_MODULR_SUCCESS_STATUS = "EXECUTED";
 
     /// <summary>
+    /// With Modulr responses an additional AspspPaymentStatus is returned along with the main Status.
+    /// Both need to be checked. Other than rejected all other statuses indicate the payment attempt
+    /// is in progress.
+    /// </summary>
+    /// <remarks>
+    /// See https://modulr.readme.io/docs/single-immediate-payments-overview#payment-initiation-request-lifecycle
+    /// </remarks>
+    public const string PISP_MODULR_BANK_REJECTED_STATUS = "Rejected";
+
+    /// <summary>
     /// The status returned from Yapily when a PIS payment is successfully initiated.
     /// </summary>
     public const string PISP_YAPILY_COMPLETED_STATUS = "COMPLETED";

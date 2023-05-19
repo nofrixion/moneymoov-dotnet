@@ -412,7 +412,8 @@ public class PaymentRequest : IPaymentRequest
                         var authorisationEvent = pispCallbackOrWebhook switch
                         {
                             PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.Modulr
-                                && cbk.Status == PaymentRequestResult.PISP_MODULR_SUCCESS_STATUS => cbk,
+                                && cbk.Status == PaymentRequestResult.PISP_MODULR_SUCCESS_STATUS
+                                && cbk.PispBankStatus != PaymentRequestResult.PISP_MODULR_BANK_REJECTED_STATUS => cbk,
                             PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.Nofrixion
                             && (cbk.Status == PayoutStatus.QUEUED.ToString() ||
                                 cbk.Status == PayoutStatus.QUEUED_UPSTREAM.ToString() ||
