@@ -44,6 +44,7 @@ public class PaymentRequestUpdate
     public bool? CardCreateToken { get; set; }
     public bool? IgnoreAddressVerification { get; set; }
     public bool? CardIgnoreCVN { get; set; }
+    [Obsolete("This field will be set automatically to ensure the best chance of matching a payin to a payment reuqest.")]
     public string? PispRecipientReference { get; set; }
     [RegularExpression(@"[a-zA-Z0-9]+",
         ErrorMessage = @"The CardProcessorMerchantID can only contain alphanumeric characters.")]
@@ -94,7 +95,6 @@ public class PaymentRequestUpdate
         if (CardCreateToken != null) dict.Add(nameof(CardCreateToken), CardCreateToken.Value.ToString());
         if (IgnoreAddressVerification != null) dict.Add(nameof(IgnoreAddressVerification), IgnoreAddressVerification.Value.ToString());
         if (CardIgnoreCVN != null) dict.Add(nameof(CardIgnoreCVN), CardIgnoreCVN.Value.ToString());
-        if (PispRecipientReference != null) dict.Add(nameof(PispRecipientReference), PispRecipientReference);
         if (CardProcessorMerchantID != null) dict.Add(nameof(CardProcessorMerchantID), CardProcessorMerchantID);
         if (CustomerEmailAddress != null) dict.Add(nameof(CustomerEmailAddress), CustomerEmailAddress ?? string.Empty);
         if (NotificationEmailAddresses != null) dict.Add(nameof(NotificationEmailAddresses), NotificationEmailAddresses ?? string.Empty);
