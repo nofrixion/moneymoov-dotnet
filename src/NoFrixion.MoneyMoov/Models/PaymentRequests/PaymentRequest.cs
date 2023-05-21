@@ -452,29 +452,30 @@ public class PaymentRequest : IPaymentRequest
 
                     paymentAttempts.Add(paymentAttempt);
                 }
+            }
 
-                // Check for orphaned settlement events. Orphaned settlements can occur where a payin transaction is matched to the
-                // PispRecipientReference on a payment request but not to any off the PISP payment request events.
-                var orphanedSettlements = Events.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle
+            // Check for orphaned settlement events. Orphaned settlements can occur where a payin transaction is matched to the
+            // PispRecipientReference on a payment request but not to any off the PISP payment request events.
+            var orphanedSettlements = Events.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle
                 && (string.IsNullOrEmpty(x.PispPaymentInitiationID) || !paymentAttempts.Any(y => y.AttemptKey == x.PispPaymentInitiationID)))
-                .OrderBy(x => x.Inserted)
-                .ToList();
+            .OrderBy(x => x.Inserted)
+            .ToList();
 
-                foreach (var orphanedSettlement in orphanedSettlements)
+            foreach (var orphanedSettlement in orphanedSettlements)
+            {
+                var paymentAttempt = new PaymentRequestPaymentAttempt
                 {
-                    var paymentAttempt = new PaymentRequestPaymentAttempt
-                    {
-                        AttemptKey = orphanedSettlement.PispPaymentInitiationID ?? string.Empty,
-                        PaymentRequestID = orphanedSettlement.PaymentRequestID,
-                        SettledAt = orphanedSettlement.Inserted,
-                        PaymentMethod = PaymentMethodTypeEnum.pisp,
-                        Currency = orphanedSettlement.Currency,
-                        SettledAmount = Amount,
-                        PaymentProcessor = orphanedSettlement.PaymentProcessorName
-                    };
+                    AttemptKey = orphanedSettlement.PispPaymentInitiationID ?? string.Empty,
+                    PaymentRequestID = orphanedSettlement.PaymentRequestID,
+                    InitiatedAt = orphanedSettlement.Inserted,
+                    SettledAt = orphanedSettlement.Inserted,
+                    PaymentMethod = PaymentMethodTypeEnum.pisp,
+                    Currency = orphanedSettlement.Currency,
+                    SettledAmount = Amount,
+                    PaymentProcessor = orphanedSettlement.PaymentProcessorName
+                };
 
-                    paymentAttempts.Add(paymentAttempt);
-                }
+                paymentAttempts.Add(paymentAttempt);
             }
 
             // TODO: Add similar logic for card and lightning payments.
