@@ -39,6 +39,8 @@ public interface IPayoutClient
     Task<MoneyMoovApiResponse<BatchPayout>> CreateBatchPayoutAsync(string userAccessToken, List<Guid> payoutIDs);
 
     Task<MoneyMoovApiResponse> SubmitBatchPayoutAsync(string strongUserAccessToken, Guid batchPayoutID);
+
+    Task<MoneyMoovApiResponse> DeletePayoutAsync(string accessToken, Guid payoutID);
 }
 
 public class PayoutClient : IPayoutClient
@@ -216,6 +218,26 @@ public class PayoutClient : IPayoutClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PostAsync(url, strongUserAccessToken),
+            _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov Payout endpoint to delete an existing payout. Only payouts in a pending state can be 
+    /// deleted.
+    /// </summary>
+    /// <param name="accessToken">The user, or merchant, access token deleting the payout.</param>
+    /// <param name="payoutID"></param>
+    /// <returns></returns>
+    public Task<MoneyMoovApiResponse> DeletePayoutAsync(string accessToken, Guid payoutID)
+    {
+        var url = MoneyMoovUrlBuilder.PayoutsApi.PayoutUrl(_apiClient.GetBaseUri().ToString(), payoutID);
+
+        var prob = _apiClient.CheckAccessToken(accessToken, nameof(DeletePayoutAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.DeleteAsync(url, accessToken),
             _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }

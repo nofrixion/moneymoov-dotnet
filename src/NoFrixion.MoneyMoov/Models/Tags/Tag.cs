@@ -14,15 +14,19 @@
 // Proprietary NoFrixion.
 //-----------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class Tag
 {
     public Guid ID { get; set; }
+    
+    [Required]
     public Guid MerchantID { get; set; }
+    
+    [Required]
     public string Name { get; set; } = string.Empty;
     public string ColourHex { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public DateTimeOffset Inserted { get; set; }
-    public DateTimeOffset LastUpdated { get; set; }
 }

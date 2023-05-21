@@ -89,5 +89,11 @@ public enum PaymentRequestEventTypesEnum
     /// <summary>
     /// A successful PISP attempt was verified and settled through modulr transaction.
     /// </summary>
-    pisp_settle = 12
+    pisp_settle = 12,
+
+    /// <summary>
+    /// A PISP attempt was authorised but then funds failed to settle after an expiry
+    /// period (typically 2 business days).
+    /// </summary>
+    pisp_settle_failure = 13
 }

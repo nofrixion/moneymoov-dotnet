@@ -44,6 +44,7 @@ public class PaymentRequestUpdate
     public bool? CardCreateToken { get; set; }
     public bool? IgnoreAddressVerification { get; set; }
     public bool? CardIgnoreCVN { get; set; }
+    [Obsolete("This field will be set automatically to ensure the best chance of matching a payin to a payment reuqest.")]
     public string? PispRecipientReference { get; set; }
     [RegularExpression(@"[a-zA-Z0-9]+",
         ErrorMessage = @"The CardProcessorMerchantID can only contain alphanumeric characters.")]
@@ -53,7 +54,14 @@ public class PaymentRequestUpdate
 
     [EmailAddressMultiple(ErrorMessage = "One or more of the email addresses are invalid. Addresses can be separated by a comma, semi-colon or space.")]
     public string? NotificationEmailAddresses { get; set; }
+    public string? Title { get; set; }
+    public string? PartialPaymentSteps { get; set; }
 
+    /// <summary>
+    /// An optional list of tag ids to add to the payment request
+    /// </summary>
+    public List<Guid>? TagIds { get; set; }
+    
     /// <summary>
     /// Places all the payment request's properties into a dictionary. Useful for testing
     /// when HTML form encoding is required.
@@ -87,10 +95,11 @@ public class PaymentRequestUpdate
         if (CardCreateToken != null) dict.Add(nameof(CardCreateToken), CardCreateToken.Value.ToString());
         if (IgnoreAddressVerification != null) dict.Add(nameof(IgnoreAddressVerification), IgnoreAddressVerification.Value.ToString());
         if (CardIgnoreCVN != null) dict.Add(nameof(CardIgnoreCVN), CardIgnoreCVN.Value.ToString());
-        if (PispRecipientReference != null) dict.Add(nameof(PispRecipientReference), PispRecipientReference);
         if (CardProcessorMerchantID != null) dict.Add(nameof(CardProcessorMerchantID), CardProcessorMerchantID);
         if (CustomerEmailAddress != null) dict.Add(nameof(CustomerEmailAddress), CustomerEmailAddress ?? string.Empty);
         if (NotificationEmailAddresses != null) dict.Add(nameof(NotificationEmailAddresses), NotificationEmailAddresses ?? string.Empty);
+        if (Title != null) dict.Add(nameof(Title), Title);
+        if (PartialPaymentSteps != null) dict.Add(nameof(PartialPaymentSteps), PartialPaymentSteps);
 
         return dict;
     }
