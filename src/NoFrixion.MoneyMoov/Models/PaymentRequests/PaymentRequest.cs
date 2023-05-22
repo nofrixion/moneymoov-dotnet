@@ -374,11 +374,11 @@ public class PaymentRequest : IPaymentRequest
 
             // Get PIS attempts.
             var pispAttempts = Events.Where(x => !string.IsNullOrEmpty(x.PispPaymentInitiationID) &&
-                 (x.EventType == PaymentRequestEventTypesEnum.pisp_initiate) ||
+                 ((x.EventType == PaymentRequestEventTypesEnum.pisp_initiate) ||
                  (x.EventType == PaymentRequestEventTypesEnum.pisp_callback) ||
                  (x.EventType == PaymentRequestEventTypesEnum.pisp_webhook) ||
                  (x.EventType == PaymentRequestEventTypesEnum.pisp_settle) ||
-                 (x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure))
+                 (x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure)))
                 .OrderBy(x => x.Inserted)
                 .GroupBy(x => x.PispPaymentInitiationID)
             .ToList();
@@ -390,7 +390,8 @@ public class PaymentRequest : IPaymentRequest
                 var initiateEvent =
                     attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_initiate).FirstOrDefault() ??
                     attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_callback).FirstOrDefault() ??
-                    attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_webhook).FirstOrDefault();
+                    attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_webhook).FirstOrDefault() ??
+                    attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle).FirstOrDefault();
 
                 if (initiateEvent != null)
                 {
@@ -449,29 +450,6 @@ public class PaymentRequest : IPaymentRequest
 
                         paymentAttempt.SettleFailedAt = settleFailedEvent.Inserted;
                     }
-
-                    paymentAttempts.Add(paymentAttempt);
-                }
-
-                // Check for orphaned settlement events. Orphaned settlements can occur where a payin transaction is matched to the
-                // PispRecipientReference on a payment request but not to any off the PISP payment request events.
-                var orphanedSettlements = Events.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle
-                && (string.IsNullOrEmpty(x.PispPaymentInitiationID) || !paymentAttempts.Any(y => y.AttemptKey == x.PispPaymentInitiationID)))
-                .OrderBy(x => x.Inserted)
-                .ToList();
-
-                foreach (var orphanedSettlement in orphanedSettlements)
-                {
-                    var paymentAttempt = new PaymentRequestPaymentAttempt
-                    {
-                        AttemptKey = orphanedSettlement.PispPaymentInitiationID ?? string.Empty,
-                        PaymentRequestID = orphanedSettlement.PaymentRequestID,
-                        SettledAt = orphanedSettlement.Inserted,
-                        PaymentMethod = PaymentMethodTypeEnum.pisp,
-                        Currency = orphanedSettlement.Currency,
-                        SettledAmount = Amount,
-                        PaymentProcessor = orphanedSettlement.PaymentProcessorName
-                    };
 
                     paymentAttempts.Add(paymentAttempt);
                 }
