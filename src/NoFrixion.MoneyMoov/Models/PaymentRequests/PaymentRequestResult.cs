@@ -114,56 +114,15 @@ public class PaymentRequestResult
         // Currently only has PIS attempts.
         var paymentAttempts = paymentRequest.GetPaymentAttempts();
 
-        if(paymentRequest != null &&
+        if (paymentRequest != null &&
            paymentRequest.Events != null &&
            paymentRequest.Events.Count() > 0)
         {
             var orderedEvents = paymentRequest.Events.OrderByDescending(x => x.Inserted);
 
-            foreach(var payEvent in orderedEvents)
+            foreach (var payEvent in orderedEvents)
             {
-                //if (payEvent.EventType == PaymentRequestEventTypesEnum.pisp_settle)
-                //{
-                //    // Successfully settled payment initiation.
-                //    Payments.Add(
-                //        new PaymentRequestPayment
-                //        {
-                //            PaymentRequestID = PaymentRequestID,
-                //            OccurredAt = payEvent.Inserted,
-                //            PaymentMethod = PaymentMethodTypeEnum.pisp,
-                //            Amount = Math.Round(payEvent.Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
-                //            Currency = payEvent.Currency
-                //        });
-                //}
-                //else if
-                //    ((payEvent.EventType == PaymentRequestEventTypesEnum.pisp_callback
-                //      || payEvent.EventType == PaymentRequestEventTypesEnum.pisp_webhook) && payEvent.Status != null
-                //     && PispSuccessStatuses().Contains(payEvent.Status))
-                //{
-                //    // Successfully authorised payment initiation.
-                //    if (!string.IsNullOrEmpty(payEvent.PispPaymentInitiationID) &&
-                //        !PispAuthorizations.Any(x => x.PispPaymentInitiationID == payEvent.PispPaymentInitiationID) &&
-                //        (
-                //            (payEvent.Currency == CurrencyTypeEnum.EUR && payEvent.Amount >= PaymentsConstants.PISP_MINIMUM_EUR_PAYMENT_AMOUNT) ||
-                //            (payEvent.Currency == CurrencyTypeEnum.GBP && payEvent.Amount >= PaymentsConstants.PISP_MINIMUM_GBP_PAYMENT_AMOUNT)
-                //        )
-                //       )
-                //    {
-                //        PispAuthorizations.Add(
-                //            new PaymentRequestAuthorization
-                //                {
-                //                    PaymentRequestID = PaymentRequestID,
-                //                    OccurredAt = payEvent.Inserted,
-                //                    PaymentMethod = PaymentMethodTypeEnum.pisp,
-                //                    Amount = Math.Round(payEvent.Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
-                //                    Currency = payEvent.Currency,
-                //                    PispPaymentInitiationID = payEvent.PispPaymentInitiationID
-                //                });
-                //    }
-
-                //    pispAuthorizedEvent = true;
-                //}
-                if(payEvent.EventType == PaymentRequestEventTypesEnum.lightning_invoice_paid)
+                if (payEvent.EventType == PaymentRequestEventTypesEnum.lightning_invoice_paid)
                 {
                     Payments.Add(
                         new PaymentRequestPayment
@@ -175,10 +134,10 @@ public class PaymentRequestResult
                             Currency = payEvent.Currency
                         });
                 }
-                else if(
+                else if (
                     (payEvent.EventType == PaymentRequestEventTypesEnum.card_authorization ||
                     payEvent.EventType == PaymentRequestEventTypesEnum.card_sale) &&
-                    (payEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS || 
+                    (payEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS ||
                     payEvent.Status == CardPaymentResponseStatus.CARD_PAYMENT_SOFT_DECLINE_STATUS ||
                     payEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS))
                 {
@@ -261,7 +220,8 @@ public class PaymentRequestResult
                                 Currency = attempt.Currency,
                                 PispPaymentInitiationID = attempt.AttemptKey
                             });
-                } }
+                }
+            }
 
             Currency = paymentRequest.Currency;
             Amount = Payments.Where(x => x.Currency == Currency).Sum(x => x.Amount);
@@ -269,41 +229,13 @@ public class PaymentRequestResult
             {
                 _ when Amount == paymentRequest.Amount => PaymentResultEnum.FullyPaid,
                 _ when Amount > paymentRequest.Amount => PaymentResultEnum.OverPaid,
-                _ when paymentRequest.Amount == 0 => PaymentResultEnum.FullyPaid,
                 _ when Amount > 0 && Amount < paymentRequest.Amount => PaymentResultEnum.PartiallyPaid,
+                _ when Amount == 0 && PispAmountAuthorized() > 0 => PaymentResultEnum.Authorized,
                 _ when Payments.Count > 0 && Payments.All(x => x.CardIsVoided) => PaymentResultEnum.Voided,
-                _ when Amount == 0 && PispAuthorizations.Any() => PaymentResultEnum.Authorized,
                 _ => PaymentResultEnum.None
             };
         }
     }
-
-    //private List<string> PispSuccessStatuses()
-    //{
-    //    return new List<string>
-    //               {
-    //                   PISP_PLAID_SUCCESS_STATUS,
-    //                   PISP_PLAID_INITIATED_STATUS,
-    //                   PISP_MODULR_SUCCESS_STATUS,
-    //                   PISP_YAPILY_COMPLETED_STATUS,
-    //                   PISP_YAPILY_PENDING_STATUS,
-    //                   PayoutStatus.QUEUED.ToString(),
-    //                   PayoutStatus.QUEUED_UPSTREAM.ToString(),
-    //                   PayoutStatus.PENDING.ToString(),
-    //                   PayoutStatus.PROCESSED.ToString()
-    //               };
-    //}
-
-    ///// <summary>
-    ///// Returns the amount that is remaining to be settled.
-    ///// </summary>
-    ///// <returns></returns>
-    //public decimal PispAmountAuthorized() =>
-    //    // subtracting total settled amount from total authorized amount will return the remaining amount yet to be settled.
-    //    decimal.Subtract(PispAuthorizations.Where(x => x.Currency == Currency)
-    //        .Sum(x => x.Amount),
-    //        Payments.Where(x => x.Currency == Currency && x.PaymentMethod == PaymentMethodTypeEnum.pisp)
-    //            .Sum(x => x.Amount));
 
     /// <summary>
     /// Returns the amount that has been authorised in pisp attempts but has not yet settled.
@@ -312,12 +244,16 @@ public class PaymentRequestResult
     public decimal PispAmountAuthorized() =>
         PispAuthorizations.Where(x => x.Currency == Currency).Sum(x => x.Amount);
 
-    public decimal AmountOutstanding() =>
-        Currency switch
-            {
-                CurrencyTypeEnum.BTC or CurrencyTypeEnum.LBTC => RequestedAmount - Amount,
-                _ => Math.Round(RequestedAmount - (Amount + PispAmountAuthorized()), PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES)
-            };
+    public decimal AmountOutstanding()
+    {
+        var outstanding = Currency switch
+        {
+            CurrencyTypeEnum.BTC or CurrencyTypeEnum.LBTC => RequestedAmount - Amount,
+            _ => Math.Round(RequestedAmount - (Amount + PispAmountAuthorized()), PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES)
+        };
+
+        return outstanding >= 0 ? outstanding : 0;
+    }
 
     /// <summary>
     /// Applies a cap on the amount a partial payment can be for to avoid exceeding
