@@ -229,6 +229,8 @@ public class PaymentRequest : IPaymentRequest
 
     public List<CardCustomerToken> TokenisedCards { get; set; } = new List<CardCustomerToken>();
 
+    public List<Transaction> Transactions { get; set; } = new List<Transaction>();
+
     /// <summary>
     /// An optional list of descriptive tags attached to the payment request.
     /// </summary>
