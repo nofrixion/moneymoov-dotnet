@@ -1,7 +1,8 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: WebhookEventTypesEnum.cs
+// Filename: WebhookResourceActionsEnum.cs
 // 
-// Description: Enum for the different webhook event types.
+// Description: Enum for the different types of actions that can be performed
+// on webhook resources.
 // 
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)
@@ -15,7 +16,7 @@
 
 namespace NoFrixion.MoneyMoov;
 
-public enum WebhookEventsEnum
+public enum WebhookResourceActionsEnum
 {
     Created,
 
