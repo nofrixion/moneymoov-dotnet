@@ -39,6 +39,8 @@ public class Webhook
 
     public string? EmailAddress { get; set; }
 
+    public int Version { get; set; }
+
     public static string GetSignature(string secret, byte[] payloadBytes)
     {
         byte[] keyByte = Encoding.UTF8.GetBytes(secret);

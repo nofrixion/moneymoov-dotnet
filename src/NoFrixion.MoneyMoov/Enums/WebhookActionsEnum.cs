@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: WebhookResourceActionsEnum.cs
+// Filename: WebhookActionsEnum.cs
 // 
 // Description: Enum for the different types of actions that can be performed
 // on webhook resources.
@@ -16,7 +16,7 @@
 
 namespace NoFrixion.MoneyMoov;
 
-public enum WebhookResourceActionsEnum
+public enum WebhookActionsEnum
 {
     Created,
 

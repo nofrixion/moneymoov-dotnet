@@ -37,7 +37,7 @@ public class WebhookEvent<T> where T : notnull, IWebhookPayload
     /// The type of event the webhook is for, for example created, updated,
     /// deleted etc.
     /// </summary>
-    public WebhookResourceActionsEnum EventType { get; set; }
+    public WebhookActionsEnum EventType { get; set; }
 
     /// <summary>
     /// The type of resource the webhook item represents, for example
@@ -52,7 +52,7 @@ public class WebhookEvent<T> where T : notnull, IWebhookPayload
 
     public WebhookEvent(
         DateTimeOffset eventDate,
-        WebhookResourceActionsEnum eventType,
+        WebhookActionsEnum eventType,
         WebhookResourcesEnum resourceType,
         T data,
         bool isSandbox)
