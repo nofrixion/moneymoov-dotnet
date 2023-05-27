@@ -16,12 +16,43 @@
 
 namespace NoFrixion.MoneyMoov;
 
+[Flags]
 public enum WebhookEventTypesEnum
 {
-    NONE,
+    None = 0,
 
-    PAYIN,
+    /// <summary>
+    /// Represents a new transaction that corresponds to funds being received.
+    /// This is a special case of Transaction. If both in and out transactions are
+    /// desired the Transaction option can be used.
+    /// </summary>
+    TransactionPayin = 1,
 
-    PAYOUT,
+    /// <summary>
+    /// Represents a new transaction that corresponds to funds being sent.
+    /// This is a special case of Transaction. If both in and out transactions are
+    /// desired the Transaction option can be used.
+    /// </summary>
+    TransactionPayout = 2,
+
+    /// <summary>
+    /// Will trigger notifications for payment request related events.
+    /// </summary>
+    PaymentRequest = 4,
+
+    /// <summary>
+    /// Will trigger notifications for payout related events.
+    /// </summary>
+    Payout = 8,
+
+    /// <summary>
+    /// Will trigger notifications for rule related events.
+    /// </summary>
+    Rule = 16,
+
+    /// <summary>
+    /// Will trigger notifications for transaction related events.
+    /// </summary>
+    Transaction = 32
 }
 

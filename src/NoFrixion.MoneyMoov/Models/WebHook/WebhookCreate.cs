@@ -17,7 +17,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class WebhookCreate : IValidatableObject
+public partial class WebhookCreate : IValidatableObject
 {
     public const int SECRET_MAX_LENGTH = 32;
 

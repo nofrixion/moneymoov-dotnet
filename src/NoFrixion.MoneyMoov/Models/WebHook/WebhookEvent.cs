@@ -15,7 +15,7 @@
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class WebhookEvent<T> where T : notnull
+public class WebhookEvent<T> where T : notnull, IWebhookPayload
 {
     /// <summary>
     /// A unique ID for each webhook event. All retransmits of the same event
