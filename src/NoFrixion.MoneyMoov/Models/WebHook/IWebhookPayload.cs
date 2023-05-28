@@ -22,7 +22,5 @@ public interface IWebhookPayload
     public Guid MerchantID { get; set; }
 
     public DateTimeOffset Inserted { get; set; }
-
-    //public string ToJson();
 }
 

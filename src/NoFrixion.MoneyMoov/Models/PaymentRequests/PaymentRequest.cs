@@ -461,7 +461,4 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
             return paymentAttempts;
         }
     }
-
-    public string ToJson()
-        => JsonConvert.SerializeObject(this);
 }
