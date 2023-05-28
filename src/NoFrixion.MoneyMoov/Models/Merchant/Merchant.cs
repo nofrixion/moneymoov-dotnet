@@ -22,6 +22,18 @@ namespace NoFrixion.MoneyMoov.Models;
 public class Merchant
 {
     /// <summary>
+    /// The original version of the merchant notifications. Only supported PAYIN and PAYOUT notifications and
+    /// they were sent as unwrapped transaction models, i.e. no parent WebhookEvent model was used.
+    /// </summary>
+    public const int WEBHOOK_VERSION_ONE = 1;
+
+    /// <summary>
+    /// The webhook version at the point the additional PaymentRequest, Payout, Rule and Transaction webhook
+    /// options were added. This version sent webhooks wrapped in a parent WebhookEvent model.
+    /// </summary>
+    public const int WEBHOOK_VERSION_TWO = 2;
+
+    /// <summary>
     /// Unique ID for the merchant.
     /// </summary>
     public Guid ID { get; set; }
