@@ -27,7 +27,7 @@ public class Webhook
 
     public Guid ID { get; set; }
 
-    public WebhookEventTypesEnum Type { get; set; }
+    public WebhookResourceTypesEnum Type { get; set; }
 
     public string? DestinationUrl { get; set; }
 

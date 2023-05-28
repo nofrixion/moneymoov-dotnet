@@ -29,40 +29,17 @@ public class WebhookEvent<T> where T : notnull, IWebhookPayload
     public bool IsSandbox { get; private set; }
 
     /// <summary>
-    /// Timestamp the event occurred at.
+    /// The payload holding the details of the item that the webhook is for.
     /// </summary>
-    public DateTimeOffset EventDate { get; set; }
-
-    /// <summary>
-    /// The type of event the webhook is for, for example created, updated,
-    /// deleted etc.
-    /// </summary>
-    public WebhookActionsEnum EventType { get; set; }
-
-    /// <summary>
-    /// The type of resource the webhook item represents, for example
-    /// payload, transaction etc.
-    /// </summary>
-    public WebhookResourcesEnum ResourceType { get; set; }
-
-    /// <summary>
-    /// The resource details of the item that the webhook is for.
-    /// </summary>
-    public T Data { get; set; }
+    public List<WebhookEventItem<T>> Items { get; set; }
 
     public WebhookEvent(
-        DateTimeOffset eventDate,
-        WebhookActionsEnum eventType,
-        WebhookResourcesEnum resourceType,
-        T data,
-        bool isSandbox)
+        bool isSandbox,
+        List<WebhookEventItem<T>> items)
     {
         ID = Guid.NewGuid();
         IsSandbox = isSandbox;
-        EventDate = eventDate;
-        EventType = eventType;
-        ResourceType = resourceType;
-        Data = data;
+        Items = items;
     }
 }
 

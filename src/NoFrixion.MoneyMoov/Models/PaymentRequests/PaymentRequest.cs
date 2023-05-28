@@ -220,6 +220,8 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// </summary>
     public string? CardStripePaymentIntentSecret { get; set; }
 
+    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
     public Merchant? Merchant { get; set; }
 
     public List<PaymentRequestAddress> Addresses { get; set; } = new List<PaymentRequestAddress>();
@@ -459,4 +461,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
             return paymentAttempts;
         }
     }
+
+    public string ToJson()
+        => JsonConvert.SerializeObject(this);
 }

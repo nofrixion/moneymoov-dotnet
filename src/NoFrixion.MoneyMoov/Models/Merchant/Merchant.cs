@@ -15,6 +15,8 @@
 // MIT.
 // -----------------------------------------------------------------------------
 
+using Newtonsoft.Json;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class Merchant
