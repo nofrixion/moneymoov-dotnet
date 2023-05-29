@@ -95,5 +95,11 @@ public enum PaymentRequestEventTypesEnum
     /// A PISP attempt was authorised but then funds failed to settle after an expiry
     /// period (typically 2 business days).
     /// </summary>
-    pisp_settle_failure = 13
+    pisp_settle_failure = 13,
+
+    /// <summary>
+    /// A PIS payment is refunded to user. A PIS refund event can only be called when 
+    /// the payment request status is fully paid.  
+    /// </summary>
+    pisp_refund = 14
 }
