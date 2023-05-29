@@ -75,6 +75,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     public string TheirReference { get; set; } = string.Empty;
 
     [Obsolete("Please use Destination.")]
+    [System.Text.Json.Serialization.JsonIgnore]
     public Guid? DestinationAccountID
     {
         get => Destination?.AccountID;
@@ -86,6 +87,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     }
 
     [Obsolete("Please use Destination.")]
+    [System.Text.Json.Serialization.JsonIgnore]
     public string? DestinationIBAN
     {
         get => Destination?.Identifier?.IBAN;
@@ -98,6 +100,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     }
 
     [Obsolete("Please use Destination.")]
+    [System.Text.Json.Serialization.JsonIgnore]
     public string? DestinationAccountNumber
     {
         get => Destination?.Identifier?.AccountNumber;
@@ -110,6 +113,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     }
 
     [Obsolete("Please use Destination.")]
+    [System.Text.Json.Serialization.JsonIgnore]
     public string? DestinationSortCode
     {
         get => Destination?.Identifier?.SortCode;
@@ -122,6 +126,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     }
 
     [Obsolete("Please use Destination.")]
+    [System.Text.Json.Serialization.JsonIgnore]
     public string? DestinationAccountName
     {
         get => Destination?.Name;
@@ -170,6 +175,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     public string SourceAccountName { get; set; } = string.Empty;
 
     [Obsolete("Please use Destination.")]
+    [System.Text.Json.Serialization.JsonIgnore]
     public Counterparty? DestinationAccount
     {
         get => Destination;
