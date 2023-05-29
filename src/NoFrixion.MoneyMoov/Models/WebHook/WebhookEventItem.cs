@@ -19,7 +19,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class WebhookEventItem<T> where T : notnull, IWebhookPayload
+public class WebhookEventItem
 {
     /// <summary>
     /// Timestamp the event occurred at.
@@ -45,13 +45,13 @@ public class WebhookEventItem<T> where T : notnull, IWebhookPayload
     /// <summary>
     /// The payload holding the details of the item that the webhook is for.
     /// </summary>
-    public T Payload { get; set; }
+    public dynamic Payload { get; set; }
 
     public WebhookEventItem(
         DateTimeOffset eventDate,
         WebhookActionsEnum actionType,
         WebhookResourceTypesEnum resourceType,
-        T payload)
+        dynamic payload)
     {
         EventDate = eventDate;
         ActionType = actionType;

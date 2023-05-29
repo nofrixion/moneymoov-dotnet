@@ -15,7 +15,7 @@
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class WebhookEvent<T> where T : notnull, IWebhookPayload
+public class WebhookEvent
 {
     /// <summary>
     /// A unique ID for each webhook event. All retransmits of the same event
@@ -31,11 +31,11 @@ public class WebhookEvent<T> where T : notnull, IWebhookPayload
     /// <summary>
     /// The payload holding the details of the item that the webhook is for.
     /// </summary>
-    public List<WebhookEventItem<T>> Items { get; set; }
+    public List<WebhookEventItem> Items { get; set; }
 
     public WebhookEvent(
         bool isSandbox,
-        List<WebhookEventItem<T>> items)
+        List<WebhookEventItem> items)
     {
         ID = Guid.NewGuid();
         IsSandbox = isSandbox;

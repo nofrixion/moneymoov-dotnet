@@ -12,8 +12,7 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -24,7 +23,7 @@ public class AccountIdentifier
     /// <summary>
     /// The type of the account identifier.
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public AccountIdentifierType Type
     {
         get
