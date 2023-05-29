@@ -48,6 +48,11 @@ public class PaymentRequestPaymentAttempt
     public DateTimeOffset? SettledAt { get; set; }
 
     /// <summary>
+    /// If the attempt was refunded this is the timestamp it occurred at.
+    /// </summary>
+    public DateTimeOffset? RefundedAt { get; set; }
+
+    /// <summary>
     /// If the attempt failed to settled after the expected settlement time this
     /// is the timestamp the failure was recorded at.
     /// </summary>
@@ -72,6 +77,11 @@ public class PaymentRequestPaymentAttempt
     /// The funds that were received from the payer.
     /// </summary>
     public decimal SettledAmount { get; set; }
+
+    /// <summary>
+    /// The amount that was refunded to the payer.
+    /// </summary>
+    public decimal RefundedAmount { get; set; }
 
     /// <summary>
     /// The authorised payment currency.

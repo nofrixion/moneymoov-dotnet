@@ -192,7 +192,7 @@ public class PaymentRequestResult
                 }
             }
 
-            foreach (var attempt in paymentAttempts)
+            foreach (var attempt in paymentAttempts.Where(x=>x.PaymentMethod == PaymentMethodTypeEnum.pisp))
             {
                 if (attempt.Status == PaymentResultEnum.FullyPaid ||
                     attempt.Status == PaymentResultEnum.PartiallyPaid ||
