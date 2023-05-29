@@ -37,8 +37,8 @@ public enum WebhookResourceTypesEnum
     /// </summary>
     /// <remarks>
     /// Note due to unfortunate naming if a merchant is using version 1 webhooks 
-    /// this webhook type corresponds to a transaction where funds are being sent out,
-    /// i.e. the opposite of payin.
+    /// this webhook type corresponds to a transaction and NOT a payout where funds 
+    /// are being sent out i.e. the opposite of payin.
     /// </remarks>
     Payout = 2,
 
@@ -53,24 +53,19 @@ public enum WebhookResourceTypesEnum
     Rule = 8,
 
     /// <summary>
-    /// Will trigger notifications for transaction related events.
-    /// </summary>
-    Transaction = 16,
-
-    /// <summary>
     /// Will trigger notifications for a transaction that is receiving funds. 
     /// </summary>
     /// <remarks>
-    /// This is the equivalent of the Payin type but is included for consistency.
+    /// This is the equivalent of the webhooks version 1 Payin.
     /// </remarks>
-    TransactionPayin = 32,
+    TransactionPayin = 16,
 
     /// <summary>
     /// Will trigger notifications for a transaction that is sending funds. 
     /// </summary>
     /// <remarks>
-    /// This is the equivalent of the version 1 Payout type.
+    /// This is the equivalent of the webhooks version 1 Payout.
     /// </remarks>
-    TransactionPayout = 64,
+    TransactionPayout = 32
 }
 
