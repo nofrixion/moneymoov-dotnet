@@ -27,7 +27,7 @@ public class Webhook
 
     public Guid ID { get; set; }
 
-    public WebhookEventTypesEnum Type { get; set; }
+    public WebhookResourceTypesEnum Type { get; set; }
 
     public string? DestinationUrl { get; set; }
 
@@ -38,6 +38,8 @@ public class Webhook
     public bool IsActive { get; set; } = true;
 
     public string? EmailAddress { get; set; }
+
+    public int Version { get; set; }
 
     public static string GetSignature(string secret, byte[] payloadBytes)
     {

@@ -22,13 +22,12 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class PaymentRequest : IPaymentRequest
+public class PaymentRequest : IPaymentRequest, IWebhookPayload
 {
     public Guid ID { get; set; }
 
@@ -221,6 +220,8 @@ public class PaymentRequest : IPaymentRequest
     /// </summary>
     public string? CardStripePaymentIntentSecret { get; set; }
 
+    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
     public Merchant? Merchant { get; set; }
 
     public List<PaymentRequestAddress> Addresses { get; set; } = new List<PaymentRequestAddress>();

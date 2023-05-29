@@ -15,7 +15,7 @@
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class WebhookEvent<T> where T : notnull
+public class WebhookEvent
 {
     /// <summary>
     /// A unique ID for each webhook event. All retransmits of the same event
@@ -29,40 +29,17 @@ public class WebhookEvent<T> where T : notnull
     public bool IsSandbox { get; private set; }
 
     /// <summary>
-    /// Timestamp the event occurred at.
+    /// The payload holding the details of the item that the webhook is for.
     /// </summary>
-    public DateTimeOffset EventDate { get; set; }
-
-    /// <summary>
-    /// The type of event the webhook is for, for example created, updated,
-    /// deleted etc.
-    /// </summary>
-    public WebhookEventsEnum EventType { get; set; }
-
-    /// <summary>
-    /// The type of resource the webhook item represents, for example
-    /// payload, transaction etc.
-    /// </summary>
-    public WebhookResourcesEnum ResourceType { get; set; }
-
-    /// <summary>
-    /// The resource details of the item that the webhook is for.
-    /// </summary>
-    public T Data { get; set; }
+    public List<WebhookEventItem> Items { get; set; }
 
     public WebhookEvent(
-        DateTimeOffset eventDate,
-        WebhookEventsEnum eventType,
-        WebhookResourcesEnum resourceType,
-        T data,
-        bool isSandbox)
+        bool isSandbox,
+        List<WebhookEventItem> items)
     {
         ID = Guid.NewGuid();
         IsSandbox = isSandbox;
-        EventDate = eventDate;
-        EventType = eventType;
-        ResourceType = resourceType;
-        Data = data;
+        Items = items;
     }
 }
 

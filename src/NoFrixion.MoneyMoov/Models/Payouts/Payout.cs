@@ -17,7 +17,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class Payout : IValidatableObject
+public class Payout : IValidatableObject, IWebhookPayload
 {
     /// <summary>
     /// The ID for the payout.
@@ -28,6 +28,11 @@ public class Payout : IValidatableObject
     /// Gets or Sets Account Id of sending account
     /// </summary>
     public Guid AccountID { get; set; }
+
+    /// <summary>
+    /// The ID of the merchant that owns the account.
+    /// </summary>
+    public Guid MerchantID { get; set; }
 
     /// <summary>
     /// Gets or Sets User ID of who created the payout request
@@ -70,6 +75,7 @@ public class Payout : IValidatableObject
     public string TheirReference { get; set; } = string.Empty;
 
     [Obsolete("Please use Destination.")]
+    [System.Text.Json.Serialization.JsonIgnore]
     public Guid? DestinationAccountID
     {
         get => Destination?.AccountID;
@@ -81,6 +87,7 @@ public class Payout : IValidatableObject
     }
 
     [Obsolete("Please use Destination.")]
+    [System.Text.Json.Serialization.JsonIgnore]
     public string? DestinationIBAN
     {
         get => Destination?.Identifier?.IBAN;
@@ -93,6 +100,7 @@ public class Payout : IValidatableObject
     }
 
     [Obsolete("Please use Destination.")]
+    [System.Text.Json.Serialization.JsonIgnore]
     public string? DestinationAccountNumber
     {
         get => Destination?.Identifier?.AccountNumber;
@@ -105,6 +113,7 @@ public class Payout : IValidatableObject
     }
 
     [Obsolete("Please use Destination.")]
+    [System.Text.Json.Serialization.JsonIgnore]
     public string? DestinationSortCode
     {
         get => Destination?.Identifier?.SortCode;
@@ -117,6 +126,7 @@ public class Payout : IValidatableObject
     }
 
     [Obsolete("Please use Destination.")]
+    [System.Text.Json.Serialization.JsonIgnore]
     public string? DestinationAccountName
     {
         get => Destination?.Name;
@@ -165,6 +175,7 @@ public class Payout : IValidatableObject
     public string SourceAccountName { get; set; } = string.Empty;
 
     [Obsolete("Please use Destination.")]
+    [System.Text.Json.Serialization.JsonIgnore]
     public Counterparty? DestinationAccount
     {
         get => Destination;
