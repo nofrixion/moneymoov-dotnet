@@ -27,7 +27,7 @@ public class WebhookCreate : IValidatableObject
     public Guid MerchantID { get; set; }
 
     [Required]
-    public WebhookEventTypesEum Type { get; set; }
+    public WebhookResourceTypesEnum Type { get; set; }
 
     [Required]
     public string? DestinationUrl { get; set; }

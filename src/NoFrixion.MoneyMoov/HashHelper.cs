@@ -33,17 +33,18 @@ public static class HashHelper
             throw new ArgumentNullException(nameof(input));
         }
 
+        return CreateHash(Encoding.UTF8.GetBytes(input));
+    }
+
+    public static string CreateHash(byte[] input)
+    {
+        if (input == null)
+        {
+            throw new ArgumentNullException(nameof(input));
+        }
+
         using var sha256Hash = SHA256.Create();
-        byte[] data = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
-
-        //    var sBuilder = new StringBuilder();
-
-        //    foreach (var b in data)
-        //    {
-        //        sBuilder.Append(b.ToString("x2"));
-        //    }
-
-        //    return sBuilder.ToString();
+        byte[] data = sha256Hash.ComputeHash(input);
 
         return Base64UrlEncoder.Encode(data);
     }

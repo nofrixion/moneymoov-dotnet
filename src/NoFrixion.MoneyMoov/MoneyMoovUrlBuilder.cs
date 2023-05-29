@@ -55,9 +55,9 @@ public enum MoneyMoovResources
 
 public static class MoneyMoovUrlBuilder
 {
-    public const string DEFAULT_MONEYMOOV_BASE_URL = "https://api.nofrixion.com/api/v1/";
+    public const string DEFAULT_MONEYMOOV_BASE_URL = "https://api.nofrixion.com/api/v1";
 
-    public const string SANDBOX_MONEYMOOV_BASE_URL = "https://api-sandbox.nofrixion.com/api/v1/";
+    public const string SANDBOX_MONEYMOOV_BASE_URL = "https://api-sandbox.nofrixion.com/api/v1";
 
     /// <summary>
     /// Available endpoint URLs for the Accounts resource.
