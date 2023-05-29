@@ -4,16 +4,10 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<AssemblyVersion>1.1.122.0</AssemblyVersion>
-	<FileVersion>1.1.122.0</FileVersion>
+	<AssemblyVersion>1.1.124.0</AssemblyVersion>
+	<FileVersion>1.1.124.0</FileVersion>
 	<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Validators\**" />
-    <EmbeddedResource Remove="Validators\**" />
-    <None Remove="Validators\**" />
-  </ItemGroup>
 
   <ItemGroup>
 	<PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
