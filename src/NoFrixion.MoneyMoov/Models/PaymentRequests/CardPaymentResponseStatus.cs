@@ -53,4 +53,14 @@ public static class CardPaymentResponseStatus
     /// The successful status for a checkout.com captured card payment.
     /// </summary>
     public const string CARD_CHECKOUT_CAPTURED_STATUS = "CAPTURED";
+
+    /// <summary>
+    /// The successful status result returned for a checkout authorisation card payment request.
+    /// </summary>
+    public const string CARD_CHECKOUT_AUTHORIZED_STATUS = "Authorized";
+
+    /// <summary>
+    /// The successful status result returned for a checkout authorisation card payment request.
+    /// </summary>
+    public const string CARD_CHECKOUT_CARDVERFIED_STATUS = "CardVerified";
 }

@@ -48,6 +48,11 @@ public class PaymentRequestPaymentAttempt
     public DateTimeOffset? SettledAt { get; set; }
 
     /// <summary>
+    /// If the attempt was refunded this is the timestamp it occurred at.
+    /// </summary>
+    public DateTimeOffset? RefundedAt { get; set; }
+
+    /// <summary>
     /// If the attempt failed to settled after the expected settlement time this
     /// is the timestamp the failure was recorded at.
     /// </summary>
@@ -74,6 +79,11 @@ public class PaymentRequestPaymentAttempt
     public decimal SettledAmount { get; set; }
 
     /// <summary>
+    /// The amount that was refunded to the payer.
+    /// </summary>
+    public decimal RefundedAmount { get; set; }
+
+    /// <summary>
     /// The authorised payment currency.
     /// </summary>
     public CurrencyTypeEnum Currency { get; set; } = CurrencyTypeEnum.EUR;
@@ -82,6 +92,8 @@ public class PaymentRequestPaymentAttempt
     /// The card processor that was used for the payment event.
     /// </summary>
     public PaymentProcessorsEnum PaymentProcessor { get; set; } = PaymentProcessorsEnum.None;
+
+    public WalletsEnum? WalletName { get; set; }
 
     public PaymentResultEnum Status
     {
