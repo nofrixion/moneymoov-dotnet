@@ -107,6 +107,8 @@ public class PaymentRequestEvent
     /// </summary>
     public string? PispBankStatus { get; set; }
 
+    public WalletsEnum? WalletName { get; set; }
+
     /// <summary>
     /// Gets the amount to display with the correct number of decimal places based on the currency type. 
     /// </summary>

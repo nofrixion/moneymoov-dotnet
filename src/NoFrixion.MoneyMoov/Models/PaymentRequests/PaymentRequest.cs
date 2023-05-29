@@ -500,6 +500,11 @@ public class PaymentRequest : IPaymentRequest
 
             }
 
+            if (attempt.Any(x => x.WalletName != null))
+            {
+                paymentAttempt.WalletName = attempt.First(x => x.WalletName != null).WalletName;
+            }
+
             cardPaymentAttempts.Add(paymentAttempt);
         }
 
