@@ -38,7 +38,12 @@ public class PaymentRequestMinimal
     [EnumDataType(typeof(CurrencyTypeEnum))]
     [JsonConverter(typeof(StringEnumConverter))]
     public CurrencyTypeEnum Currency { get; set; } = CurrencyTypeEnum.EUR;
-    
+
+    /// <summary>
+    /// The title of the payment request.
+    /// </summary>
+    public string? Title { get; set; }
+
     /// <summary>
     /// An optional description for the payment request. If set this field will appear
     /// on the transaction record for some card processors.
