@@ -1,7 +1,8 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: WebhookResourcesEnum.cs
+// Filename: WebhookActionsEnum.cs
 // 
-// Description: Enum for the different webhook resource types.
+// Description: Enum for the different types of actions that can be performed
+// on webhook resources.
 // 
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)
@@ -13,15 +14,17 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 namespace NoFrixion.MoneyMoov;
 
-public enum WebhookResourcesEnum
+[JsonConverter(typeof(StringEnumConverter))]
+public enum WebhookActionsEnum
 {
-    PaymentRequest,
+    Created,
 
-    Payout,
+    Updated,
 
-    Rule,
-
-    Transaction
+    Deteted
 }

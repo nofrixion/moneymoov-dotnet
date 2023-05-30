@@ -93,6 +93,8 @@ public class PaymentRequestPaymentAttempt
     /// </summary>
     public PaymentProcessorsEnum PaymentProcessor { get; set; } = PaymentProcessorsEnum.None;
 
+    public WalletsEnum? WalletName { get; set; }
+
     public PaymentResultEnum Status
     {
         get

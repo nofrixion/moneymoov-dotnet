@@ -88,7 +88,7 @@ public class Counterparty
     {
         if (Identifier == null)
         {
-            yield return new ValidationResult($"The identifier must be set with the desintation account details for a counterparty.",
+            yield return new ValidationResult($"The identifier must be set with the destination account details for a counterparty.",
                 new string[] { nameof(Identifier) });
         }
 

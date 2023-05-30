@@ -19,10 +19,16 @@ using static System.String;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class Rule : IValidatableObject
+public class Rule : IValidatableObject, IWebhookPayload
 {
     public Guid ID { get; set; }
     public Guid AccountID { get; set; }
+
+    /// <summary>
+    /// The ID of the merchant that owns the account.
+    /// </summary>
+    public Guid MerchantID { get; set; }
+    
     public Guid? UserID { get; set; }
     public Guid? ApproverID { get; set; }
     public string Name { get; set; } = Empty;

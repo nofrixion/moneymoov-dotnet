@@ -18,7 +18,7 @@
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class Transaction
+public class Transaction : IWebhookPayload
 {
     /// <summary>
     /// Unique ID for the transaction.
@@ -29,6 +29,11 @@ public class Transaction
     /// The ID of the account the transaction belongs to.
     /// </summary>
     public Guid AccountID { get; set; }
+
+    /// <summary>
+    /// The ID of the merchant that owns the account.
+    /// </summary>
+    public Guid MerchantID { get; set; }
 
     /// <summary>
     /// Type of the transaction.
