@@ -227,10 +227,10 @@ public class PaymentRequestResult
             Amount = Payments.Where(x => x.Currency == Currency).Sum(x => x.Amount);
             Result = Amount switch
             {
-                //when pisp_refund event is recorded with same amount as the payment request paid amount 
+                //when pisp_refund_settled event is recorded with same amount as the payment request paid amount 
                 //set the status back to none as refund is complete.
                 _ when orderedEvents.Any() && Amount == orderedEvents.FirstOrDefault(x =>
-                    x.EventType == PaymentRequestEventTypesEnum.pisp_refund)?.Amount => PaymentResultEnum.None,
+                    x.EventType == PaymentRequestEventTypesEnum.pisp_refund_settled)?.Amount => PaymentResultEnum.None,
                 _ when Amount == paymentRequest.Amount => PaymentResultEnum.FullyPaid,
                 _ when Amount > paymentRequest.Amount => PaymentResultEnum.OverPaid,
                 _ when Amount > 0 && Amount < paymentRequest.Amount => PaymentResultEnum.PartiallyPaid,
