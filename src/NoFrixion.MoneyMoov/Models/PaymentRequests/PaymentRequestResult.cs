@@ -231,6 +231,8 @@ public class PaymentRequestResult
                 //set the status back to none as refund is complete.
                 _ when orderedEvents.Any() && Amount == orderedEvents.FirstOrDefault(x =>
                     x.EventType == PaymentRequestEventTypesEnum.pisp_refund_settled)?.Amount => PaymentResultEnum.None,
+                _ when orderedEvents.Any() && Amount == orderedEvents.FirstOrDefault(x =>
+                    x.EventType == PaymentRequestEventTypesEnum.pisp_refund_initiated)?.Amount => PaymentResultEnum.RefundInitiated,
                 _ when Amount == paymentRequest.Amount => PaymentResultEnum.FullyPaid,
                 _ when Amount > paymentRequest.Amount => PaymentResultEnum.OverPaid,
                 _ when Amount > 0 && Amount < paymentRequest.Amount => PaymentResultEnum.PartiallyPaid,

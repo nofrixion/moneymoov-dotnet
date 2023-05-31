@@ -51,5 +51,10 @@ public enum PaymentResultEnum
     /// <summary>
     /// For PISP payments, the authorization was successful but the amount is yet to be settled in the respective account.
     /// </summary>
-    Authorized
+    Authorized,
+
+    /// <summary>
+    /// For PISP payments, when a refund is initiated for a payment request.
+    /// </summary>
+    RefundInitiated
 }
