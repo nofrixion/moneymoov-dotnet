@@ -192,7 +192,7 @@ public class PaymentRequestResult
                 }
             }
 
-            foreach (var attempt in paymentAttempts.Where(x=>x.PaymentMethod == PaymentMethodTypeEnum.pisp))
+            foreach (var attempt in paymentAttempts.Where(x => x.PaymentMethod == PaymentMethodTypeEnum.pisp))
             {
                 if (attempt.Status == PaymentResultEnum.FullyPaid ||
                     attempt.Status == PaymentResultEnum.PartiallyPaid ||
@@ -227,6 +227,12 @@ public class PaymentRequestResult
             Amount = Payments.Where(x => x.Currency == Currency).Sum(x => x.Amount);
             Result = Amount switch
             {
+                //when pisp_refund_settled event is recorded with same amount as the payment request paid amount 
+                //set the status back to none as refund is complete.
+                _ when orderedEvents.Any() && Amount == orderedEvents.FirstOrDefault(x =>
+                    x.EventType == PaymentRequestEventTypesEnum.pisp_refund_settled)?.Amount => PaymentResultEnum.None,
+                _ when orderedEvents.Any() && Amount == orderedEvents.FirstOrDefault(x =>
+                    x.EventType == PaymentRequestEventTypesEnum.pisp_refund_initiated)?.Amount => PaymentResultEnum.RefundInitiated,
                 _ when Amount == paymentRequest.Amount => PaymentResultEnum.FullyPaid,
                 _ when Amount > paymentRequest.Amount => PaymentResultEnum.OverPaid,
                 _ when Amount > 0 && Amount < paymentRequest.Amount => PaymentResultEnum.PartiallyPaid,

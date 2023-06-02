@@ -98,8 +98,13 @@ public enum PaymentRequestEventTypesEnum
     pisp_settle_failure = 13,
 
     /// <summary>
-    /// A PIS payment is refunded to user. A PIS refund event can only be called when 
+    /// A PIS payment is refund is initated to user. A PIS refund event can only be called when 
     /// the payment request status is fully paid.  
     /// </summary>
-    pisp_refund = 14
+    pisp_refund_initiated = 14,
+
+    /// <summary>
+    /// A PIS payment is refund is complete. The funds have been transferred back to user.
+    /// </summary>
+    pisp_refund_settled = 15
 }
