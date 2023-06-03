@@ -39,7 +39,7 @@ public class UserCreate
     /// Optional ID of the invite that was originally sent to the registering
     /// user.
     /// </summary>
-    public Guid UserIniviteID { get; set; }
+    public Guid UserInviteID { get; set; }
 
     public string? Profile { get; set; }
 
@@ -55,7 +55,7 @@ public class UserCreate
             { nameof(LastName), LastName },
             { nameof(EmailAddress), EmailAddress },
             { nameof(IdentityUserID), IdentityUserID },
-            { nameof(UserIniviteID), UserIniviteID.ToString() },
+            { nameof(UserInviteID), UserInviteID.ToString() },
             {nameof(Profile), Profile ?? ""}
         };
     }
