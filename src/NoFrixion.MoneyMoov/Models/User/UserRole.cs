@@ -18,6 +18,10 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class UserRole
 {
+    private static readonly UserRole _empty = new UserRole();
+    public static UserRole Empty => _empty;
+    public bool IsEmpty => this == _empty;
+
     public Guid ID { get; set; }
 
     public Guid UserID { get; set; }
