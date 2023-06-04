@@ -220,6 +220,9 @@ public static class MoneyMoovUrlBuilder
         public static string UserApiUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}";
 
+        public static string UserApiUrl(string moneyMoovBaseUrl, Guid userID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}/{userID}";
+
         public static string UserTokensApiUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}/{MoneyMoovResources.tokens}";
 
