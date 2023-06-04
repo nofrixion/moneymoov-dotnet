@@ -100,6 +100,11 @@ public class Merchant
     public bool DisplayQrOnHostedPay { get; set; }
 
     /// <summary>
+    /// The role of the identity that loaded the merchant record.
+    /// </summary>
+    public UserRolesEnum YourRole { get; set; } = UserRolesEnum.NewlyRegistered;
+
+    /// <summary>
     /// The list of users that have been assigned a role on the merchant.
     /// </summary>
     public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
