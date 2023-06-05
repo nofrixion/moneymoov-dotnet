@@ -95,6 +95,12 @@ public class PaymentRequestPaymentAttempt
 
     public WalletsEnum? WalletName { get; set; }
 
+    /// <summary>
+    /// Where available this is the ID of the institution used by the payer. For example in PIS attempts
+    /// this will be the ID of the bank the payer used for the attempt.
+    /// </summary>
+    public string? InstitutionID { get; set; }
+
     public PaymentResultEnum Status
     {
         get
