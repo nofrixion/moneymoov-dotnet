@@ -24,6 +24,8 @@ public interface IUserClient
 {
     Task<MoneyMoovApiResponse<User>> CreateUserAsync(UserCreate userCreate);
 
+    Task<MoneyMoovApiResponse<User>> GetAsync(string userAccessToken);
+
     Task<MoneyMoovApiResponse<User>> UpdateUserAsync(string accessToken, Guid userID, UserUpdate UserUpdate);
 
     Task<MoneyMoovApiResponse<UserToken>> UpdateUserTokenAsync(string accessToken, Guid userTokenID, UserTokenUpdate UserTokenUpdate);
@@ -67,6 +69,24 @@ public class UserClient : IUserClient
     {
         var url = MoneyMoovUrlBuilder.UserApi.UserApiUrl(_apiClient.GetBaseUri().ToString());
         return _apiClient.PostAsync<User>(url, new FormUrlEncodedContent(userCreate.ToDictionary()));
+    }
+
+    /// <summary>
+    /// Gets the caller's user record.
+    /// </summary>
+    /// <param name="userAccessToken">The user access token to get the profile for.</param>
+    /// <returns>If successful, a user object.</returns>
+    public Task<MoneyMoovApiResponse<User>> GetAsync(string userAccessToken)
+    {
+        var url = MoneyMoovUrlBuilder.UserApi.UserApiUrl(_apiClient.GetBaseUri().ToString());
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<User>(url, userAccessToken),
+            _ => Task.FromResult(new MoneyMoovApiResponse<User>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
     }
 
     /// <summary>
