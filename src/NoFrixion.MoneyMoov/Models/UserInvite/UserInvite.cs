@@ -20,7 +20,7 @@ public class UserInvite
     /// Number of hours after which a registration invite is considered expired.
     /// The invitee will not be able to register until re-invited.
     /// </summary>
-    public const int USER_INVITE_EXPIRATION_HOURS = 48;
+    public const int USER_INVITE_EXPIRATION_HOURS = 72;
 
     public Guid ID { get; set; }
     public string InviteeEmailAddress { get; set; } = string.Empty;

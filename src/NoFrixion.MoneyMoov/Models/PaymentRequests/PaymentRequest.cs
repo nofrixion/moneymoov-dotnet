@@ -533,8 +533,8 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
 
         foreach (var attempt in pispAttempts)
         {
-            // The pisp_initiate event should always be present but if for some reason it's not the first callback or
-            // webhook will also hold the required information.
+            // The pisp_initiate event should always be present but if for some reason it's not the next best event
+            // will be sued as the starting point for he attempt.
             var initiateEvent =
                 attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_initiate).FirstOrDefault() ??
                 attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_callback).FirstOrDefault() ??
@@ -551,7 +551,8 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
                     PaymentMethod = PaymentMethodTypeEnum.pisp,
                     Currency = initiateEvent.Currency,
                     AttemptedAmount = Amount,
-                    PaymentProcessor = initiateEvent.PaymentProcessorName
+                    PaymentProcessor = initiateEvent.PaymentProcessorName,
+                    InstitutionID = initiateEvent.PispPaymentServiceProviderID
                 };
 
                 foreach (var pispCallbackOrWebhook in attempt.Where(x =>
@@ -602,7 +603,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
                 pispPaymentAttempts.Add(paymentAttempt);
             }
         }
-        return pispPaymentAttempts;
 
+        return pispPaymentAttempts;
     }
 }

@@ -36,6 +36,10 @@ public interface IMoneyMoovApiClient
 
     Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content);
 
+    Task<MoneyMoovApiResponse> PutAsync(string path);
+
+    Task<MoneyMoovApiResponse> PutAsync(string path, string accessToken);
+
     Task<MoneyMoovApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content);
 
     Task<MoneyMoovApiResponse> DeleteAsync(string path, string accessToken);
@@ -93,6 +97,12 @@ public class MoneyMoovApiClient : IMoneyMoovApiClient, IDisposable
 
     public Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content) 
         => ExecAsync<T>(BuildRequest(HttpMethod.Post, path, accessToken, content));
+
+    public Task<MoneyMoovApiResponse> PutAsync(string path)
+        => ExecAsync(BuildRequest(HttpMethod.Put, path, string.Empty, Option<HttpContent>.None));
+
+    public Task<MoneyMoovApiResponse> PutAsync(string path, string accessToken)
+        => ExecAsync(BuildRequest(HttpMethod.Put, path, accessToken, Option<HttpContent>.None));
 
     public Task<MoneyMoovApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content)
         => ExecAsync<T>(BuildRequest(HttpMethod.Put, path, accessToken, content));

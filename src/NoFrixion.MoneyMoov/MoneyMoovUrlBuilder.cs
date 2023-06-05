@@ -79,6 +79,9 @@ public static class MoneyMoovUrlBuilder
         public static string MerchantsUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}";
 
+        public static string MerchantsUrl(string moneyMoovBaseUrl, Guid merchantID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}";
+
         public static string AllMerchantsTokensUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.tokens}";
 
@@ -220,6 +223,9 @@ public static class MoneyMoovUrlBuilder
         public static string UserApiUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}";
 
+        public static string UserApiUrl(string moneyMoovBaseUrl, Guid userID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}/{userID}";
+
         public static string UserTokensApiUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}/{MoneyMoovResources.tokens}";
 
@@ -284,21 +290,6 @@ public static class MoneyMoovUrlBuilder
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANT_PAYOUT_ENDPOINT}";
     }
 
-    public static string MerchantPayoutAcquireTokenApiUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANT_PAYOUT_ACQUIRE_TOKEN_ENDPOINT}";
-    }
-
-    public static string MerchantPayoutSubmitApiUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANT_PAYOUT_SUBMIT_ENDPOINT}";
-    }
-
-    public static string UserApiUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.USER_ENDPOINT}";
-    }
-
     public static string CustomerApiUrl(string moneyMoovBaseUrl)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.CUSTOMER_ENDPOINT}";
@@ -309,41 +300,14 @@ public static class MoneyMoovUrlBuilder
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.USER_ENDPOINT}/tokens";
     }
 
-    public static string UserTokenAcquireApiUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.USER_ENDPOINT}/tokensacquire";
-    }
-
     public static string UserTokensByTypeApiUrl(string moneyMoovBaseUrl)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.USER_ENDPOINT}/tokens";
     }
 
-    public static string UserRolesApiUrl(string moneyMoovBaseUrl, Guid merchantID)
-    {
-        var url = $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANT_GET_USERROLES_ENDPOINT}";
-
-        if (merchantID != Guid.Empty)
-        {
-            url = url.Replace(MoneyApiEndPointParameters.MERCHANT_ID_PARAMETER, merchantID.ToString());
-        }
-
-        return url;
-    }
-
-    public static string FailedNotificationsApiUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.FAILED_NOTIFICATIONS}";
-    }
-
     public static string PaymentRequestsApiUrl(string moneyMoovBaseUrl)
     {
         return $"{moneyMoovBaseUrl}/paymentrequests";
-    }
-
-    public static string HostedPaymentResultUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/pay/result";
     }
 
     public static string BeneficiariesGetAllApiUrl(string moneyMoovBaseUrl, Guid merchantID)

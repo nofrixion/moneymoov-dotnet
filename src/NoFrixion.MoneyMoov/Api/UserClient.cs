@@ -24,6 +24,10 @@ public interface IUserClient
 {
     Task<MoneyMoovApiResponse<User>> CreateUserAsync(UserCreate userCreate);
 
+    Task<MoneyMoovApiResponse<User>> GetAsync(string userAccessToken);
+
+    Task<MoneyMoovApiResponse<User>> UpdateUserAsync(string accessToken, Guid userID, UserUpdate UserUpdate);
+
     Task<MoneyMoovApiResponse<UserToken>> UpdateUserTokenAsync(string accessToken, Guid userTokenID, UserTokenUpdate UserTokenUpdate);
 }
 
@@ -68,10 +72,48 @@ public class UserClient : IUserClient
     }
 
     /// <summary>
+    /// Gets the caller's user record.
+    /// </summary>
+    /// <param name="userAccessToken">The user access token to get the profile for.</param>
+    /// <returns>If successful, a user object.</returns>
+    public Task<MoneyMoovApiResponse<User>> GetAsync(string userAccessToken)
+    {
+        var url = MoneyMoovUrlBuilder.UserApi.UserApiUrl(_apiClient.GetBaseUri().ToString());
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<User>(url, userAccessToken),
+            _ => Task.FromResult(new MoneyMoovApiResponse<User>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov User endpoint to update an existing user record.
+    /// </summary>
+    /// <param name="accessToken">The user access token updating the user, typically will be the same as the user being updated.</param>
+    /// <param name="userID">The ID of the user to update.</param>
+    /// <param name="userUpdate">A model with the details of the user fields being updated.</param>
+    /// <returns>An API response indicating the result of the update attempt.</returns>
+    public Task<MoneyMoovApiResponse<User>> UpdateUserAsync(string userAccessToken, Guid userID, UserUpdate userUpdate)
+    {
+        var url = MoneyMoovUrlBuilder.UserApi.UserApiUrl(_apiClient.GetBaseUri().ToString(), userID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(UpdateUserAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PutAsync<User>(url, userAccessToken, new FormUrlEncodedContent(userUpdate.ToDictionary())),
+            _ => Task.FromResult(new MoneyMoovApiResponse<User>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
     /// Calls the MoneyMoov User endpoint to update an existing user token.
     /// </summary>
     /// <param name="accessToken">The user access token updating the application user token.</param>
-    /// <param name="userTokenD">The ID of the user token to update.</param>
+    /// <param name="userTokenID">The ID of the user token to update.</param>
     /// <param name="userTokenUpdate">A model with the details of the user token fields being updated.</param>
     /// <returns>An API response indicating the result of the update attempt.</returns>
     public Task<MoneyMoovApiResponse<UserToken>> UpdateUserTokenAsync(string userAccessToken, Guid userTokenID, UserTokenUpdate userTokenUpdate)
