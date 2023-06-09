@@ -87,4 +87,9 @@ public class PaymentRequestMinimal
     /// Merchant ID from Google Pay
     /// </summary>
     public string? GooglePayMerchantID { get; set; }
+
+    /// <summary>
+    /// The payment attempts for this payment request.
+    /// </summary>
+    public IEnumerable<PaymentRequestPaymentAttempt>? PaymentAttempts { get; set; }
 }
