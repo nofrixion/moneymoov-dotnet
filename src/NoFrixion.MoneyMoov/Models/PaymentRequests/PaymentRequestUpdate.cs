@@ -27,7 +27,7 @@ public class PaymentRequestUpdate
     public string? OrderID { get; set; }
     public PaymentMethodTypeEnum? PaymentMethodTypes { get; set; }
     public string? Description { get; set; }
-    public string? PispAccountID { get; set; }
+    public Guid? PispAccountID { get; set; }
     public string? ShippingFirstName { get; set; }
     public string? ShippingLastName { get; set; }
     public string? ShippingAddressLine1 { get; set; }
@@ -78,7 +78,7 @@ public class PaymentRequestUpdate
         if (OrderID != null) dict.Add(nameof(OrderID), OrderID);
         if (PaymentMethodTypes != null) dict.Add(nameof(PaymentMethodTypes), PaymentMethodTypes.Value.ToString());
         if (Description != null) dict.Add(nameof(Description), Description);
-        if (PispAccountID != null) dict.Add(nameof(PispAccountID), PispAccountID);
+        if (PispAccountID != null) dict.Add(nameof(PispAccountID), PispAccountID.GetValueOrDefault().ToString());
         if (ShippingFirstName != null) dict.Add(nameof(ShippingFirstName), ShippingFirstName);
         if (ShippingLastName != null) dict.Add(nameof(ShippingLastName), ShippingLastName);
         if (ShippingAddressLine1 != null) dict.Add(nameof(ShippingAddressLine1), ShippingAddressLine1);
