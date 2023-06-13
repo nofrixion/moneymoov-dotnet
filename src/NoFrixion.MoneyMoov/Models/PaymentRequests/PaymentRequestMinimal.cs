@@ -27,6 +27,8 @@ public class PaymentRequestMinimal
 
     public string? MerchantName { get; set; }
 
+    public string? MerchantShortName { get; set; }
+    
     /// <summary>
     /// The amount of money to request.
     /// </summary>
@@ -92,4 +94,11 @@ public class PaymentRequestMinimal
     /// The payment attempts for this payment request.
     /// </summary>
     public IEnumerable<PaymentRequestPaymentAttempt>? PaymentAttempts { get; set; }
+    
+    /// <summary>
+    /// The status of the payment request.
+    /// </summary>
+    public PaymentResultEnum Status { get; set; }
+
+    public PartialPaymentMethodsEnum PartialPaymentMethod { get; set; }
 }
