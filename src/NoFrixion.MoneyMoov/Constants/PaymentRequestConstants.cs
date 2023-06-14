@@ -1,4 +1,16 @@
-﻿using System.Drawing.Printing;
+﻿//-----------------------------------------------------------------------------
+// Filename: PaymentRequestConstants.cs
+//
+// Description: Constants related to payment request. Contains constants for validation messages and regexes.
+//
+// Author(s):
+// Saurav Maiti (saurav@nofrixion.com)
+// 
+// History:
+// 14 Jun 2023  Saurav Maiti       Created, Harcourt Street, Dublin, Ireland.
+//
+// License: MIT
+//-----------------------------------------------------------------------------
 
 namespace NoFrixion.MoneyMoov;
 
