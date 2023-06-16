@@ -22,8 +22,6 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
 {
-    public const string DESCRIPTION_ALLOWED_CHARS_REGEX = @"[a-zA-Z0-9\-_\.@&\*%\$#!:;'""()\[\] ]+";
-
     /// <summary>
     /// The ID of the merchant to create the payment request for.
     /// </summary>
@@ -47,16 +45,16 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// payer's bank when using payment initiation. The restriction in the available characters
     /// is due to some banks rejecting requests when ones outside the set are used.
     /// </summary>
-    [RegularExpression(@"[a-zA-Z0-9-]+",
-        ErrorMessage = @"The CustomerID can only contain alphanumeric characters and dash.")]
+    [RegularExpression(PaymentRequestConstants.CUSTOMER_ID_CHARS_REGEX,
+        ErrorMessage = PaymentRequestConstants.CUSTOMER_ID_ERROR_MESSAGE)]
     public string? CustomerID { get; set; }
 
     /// <summary>
     /// An optional order ID for the payment request. If the request is for an invoice this
     /// is the most appropriate field for the invoice ID.
     /// </summary>
-    [RegularExpression(@"[a-zA-Z0-9-_\.@&\*%\$#!:; ]+",
-        ErrorMessage = @"The OrderID can only contain alphanumeric characters and -_.@&*%$#!:; and space.")]
+    [RegularExpression(PaymentRequestConstants.ORDER_ID_CHARS_REGEX,
+        ErrorMessage = PaymentRequestConstants.ORDER_ID_ERROR_MESSAGE)]
     public string? OrderID { get; set; }
 
     /// <summary>
@@ -71,8 +69,8 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// An optional description for the payment request. If set this field will appear
     /// on the transaction record for some card processors.
     /// </summary>
-    [RegularExpression(DESCRIPTION_ALLOWED_CHARS_REGEX,
-        ErrorMessage = @"The Description can only contain alphanumeric characters and -_.@&*%$#!:;'"" and space.")]
+    [RegularExpression(PaymentRequestConstants.DESCRIPTION_ALLOWED_CHARS_REGEX,
+        ErrorMessage = PaymentRequestConstants.DESCRIPTION_ERROR_MESSAGE)]
     public string? Description { get; set; }
 
     /// <summary>
@@ -84,64 +82,64 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// <summary>
     /// Optionally the first name of the customer's shipping address.
     /// </summary>
-    [RegularExpression(@"[^\<\>]+",
-        ErrorMessage = @"The ShippingFirstName had an invalid character. It cannot contain < or >.")]
+    [RegularExpression(PaymentRequestConstants.SHIPPING_FIRST_NAME_CHARS_REGEX,
+        ErrorMessage = PaymentRequestConstants.SHIPPING_FIRST_NAME_ERROR_MESSAGE)]
     public string? ShippingFirstName { get; set; }
 
     /// <summary>
     /// Optionally the last name of the customer's shipping address.
     /// </summary>
-    [RegularExpression(@"[^\<\>]+",
-        ErrorMessage = @"The ShippingLastName had an invalid character. It cannot contain < or >.")]
+    [RegularExpression(PaymentRequestConstants.SHIPPING_LAST_NAME_CHARS_REGEX,
+        ErrorMessage = PaymentRequestConstants.SHIPPING_LAST_NAME_ERROR_MESSAGE)]
     public string? ShippingLastName { get; set; }
 
     /// <summary>
     /// Optionally the first line of the customer's shipping address.
     /// </summary>
-    [RegularExpression(@"[^\<\>]+",
-        ErrorMessage = @"The ShippingAddressLine1 had an invalid character. It cannot contain < or >.")]
+    [RegularExpression(PaymentRequestConstants.SHIPPING_ADDRESS_LINE_1_CHARS_REGEX,
+        ErrorMessage = PaymentRequestConstants.SHIPPING_ADDRESS_LINE_1_ERROR_MESSAGE)]
     public string? ShippingAddressLine1 { get; set; }
 
     /// <summary>
     /// Optionally the second line of the customer's shipping address.
     /// </summary>
-    [RegularExpression(@"[^\<\>]+",
-        ErrorMessage = @"The ShippingAddressLine2 had an invalid character. It cannot contain < or >.")]
+    [RegularExpression(PaymentRequestConstants.SHIPPING_ADDRESS_LINE_2_CHARS_REGEX,
+        ErrorMessage = PaymentRequestConstants.SHIPPING_ADDRESS_LINE_2_ERROR_MESSAGE)]
     public string? ShippingAddressLine2 { get; set; }
 
     /// <summary>
     /// Optionally the city of the customer's shipping address.
     /// </summary>
-    [RegularExpression(@"[^\<\>]+",
-        ErrorMessage = @"The ShippingAddressCity had an invalid character. It cannot contain < or >.")]
+    [RegularExpression(PaymentRequestConstants.SHIPPING_CITY_CHARS_REGEX,
+        ErrorMessage = PaymentRequestConstants.SHIPPING_CITY_ERROR_MESSAGE)]
     public string? ShippingAddressCity { get; set; }
 
     /// <summary>
     /// Optionally the state or county of the customer's shipping address.
     /// </summary>
-    [RegularExpression(@"[^\<\>]+",
-        ErrorMessage = @"The ShippingAddressCounty had an invalid character. It cannot contain < or >.")]
+    [RegularExpression(PaymentRequestConstants.SHIPPING_COUNTY_CHARS_REGEX,
+        ErrorMessage = PaymentRequestConstants.SHIPPING_COUNTY_ERROR_MESSAGE)]
     public string? ShippingAddressCounty { get; set; }
 
     /// <summary>
     /// Optionally the post code of the customer's shipping address.
     /// </summary>
-    [RegularExpression(@"[^\<\>]+",
-        ErrorMessage = @"The ShippingAddressPostCode had an invalid character. It cannot contain < or >.")]
+    [RegularExpression(PaymentRequestConstants.SHIPPING_POSTAL_CODE_CHARS_REGEX,
+        ErrorMessage = PaymentRequestConstants.SHIPPING_POSTAL_CODE_ERROR_MESSAGE)]
     public string? ShippingAddressPostCode { get; set; }
 
     /// <summary>
     /// Optionally the country code of the customer's shipping address.
     /// </summary>
-    [RegularExpression(@"[^\<\>]+",
-        ErrorMessage = @"The ShippingAddressCountryCode had an invalid character. It cannot contain < or >.")]
+    [RegularExpression(PaymentRequestConstants.SHIPPING_COUNTRY_CODE_CHARS_REGEX,
+        ErrorMessage = PaymentRequestConstants.SHIPPING_COUNTRY_CODE_ERROR_MESSAGE)]
     public string? ShippingAddressCountryCode { get; set; }
 
     /// <summary>
     /// Optionally the shipping phone number for the customer.
     /// </summary>
-    [RegularExpression(@"[0-9\+\- ]+",
-        ErrorMessage = @"The ShippingPhone had an invalid character. It cannot only contain digits and -+ and space")]
+    [RegularExpression(PaymentRequestConstants.SHIPPING_PHONE_CHARS_REGEX,
+        ErrorMessage = PaymentRequestConstants.SHIPPING_PHONE_ERROR_MESSAGE)]
     public string? ShippingPhone { get; set; }
 
     /// <summary>
@@ -229,8 +227,8 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// to process any card payments. Mainly useful where a merchant has multiple processor
     /// merchant ID's. If left empty the default merchant card settings will be used.
     /// </summary>
-    [RegularExpression(@"[a-zA-Z0-9]+",
-    ErrorMessage = @"The CardProcessorMerchantID can only contain alphanumeric characters.")]
+    [RegularExpression(PaymentRequestConstants.CARD_PROCESSOR_MERCHANT_ID_CHARS_REGEX,
+    ErrorMessage = PaymentRequestConstants.CARD_PROCESSOR_MERCHANT_ID_ERROR_MESSAGE)]
     public string? CardProcessorMerchantID { get; set; }
 
     /// <summary>
@@ -287,7 +285,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     [JsonIgnore]
     public string? LightningInvoice { get; set; }
     
-    [EmailAddressMultiple(ErrorMessage = "One or more of the email addresses are invalid. Addresses can be separated by a comma, semi-colon or space.")]
+    [EmailAddressMultiple(ErrorMessage = PaymentRequestConstants.NOTIFICATION_EMAIL_ADDRESSES_ERROR_MESSAGE)]
     public string? NotificationEmailAddresses { get; set; }
 
     /// <summary>
