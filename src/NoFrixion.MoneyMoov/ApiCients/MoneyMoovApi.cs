@@ -13,16 +13,10 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-
 namespace NoFrixion.MoneyMoov;
 
 public interface IMoneyMoovApi
 {
-    //bool SetBaseUrl(string url);
-
     IAccountClient AccountClient();
 
     IMerchantClient MerchantClient();
@@ -44,33 +38,7 @@ public interface IMoneyMoovApi
 
 public class MoneyMoovApi : IMoneyMoovApi
 {
-    private sealed class MoneyMoovHttpClientFactory : IHttpClientFactory, IDisposable
-    {
-        private readonly HttpClient _httpClient;
-        private bool _disposed;
-
-        public MoneyMoovHttpClientFactory(Uri baseUri)
-        {
-            var handler = new HttpClientHandler();
-            _httpClient = new HttpClient(handler, disposeHandler: true);
-            _httpClient.BaseAddress = baseUri;
-        }
-
-        public HttpClient CreateClient(string name)
-        {
-            if (_disposed) throw new ObjectDisposedException(nameof(MoneyMoovHttpClientFactory));
-            return _httpClient;
-        }
-
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                _httpClient.Dispose();
-                _disposed = true;
-            }
-        }
-    }
+    public const string MONEYMOOV_HTTP_CLIENT_NAME = "moneymoov";
 
     private readonly IHttpClientFactory _httpClientFactory;
 
@@ -84,7 +52,7 @@ public class MoneyMoovApi : IMoneyMoovApi
     /// </summary>
     public MoneyMoovApi()
     {
-        _httpClientFactory = new MoneyMoovHttpClientFactory(
+        _httpClientFactory = new RestHttpClientFactory(
             new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL));
     }
 
@@ -92,7 +60,7 @@ public class MoneyMoovApi : IMoneyMoovApi
     {
         if (Uri.TryCreate(url, UriKind.Absolute, out var baseUri))
         {
-            _httpClientFactory = new MoneyMoovHttpClientFactory(baseUri);
+            _httpClientFactory = new RestHttpClientFactory(baseUri);
         }
         else
         {
@@ -101,29 +69,29 @@ public class MoneyMoovApi : IMoneyMoovApi
     }
 
     public IAccountClient AccountClient()
-        => new AccountClient(new MoneyMoovApiClient(_httpClientFactory));
+        => new AccountClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 
     public IMerchantClient MerchantClient()
-        => new MerchantClient(new MoneyMoovApiClient(_httpClientFactory));
+        => new MerchantClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 
     public IMetadataClient MetadataClient()
-        => new MetadataClient(new MoneyMoovApiClient(_httpClientFactory));
+        => new MetadataClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 
     public IPaymentRequestClient PaymentRequestClient()
-        => new PaymentRequestClient(new MoneyMoovApiClient(_httpClientFactory));
+        => new PaymentRequestClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 
     public IPayoutClient PayoutClient()
-        => new PayoutClient(new MoneyMoovApiClient(_httpClientFactory));
+        => new PayoutClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 
     public IRuleClient RuleClient()
-        => new RuleClient(new MoneyMoovApiClient(_httpClientFactory));
+        => new RuleClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 
     public IUserClient UserClient()
-        => new UserClient(new MoneyMoovApiClient(_httpClientFactory));
+        => new UserClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 
     public IUserInviteClient UserInviteClient()
-        => new UserInviteClient(new MoneyMoovApiClient(_httpClientFactory));
+        => new UserInviteClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 
     public IWebhookClient WebhookClient()
-        => new WebhookClient(new MoneyMoovApiClient(_httpClientFactory));
+        => new WebhookClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 }

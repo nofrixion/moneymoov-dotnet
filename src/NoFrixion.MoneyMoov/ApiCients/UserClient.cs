@@ -22,39 +22,39 @@ namespace NoFrixion.MoneyMoov;
 
 public interface IUserClient
 {
-    Task<MoneyMoovApiResponse<User>> CreateUserAsync(UserCreate userCreate);
+    Task<RestApiResponse<User>> CreateUserAsync(UserCreate userCreate);
 
-    Task<MoneyMoovApiResponse<User>> GetAsync(string userAccessToken);
+    Task<RestApiResponse<User>> GetAsync(string userAccessToken);
 
-    Task<MoneyMoovApiResponse<User>> UpdateUserAsync(string accessToken, Guid userID, UserUpdate UserUpdate);
+    Task<RestApiResponse<User>> UpdateUserAsync(string accessToken, Guid userID, UserUpdate UserUpdate);
 
-    Task<MoneyMoovApiResponse<UserToken>> UpdateUserTokenAsync(string accessToken, Guid userTokenID, UserTokenUpdate UserTokenUpdate);
+    Task<RestApiResponse<UserToken>> UpdateUserTokenAsync(string accessToken, Guid userTokenID, UserTokenUpdate UserTokenUpdate);
 }
 
 public class UserClient : IUserClient
 {
     private readonly ILogger _logger;
-    private readonly IMoneyMoovApiClient _apiClient;
+    private readonly IRestApiClient _apiClient;
 
     public UserClient()
     {
-        _apiClient = new MoneyMoovApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+        _apiClient = new RestApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
         _logger = NullLogger.Instance;
     }
 
     public UserClient(string baseUri)
     {
-        _apiClient = new MoneyMoovApiClient(baseUri);
+        _apiClient = new RestApiClient(baseUri);
         _logger = NullLogger.Instance;
     }
 
-    public UserClient(IMoneyMoovApiClient apiClient)
+    public UserClient(IRestApiClient apiClient)
     {
         _apiClient = apiClient;
         _logger = NullLogger.Instance;
     }
 
-    public UserClient(IMoneyMoovApiClient apiClient, ILogger<AccountClient> logger)
+    public UserClient(IRestApiClient apiClient, ILogger<AccountClient> logger)
     {
         _apiClient = apiClient;
         _logger = logger;
@@ -65,7 +65,7 @@ public class UserClient : IUserClient
     /// </summary>
     /// <param name="userCreate">The model containing the data about the new user to create.</param>
     /// <returns>If successful, a user object.</returns>
-    public Task<MoneyMoovApiResponse<User>> CreateUserAsync(UserCreate userCreate)
+    public Task<RestApiResponse<User>> CreateUserAsync(UserCreate userCreate)
     {
         var url = MoneyMoovUrlBuilder.UserApi.UserApiUrl(_apiClient.GetBaseUri().ToString());
         return _apiClient.PostAsync<User>(url, new FormUrlEncodedContent(userCreate.ToDictionary()));
@@ -76,7 +76,7 @@ public class UserClient : IUserClient
     /// </summary>
     /// <param name="userAccessToken">The user access token to get the profile for.</param>
     /// <returns>If successful, a user object.</returns>
-    public Task<MoneyMoovApiResponse<User>> GetAsync(string userAccessToken)
+    public Task<RestApiResponse<User>> GetAsync(string userAccessToken)
     {
         var url = MoneyMoovUrlBuilder.UserApi.UserApiUrl(_apiClient.GetBaseUri().ToString());
 
@@ -85,7 +85,7 @@ public class UserClient : IUserClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<User>(url, userAccessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse<User>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<User>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -96,7 +96,7 @@ public class UserClient : IUserClient
     /// <param name="userID">The ID of the user to update.</param>
     /// <param name="userUpdate">A model with the details of the user fields being updated.</param>
     /// <returns>An API response indicating the result of the update attempt.</returns>
-    public Task<MoneyMoovApiResponse<User>> UpdateUserAsync(string userAccessToken, Guid userID, UserUpdate userUpdate)
+    public Task<RestApiResponse<User>> UpdateUserAsync(string userAccessToken, Guid userID, UserUpdate userUpdate)
     {
         var url = MoneyMoovUrlBuilder.UserApi.UserApiUrl(_apiClient.GetBaseUri().ToString(), userID);
 
@@ -105,7 +105,7 @@ public class UserClient : IUserClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PutAsync<User>(url, userAccessToken, new FormUrlEncodedContent(userUpdate.ToDictionary())),
-            _ => Task.FromResult(new MoneyMoovApiResponse<User>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<User>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -116,7 +116,7 @@ public class UserClient : IUserClient
     /// <param name="userTokenID">The ID of the user token to update.</param>
     /// <param name="userTokenUpdate">A model with the details of the user token fields being updated.</param>
     /// <returns>An API response indicating the result of the update attempt.</returns>
-    public Task<MoneyMoovApiResponse<UserToken>> UpdateUserTokenAsync(string userAccessToken, Guid userTokenID, UserTokenUpdate userTokenUpdate)
+    public Task<RestApiResponse<UserToken>> UpdateUserTokenAsync(string userAccessToken, Guid userTokenID, UserTokenUpdate userTokenUpdate)
     {
         var url = MoneyMoovUrlBuilder.UserApi.UserTokenApiUrl(_apiClient.GetBaseUri().ToString(), userTokenID);
 
@@ -125,7 +125,7 @@ public class UserClient : IUserClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PutAsync<UserToken>(url, userAccessToken, new FormUrlEncodedContent(userTokenUpdate.ToDictionary())),
-            _ => Task.FromResult(new MoneyMoovApiResponse<UserToken>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<UserToken>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }

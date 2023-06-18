@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: MoneyMoovApiClient.cs
+// Filename: RestApiClient.cs
 //
-// Description: An API client used to call MoneyMoov API end points.
+// Description: A REST API client used to call MoneyMoov API end points.
 //
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)
@@ -20,94 +20,92 @@ using System.Net.Http.Json;
 
 namespace NoFrixion.MoneyMoov;
 
-public interface IMoneyMoovApiClient
+public interface IRestApiClient
 {
-    Task<MoneyMoovApiResponse<T>> GetAsync<T>(string path);
+    Task<RestApiResponse<T>> GetAsync<T>(string path);
 
-    Task<MoneyMoovApiResponse<T>> GetAsync<T>(string path, string accessToken);
+    Task<RestApiResponse<T>> GetAsync<T>(string path, string accessToken);
 
-    Task<MoneyMoovApiResponse> PostAsync(string path, HttpContent content);
+    Task<RestApiResponse> PostAsync(string path, HttpContent content);
 
-    Task<MoneyMoovApiResponse> PostAsync(string path, string accessToken);
+    Task<RestApiResponse> PostAsync(string path, string accessToken);
 
-    Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, HttpContent content);
+    Task<RestApiResponse<T>> PostAsync<T>(string path, HttpContent content);
 
-    Task<MoneyMoovApiResponse> PostAsync(string path, string accessToken, HttpContent content);
+    Task<RestApiResponse> PostAsync(string path, string accessToken, HttpContent content);
 
-    Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content);
+    Task<RestApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content);
 
-    Task<MoneyMoovApiResponse> PutAsync(string path);
+    Task<RestApiResponse> PutAsync(string path);
 
-    Task<MoneyMoovApiResponse> PutAsync(string path, string accessToken);
+    Task<RestApiResponse> PutAsync(string path, string accessToken);
 
-    Task<MoneyMoovApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content);
+    Task<RestApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content);
 
-    Task<MoneyMoovApiResponse> DeleteAsync(string path, string accessToken);
+    Task<RestApiResponse> DeleteAsync(string path, string accessToken);
 
     Uri GetBaseUri();
 
     NoFrixionProblem CheckAccessToken(string accessToken, string callerName);
 }
 
-public class MoneyMoovApiClient : IMoneyMoovApiClient, IDisposable
+public class RestApiClient : IRestApiClient, IDisposable
 {
-    public const string HTTP_CLIENT_NAME = "moneymoov";
-
     private bool _disposed;
 
     public HttpClient HttpClient { get; set; }
 
-    public MoneyMoovApiClient()
+    public RestApiClient()
     {
         HttpClient = new HttpClient();
         HttpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
     }
 
-    public MoneyMoovApiClient(string baseUri)
+    public RestApiClient(string baseUri)
     {
         HttpClient = new HttpClient();
         HttpClient.BaseAddress = new Uri(baseUri);
     }
 
-    public MoneyMoovApiClient(IHttpClientFactory httpClientFactory)
+    public RestApiClient(IHttpClientFactory httpClientFactory, string httpClientName)
     {
-        HttpClient = httpClientFactory.CreateClient(HTTP_CLIENT_NAME);
+        HttpClient = httpClientFactory.CreateClient(httpClientName);
     }
 
     public Uri GetBaseUri()
         => HttpClient.BaseAddress ?? new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
 
-    public Task<MoneyMoovApiResponse<T>> GetAsync<T>(string path)
+    public Task<RestApiResponse<T>> GetAsync<T>(string path)
         => ExecAsync<T>(BuildRequest(HttpMethod.Get, path, string.Empty, Option<HttpContent>.None));
 
-    public Task<MoneyMoovApiResponse<T>> GetAsync<T>(string path, string accessToken) 
+    public Task<RestApiResponse<T>> GetAsync<T>(string path, string accessToken) 
         => ExecAsync<T>(BuildRequest(HttpMethod.Get, path, accessToken, Option<HttpContent>.None));
 
-    public Task<MoneyMoovApiResponse> PostAsync(string path, HttpContent content)
+    public Task<RestApiResponse> PostAsync(string path, HttpContent content)
         => ExecAsync(BuildRequest(HttpMethod.Post, path, string.Empty, content));
 
-    public Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, HttpContent content)
+    public Task<RestApiResponse<T>> PostAsync<T>(string path, HttpContent content)
         => ExecAsync<T>(BuildRequest(HttpMethod.Post, path, string.Empty, content));
 
-    public Task<MoneyMoovApiResponse> PostAsync(string path, string accessToken, HttpContent content)
+    public Task<RestApiResponse> PostAsync(string path, string accessToken, HttpContent content)
         => ExecAsync(BuildRequest(HttpMethod.Post, path, accessToken, content));
 
-    public Task<MoneyMoovApiResponse> PostAsync(string path, string accessToken)
+    public Task<RestApiResponse> PostAsync(string path, string accessToken)
         => ExecAsync(BuildRequest(HttpMethod.Post, path, accessToken, Option<HttpContent>.None));
 
-    public Task<MoneyMoovApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content) 
+    public Task<RestApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content) 
         => ExecAsync<T>(BuildRequest(HttpMethod.Post, path, accessToken, content));
 
-    public Task<MoneyMoovApiResponse> PutAsync(string path)
+    public Task<RestApiResponse> PutAsync(string path)
         => ExecAsync(BuildRequest(HttpMethod.Put, path, string.Empty, Option<HttpContent>.None));
 
-    public Task<MoneyMoovApiResponse> PutAsync(string path, string accessToken)
+    public Task<RestApiResponse> PutAsync(string path, string accessToken)
         => ExecAsync(BuildRequest(HttpMethod.Put, path, accessToken, Option<HttpContent>.None));
 
-    public Task<MoneyMoovApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content)
+    public Task<RestApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content)
         => ExecAsync<T>(BuildRequest(HttpMethod.Put, path, accessToken, content));
 
-    public Task<MoneyMoovApiResponse> DeleteAsync(string path, string accessToken)
+    public Task<RestApiResponse> DeleteAsync(string path, string accessToken)
         => ExecAsync(BuildRequest(HttpMethod.Delete, path, accessToken, Option<HttpContent>.None));
 
     public NoFrixionProblem CheckAccessToken(string accessToken, string callerName)
@@ -145,29 +143,29 @@ public class MoneyMoovApiClient : IMoneyMoovApiClient, IDisposable
         return request;
     }
 
-    private async Task<MoneyMoovApiResponse> ToApiResponse(HttpResponseMessage response, Uri? requestUri)
+    private async Task<RestApiResponse> ToApiResponse(HttpResponseMessage response, Uri? requestUri)
     {
         if (response.IsSuccessStatusCode)
         {
-            return new MoneyMoovApiResponse(response.StatusCode, requestUri, response.Headers);
+            return new RestApiResponse(response.StatusCode, requestUri, response.Headers);
         }
         else if ((int)response.StatusCode >= 400 && (int)response.StatusCode < 500 && response.Content.Headers.ContentLength > 0)
         {
             var problemDetails = await response.Content.ReadFromJsonAsync<NoFrixionProblem>();
             return problemDetails != null ?
-                new MoneyMoovApiResponse(response.StatusCode, requestUri, response.Headers, problemDetails) :
-                new MoneyMoovApiResponse(response.StatusCode, requestUri, response.Headers,
+                new RestApiResponse(response.StatusCode, requestUri, response.Headers, problemDetails) :
+                new RestApiResponse(response.StatusCode, requestUri, response.Headers,
                    new NoFrixionProblem(response.StatusCode, $"Json deserialisation failed for type {typeof(NoFrixionProblem)}."));
         }
         else
         {
             string error = await response.Content.ReadAsStringAsync();
 
-            return new MoneyMoovApiResponse(response.StatusCode, requestUri, response.Headers, new NoFrixionProblem(response.StatusCode, error));
+            return new RestApiResponse(response.StatusCode, requestUri, response.Headers, new NoFrixionProblem(response.StatusCode, error));
         }
     }
 
-    private async Task<MoneyMoovApiResponse<T>> ToApiResponse<T>(HttpResponseMessage response, Uri? requestUri)
+    private async Task<RestApiResponse<T>> ToApiResponse<T>(HttpResponseMessage response, Uri? requestUri)
     {
         if (response.IsSuccessStatusCode && response.Content.Headers.ContentLength > 0)
         {
@@ -179,8 +177,8 @@ public class MoneyMoovApiClient : IMoneyMoovApiClient, IDisposable
             );
 
             return result != null ?
-                new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers, result) :
-                new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers,
+                new RestApiResponse<T>(response.StatusCode, requestUri, response.Headers, result) :
+                new RestApiResponse<T>(response.StatusCode, requestUri, response.Headers,
                     new NoFrixionProblem(response.StatusCode, $"Json deserialisation failed for type {typeof(T)}."));
         }
         else if (response.Content.Headers.ContentLength > 0)
@@ -198,15 +196,15 @@ public class MoneyMoovApiClient : IMoneyMoovApiClient, IDisposable
                 problemDetails = new NoFrixionProblem(response.StatusCode, $"Json deserialisation failed for type {typeof(NoFrixionProblem)}.");
             }
 
-            return new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers, problemDetails);
+            return new RestApiResponse<T>(response.StatusCode, requestUri, response.Headers, problemDetails);
         }
         else
         {
-            return new MoneyMoovApiResponse<T>(response.StatusCode, requestUri, response.Headers, new NoFrixionProblem(response.StatusCode, string.Empty));
+            return new RestApiResponse<T>(response.StatusCode, requestUri, response.Headers, new NoFrixionProblem(response.StatusCode, string.Empty));
         }
     }
 
-    private async Task<MoneyMoovApiResponse> ExecAsync(
+    private async Task<RestApiResponse> ExecAsync(
         HttpRequestMessage req,
         CancellationToken cancellationToken = default(CancellationToken))
     {
@@ -214,7 +212,7 @@ public class MoneyMoovApiClient : IMoneyMoovApiClient, IDisposable
         return await ToApiResponse(response, req.RequestUri);
     }
 
-    private async Task<MoneyMoovApiResponse<T>> ExecAsync<T>(
+    private async Task<RestApiResponse<T>> ExecAsync<T>(
         HttpRequestMessage req,
         CancellationToken cancellationToken = default(CancellationToken))
     {

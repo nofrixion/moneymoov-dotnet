@@ -24,37 +24,37 @@ namespace NoFrixion.MoneyMoov;
 
 public interface IPayoutClient
 {
-    Task<MoneyMoovApiResponse<Payout>> CreatePayoutAsync(string userAccessToken, PayoutCreate payoutCreate);
+    Task<RestApiResponse<Payout>> CreatePayoutAsync(string userAccessToken, PayoutCreate payoutCreate);
 
-    Task<MoneyMoovApiResponse<Payout>> GetPayoutAsync(string userAccessToken, Guid payoutID);
+    Task<RestApiResponse<Payout>> GetPayoutAsync(string userAccessToken, Guid payoutID);
 
-    Task<MoneyMoovApiResponse<Payout>> GetPayoutByInvoiceIDAsync(string merchantAccessToken, string invoiceID);
+    Task<RestApiResponse<Payout>> GetPayoutByInvoiceIDAsync(string merchantAccessToken, string invoiceID);
 
-    Task<MoneyMoovApiResponse> SubmitPayoutAsync(string strongUserAccessToken, Guid payoutID);
+    Task<RestApiResponse> SubmitPayoutAsync(string strongUserAccessToken, Guid payoutID);
 
-    Task<MoneyMoovApiResponse<Payout>> UpdatePayoutAsync(string accessToken, Guid payoutID, PayoutUpdate payoutUpdate);
+    Task<RestApiResponse<Payout>> UpdatePayoutAsync(string accessToken, Guid payoutID, PayoutUpdate payoutUpdate);
 
-    Task<MoneyMoovApiResponse<BatchPayout>> GetBatchPayoutAsync(string userAccessToken, Guid batchPayoutID);
+    Task<RestApiResponse<BatchPayout>> GetBatchPayoutAsync(string userAccessToken, Guid batchPayoutID);
 
-    Task<MoneyMoovApiResponse<BatchPayout>> CreateBatchPayoutAsync(string userAccessToken, List<Guid> payoutIDs);
+    Task<RestApiResponse<BatchPayout>> CreateBatchPayoutAsync(string userAccessToken, List<Guid> payoutIDs);
 
-    Task<MoneyMoovApiResponse> SubmitBatchPayoutAsync(string strongUserAccessToken, Guid batchPayoutID);
+    Task<RestApiResponse> SubmitBatchPayoutAsync(string strongUserAccessToken, Guid batchPayoutID);
 
-    Task<MoneyMoovApiResponse> DeletePayoutAsync(string accessToken, Guid payoutID);
+    Task<RestApiResponse> DeletePayoutAsync(string accessToken, Guid payoutID);
 }
 
 public class PayoutClient : IPayoutClient
 {
     private readonly ILogger _logger;
-    private readonly IMoneyMoovApiClient _apiClient;
+    private readonly IRestApiClient _apiClient;
 
-    public PayoutClient(IMoneyMoovApiClient apiClient)
+    public PayoutClient(IRestApiClient apiClient)
     {
         _apiClient = apiClient;
         _logger = NullLogger.Instance;
     }
 
-    public PayoutClient(IMoneyMoovApiClient apiClient, ILogger<RuleClient> logger)
+    public PayoutClient(IRestApiClient apiClient, ILogger<RuleClient> logger)
     {
         _apiClient = apiClient;
         _logger = logger;
@@ -68,7 +68,7 @@ public class PayoutClient : IPayoutClient
     /// <param name="userAccessToken">The access token of the user creating the payout.</param>
     /// <param name="payoutCreate">A model with the details of the payout to create.</param>
     /// <returns>An API response indicating the result of the create attempt.</returns>
-    public Task<MoneyMoovApiResponse<Payout>> CreatePayoutAsync(string userAccessToken, PayoutCreate payoutCreate)
+    public Task<RestApiResponse<Payout>> CreatePayoutAsync(string userAccessToken, PayoutCreate payoutCreate)
     {
         var url = MoneyMoovUrlBuilder.PayoutsApi.PayoutsUrl(_apiClient.GetBaseUri().ToString());
 
@@ -77,7 +77,7 @@ public class PayoutClient : IPayoutClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PostAsync<Payout>(url, userAccessToken, new FormUrlEncodedContent(payoutCreate.ToDictionary())),
-            _ => Task.FromResult(new MoneyMoovApiResponse<Payout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<Payout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -87,7 +87,7 @@ public class PayoutClient : IPayoutClient
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="payoutID">The ID of the payout to retrieve.</param>
     /// <returns>If successful, a payout object.</returns>
-    public Task<MoneyMoovApiResponse<Payout>> GetPayoutAsync(string userAccessToken, Guid payoutID)
+    public Task<RestApiResponse<Payout>> GetPayoutAsync(string userAccessToken, Guid payoutID)
     {
         var url = MoneyMoovUrlBuilder.PayoutsApi.PayoutUrl(_apiClient.GetBaseUri().ToString(), payoutID);
 
@@ -96,7 +96,7 @@ public class PayoutClient : IPayoutClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<Payout>(url, userAccessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse<Payout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<Payout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -106,7 +106,7 @@ public class PayoutClient : IPayoutClient
     /// </summary>
     /// <param name="invoiceID">The invoice ID of the payout to retrieve.</param>
     /// <returns>If successful, a payout object.</returns>
-    public Task<MoneyMoovApiResponse<Payout>> GetPayoutByInvoiceIDAsync(string merchantAccessToken, string invoiceID)
+    public Task<RestApiResponse<Payout>> GetPayoutByInvoiceIDAsync(string merchantAccessToken, string invoiceID)
     {
         var url = MoneyMoovUrlBuilder.PayoutsApi.GetByInvoiceIDUrl(_apiClient.GetBaseUri().ToString(), invoiceID);
 
@@ -115,7 +115,7 @@ public class PayoutClient : IPayoutClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<Payout>(url, merchantAccessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse<Payout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<Payout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -128,7 +128,7 @@ public class PayoutClient : IPayoutClient
     /// and are specific to the payout being submitted.</param>
     /// <param name="payoutID">The ID of the payout to submit for processing.</param>
     /// <returns>An API response indicating the result of the submit attempt.</returns>
-    public Task<MoneyMoovApiResponse> SubmitPayoutAsync(string strongUserAccessToken, Guid payoutID)
+    public Task<RestApiResponse> SubmitPayoutAsync(string strongUserAccessToken, Guid payoutID)
     {
         var url = MoneyMoovUrlBuilder.PayoutsApi.SubmitPayoutUrl(_apiClient.GetBaseUri().ToString(), payoutID);
 
@@ -137,7 +137,7 @@ public class PayoutClient : IPayoutClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PostAsync(url, strongUserAccessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -148,7 +148,7 @@ public class PayoutClient : IPayoutClient
     /// <param name="payoutID">The ID of the payout to update.</param>
     /// <param name="payoutUpdate">A model with the details of the payout fields being updated.</param>
     /// <returns>An API response indicating the result of the update attempt.</returns>
-    public Task<MoneyMoovApiResponse<Payout>> UpdatePayoutAsync(string userAccessToken, Guid payoutID, PayoutUpdate payoutUpdate)
+    public Task<RestApiResponse<Payout>> UpdatePayoutAsync(string userAccessToken, Guid payoutID, PayoutUpdate payoutUpdate)
     {
         var url = MoneyMoovUrlBuilder.PayoutsApi.PayoutUrl(_apiClient.GetBaseUri().ToString(), payoutID);
 
@@ -157,7 +157,7 @@ public class PayoutClient : IPayoutClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PutAsync<Payout>(url, userAccessToken, new FormUrlEncodedContent(payoutUpdate.ToDictionary())),
-            _ => Task.FromResult(new MoneyMoovApiResponse<Payout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<Payout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -167,7 +167,7 @@ public class PayoutClient : IPayoutClient
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="batchPayoutID">The batch ID of the payouts to retrieve.</param>
     /// <returns>If successful, a list of payout objects.</returns>
-    public Task<MoneyMoovApiResponse<BatchPayout>> GetBatchPayoutAsync(string userAccessToken, Guid batchPayoutID)
+    public Task<RestApiResponse<BatchPayout>> GetBatchPayoutAsync(string userAccessToken, Guid batchPayoutID)
     {
         var url = MoneyMoovUrlBuilder.PayoutsApi.BatchPayoutUrl(_apiClient.GetBaseUri().ToString(), batchPayoutID);
 
@@ -176,7 +176,7 @@ public class PayoutClient : IPayoutClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<BatchPayout>(url, userAccessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse<BatchPayout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<BatchPayout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -187,7 +187,7 @@ public class PayoutClient : IPayoutClient
     /// <param name="userAccessToken">The access token of the user creating the batch payout.</param>
     /// <param name="payoutIDs">A model with the list of payout IDs to create a batch from.</param>
     /// <returns>An API response indicating the result of the create attempt.</returns>
-    public Task<MoneyMoovApiResponse<BatchPayout>> CreateBatchPayoutAsync(string userAccessToken, List<Guid> payoutIDs)
+    public Task<RestApiResponse<BatchPayout>> CreateBatchPayoutAsync(string userAccessToken, List<Guid> payoutIDs)
     {
         var url = MoneyMoovUrlBuilder.PayoutsApi.BatchPayoutUrl(_apiClient.GetBaseUri().ToString());
 
@@ -196,7 +196,7 @@ public class PayoutClient : IPayoutClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PostAsync<BatchPayout>(url, userAccessToken, JsonContent.Create(payoutIDs)),
-            _ => Task.FromResult(new MoneyMoovApiResponse<BatchPayout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<BatchPayout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -209,7 +209,7 @@ public class PayoutClient : IPayoutClient
     /// and are specific to the batch payout being submitted.</param>
     /// <param name="batchPayoutID">The ID of the batch payout to submit for processing.</param>
     /// <returns>An API response indicating the result of the submit attempt.</returns>
-    public Task<MoneyMoovApiResponse> SubmitBatchPayoutAsync(string strongUserAccessToken, Guid batchPayoutID)
+    public Task<RestApiResponse> SubmitBatchPayoutAsync(string strongUserAccessToken, Guid batchPayoutID)
     {
         var url = MoneyMoovUrlBuilder.PayoutsApi.SubmitBatchPayoutUrl(_apiClient.GetBaseUri().ToString(), batchPayoutID);
 
@@ -218,7 +218,7 @@ public class PayoutClient : IPayoutClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PostAsync(url, strongUserAccessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -229,7 +229,7 @@ public class PayoutClient : IPayoutClient
     /// <param name="accessToken">The user, or merchant, access token deleting the payout.</param>
     /// <param name="payoutID"></param>
     /// <returns></returns>
-    public Task<MoneyMoovApiResponse> DeletePayoutAsync(string accessToken, Guid payoutID)
+    public Task<RestApiResponse> DeletePayoutAsync(string accessToken, Guid payoutID)
     {
         var url = MoneyMoovUrlBuilder.PayoutsApi.PayoutUrl(_apiClient.GetBaseUri().ToString(), payoutID);
 
@@ -238,7 +238,7 @@ public class PayoutClient : IPayoutClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.DeleteAsync(url, accessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }

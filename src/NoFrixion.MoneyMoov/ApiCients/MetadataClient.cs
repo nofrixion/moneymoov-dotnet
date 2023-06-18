@@ -24,41 +24,41 @@ namespace NoFrixion.MoneyMoov;
 
 public interface IMetadataClient
 {
-    Task<MoneyMoovApiResponse<NoFrixionVersion>> GetVersionAsync();
+    Task<RestApiResponse<NoFrixionVersion>> GetVersionAsync();
 
-    Task<MoneyMoovApiResponse<User>> WhoamiAsync(string userAccessToken);
+    Task<RestApiResponse<User>> WhoamiAsync(string userAccessToken);
 
-    Task<MoneyMoovApiResponse<Merchant>> WhoamiMerchantAsync(string merchantAccessToken);
+    Task<RestApiResponse<Merchant>> WhoamiMerchantAsync(string merchantAccessToken);
 
-    Task<MoneyMoovApiResponse<string>> EchoAsync(string name, string message);
+    Task<RestApiResponse<string>> EchoAsync(string name, string message);
 
-    Task<MoneyMoovApiResponse<dynamic>> EchoJsonAsync(string name, string message);
+    Task<RestApiResponse<dynamic>> EchoJsonAsync(string name, string message);
 }
 
 public class MetadataClient : IMetadataClient
 {
     private readonly ILogger _logger;
-    private readonly IMoneyMoovApiClient _apiClient;
+    private readonly IRestApiClient _apiClient;
 
     public MetadataClient()
     {
-        _apiClient = new MoneyMoovApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+        _apiClient = new RestApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
         _logger = NullLogger.Instance;
     }
 
     public MetadataClient(string baseUri)
     {
-        _apiClient = new MoneyMoovApiClient(baseUri);
+        _apiClient = new RestApiClient(baseUri);
         _logger = NullLogger.Instance;
     }
 
-    public MetadataClient(IMoneyMoovApiClient apiClient)
+    public MetadataClient(IRestApiClient apiClient)
     {
         _apiClient = apiClient;
         _logger = NullLogger.Instance;
     }
 
-    public MetadataClient(IMoneyMoovApiClient apiClient, ILogger<MetadataClient> logger)
+    public MetadataClient(IRestApiClient apiClient, ILogger<MetadataClient> logger)
     {
         _apiClient = apiClient;
         _logger = logger;
@@ -68,7 +68,7 @@ public class MetadataClient : IMetadataClient
     /// Calls the MoneyMoov Metadata get version endpoint.
     /// </summary>
     /// <returns>The MoneyMoov version information.</returns>
-    public Task<MoneyMoovApiResponse<NoFrixionVersion>> GetVersionAsync()
+    public Task<RestApiResponse<NoFrixionVersion>> GetVersionAsync()
     {
         return _apiClient.GetAsync<NoFrixionVersion>(MoneyMoovUrlBuilder.MetadataApi.VersionUrl(_apiClient.GetBaseUri().ToString()));
     }
@@ -78,14 +78,14 @@ public class MetadataClient : IMetadataClient
     /// </summary>
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <returns>If the token is valid the authenticated User's details are returned.</returns>
-    public Task<MoneyMoovApiResponse<User>> WhoamiAsync(string userAccessToken)
+    public Task<RestApiResponse<User>> WhoamiAsync(string userAccessToken)
     {
         var url = MoneyMoovUrlBuilder.MetadataApi.WhoamiUrl(_apiClient.GetBaseUri().ToString());
 
         var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(WhoamiAsync));
 
         return !prob.IsEmpty ?
-            Task.FromResult(new MoneyMoovApiResponse<User>(HttpStatusCode.PreconditionFailed, new Uri(url), prob)) :
+            Task.FromResult(new RestApiResponse<User>(HttpStatusCode.PreconditionFailed, new Uri(url), prob)) :
             _apiClient.GetAsync<User>(url, userAccessToken);
     }
 
@@ -94,14 +94,14 @@ public class MetadataClient : IMetadataClient
     /// </summary>
     /// <param name="merchantAccessToken">A Merchant scoped JWT access token.</param>
     /// <returns>If the token is valid the authenticated Merchant's details are returned.</returns>
-    public Task<MoneyMoovApiResponse<Merchant>> WhoamiMerchantAsync(string merchantAccessToken)
+    public Task<RestApiResponse<Merchant>> WhoamiMerchantAsync(string merchantAccessToken)
     {
         var url = MoneyMoovUrlBuilder.MetadataApi.WhoamiMerchantUrl(_apiClient.GetBaseUri().ToString());
 
         var prob = _apiClient.CheckAccessToken(merchantAccessToken, nameof(WhoamiMerchantAsync));
 
         return !prob.IsEmpty ?
-            Task.FromResult(new MoneyMoovApiResponse<Merchant>(HttpStatusCode.PreconditionFailed, new Uri(url), prob)) :
+            Task.FromResult(new RestApiResponse<Merchant>(HttpStatusCode.PreconditionFailed, new Uri(url), prob)) :
             _apiClient.GetAsync<Merchant>(url, merchantAccessToken);
     }
 
@@ -109,7 +109,7 @@ public class MetadataClient : IMetadataClient
     /// Calls the MoneyMoov Metadata get version endpoint with a form URL encoded payload.
     /// </summary>
     /// <returns>A string echo response message.</returns>
-    public Task<MoneyMoovApiResponse<string>> EchoAsync(string name, string message)
+    public Task<RestApiResponse<string>> EchoAsync(string name, string message)
     {
         var content = new FormUrlEncodedContent(Map.create(("message", message), ("name", name)).ToDictionary());
         return _apiClient.PostAsync<string>(MoneyMoovUrlBuilder.MetadataApi.EchoUrl(_apiClient.GetBaseUri().ToString()), content);
@@ -119,7 +119,7 @@ public class MetadataClient : IMetadataClient
     /// Calls the MoneyMoov Metadata get version endpoint with a JSON encoded payload.
     /// </summary>
     /// <returns>A JSON echo response message.</returns>
-    public Task<MoneyMoovApiResponse<dynamic>> EchoJsonAsync(string name, string message)
+    public Task<RestApiResponse<dynamic>> EchoJsonAsync(string name, string message)
     {
         var content = JsonContent.Create(new { name, message });
         return _apiClient.PostAsync<dynamic>(MoneyMoovUrlBuilder.MetadataApi.EchoUrl(_apiClient.GetBaseUri().ToString()), content);

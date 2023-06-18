@@ -280,11 +280,6 @@ public static class MoneyMoovUrlBuilder
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.ACCOUNTS_ENDPOINT}";
     }
 
-    public static string PaymentAccountTransferApiUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.TRANSFER_ENDPOINT}";
-    }
-
     public static string MerchantPayoutApiUrl(string moneyMoovBaseUrl)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.MERCHANT_PAYOUT_ENDPOINT}";
