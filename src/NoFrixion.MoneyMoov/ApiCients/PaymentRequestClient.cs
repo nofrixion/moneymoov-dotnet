@@ -13,7 +13,6 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using LanguageExt.ClassInstances;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NoFrixion.MoneyMoov.Models;

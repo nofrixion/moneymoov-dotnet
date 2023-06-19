@@ -15,7 +15,7 @@
 
 namespace NoFrixion.MoneyMoov;
 
-public interface IMoneyMoovApi
+public interface IMoneyMoovClient
 {
     IAccountClient AccountClient();
 
@@ -36,13 +36,13 @@ public interface IMoneyMoovApi
     IWebhookClient WebhookClient();
 }
 
-public class MoneyMoovApi : IMoneyMoovApi
+public class MoneyMoovClient : IMoneyMoovClient
 {
     public const string MONEYMOOV_HTTP_CLIENT_NAME = "moneymoov";
 
     private readonly IHttpClientFactory _httpClientFactory;
 
-    public MoneyMoovApi(IHttpClientFactory httpClientFactory)
+    public MoneyMoovClient(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
     }
@@ -50,13 +50,13 @@ public class MoneyMoovApi : IMoneyMoovApi
     /// <summary>
     /// Default constructor that uses the production MoneyMoov API.
     /// </summary>
-    public MoneyMoovApi()
+    public MoneyMoovClient()
     {
         _httpClientFactory = new RestHttpClientFactory(
             new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL));
     }
 
-    public MoneyMoovApi(string url)
+    public MoneyMoovClient(string url)
     {
         if (Uri.TryCreate(url, UriKind.Absolute, out var baseUri))
         {
