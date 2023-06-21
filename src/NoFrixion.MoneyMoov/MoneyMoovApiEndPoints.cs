@@ -50,11 +50,6 @@ public static class MoneyMoovApiEndPoints
     public const string MERCHANTS_ENDPOINT = "merchants";
 
     /// <summary>
-    /// The URL for the NoFrixion MoneyMoov get failed notifications API.
-    /// </summary>
-    public const string FAILED_NOTIFICATIONS = "webhooks/failed";
-
-    /// <summary>
     /// The URL for the NoFrixion MoneyMoov merchant get tokens API.
     /// </summary>
     public const string MERCHANT_GET_TOKEN_ENDPOINT = "merchants/{merchantid}/tokens";
@@ -63,11 +58,6 @@ public static class MoneyMoovApiEndPoints
     /// The URL for the NoFrixion MoneyMoov merchant get user roles API.
     /// </summary>
     public const string MERCHANT_GET_USERROLES_ENDPOINT = "merchants/{merchantid}/userroles";
-
-    /// <summary>
-    /// The URL to acquire a strong token that can be used to approve a payout.
-    /// </summary>
-    public const string MERCHANT_PAYOUT_ACQUIRE_TOKEN_ENDPOINT = "payouts/acquiretoken";
 
     /// <summary>
     /// The URL to access the main NoFrixion MoneyMoov Payout API.
@@ -88,11 +78,6 @@ public static class MoneyMoovApiEndPoints
     /// The URL to access the main NoFrixion MoneyMoov MerchantTransactions API.
     /// </summary>
     public const string MERCHANT_TRANSACTIONS_ENDPOINT = "transactions";
-
-    /// <summary>
-    /// The URL to access the main NoFrixion MoneyMoov Transfer API.
-    /// </summary>
-    public const string TRANSFER_ENDPOINT = "payouts/transfer";
 
     /// <summary>
     /// The URL to access the main NoFrixion MoneyMoov User API.

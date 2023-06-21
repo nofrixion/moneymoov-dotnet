@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Filename: MoneyMoovApiResponse.cs
+// Filename: RestApiResponse.cs
 //
 // Description: A response wrapper class to hold the attempt or result
 // of calling a MoneyMoov endpoint.
@@ -23,7 +23,7 @@ namespace NoFrixion.MoneyMoov;
 /// <summary>
 /// Provides a non-generic contract for the ApiResponse wrapper.
 /// </summary>
-public interface IApiResponse
+public interface IRestApiResponse
 {
     /// <summary>
     /// Gets or sets the status code (HTTP status code)
@@ -47,9 +47,9 @@ public interface IApiResponse
 }
 
 /// <summary>
-/// API Response.
+/// Base class for REST API Response.
 /// </summary>
-public class MoneyMoovApiResponse
+public class RestApiResponse
 {
     /// <summary>
     /// Gets or sets the status code (HTTP status code)
@@ -67,18 +67,18 @@ public class MoneyMoovApiResponse
 
     public NoFrixionProblem Problem { get; } = NoFrixionProblem.Empty;
 
-    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, HttpResponseHeaders headers)
+    public RestApiResponse(HttpStatusCode statusCode, Uri? requestUri, HttpResponseHeaders headers)
     {
         StatusCode = statusCode;
         RequestUri = requestUri ?? Option<Uri>.None;
         Headers = headers;
     }
 
-    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, NoFrixionProblem problem) :
+    public RestApiResponse(HttpStatusCode statusCode, Uri? requestUri, NoFrixionProblem problem) :
         this(statusCode, requestUri, Option<HttpResponseHeaders>.None, problem)
     { }
 
-    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, Option<HttpResponseHeaders> headers, NoFrixionProblem problem)
+    public RestApiResponse(HttpStatusCode statusCode, Uri? requestUri, Option<HttpResponseHeaders> headers, NoFrixionProblem problem)
     {
         StatusCode = statusCode;
         RequestUri = requestUri ?? Option<Uri>.None;
@@ -93,9 +93,9 @@ public class MoneyMoovApiResponse
 }
 
 /// <summary>
-/// API Response.
+/// Generic REST API Response.
 /// </summary>
-public class MoneyMoovApiResponse<T> : MoneyMoovApiResponse, IApiResponse
+public class RestApiResponse<T> : RestApiResponse, IRestApiResponse
 {
     /// <summary>
     /// Gets or sets the data (parsed HTTP body)
@@ -108,28 +108,28 @@ public class MoneyMoovApiResponse<T> : MoneyMoovApiResponse, IApiResponse
     /// </summary>
     public T? Result => Data.IsNone ? default : (T)Data;
 
-    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, HttpResponseHeaders headers)
+    public RestApiResponse(HttpStatusCode statusCode, Uri? requestUri, HttpResponseHeaders headers)
         : base(statusCode, requestUri, headers)
     { }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MoneyMoovApiResponse{T}" /> class.
+    /// Initializes a new instance of the <see cref="RestApiResponse{T}" /> class.
     /// </summary>
     /// <param name="statusCode">HTTP status code.</param>
     /// <param name="headers">HTTP headers.</param>
     /// <param name="data">Data (parsed HTTP body)</param>
     /// <param name="rawContent">Raw content.</param>
-    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, HttpResponseHeaders headers, T data)
+    public RestApiResponse(HttpStatusCode statusCode, Uri? requestUri, HttpResponseHeaders headers, T data)
         :  base(statusCode, requestUri, headers)
     {
         Data = data;
     }
 
-    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, NoFrixionProblem problem)
+    public RestApiResponse(HttpStatusCode statusCode, Uri? requestUri, NoFrixionProblem problem)
     : base(statusCode, requestUri, problem)
     { }
 
-    public MoneyMoovApiResponse(HttpStatusCode statusCode, Uri? requestUri, Option<HttpResponseHeaders> headers, NoFrixionProblem problem)
+    public RestApiResponse(HttpStatusCode statusCode, Uri? requestUri, Option<HttpResponseHeaders> headers, NoFrixionProblem problem)
         : base(statusCode, requestUri, headers, problem)
     { }
  }

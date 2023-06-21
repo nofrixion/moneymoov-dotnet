@@ -38,7 +38,7 @@ public class MoneyMoovTestBase<T> where T : class
 
         HttpClientFactory = new DefaultHttpClientFactory();
 
-        MoneyMoovApiBaseUrl = Configuration["NoFrixion:MoneyMoovApiBaseUrl"];
+        MoneyMoovApiBaseUrl = Configuration["NoFrixion:MoneyMoovApiBaseUrl"] ?? string.Empty;
     }
 
     public LoggerFactory LoggerFactory { get; set; }
