@@ -50,6 +50,31 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
     }
 
     /// <summary>
+    /// Tests that the get version method can be correctly called on the sandbox cluster when using the 
+    /// MoneyMoov client.
+    /// </summary>
+    [Fact]
+    public async Task Get_Version_MoneyMoovClient_Production_Test()
+    {
+        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
+
+        var moneyMoovClient = new MoneyMoovClient();
+
+        Assert.Equal(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL, moneyMoovClient.GetBaseUrl()?.ToString());
+
+        var response = await moneyMoovClient.MetadataClient().GetVersionAsync();
+
+        Assert.NotNull(response);
+        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+        Assert.True(response.Data.IsSome);
+        Assert.True(response.Problem.IsEmpty);
+
+        var version = (NoFrixionVersion)response.Data;
+
+        Logger.LogDebug(version.ToString());
+    }
+
+    /// <summary>
     /// Tests that the get version method can be correctly called on the sandbox cluster.
     /// </summary>
     [Fact]
@@ -60,6 +85,31 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         var metadataApiClient = new MetadataClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
 
         var response = await metadataApiClient.GetVersionAsync();
+
+        Assert.NotNull(response);
+        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+        Assert.True(response.Data.IsSome);
+        Assert.True(response.Problem.IsEmpty);
+
+        var version = (NoFrixionVersion)response.Data;
+
+        Logger.LogDebug(version.ToString());
+    }
+
+    /// <summary>
+    /// Tests that the get version method can be correctly called on the sandbox cluster when using the 
+    /// MoneyMoov client.
+    /// </summary>
+    [Fact]
+    public async Task Get_Version_MoneyMoovClient_Sandbox_Test()
+    {
+        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
+
+        var moneyMoovClient = new MoneyMoovClient(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL);
+
+        Assert.Equal(MoneyMoovUrlBuilder.SANDBOX_MONEYMOOV_BASE_URL, moneyMoovClient.GetBaseUrl()?.ToString());
+
+        var response = await moneyMoovClient.MetadataClient().GetVersionAsync();
 
         Assert.NotNull(response);
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);

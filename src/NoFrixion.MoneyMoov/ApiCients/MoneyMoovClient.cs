@@ -13,6 +13,8 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using System.Net.Http;
+
 namespace NoFrixion.MoneyMoov;
 
 public interface IMoneyMoovClient
@@ -34,6 +36,8 @@ public interface IMoneyMoovClient
     IUserInviteClient UserInviteClient();
 
     IWebhookClient WebhookClient();
+
+    Uri? GetBaseUrl();
 }
 
 public class MoneyMoovClient : IMoneyMoovClient
@@ -41,6 +45,8 @@ public class MoneyMoovClient : IMoneyMoovClient
     public const string MONEYMOOV_HTTP_CLIENT_NAME = "moneymoov";
 
     private readonly IHttpClientFactory _httpClientFactory;
+
+    public Uri? GetBaseUrl() => _httpClientFactory.CreateClient(MONEYMOOV_HTTP_CLIENT_NAME).BaseAddress;
 
     public MoneyMoovClient(IHttpClientFactory httpClientFactory)
     {
