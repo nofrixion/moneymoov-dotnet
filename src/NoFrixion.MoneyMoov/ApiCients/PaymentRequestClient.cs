@@ -13,7 +13,6 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using LanguageExt.ClassInstances;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NoFrixion.MoneyMoov.Models;
@@ -23,39 +22,39 @@ namespace NoFrixion.MoneyMoov;
 
 public interface IPaymentRequestClient
 {
-    Task<MoneyMoovApiResponse<PaymentRequest>> GetPaymentRequestAsync(string accessToken, Guid paymentRequestID);
+    Task<RestApiResponse<PaymentRequest>> GetPaymentRequestAsync(string accessToken, Guid paymentRequestID);
 
-    Task<MoneyMoovApiResponse<PaymentRequest>> GetPaymentRequestByOrderAsync(string accessToken, string orderID);
+    Task<RestApiResponse<PaymentRequest>> GetPaymentRequestByOrderAsync(string accessToken, string orderID);
 
-    Task<MoneyMoovApiResponse<PaymentRequest>> CreatePaymentRequestAsync(string accessToken, PaymentRequestCreate paymentRequestCreate);
+    Task<RestApiResponse<PaymentRequest>> CreatePaymentRequestAsync(string accessToken, PaymentRequestCreate paymentRequestCreate);
 
-    //Task<MoneyMoovApiResponse> DeletePaymentRequestAsync(string accessToken, Guid paymentRequestID);
+    //Task<RestApiResponse> DeletePaymentRequestAsync(string accessToken, Guid paymentRequestID);
 }
 
 public class PaymentRequestClient : IPaymentRequestClient
 {
     private readonly ILogger _logger;
-    private readonly IMoneyMoovApiClient _apiClient;
+    private readonly IRestApiClient _apiClient;
 
     public PaymentRequestClient()
     {
-        _apiClient = new MoneyMoovApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+        _apiClient = new RestApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
         _logger = NullLogger.Instance;
     }
 
     public PaymentRequestClient(string baseUri)
     {
-        _apiClient = new MoneyMoovApiClient(baseUri);
+        _apiClient = new RestApiClient(baseUri);
         _logger = NullLogger.Instance;
     }
 
-    public PaymentRequestClient(IMoneyMoovApiClient apiClient)
+    public PaymentRequestClient(IRestApiClient apiClient)
     {
         _apiClient = apiClient;
         _logger = NullLogger.Instance;
     }
 
-    public PaymentRequestClient(IMoneyMoovApiClient apiClient, ILogger<PaymentRequestClient> logger)
+    public PaymentRequestClient(IRestApiClient apiClient, ILogger<PaymentRequestClient> logger)
     {
         _apiClient = apiClient;
         _logger = logger;
@@ -67,7 +66,7 @@ public class PaymentRequestClient : IPaymentRequestClient
     /// <param name="accessToken">A User or Merchant scoped JWT access token.</param>
     /// <param name="paymentRequestID">The ID of the payment request to retrieve.</param>
     /// <returns>If successful, a payment request object.</returns>
-    public Task<MoneyMoovApiResponse<PaymentRequest>> GetPaymentRequestAsync(string accessToken, Guid paymentRequestID)
+    public Task<RestApiResponse<PaymentRequest>> GetPaymentRequestAsync(string accessToken, Guid paymentRequestID)
     {
         var url = MoneyMoovUrlBuilder.PaymentRequestsApi.PaymentRequestUrl(_apiClient.GetBaseUri().ToString(), paymentRequestID);
 
@@ -76,7 +75,7 @@ public class PaymentRequestClient : IPaymentRequestClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<PaymentRequest>(url, accessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse<PaymentRequest>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<PaymentRequest>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -87,7 +86,7 @@ public class PaymentRequestClient : IPaymentRequestClient
     /// is required when retrieving a payment request by order.</param>
     /// <param name="orderID">The order ID of the payment request to retrieve.</param>
     /// <returns>If successful, a payment request object.</returns>
-    public Task<MoneyMoovApiResponse<PaymentRequest>> GetPaymentRequestByOrderAsync(string accessToken, string orderID)
+    public Task<RestApiResponse<PaymentRequest>> GetPaymentRequestByOrderAsync(string accessToken, string orderID)
     {
         var url = MoneyMoovUrlBuilder.PaymentRequestsApi.GetByOrderIDUrl(_apiClient.GetBaseUri().ToString(), orderID);
 
@@ -96,7 +95,7 @@ public class PaymentRequestClient : IPaymentRequestClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<PaymentRequest>(url, accessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse<PaymentRequest>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<PaymentRequest>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -106,7 +105,7 @@ public class PaymentRequestClient : IPaymentRequestClient
     /// <param name="accessToken">A User or Merchant scoped JWT access token.</param>
     /// <param name="paymentRequestCreate">The details of the payment request to create.</param>
     /// <returns>If successful, the newly created merchant token.</returns>
-    public Task<MoneyMoovApiResponse<PaymentRequest>> CreatePaymentRequestAsync(string accessToken, PaymentRequestCreate paymentRequestCreate)
+    public Task<RestApiResponse<PaymentRequest>> CreatePaymentRequestAsync(string accessToken, PaymentRequestCreate paymentRequestCreate)
     {
         var url = MoneyMoovUrlBuilder.PaymentRequestsApi.PaymentRequestsUrl(_apiClient.GetBaseUri().ToString());
 
@@ -115,7 +114,7 @@ public class PaymentRequestClient : IPaymentRequestClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PostAsync<PaymentRequest>(url, accessToken, new FormUrlEncodedContent(paymentRequestCreate.ToDictionary())),
-            _ => Task.FromResult(new MoneyMoovApiResponse<PaymentRequest>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<PaymentRequest>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -125,7 +124,7 @@ public class PaymentRequestClient : IPaymentRequestClient
     /// <param name="accessToken">A User scoped JWT access token.</param>
     /// <param name="paymentRequestID">The ID of the payment request to delete.</param>
     /// <returns>If successful, the newly created merchant token.</returns>
-    //public Task<MoneyMoovApiResponse> DeletePaymentRequestAsync(string accessToken, Guid paymentRequestID)
+    //public Task<RestApiResponse> DeletePaymentRequestAsync(string accessToken, Guid paymentRequestID)
     //{
     //    var url = MoneyMoovUrlBuilder.PaymentRequestsApi.DeleteUrl(_apiClient.GetBaseUri().ToString(), paymentRequestID);
 
@@ -134,7 +133,7 @@ public class PaymentRequestClient : IPaymentRequestClient
     //    return prob switch
     //    {
     //        var p when p.IsEmpty => _apiClient.DeleteAsync(url, accessToken),
-    //        _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+    //        _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
     //    };
     //}
 }

@@ -22,37 +22,37 @@ namespace NoFrixion.MoneyMoov;
 
 public interface IMerchantClient
 {
-    Task<MoneyMoovApiResponse<MerchantTokenPageResponse>> GetMerchantTokensAsync(string userAccessToken, Guid merchantID);
+    Task<RestApiResponse<MerchantTokenPageResponse>> GetMerchantTokensAsync(string userAccessToken, Guid merchantID);
 
-    Task<MoneyMoovApiResponse<MerchantToken>> CreateMerchantTokenAsync(string userAccessToken, TokenAdd token);
+    Task<RestApiResponse<MerchantToken>> CreateMerchantTokenAsync(string userAccessToken, TokenAdd token);
 
-    Task<MoneyMoovApiResponse> DeleteMerchantTokenAsync(string userAccessToken, Guid tokenID);
+    Task<RestApiResponse> DeleteMerchantTokenAsync(string userAccessToken, Guid tokenID);
 
-    Task<MoneyMoovApiResponse<IEnumerable<UserRole>>> GetUserRolesAsync(string userAccessToken, Guid merchantID);
+    Task<RestApiResponse<IEnumerable<UserRole>>> GetUserRolesAsync(string userAccessToken, Guid merchantID);
 
-    Task<MoneyMoovApiResponse<IEnumerable<PaymentAccount>>> GetAccountsAsync(string userAccessToken, Guid merchantID);
+    Task<RestApiResponse<IEnumerable<PaymentAccount>>> GetAccountsAsync(string userAccessToken, Guid merchantID);
 
-    Task<MoneyMoovApiResponse<IEnumerable<UserInvite>>> GetUserInvitesAsync(string userAccessToken, Guid merchantID);
+    Task<RestApiResponse<IEnumerable<UserInvite>>> GetUserInvitesAsync(string userAccessToken, Guid merchantID);
 }
 
 public class MerchantClient : IMerchantClient
 {
     private readonly ILogger _logger;
-    private readonly IMoneyMoovApiClient _apiClient;
+    private readonly IRestApiClient _apiClient;
 
     public MerchantClient(string baseUri)
     {
-        _apiClient = new MoneyMoovApiClient(baseUri);
+        _apiClient = new RestApiClient(baseUri);
         _logger = NullLogger.Instance;
     }
 
-    public MerchantClient(IMoneyMoovApiClient apiClient)
+    public MerchantClient(IRestApiClient apiClient)
     {
         _apiClient = apiClient;
         _logger = NullLogger.Instance;
     }
 
-    public MerchantClient(IMoneyMoovApiClient apiClient, ILogger<MerchantClient> logger)
+    public MerchantClient(IRestApiClient apiClient, ILogger<MerchantClient> logger)
     {
         _apiClient = apiClient;
         _logger = logger;
@@ -65,7 +65,7 @@ public class MerchantClient : IMerchantClient
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="merchantID">The ID of the merchant to get the merchant tokens for.</param>
     /// <returns>If successful, a list of tokens for the merchant.</returns>
-    public Task<MoneyMoovApiResponse<MerchantTokenPageResponse>> GetMerchantTokensAsync(string userAccessToken, Guid merchantID)
+    public Task<RestApiResponse<MerchantTokenPageResponse>> GetMerchantTokensAsync(string userAccessToken, Guid merchantID)
     {
         var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantTokensUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
@@ -74,7 +74,7 @@ public class MerchantClient : IMerchantClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<MerchantTokenPageResponse>(url, userAccessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse<MerchantTokenPageResponse>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<MerchantTokenPageResponse>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -84,7 +84,7 @@ public class MerchantClient : IMerchantClient
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="token">The details of the token to create.</param>
     /// <returns>If successful, the newly created merchant token.</returns>
-    public Task<MoneyMoovApiResponse<MerchantToken>> CreateMerchantTokenAsync(string userAccessToken, TokenAdd token)
+    public Task<RestApiResponse<MerchantToken>> CreateMerchantTokenAsync(string userAccessToken, TokenAdd token)
     {
         var url = MoneyMoovUrlBuilder.MerchantsApi.AllMerchantsTokensUrl(_apiClient.GetBaseUri().ToString());
 
@@ -93,7 +93,7 @@ public class MerchantClient : IMerchantClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PostAsync<MerchantToken>(url, userAccessToken, new FormUrlEncodedContent(token.ToDictionary())),
-            _ => Task.FromResult(new MoneyMoovApiResponse<MerchantToken>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<MerchantToken>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -103,7 +103,7 @@ public class MerchantClient : IMerchantClient
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="tokenID">The ID of the token to delete.</param>
     /// <returns>If successful, a list of tokens for the merchant.</returns>
-    public Task<MoneyMoovApiResponse> DeleteMerchantTokenAsync(string userAccessToken, Guid tokenID)
+    public Task<RestApiResponse> DeleteMerchantTokenAsync(string userAccessToken, Guid tokenID)
     {
         var url = MoneyMoovUrlBuilder.TokensApi.TokenUrl(_apiClient.GetBaseUri().ToString(), tokenID);
 
@@ -112,7 +112,7 @@ public class MerchantClient : IMerchantClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.DeleteAsync(url, userAccessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -123,7 +123,7 @@ public class MerchantClient : IMerchantClient
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="merchantID">The ID of the merchant to get the user roles for.</param>
     /// <returns>If successful, a list of the user role assignments for the merchant.</returns>
-    public Task<MoneyMoovApiResponse<IEnumerable<UserRole>>> GetUserRolesAsync(string userAccessToken, Guid merchantID)
+    public Task<RestApiResponse<IEnumerable<UserRole>>> GetUserRolesAsync(string userAccessToken, Guid merchantID)
     {
         var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantUserRolesUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
@@ -132,7 +132,7 @@ public class MerchantClient : IMerchantClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<IEnumerable<UserRole>>(url, userAccessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse<IEnumerable<UserRole>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<IEnumerable<UserRole>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -142,7 +142,7 @@ public class MerchantClient : IMerchantClient
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="merchantID">The ID of the merchant to get the payment accounts for.</param>
     /// <returns>If successful, a list of the payment accounts for the merchant.</returns>
-    public Task<MoneyMoovApiResponse<IEnumerable<PaymentAccount>>> GetAccountsAsync(string userAccessToken, Guid merchantID)
+    public Task<RestApiResponse<IEnumerable<PaymentAccount>>> GetAccountsAsync(string userAccessToken, Guid merchantID)
     {
         var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantAccountsUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
@@ -151,7 +151,7 @@ public class MerchantClient : IMerchantClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<IEnumerable<PaymentAccount>>(url, userAccessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse<IEnumerable<PaymentAccount>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<IEnumerable<PaymentAccount>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -162,7 +162,7 @@ public class MerchantClient : IMerchantClient
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="merchantID">The ID of the merchant to get the invites for.</param>
     /// <returns>If successful, a list of the user invites for the merchant.</returns>
-    public Task<MoneyMoovApiResponse<IEnumerable<UserInvite>>> GetUserInvitesAsync(string userAccessToken, Guid merchantID)
+    public Task<RestApiResponse<IEnumerable<UserInvite>>> GetUserInvitesAsync(string userAccessToken, Guid merchantID)
     {
         var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantUserInvitesUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
@@ -171,7 +171,7 @@ public class MerchantClient : IMerchantClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<IEnumerable<UserInvite>>(url, userAccessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse<IEnumerable<UserInvite>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<IEnumerable<UserInvite>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }

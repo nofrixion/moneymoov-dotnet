@@ -22,37 +22,37 @@ namespace NoFrixion.MoneyMoov;
 
 public interface IWebhookClient
 {
-    Task<MoneyMoovApiResponse<Webhook>> CreateWebhookAsync(string userAccessToken, WebhookCreate webhookCreate);
+    Task<RestApiResponse<Webhook>> CreateWebhookAsync(string userAccessToken, WebhookCreate webhookCreate);
 
-    Task<MoneyMoovApiResponse> DeleteWebhookAsync(string accessToken, Guid webhookID);
+    Task<RestApiResponse> DeleteWebhookAsync(string accessToken, Guid webhookID);
 
-    Task<MoneyMoovApiResponse<IEnumerable<Webhook>>> GetWebhooksAsync(string userAccessToken, Guid merchantID);
+    Task<RestApiResponse<IEnumerable<Webhook>>> GetWebhooksAsync(string userAccessToken, Guid merchantID);
 }
 
 public class WebhookClient : IWebhookClient
 {
     private readonly ILogger _logger;
-    private readonly IMoneyMoovApiClient _apiClient;
+    private readonly IRestApiClient _apiClient;
 
     public WebhookClient()
     {
-        _apiClient = new MoneyMoovApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+        _apiClient = new RestApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
         _logger = NullLogger.Instance;
     }
 
     public WebhookClient(string baseUri)
     {
-        _apiClient = new MoneyMoovApiClient(baseUri);
+        _apiClient = new RestApiClient(baseUri);
         _logger = NullLogger.Instance;
     }
 
-    public WebhookClient(IMoneyMoovApiClient apiClient)
+    public WebhookClient(IRestApiClient apiClient)
     {
         _apiClient = apiClient;
         _logger = NullLogger.Instance;
     }
 
-    public WebhookClient(IMoneyMoovApiClient apiClient, ILogger<AccountClient> logger)
+    public WebhookClient(IRestApiClient apiClient, ILogger<AccountClient> logger)
     {
         _apiClient = apiClient;
         _logger = logger;
@@ -64,7 +64,7 @@ public class WebhookClient : IWebhookClient
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="webHookCreate">The model containing the data about the new webhook to create.</param>
     /// <returns>If successful, a webhook object.</returns>
-    public Task<MoneyMoovApiResponse<Webhook>> CreateWebhookAsync(string userAccessToken, WebhookCreate webHookCreate)
+    public Task<RestApiResponse<Webhook>> CreateWebhookAsync(string userAccessToken, WebhookCreate webHookCreate)
     {
         var url = MoneyMoovUrlBuilder.WebhooksApi.WebhooksUrl(_apiClient.GetBaseUri().ToString());
         
@@ -73,7 +73,7 @@ public class WebhookClient : IWebhookClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PostAsync<Webhook>(url, userAccessToken, new FormUrlEncodedContent(webHookCreate.ToDictionary())),
-            _ => Task.FromResult(new MoneyMoovApiResponse<Webhook>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<Webhook>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -83,7 +83,7 @@ public class WebhookClient : IWebhookClient
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="merhcantID">The merchant ID to get the webhooks for.</param>
     /// <returns>If successful, a list of webhooks.</returns>
-    public Task<MoneyMoovApiResponse<IEnumerable<Webhook>>> GetWebhooksAsync(string userAccessToken, Guid merchantID)
+    public Task<RestApiResponse<IEnumerable<Webhook>>> GetWebhooksAsync(string userAccessToken, Guid merchantID)
     {
         var url = MoneyMoovUrlBuilder.WebhooksApi.AllWebhooksUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
@@ -92,7 +92,7 @@ public class WebhookClient : IWebhookClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<IEnumerable<Webhook>> (url, userAccessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse<IEnumerable<Webhook>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<IEnumerable<Webhook>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -101,7 +101,7 @@ public class WebhookClient : IWebhookClient
     /// </summary>
     /// <param name="accessToken">A User scoped JWT access token.</param>
     /// <param name="webhookID">The ID of the webhook to delete.</param>
-    public Task<MoneyMoovApiResponse> DeleteWebhookAsync(string accessToken, Guid webhookID)
+    public Task<RestApiResponse> DeleteWebhookAsync(string accessToken, Guid webhookID)
     {
         var url = MoneyMoovUrlBuilder.WebhooksApi.WebhookUrl(_apiClient.GetBaseUri().ToString(), webhookID);
 
@@ -110,7 +110,7 @@ public class WebhookClient : IWebhookClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.DeleteAsync(url, accessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }

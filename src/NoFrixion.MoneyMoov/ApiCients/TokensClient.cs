@@ -21,33 +21,33 @@ namespace NoFrixion.MoneyMoov;
 
 public interface ITokensClient
 {
-    Task<MoneyMoovApiResponse> DeleteTokenAsync(string accessToken, Guid id);
+    Task<RestApiResponse> DeleteTokenAsync(string accessToken, Guid id);
 }
 
 public class TokensClient : ITokensClient
 {
     private readonly ILogger _logger;
-    private readonly IMoneyMoovApiClient _apiClient;
+    private readonly IRestApiClient _apiClient;
 
     public TokensClient()
     {
-        _apiClient = new MoneyMoovApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+        _apiClient = new RestApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
         _logger = NullLogger.Instance;
     }
 
     public TokensClient(string baseUri)
     {
-        _apiClient = new MoneyMoovApiClient(baseUri);
+        _apiClient = new RestApiClient(baseUri);
         _logger = NullLogger.Instance;
     }
 
-    public TokensClient(IMoneyMoovApiClient apiClient)
+    public TokensClient(IRestApiClient apiClient)
     {
         _apiClient = apiClient;
         _logger = NullLogger.Instance;
     }
 
-    public TokensClient(IMoneyMoovApiClient apiClient, ILogger<AccountClient> logger)
+    public TokensClient(IRestApiClient apiClient, ILogger<AccountClient> logger)
     {
         _apiClient = apiClient;
         _logger = logger;
@@ -59,7 +59,7 @@ public class TokensClient : ITokensClient
     /// <param name="accessToken">A User scoped JWT access token.</param>
     /// <param name="id">The ID of the token to delete.</param>
     /// <returns>A moneymoov API response object.</returns>
-    public Task<MoneyMoovApiResponse> DeleteTokenAsync(string accessToken, Guid id)
+    public Task<RestApiResponse> DeleteTokenAsync(string accessToken, Guid id)
     {
         var url = MoneyMoovUrlBuilder.TokensApi.TokenUrl(_apiClient.GetBaseUri().ToString(), id);
 
@@ -68,7 +68,7 @@ public class TokensClient : ITokensClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.DeleteAsync(url, accessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }

@@ -22,23 +22,23 @@ namespace NoFrixion.MoneyMoov;
 
 public interface IRuleClient
 {
-    Task<MoneyMoovApiResponse> ApproveRuleAsync(string userAccessStrongToken, Guid ruleID);
+    Task<RestApiResponse> ApproveRuleAsync(string userAccessStrongToken, Guid ruleID);
 
-    Task<MoneyMoovApiResponse<Rule>> GetRuleAsync(string userAccessToken, Guid ruleID);
+    Task<RestApiResponse<Rule>> GetRuleAsync(string userAccessToken, Guid ruleID);
 }
 
 public class RuleClient : IRuleClient
 {
     private readonly ILogger _logger;
-    private readonly IMoneyMoovApiClient _apiClient;
+    private readonly IRestApiClient _apiClient;
 
-    public RuleClient(IMoneyMoovApiClient apiClient)
+    public RuleClient(IRestApiClient apiClient)
     {
         _apiClient = apiClient;
         _logger = NullLogger.Instance;
     }
 
-    public RuleClient(IMoneyMoovApiClient apiClient, ILogger<RuleClient> logger)
+    public RuleClient(IRestApiClient apiClient, ILogger<RuleClient> logger)
     {
         _apiClient = apiClient;
         _logger = logger;
@@ -50,7 +50,7 @@ public class RuleClient : IRuleClient
     /// <param name="userAccessStrongToken">A User scoped JWT strong access token.</param>
     /// <param name="ruleID">The ID of the rule being authorised, must match the token.</param>
     /// <returns>An API response indicating the result of the approval attempt.</returns>
-    public Task<MoneyMoovApiResponse> ApproveRuleAsync(string userAccessStrongToken, Guid ruleID)
+    public Task<RestApiResponse> ApproveRuleAsync(string userAccessStrongToken, Guid ruleID)
     {
         var url = MoneyMoovUrlBuilder.RulesApi.ApproveRuleUrl(_apiClient.GetBaseUri().ToString(), ruleID);
         return _apiClient.PostAsync(url, userAccessStrongToken);
@@ -62,7 +62,7 @@ public class RuleClient : IRuleClient
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="ruleID">The ID of the rule to retrieve.</param>
     /// <returns>If successful, a rule object.</returns>
-    public Task<MoneyMoovApiResponse<Rule>> GetRuleAsync(string userAccessToken, Guid ruleID)
+    public Task<RestApiResponse<Rule>> GetRuleAsync(string userAccessToken, Guid ruleID)
     {
         var url = MoneyMoovUrlBuilder.RulesApi.RuleUrl(_apiClient.GetBaseUri().ToString(), ruleID);
 
@@ -71,7 +71,7 @@ public class RuleClient : IRuleClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<Rule>(url, userAccessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse<Rule>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<Rule>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }

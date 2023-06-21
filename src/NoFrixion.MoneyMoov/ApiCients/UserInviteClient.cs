@@ -22,42 +22,42 @@ namespace NoFrixion.MoneyMoov;
 
 public interface IUserInviteClient
 {
-    Task<MoneyMoovApiResponse<UserInvite>> GetUserInviteAsync(Guid userInviteID);
+    Task<RestApiResponse<UserInvite>> GetUserInviteAsync(Guid userInviteID);
 
-    Task<MoneyMoovApiResponse<UserInvite>> GetUserInviteAsync(string accessToken, Guid userInviteID);
+    Task<RestApiResponse<UserInvite>> GetUserInviteAsync(string accessToken, Guid userInviteID);
 
-    Task<MoneyMoovApiResponse<UserInvite>> SendInviteAsync(string userAccessToken, Guid merchantID, string inviteeEmailAddress, string inviteRegistrationUrl,
+    Task<RestApiResponse<UserInvite>> SendInviteAsync(string userAccessToken, Guid merchantID, string inviteeEmailAddress, string inviteRegistrationUrl,
         bool sendInviteEmail, string inviteeFirstName, string inviteeLastName);
 
-    Task<MoneyMoovApiResponse> ResendUserInviteAsync(Guid userInviteID);
+    Task<RestApiResponse> ResendUserInviteAsync(Guid userInviteID);
 
-    Task<MoneyMoovApiResponse> ResendUserInviteAsync(string accessToken, Guid userInviteID);
+    Task<RestApiResponse> ResendUserInviteAsync(string accessToken, Guid userInviteID);
 }
 
 public class UserInviteClient : IUserInviteClient
 {
     private readonly ILogger _logger;
-    private readonly IMoneyMoovApiClient _apiClient;
+    private readonly IRestApiClient _apiClient;
 
     public UserInviteClient()
     {
-        _apiClient = new MoneyMoovApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
+        _apiClient = new RestApiClient(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
         _logger = NullLogger.Instance;
     }
 
     public UserInviteClient(string baseUri)
     {
-        _apiClient = new MoneyMoovApiClient(baseUri);
+        _apiClient = new RestApiClient(baseUri);
         _logger = NullLogger.Instance;
     }
 
-    public UserInviteClient(IMoneyMoovApiClient apiClient)
+    public UserInviteClient(IRestApiClient apiClient)
     {
         _apiClient = apiClient;
         _logger = NullLogger.Instance;
     }
 
-    public UserInviteClient(IMoneyMoovApiClient apiClient, ILogger<AccountClient> logger)
+    public UserInviteClient(IRestApiClient apiClient, ILogger<AccountClient> logger)
     {
         _apiClient = apiClient;
         _logger = logger;
@@ -70,7 +70,7 @@ public class UserInviteClient : IUserInviteClient
     /// </summary>
     /// <param name="userInviteID">The ID of the user invite to retrieve.</param>
     /// <returns>If successful, a user invite object.</returns>
-    public Task<MoneyMoovApiResponse<UserInvite>> GetUserInviteAsync(Guid userInviteID)
+    public Task<RestApiResponse<UserInvite>> GetUserInviteAsync(Guid userInviteID)
     {
         var url = MoneyMoovUrlBuilder.UserInvitesApi.UserInviteUrl(_apiClient.GetBaseUri().ToString(), userInviteID);
         return _apiClient.GetAsync<UserInvite>(url);
@@ -82,7 +82,7 @@ public class UserInviteClient : IUserInviteClient
     /// <param name="accessToken">A User scoped JWT access token.</param>
     /// <param name="userInviteID">The ID of the user invite to retrieve.</param>
     /// <returns>If successful, a user invite object.</returns>
-    public Task<MoneyMoovApiResponse<UserInvite>> GetUserInviteAsync(string accessToken, Guid userInviteID)
+    public Task<RestApiResponse<UserInvite>> GetUserInviteAsync(string accessToken, Guid userInviteID)
     {
         var url = MoneyMoovUrlBuilder.UserInvitesApi.UserInviteUrl(_apiClient.GetBaseUri().ToString(), userInviteID);
 
@@ -91,7 +91,7 @@ public class UserInviteClient : IUserInviteClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<UserInvite>(url, accessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse<UserInvite>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<UserInvite>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -102,7 +102,7 @@ public class UserInviteClient : IUserInviteClient
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="merchantID">The ID of the merchant the user is being invited to join.</param>
     /// <param name="inviteeEmailAddress">The email address of the user to invite.</param>
-    public Task<MoneyMoovApiResponse<UserInvite>> SendInviteAsync(string userAccessToken, Guid merchantID, 
+    public Task<RestApiResponse<UserInvite>> SendInviteAsync(string userAccessToken, Guid merchantID, 
         string inviteeEmailAddress, 
         string inviteRegistrationUrl, 
         bool sendInviteEmail,
@@ -126,7 +126,7 @@ public class UserInviteClient : IUserInviteClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PostAsync<UserInvite>(url, userAccessToken, new FormUrlEncodedContent(userInviteCreate.ToDictionary())),
-            _ => Task.FromResult(new MoneyMoovApiResponse<UserInvite>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse<UserInvite>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
@@ -136,7 +136,7 @@ public class UserInviteClient : IUserInviteClient
     /// be sent to the original inviter informing them of the request so they can decide whether to resend or not.
     /// </summary>
     /// <param name="userInviteID">The ID of the user invite to request a resend for.</param>
-    public Task<MoneyMoovApiResponse> ResendUserInviteAsync(Guid userInviteID)
+    public Task<RestApiResponse> ResendUserInviteAsync(Guid userInviteID)
     {
         var url = MoneyMoovUrlBuilder.UserInvitesApi.UserInviteUrl(_apiClient.GetBaseUri().ToString(), userInviteID);
         return _apiClient.PutAsync(url);
@@ -147,7 +147,7 @@ public class UserInviteClient : IUserInviteClient
     /// </summary>
     /// <param name="accessToken">A User scoped JWT access token.</param>
     /// <param name="userInviteID">The ID of the user invite to resend.</param>
-    public Task<MoneyMoovApiResponse> ResendUserInviteAsync(string accessToken, Guid userInviteID)
+    public Task<RestApiResponse> ResendUserInviteAsync(string accessToken, Guid userInviteID)
     {
         var url = MoneyMoovUrlBuilder.UserInvitesApi.UserInviteUrl(_apiClient.GetBaseUri().ToString(), userInviteID);
 
@@ -156,7 +156,7 @@ public class UserInviteClient : IUserInviteClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PutAsync(url, accessToken),
-            _ => Task.FromResult(new MoneyMoovApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }
