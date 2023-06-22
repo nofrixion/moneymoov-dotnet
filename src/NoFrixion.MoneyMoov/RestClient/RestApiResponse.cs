@@ -2,7 +2,7 @@
 // Filename: RestApiResponse.cs
 //
 // Description: A response wrapper class to hold the attempt or result
-// of calling a MoneyMoov endpoint.
+// of calling a REST endpoint.
 //
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)
