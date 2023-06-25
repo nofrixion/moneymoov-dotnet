@@ -214,7 +214,7 @@ public static class PaymentRequestExtensions
                         PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.Modulr
                             && cbk.Status == PaymentRequestResult.PISP_MODULR_SUCCESS_STATUS
                             && cbk.PispBankStatus != PaymentRequestResult.PISP_MODULR_BANK_REJECTED_STATUS => cbk,
-                        PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.Nofrixion
+                        PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.NoFrixion
                         && (cbk.Status == PayoutStatus.QUEUED.ToString() ||
                             cbk.Status == PayoutStatus.QUEUED_UPSTREAM.ToString() ||
                             cbk.Status == PayoutStatus.PENDING.ToString() ||

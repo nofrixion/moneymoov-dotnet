@@ -840,7 +840,7 @@ public class PaymentRequestResultTests
             Inserted = DateTime.UtcNow,
             EventType = PaymentRequestEventTypesEnum.pisp_callback,
             Status = PayoutStatus.PENDING.ToString(),
-            PaymentProcessorName = PaymentProcessorsEnum.Nofrixion,
+            PaymentProcessorName = PaymentProcessorsEnum.NoFrixion,
             PispPaymentInitiationID = "xxx"
         };
 
@@ -853,7 +853,7 @@ public class PaymentRequestResultTests
             Inserted = DateTime.UtcNow,
             EventType = PaymentRequestEventTypesEnum.pisp_callback,
             Status = PayoutStatus.QUEUED.ToString(),
-            PaymentProcessorName = PaymentProcessorsEnum.Nofrixion,
+            PaymentProcessorName = PaymentProcessorsEnum.NoFrixion,
             PispPaymentInitiationID = "xxx"
         };
 
