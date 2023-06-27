@@ -48,11 +48,6 @@ public class PaymentRequestPaymentAttempt
     public DateTimeOffset? SettledAt { get; set; }
 
     /// <summary>
-    /// If the attempt was refunded this is the timestamp it occurred at.
-    /// </summary>
-    public DateTimeOffset? RefundedAt { get; set; }
-
-    /// <summary>
     /// If the attempt failed to settled after the expected settlement time this
     /// is the timestamp the failure was recorded at.
     /// </summary>
@@ -79,9 +74,9 @@ public class PaymentRequestPaymentAttempt
     public decimal SettledAmount { get; set; }
 
     /// <summary>
-    /// The amount that was refunded to the payer.
+    /// The refund attempts associated with this payment attempt.
     /// </summary>
-    public decimal RefundedAmount { get; set; }
+    public List<PaymentRequestRefundAttempt> RefundAttempts { get; set; } = new List<PaymentRequestRefundAttempt>();
 
     /// <summary>
     /// The authorised payment currency.
@@ -116,4 +111,22 @@ public class PaymentRequestPaymentAttempt
             };
         }
     }
+}
+
+
+public class PaymentRequestRefundAttempt
+{
+    public Guid? RefundPayoutID { get; set; }
+    
+    public DateTimeOffset? RefundInitiatedAt { get; set; }
+    
+    public DateTimeOffset? RefundSettledAt { get; set; }
+    
+    public DateTimeOffset? RefundCancelledAt { get; set; }
+    
+    public decimal RefundInitiatedAmount { get; set; }
+    
+    public decimal RefundSettledAmount { get; set; }
+    
+    public decimal RefundCancelledAmount { get; set; }
 }

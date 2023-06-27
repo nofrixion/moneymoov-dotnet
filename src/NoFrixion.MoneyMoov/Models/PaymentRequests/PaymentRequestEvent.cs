@@ -108,6 +108,11 @@ public class PaymentRequestEvent
     public string? PispBankStatus { get; set; }
 
     public WalletsEnum? WalletName { get; set; }
+    
+    /// <summary>
+    /// ID of the Payout that was created for refund.
+    /// </summary>
+    public Guid? RefundPayoutID { get; set; }
 
     /// <summary>
     /// Gets the amount to display with the correct number of decimal places based on the currency type. 
