@@ -111,4 +111,9 @@ public class PaymentAccount
     /// <returns></returns>
     public string Summary
         => AccountName + (Identifier != null ? ", " + Identifier.Summary : string.Empty);
+
+    /// <summary>
+    /// Is the default account
+    /// </summary>
+    public bool IsDefault { get; set; }
 }
