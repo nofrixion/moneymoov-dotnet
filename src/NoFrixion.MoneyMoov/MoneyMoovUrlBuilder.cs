@@ -64,6 +64,9 @@ public static class MoneyMoovUrlBuilder
     /// </summary>
     public static class AccountsApi
     {
+        public static string AccountUrl(string moneyMoovBaseUrl, Guid accountID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/{accountID}";
+
         public static string AccountsUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/";
 
