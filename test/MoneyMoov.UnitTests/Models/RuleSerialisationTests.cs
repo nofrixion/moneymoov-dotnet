@@ -145,9 +145,9 @@ public class RuleSerialisationTests : MoneyMoovUnitTestBase<RuleSerialisationTes
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
-        string yourRefPattern = "${some_pattern} your ref";
-        string theirRefPattern = "${some_pattern} their ref";
-        string descriptionPattern = "Description ${some_pattern}";
+        string yourRefPattern = "{some_pattern} your ref";
+        string theirRefPattern = "{some_pattern} their ref";
+        string descriptionPattern = "Description {some_pattern}";
 
         var sweepRuleJson = @"
             {
