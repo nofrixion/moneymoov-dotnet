@@ -15,8 +15,6 @@
 
 using Microsoft.Extensions.Logging;
 using NoFrixion.MoneyMoov.Models;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 

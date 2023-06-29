@@ -132,8 +132,6 @@ public class Rule : IValidatableObject, IWebhookPayload
             }
         }
 
-
-
         if (SweepAction != null)
         {
             foreach (var err in SweepAction.Validate(validationContext))

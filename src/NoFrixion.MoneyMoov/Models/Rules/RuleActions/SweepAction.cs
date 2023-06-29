@@ -38,7 +38,7 @@ public class SweepAction : IValidatableObject
     public List<SweepDestination> Destinations { get; set; } = new List<SweepDestination>();
 
     /// <summary>
-    /// The amount to leave in the account once the seep has been processed.
+    /// The amount to leave in the account once the sweep has been processed.
     /// A value of zero means sweep all funds.
     /// </summary>
     public decimal AmountToLeave { get; set; }
@@ -50,6 +50,21 @@ public class SweepAction : IValidatableObject
     /// </summary>
     public decimal MinimumAmountToRunAt { get; set; }
 
+    /// <summary>
+    /// The pattern to use for the Your Reference value when creating payouts based on the rule.
+    /// </summary>
+    public string? PayoutYourReference { get; set; }
+
+    /// <summary>
+    /// The pattern to use for the Their Reference value when creating payouts based on the rule.
+    /// </summary>
+    public string? PayoutTheirReference { get; set; }
+
+    /// <summary>
+    /// The pattern to use for the Description value when creating payouts based on the rule.
+    /// </summary>
+    public string? PayoutDescription { get; set; }
+
     public bool IsEmpty() => _isEmpty;
 
     public Dictionary<string, string> ToDictionary(string keyPrefix)
@@ -59,7 +74,10 @@ public class SweepAction : IValidatableObject
             { keyPrefix + nameof(Priority), Priority.ToString() },
             { keyPrefix + nameof(ActionType), ActionType.ToString() },
             { keyPrefix + nameof(AmountToLeave), AmountToLeave.ToString() },
-            { keyPrefix + nameof(MinimumAmountToRunAt), MinimumAmountToRunAt.ToString() }
+            { keyPrefix + nameof(MinimumAmountToRunAt), MinimumAmountToRunAt.ToString() },
+            { keyPrefix + nameof(PayoutYourReference), PayoutYourReference ?? string.Empty },
+            { keyPrefix + nameof(PayoutTheirReference), PayoutTheirReference ?? string.Empty },
+            { keyPrefix + nameof(PayoutDescription), PayoutDescription?? string.Empty },
         };
 
         for (int i = 0; i < Destinations.Count(); i++)

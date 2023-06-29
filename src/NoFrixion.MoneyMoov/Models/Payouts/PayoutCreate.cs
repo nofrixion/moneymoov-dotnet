@@ -37,7 +37,7 @@ public class PayoutCreate
     /// <summary>
     /// Gets or Sets your reference ID
     /// </summary>
-    [Required(ErrorMessage = "Your Reference is required.")]
+    //[Required(ErrorMessage = "Your Reference is required.")]
     public string YourReference { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Their Reference is required.")]

@@ -21,19 +21,19 @@ namespace NoFrixion.MoneyMoov.Models;
 public class SweepDestination : Counterparty, IValidatableObject
 {
     /// <summary>
-    /// The percentage of the total funds in the account when the rule is exectued
+    /// The percentage of the total funds in the account when the rule is executed
     /// that should be swept to the destination.
     /// </summary>
     [Range(0, 100.00)]
     public decimal SweepPercentage { get; set; }
 
     /// <summary>
-    /// The amount that should be swept to the destination. Ignored if a sweep poercentage is set.
+    /// The amount that should be swept to the destination. Ignored if a sweep percentage is set.
     /// </summary>
     public decimal SweepAmount { get; set; }
 
     /// <summary>
-    /// The priority of the desination. Lower numbers represent higher priorities, e.g. 0 is the highest priority. 
+    /// The priority of the destination. Lower numbers represent higher priorities, e.g. 0 is the highest priority. 
     /// Relevant when there are multiple destinations in a sweep. The higher priority destinations will be paid first 
     /// and also attributed any remaining balance in the case of an uneven split.
     /// </summary>

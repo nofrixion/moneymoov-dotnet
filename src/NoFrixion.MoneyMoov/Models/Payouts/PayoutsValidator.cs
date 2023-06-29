@@ -24,20 +24,20 @@ public static class PayoutsValidator
 {
     /// <summary>
     /// The minimum required length for the Their Reference field. Note that length gets 
-    /// calculated after certain non-counter characters have been removed.
+    /// calculated after certain non-counted characters have been removed.
     /// </summary>
     public const int THEIR_REFERENCE_MINIMUM_LENGTH = 6;
 
     /// <summary>
     /// The maximum allowed length for the Their Reference field for sort code
     /// and account number (SCAN) payments . Note that length gets calculated after 
-    /// certain non-counter characters have been removed.
+    /// certain non-counted characters have been removed.
     /// </summary>
     public const int THEIR_REFERENCE_SCAN_MAXIMUM_LENGTH = 17;
 
     /// <summary>
     /// The maximum allowed length for the Their Reference field for International Bank Account Number
-    /// (IBAN) payments . Note that length gets calculated after / certain non-counter characters 
+    /// (IBAN) payments . Note that length gets calculated after / certain non-counted characters 
     /// have been removed.
     /// </summary>
     public const int THEIR_REFERENCE_IBAN_MAXIMUM_LENGTH = 139;
