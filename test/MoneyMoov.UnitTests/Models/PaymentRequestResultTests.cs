@@ -1495,4 +1495,490 @@ public class PaymentRequestResultTests
         Assert.Equal(entity.Currency, result.Currency);
         Assert.Equal(PaymentResultEnum.OverPaid, result.Result);
     }
+    
+    [Fact]
+    public void Nofrixion_Pisp_Single_Attempt_Full_Refund_OutstandingAmount_Equal_To_InitalAmount()
+    {
+        var entity = GetTestPaymentRequest();
+
+        var refundPayoutID = Guid.NewGuid();
+
+        var initiateEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_initiate,
+            Status = PaymentRequestResult.PISP_YAPILY_PENDING_STATUS,
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var callbackEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_callback,
+            Status = PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS,
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var settleEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_settle,
+            Status = "SETTLED",
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var refundInitiatedEvent = new PaymentRequestEvent
+                              {
+                                  ID = Guid.NewGuid(),
+                                  PaymentRequestID = entity.ID,
+                                  Amount = entity.Amount,
+                                  Currency = entity.Currency,
+                                  Inserted = DateTime.UtcNow,
+                                  EventType = PaymentRequestEventTypesEnum.pisp_refund_initiated,
+                                  Status = "QUEUED",
+                                  PispPaymentInitiationID = "xxx",
+                                  PaymentProcessorName = PaymentProcessorsEnum.Yapily,
+                                    RefundPayoutID = refundPayoutID
+                              };
+
+        var refundSettledEvent = new PaymentRequestEvent
+                              {
+                                  ID = Guid.NewGuid(),
+                                  PaymentRequestID = entity.ID,
+                                  Amount = entity.Amount,
+                                  Currency = entity.Currency,
+                                  Inserted = DateTime.UtcNow,
+                                  EventType = PaymentRequestEventTypesEnum.pisp_refund_settled,
+                                  Status = "PROCESSED",
+                                  PispPaymentInitiationID = "xxx",
+                                  PaymentProcessorName = PaymentProcessorsEnum.Yapily,
+                                    RefundPayoutID = refundPayoutID
+                              };
+
+        entity.Events = new List<PaymentRequestEvent> { initiateEvent, callbackEvent, settleEvent, refundInitiatedEvent, refundSettledEvent };
+
+        var result = new PaymentRequestResult(entity);
+
+        Assert.Equal(Decimal.Zero, result.Amount);
+        Assert.Equal(0, result.PispAmountAuthorized());
+        Assert.Equal(entity.Amount, result.AmountOutstanding());
+        Assert.Equal(entity.Currency, result.Currency);
+        Assert.Equal(PaymentResultEnum.None, result.Result);
+        Assert.Equal(entity.Amount, result.Payments.Single().RefundedAmount);
+    }
+    
+    [Fact]
+    public void Nofrixion_Pisp_Single_Attempt_Partial_Refund()
+    {
+        var entity = GetTestPaymentRequest();
+        
+        entity.Amount = 100;
+
+        var refundPayoutID = Guid.NewGuid();
+
+        var initiateEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_initiate,
+            Status = PaymentRequestResult.PISP_YAPILY_PENDING_STATUS,
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var callbackEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_callback,
+            Status = PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS,
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var settleEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_settle,
+            Status = "SETTLED",
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var refundInitiatedEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_refund_initiated,
+            Status = "QUEUED",
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily,
+            RefundPayoutID = refundPayoutID
+        };
+
+        var refundSettledEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_refund_settled,
+            Status = "PROCESSED",
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily,
+            RefundPayoutID = refundPayoutID
+        };
+
+        entity.Events = new List<PaymentRequestEvent> { initiateEvent, callbackEvent, settleEvent, refundInitiatedEvent, refundSettledEvent };
+
+        var result = new PaymentRequestResult(entity);
+
+        Assert.Equal(entity.Amount/2, result.Amount);
+        Assert.Equal(0, result.PispAmountAuthorized());
+        Assert.Equal(entity.Amount/2, result.AmountOutstanding());
+        Assert.Equal(entity.Currency, result.Currency);
+        Assert.Equal(PaymentResultEnum.PartiallyPaid, result.Result);
+        Assert.Equal(entity.Amount/2, result.Payments.Single().RefundedAmount);
+    }
+    
+    [Fact]
+    public void Nofrixion_Pisp_Multiple_Attempts_Multiple_Single_Refunds()
+    {
+        var entity = GetTestPaymentRequest();
+        
+        entity.Amount = 100;
+
+        var refundPayoutID = Guid.NewGuid();
+        var refundPayoutID2 = Guid.NewGuid();
+
+        var initiateEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_initiate,
+            Status = PaymentRequestResult.PISP_YAPILY_PENDING_STATUS,
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var callbackEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_callback,
+            Status = PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS,
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var settleEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_settle,
+            Status = "SETTLED",
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var refundInitiatedEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_refund_initiated,
+            Status = "QUEUED",
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily,
+            RefundPayoutID = refundPayoutID
+        };
+
+        var refundSettledEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_refund_settled,
+            Status = "PROCESSED",
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily,
+            RefundPayoutID = refundPayoutID
+        };
+        
+        var initiateEvent2 = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_initiate,
+            Status = PaymentRequestResult.PISP_YAPILY_PENDING_STATUS,
+            PispPaymentInitiationID = "yyy",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var callbackEvent2 = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_callback,
+            Status = PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS,
+            PispPaymentInitiationID = "yyy",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var settleEvent2 = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_settle,
+            Status = "SETTLED",
+            PispPaymentInitiationID = "yyy",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var refundInitiatedEvent2 = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_refund_initiated,
+            Status = "QUEUED",
+            PispPaymentInitiationID = "yyy",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily,
+            RefundPayoutID = refundPayoutID2
+        };
+
+        var refundSettledEvent2 = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_refund_settled,
+            Status = "PROCESSED",
+            PispPaymentInitiationID = "yyy",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily,
+            RefundPayoutID = refundPayoutID2
+        };
+
+        entity.Events = new List<PaymentRequestEvent> { initiateEvent, callbackEvent, settleEvent, refundInitiatedEvent, refundSettledEvent, initiateEvent2, callbackEvent2, settleEvent2, refundInitiatedEvent2, refundSettledEvent2 };
+
+        var result = new PaymentRequestResult(entity);
+
+        Assert.Equal(0, result.Amount);
+        Assert.Equal(0, result.PispAmountAuthorized());
+        Assert.Equal(entity.Amount, result.AmountOutstanding());
+        Assert.Equal(entity.Currency, result.Currency);
+        Assert.Equal(PaymentResultEnum.None, result.Result);
+        Assert.Equal(entity.Amount, result.Payments.Sum(x=>x.RefundedAmount));
+    }
+    
+    [Fact]
+    public void Nofrixion_Pisp_Multiple_Attempts_Multiple_Partial_Refunds()
+    {
+        var entity = GetTestPaymentRequest();
+        
+        entity.Amount = 100;
+
+        var refundPayoutID = Guid.NewGuid();
+        var refundPayoutID2 = Guid.NewGuid();
+
+        var initiateEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_initiate,
+            Status = PaymentRequestResult.PISP_YAPILY_PENDING_STATUS,
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var callbackEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_callback,
+            Status = PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS,
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var settleEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_settle,
+            Status = "SETTLED",
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var refundInitiatedEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/4,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_refund_initiated,
+            Status = "QUEUED",
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily,
+            RefundPayoutID = refundPayoutID
+        };
+
+        var refundSettledEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/4,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_refund_settled,
+            Status = "PROCESSED",
+            PispPaymentInitiationID = "xxx",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily,
+            RefundPayoutID = refundPayoutID
+        };
+        
+        var initiateEvent2 = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_initiate,
+            Status = PaymentRequestResult.PISP_YAPILY_PENDING_STATUS,
+            PispPaymentInitiationID = "yyy",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var callbackEvent2 = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_callback,
+            Status = PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS,
+            PispPaymentInitiationID = "yyy",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var settleEvent2 = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/2,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_settle,
+            Status = "SETTLED",
+            PispPaymentInitiationID = "yyy",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily
+        };
+
+        var refundInitiatedEvent2 = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/4,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_refund_initiated,
+            Status = "QUEUED",
+            PispPaymentInitiationID = "yyy",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily,
+            RefundPayoutID = refundPayoutID2
+        };
+
+        var refundSettledEvent2 = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount/4,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.pisp_refund_settled,
+            Status = "PROCESSED",
+            PispPaymentInitiationID = "yyy",
+            PaymentProcessorName = PaymentProcessorsEnum.Yapily,
+            RefundPayoutID = refundPayoutID2
+        };
+
+        entity.Events = new List<PaymentRequestEvent> { initiateEvent, callbackEvent, settleEvent, refundInitiatedEvent, refundSettledEvent, initiateEvent2, callbackEvent2, settleEvent2, refundInitiatedEvent2, refundSettledEvent2 };
+
+        var result = new PaymentRequestResult(entity);
+
+        Assert.Equal(entity.Amount/2, result.Amount);
+        Assert.Equal(0, result.PispAmountAuthorized());
+        Assert.Equal(entity.Amount/2, result.AmountOutstanding());
+        Assert.Equal(entity.Currency, result.Currency);
+        Assert.Equal(PaymentResultEnum.PartiallyPaid, result.Result);
+        Assert.Equal(entity.Amount/2, result.Payments.Sum(x=>x.RefundedAmount));
+    }
 }
