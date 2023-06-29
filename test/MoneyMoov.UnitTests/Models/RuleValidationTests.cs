@@ -40,7 +40,6 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
                 Priority = 1,
                 AmountToLeave = 1.00M,
                 MinimumAmountToRunAt = 99.00M,
-                ActionType = RuleActionsEnum.Sweep,
                 Destinations = new List<SweepDestination>
                 {
                     new SweepDestination
@@ -87,7 +86,6 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
                 Priority = 1,
                 AmountToLeave = 1.00M,
                 MinimumAmountToRunAt = 99.00M,
-                ActionType = RuleActionsEnum.Sweep,
                 Destinations = new List<SweepDestination>
                 {
                     new SweepDestination

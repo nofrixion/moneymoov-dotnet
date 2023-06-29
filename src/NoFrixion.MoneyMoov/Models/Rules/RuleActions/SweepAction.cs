@@ -33,7 +33,7 @@ public class SweepAction : IValidatableObject
 
     public int Priority { get; set; }
 
-    public RuleActionsEnum ActionType { get; set; }
+    public RuleActionsEnum ActionType { get; } = RuleActionsEnum.Sweep;
 
     public List<SweepDestination> Destinations { get; set; } = new List<SweepDestination>();
 
@@ -77,7 +77,7 @@ public class SweepAction : IValidatableObject
             { keyPrefix + nameof(MinimumAmountToRunAt), MinimumAmountToRunAt.ToString() },
             { keyPrefix + nameof(PayoutYourReference), PayoutYourReference ?? string.Empty },
             { keyPrefix + nameof(PayoutTheirReference), PayoutTheirReference ?? string.Empty },
-            { keyPrefix + nameof(PayoutDescription), PayoutDescription?? string.Empty },
+            { keyPrefix + nameof(PayoutDescription), PayoutDescription ?? string.Empty },
         };
 
         for (int i = 0; i < Destinations.Count(); i++)
