@@ -163,4 +163,41 @@ public class PayoutsValidatorTests
         Assert.False(result.IsEmpty);
         Assert.Single(result.Errors);
     }
+
+    public enum ComparisonMethod
+    {
+        Equals,
+        StartsWith
+    }
+
+    /// <summary>
+    /// Tests that making a safe TheirReference works as expected.
+    /// </summary>
+    [Theory]
+    [InlineData(AccountIdentifierType.IBAN, "", "NFXN", ComparisonMethod.StartsWith)]
+    [InlineData(AccountIdentifierType.IBAN, "xyz123", "xyz123", ComparisonMethod.Equals)]
+    [InlineData(AccountIdentifierType.IBAN, "-sD7&K.sdf./", "-sD7&K.sdf./", ComparisonMethod.Equals)] // If valid, gets left alone.
+    [InlineData(AccountIdentifierType.IBAN, "-sD7!&K.sdf./", "sD7Ksdf", ComparisonMethod.Equals)] // If invalid, non-ASCII chars get replaced.
+    [InlineData(AccountIdentifierType.IBAN, "Acme™ Corporation", "Acme Corporation", ComparisonMethod.Equals)] // Replace unicode.
+    [InlineData(AccountIdentifierType.SCAN, "Too long for SCAN which oly likes short refs", "Too long for SCAN", ComparisonMethod.Equals)]
+    public void PaymentsValidator_Make_Safe_TheirReference(AccountIdentifierType accountType, 
+        string requestedTheirReference, 
+        string expectedTheirReference,
+        ComparisonMethod comparison)
+    {
+        var safeTheirRef = PayoutsValidator.MakeSafeTheirReference(accountType, requestedTheirReference);
+
+        _logger.LogDebug($"Safe their ref={safeTheirRef}.");
+
+        Assert.True(PayoutsValidator.ValidateTheirReference(safeTheirRef, accountType));
+
+        if (comparison == ComparisonMethod.Equals)
+        {
+            Assert.Equal(expectedTheirReference, safeTheirRef);
+        }
+        else if(comparison == ComparisonMethod.StartsWith)
+        {
+            Assert.StartsWith(expectedTheirReference, safeTheirRef);
+        }
+    }
 }

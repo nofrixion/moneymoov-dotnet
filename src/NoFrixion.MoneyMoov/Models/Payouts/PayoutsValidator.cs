@@ -95,6 +95,11 @@ public static class PayoutsValidator
     /// </summary>
     public const string IBAN_REGEX = @"^[a-zA-Z]{2}[0-9]{2}([a-zA-Z0-9]){11,30}$";
 
+    /// <summary>
+    /// Fallback pattern for TheirReference field.
+    /// </summary>
+    public const string FALLBACK_THEIR_REFERENCE = "NFXN {0}";
+
     public static bool ValidateIBAN(string iban)
     {
         if (string.IsNullOrEmpty(iban))
@@ -285,6 +290,13 @@ public static class PayoutsValidator
     /// <returns>A safe TheirReference value.</returns>
     public static string MakeSafeTheirReference(AccountIdentifierType identifierType, string theirReference)
     {
+        string fallbackTheirReference = string.Format(FALLBACK_THEIR_REFERENCE, DateTime.Now.ToString("HHmmss"));
+
+        if (string.IsNullOrEmpty(theirReference))
+        {
+            return fallbackTheirReference;
+        }
+
         if (ValidateTheirReference(theirReference, identifierType))
         {
             return theirReference;
@@ -305,7 +317,7 @@ public static class PayoutsValidator
                 theirReference.PadRight(THEIR_REFERENCE_MINIMUM_LENGTH - theirReference.Length, 'X') :
                 theirReference;
 
-            return theirReference;
+            return ValidateTheirReference(theirReference, identifierType) ? theirReference : fallbackTheirReference;
         }
     }
 }
