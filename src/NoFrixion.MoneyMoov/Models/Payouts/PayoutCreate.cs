@@ -35,10 +35,9 @@ public class PayoutCreate
     public decimal Amount { get; set; }
 
     /// <summary>
-    /// Gets or Sets your reference ID
+    /// Gets or Sets the your reference property.
     /// </summary>
-    [Required(ErrorMessage = "Your Reference is required.")]
-    public string YourReference { get; set; } = string.Empty;
+    public string? YourReference { get; set; }
 
     [Required(ErrorMessage = "Their Reference is required.")]
     public string TheirReference { get; set; } = string.Empty;
@@ -141,7 +140,7 @@ public class PayoutCreate
             { nameof(Description), Description ?? string.Empty },
             { nameof(Currency), Currency.ToString() },
             { nameof(Amount), Amount.ToString() },
-            { nameof(YourReference), YourReference },
+            { nameof(YourReference), YourReference ?? string.Empty },
             { nameof(TheirReference), TheirReference },
             { nameof(InvoiceID), InvoiceID ?? string.Empty },
             { nameof(AllowIncomplete), AllowIncomplete.ToString() },

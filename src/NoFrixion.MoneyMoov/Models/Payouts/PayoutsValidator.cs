@@ -24,20 +24,20 @@ public static class PayoutsValidator
 {
     /// <summary>
     /// The minimum required length for the Their Reference field. Note that length gets 
-    /// calculated after certain non-counter characters have been removed.
+    /// calculated after certain non-counted characters have been removed.
     /// </summary>
     public const int THEIR_REFERENCE_MINIMUM_LENGTH = 6;
 
     /// <summary>
     /// The maximum allowed length for the Their Reference field for sort code
     /// and account number (SCAN) payments . Note that length gets calculated after 
-    /// certain non-counter characters have been removed.
+    /// certain non-counted characters have been removed.
     /// </summary>
     public const int THEIR_REFERENCE_SCAN_MAXIMUM_LENGTH = 17;
 
     /// <summary>
     /// The maximum allowed length for the Their Reference field for International Bank Account Number
-    /// (IBAN) payments . Note that length gets calculated after / certain non-counter characters 
+    /// (IBAN) payments . Note that length gets calculated after / certain non-counted characters 
     /// have been removed.
     /// </summary>
     public const int THEIR_REFERENCE_IBAN_MAXIMUM_LENGTH = 139;
@@ -73,7 +73,7 @@ public static class PayoutsValidator
     /// [^\W_] is actings as \w with the underscore character included. The upstream supplier does not permit
     /// underscore in the Reference (Theirs) field.
     /// </remarks>
-    public const string THEIR_REFERENCE_REGEX = @"^([^\W_]|[[\.\-/&\s]){6,}$";
+    public const string THEIR_REFERENCE_REGEX = @"^([^\W_]|[\.\-/&\s]){6,}$";
 
     /// <summary>
     /// Certain characters in the Their Reference field are not counted towards the minimum and
@@ -94,6 +94,11 @@ public static class PayoutsValidator
     /// Validation regex for the destination IBAN field.
     /// </summary>
     public const string IBAN_REGEX = @"^[a-zA-Z]{2}[0-9]{2}([a-zA-Z0-9]){11,30}$";
+
+    /// <summary>
+    /// Fallback pattern for TheirReference field.
+    /// </summary>
+    public const string FALLBACK_THEIR_REFERENCE = "NFXN {0}";
 
     public static bool ValidateIBAN(string iban)
     {
@@ -178,7 +183,7 @@ public static class PayoutsValidator
 
         Regex matchRegex = new Regex(YOUR_REFERENCE_REGEX);
 
-        if ( yourReference.Length > YOUR_REFERENCE_MAXIMUM_LENGTH
+        if (yourReference.Length > YOUR_REFERENCE_MAXIMUM_LENGTH
             || !matchRegex.IsMatch(yourReference))
         {
             return false;
@@ -213,7 +218,7 @@ public static class PayoutsValidator
         {
             yield return new ValidationResult("Destination account name required.", new string[] { nameof(payout.Destination.Name) });
         }
-        
+
         if (payout.Destination?.Name != null && !IsValidAccountName(payout.Destination?.Name ?? string.Empty))
         {
             yield return new ValidationResult($"Destination account name is invalid. It can only contain alphanumeric characters plus the ' . - & and space characters.",
@@ -231,7 +236,7 @@ public static class PayoutsValidator
             yield return new ValidationResult("The destination account IBAN must be specified for an IBAN payout type.", new string[] { nameof(payout.Destination.Identifier.IBAN) });
         }
 
-        if (payout.Type == AccountIdentifierType.IBAN && payout.Destination?.Identifier != null && 
+        if (payout.Type == AccountIdentifierType.IBAN && payout.Destination?.Identifier != null &&
             !ValidateIBAN(payout.Destination?.Identifier?.IBAN ?? string.Empty))
         {
             yield return new ValidationResult("Destination IBAN is invalid, Please enter a valid IBAN.", new string[] { nameof(payout.Destination.Identifier.IBAN) });
@@ -273,6 +278,46 @@ public static class PayoutsValidator
             yield return new ValidationResult("Your reference can only contain alphanumeric, space, hyphen(-) and underscore (_) characters. " +
             $"The maximum allowed length of the field is {YOUR_REFERENCE_MAXIMUM_LENGTH} characters.",
             new string[] { nameof(payout.YourReference) });
+        }
+    }
+
+    /// <summary>
+    /// Constructs a valid TheirReference field based on the desired string. The aim is to make it as close as
+    /// desired to the supplied value while still remaining valid.
+    /// </summary>
+    /// <param name="identifierType">The account type the Their Reference field is for.</param>
+    /// <param name="theirReference">The desired TheirReference string.</param>
+    /// <returns>A safe TheirReference value.</returns>
+    public static string MakeSafeTheirReference(AccountIdentifierType identifierType, string theirReference)
+    {
+        string fallbackTheirReference = string.Format(FALLBACK_THEIR_REFERENCE, DateTime.Now.ToString("HHmmss"));
+
+        if (string.IsNullOrEmpty(theirReference))
+        {
+            return fallbackTheirReference;
+        }
+
+        if (ValidateTheirReference(theirReference, identifierType))
+        {
+            return theirReference;
+        }
+        else
+        {
+            theirReference = Regex.Replace(theirReference, @"[^a-zA-Z0-9 ]", "");
+
+            int theirRefMaxLength = identifierType == AccountIdentifierType.SCAN ?
+               THEIR_REFERENCE_SCAN_MAXIMUM_LENGTH :
+               THEIR_REFERENCE_IBAN_MAXIMUM_LENGTH;
+
+            theirReference = theirReference.Length > theirRefMaxLength ?
+                theirReference.Substring(0, theirRefMaxLength) :
+                theirReference;
+
+            theirReference = theirReference.Length < THEIR_REFERENCE_MINIMUM_LENGTH ?
+                theirReference.PadRight(THEIR_REFERENCE_MINIMUM_LENGTH - theirReference.Length, 'X') :
+                theirReference;
+
+            return ValidateTheirReference(theirReference, identifierType) ? theirReference : fallbackTheirReference;
         }
     }
 }

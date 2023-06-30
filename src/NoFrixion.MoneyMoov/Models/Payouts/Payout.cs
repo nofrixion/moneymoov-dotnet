@@ -67,7 +67,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// <summary>
     /// Gets or Sets your reference ID
     /// </summary>
-    public string YourReference { get; set; } = string.Empty;
+    public string? YourReference { get; set; }
 
     /// <summary>
     /// Gets or Sets destination reference ID
