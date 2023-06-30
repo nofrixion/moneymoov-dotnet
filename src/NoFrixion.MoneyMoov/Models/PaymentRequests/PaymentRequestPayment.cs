@@ -74,4 +74,9 @@ public class PaymentRequestPayment
     /// The card processor that was used for the payment event.
     /// </summary>
     public PaymentProcessorsEnum PaymentProcessor { get; set; } = PaymentProcessorsEnum.None;
+
+    /// <summary>
+    /// Refunded Amount
+    /// </summary>
+    public decimal RefundedAmount { get; set; }
 }

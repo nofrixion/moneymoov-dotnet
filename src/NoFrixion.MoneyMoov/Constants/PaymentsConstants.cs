@@ -68,6 +68,8 @@ public static class PaymentsConstants
     public const string PISP_SETTLED_STATUS = "SETTLED";
 
     public const string PISP_FAILED_STATUS = "FAILLED";
+    
+    public const string PISP_REFUND_CANCELLED_STATUS = "PAYOUT DELETED";
 
     public const string NOFRIXION_OPEN_BANKING_PROVIDER_ID = "nofrixion";
 }

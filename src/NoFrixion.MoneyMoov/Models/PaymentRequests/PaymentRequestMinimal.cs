@@ -101,4 +101,9 @@ public class PaymentRequestMinimal
     public PaymentResultEnum Status { get; set; }
 
     public PartialPaymentMethodsEnum PartialPaymentMethod { get; set; }
+    
+    /// <summary>
+    /// Account ID of connected customers in Stripe
+    /// </summary>
+    public string? StripeAccountID { get; set; }
 }

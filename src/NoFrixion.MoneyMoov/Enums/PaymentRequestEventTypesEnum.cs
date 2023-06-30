@@ -106,5 +106,10 @@ public enum PaymentRequestEventTypesEnum
     /// <summary>
     /// A PIS payment is refund is complete. The funds have been transferred back to user.
     /// </summary>
-    pisp_refund_settled = 15
+    pisp_refund_settled = 15,
+    
+    /// <summary>
+    /// A PIS payment is refund is cancelled. The funds have not been transferred back to user.
+    /// </summary>
+    pisp_refund_cancelled = 16
 }
