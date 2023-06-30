@@ -1,8 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
 // Filename: RestHttpClientFactory.cs
 //
-// Description: A response wrapper class to hold the attempt or result
-// of calling a MoneyMoov endpoint.
+// Description: Factory class for creating REST clients.
 //
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)

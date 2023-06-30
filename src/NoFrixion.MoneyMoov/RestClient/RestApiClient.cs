@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
 // Filename: RestApiClient.cs
 //
-// Description: A REST API client used to call MoneyMoov API end points.
+// Description: A REST API client.
 //
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)
@@ -55,16 +55,15 @@ public class RestApiClient : IRestApiClient, IDisposable
 
     public HttpClient HttpClient { get; set; }
 
-    public RestApiClient()
-    {
-        HttpClient = new HttpClient();
-        HttpClient.BaseAddress = new Uri(MoneyMoovUrlBuilder.DEFAULT_MONEYMOOV_BASE_URL);
-    }
-
     public RestApiClient(string baseUri)
     {
         HttpClient = new HttpClient();
         HttpClient.BaseAddress = new Uri(baseUri);
+    }
+
+    public RestApiClient(HttpClient httpClient)
+    {
+        HttpClient = httpClient;
     }
 
     public RestApiClient(IHttpClientFactory httpClientFactory, string httpClientName)

@@ -58,8 +58,18 @@ public enum PaymentProcessorsEnum
     Yapily,
 
     /// <summary>
-    /// Nofrixion payment initiation processor.
+    /// NoFrixion payment initiation processor.
     /// </summary>
-    Nofrixion
+    Nofrixion,
+
+    /// <summary>
+    /// Processed on Bitcoin mainnet.
+    /// </summary>
+    Bitcoin,
+
+    /// <summary>
+    /// Processed on Bitcoin testnet.
+    /// </summary>
+    BitcoinTestnet
 }
 

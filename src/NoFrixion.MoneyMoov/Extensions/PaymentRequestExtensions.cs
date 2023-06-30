@@ -141,14 +141,17 @@ public static class PaymentRequestExtensions
             // If there is a card void event, then the payment attempt was refunded.
             if (attempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.card_void))
             {
-                var cardVoidEvent = attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.card_void).First();
+                var cardVoidEvents = attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.card_void);
 
-                if (cardVoidEvent.Status == CardPaymentResponseStatus.CARD_VOIDED_SUCCESS_STATUS)
-                {
-                    paymentAttempt.RefundedAt = cardVoidEvent.Inserted;
-                    paymentAttempt.RefundedAmount = cardVoidEvent.Amount;
-                }
+                var refundAttempts = (from cardVoidEvent in cardVoidEvents
+                    where cardVoidEvent.Status == CardPaymentResponseStatus.CARD_VOIDED_SUCCESS_STATUS
+                    select new PaymentRequestRefundAttempt
+                    {
+                        RefundInitiatedAt = cardVoidEvent.Inserted, RefundInitiatedAmount = cardVoidEvent.Amount,
+                        RefundSettledAt = cardVoidEvent.Inserted, RefundSettledAmount = cardVoidEvent.Amount,
+                    }).ToList();
 
+                paymentAttempt.RefundAttempts = refundAttempts;
             }
 
             if (attempt.Any(x => x.WalletName != null))
@@ -176,7 +179,9 @@ public static class PaymentRequestExtensions
                                                             (x.EventType == PaymentRequestEventTypesEnum.pisp_callback) ||
                                                             (x.EventType == PaymentRequestEventTypesEnum.pisp_webhook) ||
                                                             (x.EventType == PaymentRequestEventTypesEnum.pisp_settle) ||
-                                                            (x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure)))
+                                                            (x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure) ||
+                                                            (x.EventType == PaymentRequestEventTypesEnum.pisp_refund_initiated) ||
+                                                            (x.EventType == PaymentRequestEventTypesEnum.pisp_refund_settled)))
             .OrderBy(x => x.Inserted)
             .GroupBy(x => x.PispPaymentInitiationID)
             .ToList();
@@ -184,7 +189,7 @@ public static class PaymentRequestExtensions
         foreach (var attempt in pispAttempts)
         {
             // The pisp_initiate event should always be present but if for some reason it's not the next best event
-            // will be sued as the starting point for he attempt.
+            // will be sued as the starting point for the attempt.
             var initiateEvent =
                 attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_initiate).FirstOrDefault() ??
                 attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_callback).FirstOrDefault() ??
@@ -242,6 +247,8 @@ public static class PaymentRequestExtensions
 
                     paymentAttempt.SettledAt = settleEvent.Inserted;
                     paymentAttempt.SettledAmount = settleEvent.Amount;
+                    
+                    paymentAttempt.RefundAttempts = GetPispRefundAttempts(events, settleEvent.PispPaymentInitiationID!).ToList();
                 }
                 else if (attempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure))
                 {
@@ -255,5 +262,61 @@ public static class PaymentRequestExtensions
         }
 
         return pispPaymentAttempts;
+    }
+
+    private static IEnumerable<PaymentRequestRefundAttempt> GetPispRefundAttempts(
+        this IEnumerable<PaymentRequestEvent> events, string pispPaymentInitiationID)
+    {
+        var pispRefundAttempts = new List<PaymentRequestRefundAttempt>();
+        
+        // Get pisp refund attempts for the given pisp payment initiation id.
+        var pispRefundEvents = events.Where(x =>
+                !string.IsNullOrEmpty(x.PispPaymentInitiationID) &&
+                x.PispPaymentInitiationID == pispPaymentInitiationID && x.RefundPayoutID != null
+                &&
+                (
+                    (x.EventType == PaymentRequestEventTypesEnum.pisp_refund_initiated) ||
+                    (x.EventType == PaymentRequestEventTypesEnum.pisp_refund_settled) ||
+                    (x.EventType == PaymentRequestEventTypesEnum.pisp_refund_cancelled)))
+            .OrderBy(x => x.Inserted)
+            .GroupBy(x => x.RefundPayoutID)
+            .ToList();
+
+        foreach (var pispRefundEvent in pispRefundEvents)
+        {
+            if (pispRefundEvent.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_refund_initiated))
+            {
+                var refundInitiatedEvent =
+                    pispRefundEvent.First(x => x.EventType == PaymentRequestEventTypesEnum.pisp_refund_initiated);
+
+                var refundAttempt = new PaymentRequestRefundAttempt
+                {
+                    RefundPayoutID = refundInitiatedEvent.RefundPayoutID,
+                    RefundInitiatedAt = refundInitiatedEvent.Inserted,
+                    RefundInitiatedAmount = refundInitiatedEvent.Amount,
+                };
+                
+                if (pispRefundEvent.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_refund_cancelled))
+                {
+                    var refundCancelledEvent = pispRefundEvent.First(x =>
+                        x.EventType == PaymentRequestEventTypesEnum.pisp_refund_cancelled);
+
+                    refundAttempt.RefundCancelledAt = refundCancelledEvent.Inserted;
+                    refundAttempt.RefundCancelledAmount = refundCancelledEvent.Amount;
+                }
+                else if (pispRefundEvent.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_refund_settled))
+                {
+                    var refundSettledEvent = pispRefundEvent.First(x =>
+                        x.EventType == PaymentRequestEventTypesEnum.pisp_refund_settled);
+
+                    refundAttempt.RefundSettledAt = refundSettledEvent.Inserted;
+                    refundAttempt.RefundSettledAmount = refundSettledEvent.Amount; 
+                }
+                
+                pispRefundAttempts.Add(refundAttempt);
+            }
+        }
+        
+        return pispRefundAttempts;
     }
 }

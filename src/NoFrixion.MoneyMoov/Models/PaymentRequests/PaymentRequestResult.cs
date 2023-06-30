@@ -206,7 +206,8 @@ public class PaymentRequestResult
                             OccurredAt = attempt.InitiatedAt,
                             PaymentMethod = PaymentMethodTypeEnum.pisp,
                             Amount = Math.Round(attempt.SettledAmount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
-                            Currency = attempt.Currency
+                            Currency = attempt.Currency,
+                            RefundedAmount = attempt.RefundAttempts.Sum(x=>x.RefundSettledAmount),
                         });
                 }
                 else if (attempt.Status == PaymentResultEnum.Authorized)
@@ -225,15 +226,10 @@ public class PaymentRequestResult
             }
 
             Currency = paymentRequest.Currency;
-            Amount = Payments.Where(x => x.Currency == Currency).Sum(x => x.Amount);
+            Amount = Payments.Where(x => x.Currency == Currency).Sum(x => x.Amount)
+                     - Payments.Where(x => x.Currency == Currency).Sum(x => x.RefundedAmount); // Refunds are negative payments.
             Result = Amount switch
             {
-                //when pisp_refund_settled event is recorded with same amount as the payment request paid amount 
-                //set the status back to none as refund is complete.
-                _ when orderedEvents.Any() && Amount == orderedEvents.FirstOrDefault(x =>
-                    x.EventType == PaymentRequestEventTypesEnum.pisp_refund_settled)?.Amount => PaymentResultEnum.None,
-                _ when orderedEvents.Any() && Amount == orderedEvents.FirstOrDefault(x =>
-                    x.EventType == PaymentRequestEventTypesEnum.pisp_refund_initiated)?.Amount => PaymentResultEnum.RefundInitiated,
                 _ when Amount == paymentRequest.Amount => PaymentResultEnum.FullyPaid,
                 _ when Amount > paymentRequest.Amount => PaymentResultEnum.OverPaid,
                 _ when Amount > 0 && Amount < paymentRequest.Amount => PaymentResultEnum.PartiallyPaid,

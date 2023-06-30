@@ -15,8 +15,6 @@
 
 using Microsoft.Extensions.Logging;
 using NoFrixion.MoneyMoov.Models;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -42,7 +40,6 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
                 Priority = 1,
                 AmountToLeave = 1.00M,
                 MinimumAmountToRunAt = 99.00M,
-                ActionType = RuleActionsEnum.Sweep,
                 Destinations = new List<SweepDestination>
                 {
                     new SweepDestination
@@ -89,7 +86,6 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
                 Priority = 1,
                 AmountToLeave = 1.00M,
                 MinimumAmountToRunAt = 99.00M,
-                ActionType = RuleActionsEnum.Sweep,
                 Destinations = new List<SweepDestination>
                 {
                     new SweepDestination
