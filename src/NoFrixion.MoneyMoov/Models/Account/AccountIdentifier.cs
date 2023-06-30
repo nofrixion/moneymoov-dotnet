@@ -12,8 +12,6 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-
 namespace NoFrixion.MoneyMoov.Models;
 
 #nullable disable
@@ -51,24 +49,83 @@ public class AccountIdentifier
     /// <summary>
     /// The Bank Identifier Code for an IBAN.
     /// </summary>
-    public string BIC { get; set; }
+    private string _bic;
+    public string BIC
+    {
+        get => _bic;
+        set
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                _bic = value.Trim().Replace(" ", string.Empty);
+            }
+            else
+            {
+                _bic = value;
+            }
+        }
+    }
 
     /// <summary>
     /// The International Bank Account Number for the identifier. Only applicable 
     /// for IBAN identifiers.
     /// </summary>
-    public string IBAN { get; set; }
+    private string _iban;
+    public string IBAN 
+    {
+        get => _iban;
+        set
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                _iban = value.Trim().Replace(" ", string.Empty);
+            }
+            else
+            {
+                _iban = value;
+            }
+        }
+    }
 
     /// <summary>
     /// The account Sort Code. Only applicable for SCAN identifiers.
     /// </summary>
-    public string SortCode { get; set; }
+    private string _sortCode;
+    public string SortCode
+    {
+        get => _sortCode;
+        set
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                _sortCode = value.Trim().Replace(" ", string.Empty);
+            }
+            else
+            {
+                _sortCode = value;
+            }
+        }
+    }
 
     /// <summary>
     /// Bank account number. Only applicable for SCAN identifiers.
     /// </summary>
-    public string AccountNumber { get; set; }
-
+    private string _accountNumber;
+    public string AccountNumber
+    {
+        get => _accountNumber;
+        set
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                _accountNumber = value.Trim().Replace(" ", string.Empty);
+            }
+            else
+            {
+                _accountNumber = value;
+            }
+        }
+    }
     /// <summary>
     /// Summary of the account identifier's most important properties.
     /// </summary>

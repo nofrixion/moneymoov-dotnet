@@ -189,7 +189,7 @@ public static class PaymentRequestExtensions
         foreach (var attempt in pispAttempts)
         {
             // The pisp_initiate event should always be present but if for some reason it's not the next best event
-            // will be sued as the starting point for he attempt.
+            // will be sued as the starting point for the attempt.
             var initiateEvent =
                 attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_initiate).FirstOrDefault() ??
                 attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_callback).FirstOrDefault() ??
