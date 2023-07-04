@@ -1,4 +1,4 @@
-﻿//  Filename: CustomRegexStringAttribute.cs
+﻿//  Filename: CustomRegexString.cs
 // 
 //  Description: A custom attribute to validate string value with a regular expression:
 // 
@@ -18,11 +18,11 @@ using System.Text.RegularExpressions;
 namespace NoFrixion.MoneyMoov.Attributes
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter)]
-    public class CustomRegexStringAttribute : DataTypeAttribute
+    public class CustomRegexString : DataTypeAttribute
     {
         public string RegexString { get; set; }
 
-        public CustomRegexStringAttribute(string regexString) : base(DataType.Text)
+        public CustomRegexString(string regexString) : base(DataType.Text)
         {
             RegexString = regexString;
         }
