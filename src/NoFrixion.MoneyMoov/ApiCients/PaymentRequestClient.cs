@@ -117,23 +117,4 @@ public class PaymentRequestClient : IPaymentRequestClient
             _ => Task.FromResult(new RestApiResponse<PaymentRequest>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
-
-    /// <summary>
-    /// Calls the MoneyMoov Merchant delete payment request endpoint to delete an existing payment request.
-    /// </summary>
-    /// <param name="accessToken">A User scoped JWT access token.</param>
-    /// <param name="paymentRequestID">The ID of the payment request to delete.</param>
-    /// <returns>If successful, the newly created merchant token.</returns>
-    //public Task<RestApiResponse> DeletePaymentRequestAsync(string accessToken, Guid paymentRequestID)
-    //{
-    //    var url = MoneyMoovUrlBuilder.PaymentRequestsApi.DeleteUrl(_apiClient.GetBaseUri().ToString(), paymentRequestID);
-
-    //    var prob = _apiClient.CheckAccessToken(accessToken, nameof(DeletePaymentRequestAsync));
-
-    //    return prob switch
-    //    {
-    //        var p when p.IsEmpty => _apiClient.DeleteAsync(url, accessToken),
-    //        _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
-    //    };
-    //}
 }

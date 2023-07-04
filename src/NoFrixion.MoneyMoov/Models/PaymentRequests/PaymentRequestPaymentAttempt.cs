@@ -22,7 +22,7 @@ public class PaymentRequestPaymentAttempt
 {
     /// <summary>
     /// For pay by bank attempts this is the ID that gets set on all the events (initiate,
-    /// callback, webhook &, settlement) for the same attempt. For cards and lightning different
+    /// callback, webhook and settlement) for the same attempt. For cards and lightning different
     /// fields are used to group payment request events.
     /// </summary>
     public string AttemptKey { get; set; } = string.Empty;
