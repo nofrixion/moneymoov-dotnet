@@ -116,9 +116,9 @@ public class RestApiResponse<T> : RestApiResponse, IRestApiResponse
     /// Initializes a new instance of the <see cref="RestApiResponse{T}" /> class.
     /// </summary>
     /// <param name="statusCode">HTTP status code.</param>
+    /// <param name="requestUri">The URI to send the request to.</param>
     /// <param name="headers">HTTP headers.</param>
     /// <param name="data">Data (parsed HTTP body)</param>
-    /// <param name="rawContent">Raw content.</param>
     public RestApiResponse(HttpStatusCode statusCode, Uri? requestUri, HttpResponseHeaders headers, T data)
         :  base(statusCode, requestUri, headers)
     {

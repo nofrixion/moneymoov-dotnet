@@ -104,6 +104,7 @@ public class PayoutClient : IPayoutClient
     /// Calls the MoneyMoov payout endpoint to get a single payout by invoice ID. This method
     /// requires a merchant access token as invoice ID's are only unique across a single merchant.
     /// </summary>
+    /// <param name="merchantAccessToken">The merchant access token used to authorise the pay by invoice.</param>
     /// <param name="invoiceID">The invoice ID of the payout to retrieve.</param>
     /// <returns>If successful, a payout object.</returns>
     public Task<RestApiResponse<Payout>> GetPayoutByInvoiceIDAsync(string merchantAccessToken, string invoiceID)
@@ -144,7 +145,7 @@ public class PayoutClient : IPayoutClient
     /// <summary>
     /// Calls the MoneyMoov Payout endpoint to update an existing payout.
     /// </summary>
-    /// <param name="accessToken">The user, or merchant, access token updating the payout.</param>
+    /// <param name="userAccessToken">The user access token updating the payout.</param>
     /// <param name="payoutID">The ID of the payout to update.</param>
     /// <param name="payoutUpdate">A model with the details of the payout fields being updated.</param>
     /// <returns>An API response indicating the result of the update attempt.</returns>

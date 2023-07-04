@@ -23,12 +23,6 @@ public enum PaymentResultEnum
     None,
 
     /// <summary>
-    /// At least one event has been recorded for the payment request
-    /// but it has not yet been finalised.
-    /// </summary>
-    //InProgress,
-
-    /// <summary>
     /// The payment attempt was successful and the request amount has been fully paid.
     /// </summary>
     FullyPaid,
