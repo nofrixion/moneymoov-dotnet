@@ -49,12 +49,12 @@ public static class PayoutsValidator
 
     /// <summary>
     /// Validation regex for the destination account name field.
-    /// </summary
+    /// </summary>
     /// <remarks>
     /// The original regular expression, from the supplier's swagger file was adjusted to match
     /// what the original intent seems to have been. The original expression allowed any string
     /// as long as it had at least one letter or number.
-    /// The intent seems to have been to allow only letters (unicode), numbers and '.-/& and spaces
+    /// The intent seems to have been to allow only letters (unicode), numbers and '.-/&amp; and spaces
     /// and it must contain at least one letter or number.
     /// "Beneficiary name can only have alphanumerics plus full stop, hyphen, forward slash or ampersand"
     /// </remarks>
@@ -64,10 +64,10 @@ public static class PayoutsValidator
     /// <summary>
     /// Validation reqex for the Their, or Reference, field. It  must consist of at least 6 
     /// alphanumeric characters that are not all the same. Optional, uncounted characters include space, 
-    /// hyphen(-), full stop (.), ampersand(&), and forward slash (/). Total of all characters must be less than 
+    /// hyphen(-), full stop (.), ampersand(&amp;), and forward slash (/). Total of all characters must be less than 
     /// 18 for scan payment and 140 for an IBAN payment.
     /// Somewhat misleadingly, the Reference field cannot contain a hyphen, the allowed characters are:
-    /// alpha numeric (including unicode), space, hyphen(-), full stop (.), ampersand(&), and forward slash (/). 
+    /// alpha numeric (including unicode), space, hyphen(-), full stop (.), ampersand(&amp;), and forward slash (/). 
     /// </summary>
     /// <remarks>
     /// [^\W_] is actings as \w with the underscore character included. The upstream supplier does not permit

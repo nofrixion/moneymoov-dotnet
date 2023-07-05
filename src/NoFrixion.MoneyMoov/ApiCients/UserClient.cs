@@ -92,7 +92,7 @@ public class UserClient : IUserClient
     /// <summary>
     /// Calls the MoneyMoov User endpoint to update an existing user record.
     /// </summary>
-    /// <param name="accessToken">The user access token updating the user, typically will be the same as the user being updated.</param>
+    /// <param name="userAccessToken">The user access token updating the user, typically will be the same as the user being updated.</param>
     /// <param name="userID">The ID of the user to update.</param>
     /// <param name="userUpdate">A model with the details of the user fields being updated.</param>
     /// <returns>An API response indicating the result of the update attempt.</returns>
@@ -112,7 +112,7 @@ public class UserClient : IUserClient
     /// <summary>
     /// Calls the MoneyMoov User endpoint to update an existing user token.
     /// </summary>
-    /// <param name="accessToken">The user access token updating the application user token.</param>
+    /// <param name="userAccessToken">The user access token updating the application user token.</param>
     /// <param name="userTokenID">The ID of the user token to update.</param>
     /// <param name="userTokenUpdate">A model with the details of the user token fields being updated.</param>
     /// <returns>An API response indicating the result of the update attempt.</returns>
