@@ -228,12 +228,6 @@ public static class MoneyMoovUrlBuilder
 
         public static string UserApiUrl(string moneyMoovBaseUrl, Guid userID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}/{userID}";
-
-        public static string UserTokensApiUrl(string moneyMoovBaseUrl)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}/{MoneyMoovResources.tokens}";
-
-        public static string UserTokenApiUrl(string moneyMoovBaseUrl, Guid userTokenID)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.user}/{MoneyMoovResources.tokens}/{userTokenID}";
     }
 
     /// <summary>
@@ -291,16 +285,6 @@ public static class MoneyMoovUrlBuilder
     public static string CustomerApiUrl(string moneyMoovBaseUrl)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.CUSTOMER_ENDPOINT}";
-    }
-
-    public static string UserTokenApiUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.USER_ENDPOINT}/tokens";
-    }
-
-    public static string UserTokensByTypeApiUrl(string moneyMoovBaseUrl)
-    {
-        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.USER_ENDPOINT}/tokens";
     }
 
     public static string PaymentRequestsApiUrl(string moneyMoovBaseUrl)
