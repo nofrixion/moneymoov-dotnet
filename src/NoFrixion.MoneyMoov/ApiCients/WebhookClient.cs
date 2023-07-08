@@ -81,7 +81,7 @@ public class WebhookClient : IWebhookClient
     /// Calls the MoneyMoov Merchant webhooks endpoint to retrieve all a merchant's existing webhooks.
     /// </summary>
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
-    /// <param name="merhcantID">The merchant ID to get the webhooks for.</param>
+    /// <param name="merchantID">The merchant ID to get the webhooks for.</param>
     /// <returns>If successful, a list of webhooks.</returns>
     public Task<RestApiResponse<IEnumerable<Webhook>>> GetWebhooksAsync(string userAccessToken, Guid merchantID)
     {
