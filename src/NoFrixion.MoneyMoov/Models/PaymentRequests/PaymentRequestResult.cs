@@ -251,7 +251,7 @@ public class PaymentRequestResult
     {
         var outstanding = Currency switch
         {
-            CurrencyTypeEnum.BTC or CurrencyTypeEnum.LBTC => RequestedAmount - Amount,
+            CurrencyTypeEnum.BTC or CurrencyTypeEnum.TBTC => RequestedAmount - Amount,
             _ => Math.Round(RequestedAmount - (Amount + PispAmountAuthorized()), PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES)
         };
 
