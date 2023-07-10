@@ -21,7 +21,7 @@ public static class PaymentRequestValidator
 {
     public static bool ValidatePaymentRequestCurrency(CurrencyTypeEnum currency, PaymentMethodTypeEnum paymentMethodTypes)
     {
-        return !(currency == CurrencyTypeEnum.LBTC &&
+        return !(currency == CurrencyTypeEnum.BTC &&
                (paymentMethodTypes.HasFlag(PaymentMethodTypeEnum.card) ||
                 paymentMethodTypes.HasFlag(PaymentMethodTypeEnum.pisp)));
     }
