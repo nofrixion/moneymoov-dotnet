@@ -15,8 +15,26 @@
 
 namespace NoFrixion.MoneyMoov.Models.PaymentRequests
 {
+    public enum MetricsEnum
+    {
+        All = 0,
+        Unpaid = 1,
+        PartiallyPaid = 2,
+        Paid = 3,
+    }
     public class PaymentRequestMetrics
     {
+        public PaymentRequestMetrics()
+        {
+            TotalAmountsByCurrency = new Dictionary<MetricsEnum, Dictionary<CurrencyTypeEnum, decimal>>
+            {
+                { MetricsEnum.All, new Dictionary<CurrencyTypeEnum, decimal>() },
+                { MetricsEnum.Paid, new Dictionary<CurrencyTypeEnum, decimal>() },
+                { MetricsEnum.Unpaid, new Dictionary<CurrencyTypeEnum, decimal>() },
+                { MetricsEnum.PartiallyPaid, new Dictionary<CurrencyTypeEnum, decimal>() }
+            };
+        }
+
         /// <summary>
         /// Total payment request count.
         /// </summary>
@@ -36,5 +54,24 @@ namespace NoFrixion.MoneyMoov.Models.PaymentRequests
         /// Total payment request count with status FullyPaid.
         /// </summary>
         public int Paid { get; set; }
+        
+        // The below could have been nested with the above 
+        // This preserves backwards compatibility with the existing API
+        
+        /// <summary>
+        /// The total amounts by status and currency.
+        /// </summary>
+        public Dictionary<MetricsEnum, Dictionary<CurrencyTypeEnum, decimal>> TotalAmountsByCurrency { get; set; }
+    }
+
+    public class MetricsQuery
+    {
+        public PaymentResultEnum Status { get; set; }
+
+        public CurrencyTypeEnum Currency { get; set; }
+
+        public int Count { get; set; }
+        
+        public decimal Total { get; set; }
     }
 }
