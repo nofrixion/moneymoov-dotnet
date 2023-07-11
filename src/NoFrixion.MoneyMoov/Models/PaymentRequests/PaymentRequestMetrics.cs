@@ -63,15 +63,4 @@ namespace NoFrixion.MoneyMoov.Models.PaymentRequests
         /// </summary>
         public Dictionary<MetricsEnum, Dictionary<CurrencyTypeEnum, decimal>> TotalAmountsByCurrency { get; set; }
     }
-
-    public class MetricsQuery
-    {
-        public PaymentResultEnum Status { get; set; }
-
-        public CurrencyTypeEnum Currency { get; set; }
-
-        public int Count { get; set; }
-        
-        public decimal Total { get; set; }
-    }
 }
