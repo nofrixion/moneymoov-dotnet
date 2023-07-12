@@ -113,6 +113,11 @@ public class PaymentRequestEvent
     /// ID of the Payout that was created for refund.
     /// </summary>
     public Guid? RefundPayoutID { get; set; }
+    
+    /// <summary>
+    /// Transaction ID received in Apple pay token.
+    /// </summary>
+    public string? ApplePayTransactionID { get; set; }
 
     /// <summary>
     /// Gets the amount to display with the correct number of decimal places based on the currency type. 
