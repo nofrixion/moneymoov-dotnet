@@ -91,9 +91,14 @@ public static class MoneyMoovUrlBuilder
         public static string MerchantAccountsUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.accounts}";
 
-        public static string MerchantBankSettings(string moneyMoovBaseUrl, Guid merchantID)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.banksettings}";
-
+        public static string MerchantBankSettings(string moneyMoovBaseUrl, Guid merchantID,
+            CurrencyTypeEnum? currency = null)
+        {
+            return currency.HasValue 
+                ? $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.banksettings}?currency={currency}" 
+                : $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.banksettings}";
+        }
+        
         public static string MerchantTokensUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.tokens}";
 

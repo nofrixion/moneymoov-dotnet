@@ -38,14 +38,14 @@ public enum CurrencyTypeEnum
     // Start non-fiat currencies from 1000 to avoid conflicting with supplier mappings.
 
     /// <summary>
-    /// Bitcoin Lightning Network.
-    /// </summary>
-    [EnumMember(Value = "LBTC")]
-    LBTC = 1001,
-
-    /// <summary>
     /// Bitcoin.
     /// </summary>
     [EnumMember(Value = "BTC")]
-    BTC = 1002
+    BTC = 1001,
+
+    /// <summary>
+    /// Testnet Bitcoin.
+    /// </summary>
+    [EnumMember(Value = "TBTC")]
+    TBTC = 1002
 }
