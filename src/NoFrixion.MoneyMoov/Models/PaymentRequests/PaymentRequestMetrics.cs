@@ -21,6 +21,7 @@ namespace NoFrixion.MoneyMoov.Models.PaymentRequests
         Unpaid = 1,
         PartiallyPaid = 2,
         Paid = 3,
+        Authorized = 4,
     }
     public class PaymentRequestMetrics
     {
@@ -31,7 +32,8 @@ namespace NoFrixion.MoneyMoov.Models.PaymentRequests
                 { MetricsEnum.All, new Dictionary<CurrencyTypeEnum, decimal>() },
                 { MetricsEnum.Paid, new Dictionary<CurrencyTypeEnum, decimal>() },
                 { MetricsEnum.Unpaid, new Dictionary<CurrencyTypeEnum, decimal>() },
-                { MetricsEnum.PartiallyPaid, new Dictionary<CurrencyTypeEnum, decimal>() }
+                { MetricsEnum.PartiallyPaid, new Dictionary<CurrencyTypeEnum, decimal>() },
+                { MetricsEnum.Authorized, new Dictionary<CurrencyTypeEnum, decimal>() }
             };
         }
 
@@ -54,6 +56,11 @@ namespace NoFrixion.MoneyMoov.Models.PaymentRequests
         /// Total payment request count with status FullyPaid.
         /// </summary>
         public int Paid { get; set; }
+        
+        /// <summary>
+        /// Total payment request count with status Authorized.
+        /// </summary>
+        public int Authorized { get; set; }
         
         // The below could have been nested with the above 
         // This preserves backwards compatibility with the existing API
