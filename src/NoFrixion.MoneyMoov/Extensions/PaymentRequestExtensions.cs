@@ -230,6 +230,8 @@ public static class PaymentRequestExtensions
                         PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.Yapily
                             && (cbk.Status == PaymentRequestResult.PISP_YAPILY_PENDING_STATUS ||
                                cbk.Status == PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS) => cbk,
+                        PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.Nofrixion
+                            && cbk.Status == PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS => cbk,
                         _ => null
                     };
 
