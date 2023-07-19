@@ -20,7 +20,7 @@ namespace NoFrixion.MoneyMoov.Extensions;
 
 public static class PaymentRequestExtensions
 {
-    public static List<PaymentRequestPaymentAttempt> GetPaymentAttempts(this IEnumerable<PaymentRequestEvent> events, decimal amount)
+    public static List<PaymentRequestPaymentAttempt> GetPaymentAttempts(this IEnumerable<PaymentRequestEvent> events)
     {
         if (events == null || !events.Any())
         {
@@ -31,7 +31,7 @@ public static class PaymentRequestExtensions
             var paymentAttempts = new List<PaymentRequestPaymentAttempt>();
 
             paymentAttempts.AddRange(GetCardPaymentAttempts(events));
-            paymentAttempts.AddRange(GetPispPaymentAttempts(events, amount));
+            paymentAttempts.AddRange(GetPispPaymentAttempts(events));
 
             // TODO: Add similar logic for lightning payments.
 
@@ -172,7 +172,7 @@ public static class PaymentRequestExtensions
     /// Groups the payment request events into a list of payment attempts for PISP payments.
     /// </summary>
     /// <returns></returns>
-    public static IEnumerable<PaymentRequestPaymentAttempt> GetPispPaymentAttempts(this IEnumerable<PaymentRequestEvent> events, decimal amount)
+    public static IEnumerable<PaymentRequestPaymentAttempt> GetPispPaymentAttempts(this IEnumerable<PaymentRequestEvent> events)
     {
         var pispPaymentAttempts = new List<PaymentRequestPaymentAttempt>();
         // Get PIS attempts.
@@ -207,7 +207,7 @@ public static class PaymentRequestExtensions
                     InitiatedAt = initiateEvent.Inserted,
                     PaymentMethod = PaymentMethodTypeEnum.pisp,
                     Currency = initiateEvent.Currency,
-                    AttemptedAmount = amount,
+                    AttemptedAmount = initiateEvent.Amount,
                     PaymentProcessor = initiateEvent.PaymentProcessorName,
                     InstitutionID = initiateEvent.PispPaymentServiceProviderID,
                     InstitutionName = initiateEvent.PispPaymentInstitutionName
