@@ -130,12 +130,7 @@ public static class PaymentRequestExtensions
 
                 var settledAmount = 0m;
                 
-                if (cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS || 
-                    cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_PAYMENT_SOFT_DECLINE_STATUS)
-                {
-                    settledAmount = cardCaptureEvent.Amount;
-                } 
-                else if (successfulCaptureEvents.Any())
+                if (successfulCaptureEvents.Any())
                 { 
                     settledAmount = 
                         successfulCaptureEvents.Sum(x => x.Amount);
@@ -149,15 +144,26 @@ public static class PaymentRequestExtensions
                             })
                             .ToList();
                 }
+                
+                if (cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS || 
+                    cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_PAYMENT_SOFT_DECLINE_STATUS)
+                {
+                    settledAmount = cardCaptureEvent.Amount;
+                    
+                    if (cardCaptureEvent.PaymentProcessorName == PaymentProcessorsEnum.Checkout)
+                    {
+                        paymentAttempt.AuthorisedAt = cardCaptureEvent.Inserted;
+                        paymentAttempt.AuthorisedAmount = cardCaptureEvent.Amount;
+                    }
+                } 
 
                 paymentAttempt.SettledAt = cardCaptureEvent.Inserted;
                 paymentAttempt.SettledAmount = settledAmount;
-                    
-                if (cardCaptureEvent.PaymentProcessorName == PaymentProcessorsEnum.Checkout)
-                {
-                    paymentAttempt.AuthorisedAt = cardCaptureEvent.Inserted;
-                    paymentAttempt.AuthorisedAmount = cardCaptureEvent.Amount;
-                }
+
+                paymentAttempt.AuthorisedAt ??= paymentAttempt.SettledAt;
+                paymentAttempt.AuthorisedAmount = 
+                    paymentAttempt.AuthorisedAmount == 0 ?
+                        settledAmount : paymentAttempt.AuthorisedAmount;
             }
 
             // If there is a card void event, then the payment attempt was refunded.
