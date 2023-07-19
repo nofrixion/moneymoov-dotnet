@@ -101,6 +101,12 @@ public class PaymentRequestPaymentAttempt
     /// </summary>
     public string? InstitutionID { get; set; }
 
+    /// <summary>
+    /// Where available this is the name of the institution used by the payer. For example,
+    /// in PIS attempts this will be the name of the bank the payer used for the attempt.
+    /// </summary>
+    public string? InstitutionName { get; set; }
+
     public PaymentResultEnum Status
     {
         get
@@ -122,17 +128,17 @@ public class PaymentRequestPaymentAttempt
 public class PaymentRequestRefundAttempt
 {
     public Guid? RefundPayoutID { get; set; }
-    
+
     public DateTimeOffset? RefundInitiatedAt { get; set; }
-    
+
     public DateTimeOffset? RefundSettledAt { get; set; }
-    
+
     public DateTimeOffset? RefundCancelledAt { get; set; }
-    
+
     public decimal RefundInitiatedAmount { get; set; }
-    
+
     public decimal RefundSettledAmount { get; set; }
-    
+
     public decimal RefundCancelledAmount { get; set; }
 }
 

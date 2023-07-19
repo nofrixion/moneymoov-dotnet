@@ -108,16 +108,22 @@ public class PaymentRequestEvent
     public string? PispBankStatus { get; set; }
 
     public WalletsEnum? WalletName { get; set; }
-    
+
     /// <summary>
     /// ID of the Payout that was created for refund.
     /// </summary>
     public Guid? RefundPayoutID { get; set; }
-    
+
     /// <summary>
     /// Transaction ID received in Apple pay token.
     /// </summary>
     public string? ApplePayTransactionID { get; set; }
+
+    /// <summary>
+    /// For a payment initiation this is the name of the financial institution that
+    /// is used to initiate and authorise the payment.
+    /// </summary>
+    public string? PispPaymentInstitutionName { get; set; }
 
     /// <summary>
     /// Gets the amount to display with the correct number of decimal places based on the currency type. 
