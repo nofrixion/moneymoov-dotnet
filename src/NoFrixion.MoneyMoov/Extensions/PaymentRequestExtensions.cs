@@ -120,21 +120,43 @@ public static class PaymentRequestExtensions
                     };
                 }
 
-                var isSuccessfullCaptureEvent =
-                    cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS
-                    || cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_PAYMENT_SOFT_DECLINE_STATUS
-                    || cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS
-                    || cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_CAPTURE_SUCCESS_STATUS;
+                var successfulCaptureEvents =
+                    attempt
+                        .Where(x =>
+                            x.EventType == PaymentRequestEventTypesEnum.card_capture &&
+                            (x.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS ||
+                             x.Status == CardPaymentResponseStatus.CARD_CAPTURE_SUCCESS_STATUS))
+                        .ToList();
 
-                if (isSuccessfullCaptureEvent)
+                var settledAmount = 0m;
+                
+                if (cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS || 
+                    cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_PAYMENT_SOFT_DECLINE_STATUS)
                 {
-                    paymentAttempt.SettledAt = cardCaptureEvent.Inserted;
-                    paymentAttempt.SettledAmount = cardCaptureEvent.Amount;
-                    if (cardCaptureEvent.PaymentProcessorName == PaymentProcessorsEnum.Checkout)
-                    {
-                        paymentAttempt.AuthorisedAt = cardCaptureEvent.Inserted;
-                        paymentAttempt.AuthorisedAmount = cardCaptureEvent.Amount;
-                    }
+                    settledAmount = cardCaptureEvent.Amount;
+                } 
+                else if (successfulCaptureEvents.Any())
+                { 
+                    settledAmount = 
+                        successfulCaptureEvents.Sum(x => x.Amount);
+
+                    paymentAttempt.CaptureAttempts =
+                        successfulCaptureEvents
+                            .Select(x => new PaymentRequestCaptureAttempt()
+                            {
+                                CapturedAt = x.Inserted,
+                                CapturedAmount = x.Amount
+                            })
+                            .ToList();
+                }
+
+                paymentAttempt.SettledAt = cardCaptureEvent.Inserted;
+                paymentAttempt.SettledAmount = settledAmount;
+                    
+                if (cardCaptureEvent.PaymentProcessorName == PaymentProcessorsEnum.Checkout)
+                {
+                    paymentAttempt.AuthorisedAt = cardCaptureEvent.Inserted;
+                    paymentAttempt.AuthorisedAmount = cardCaptureEvent.Amount;
                 }
             }
 
