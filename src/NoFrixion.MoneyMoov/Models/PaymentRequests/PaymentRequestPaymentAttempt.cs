@@ -79,6 +79,11 @@ public class PaymentRequestPaymentAttempt
     public List<PaymentRequestRefundAttempt> RefundAttempts { get; set; } = new List<PaymentRequestRefundAttempt>();
 
     /// <summary>
+    /// The capture attempts associated with this payment attempt.
+    /// </summary>
+    public List<PaymentRequestCaptureAttempt> CaptureAttempts { get; set; } = new();
+
+    /// <summary>
     /// The authorised payment currency.
     /// </summary>
     public CurrencyTypeEnum Currency { get; set; } = CurrencyTypeEnum.EUR;
@@ -129,4 +134,20 @@ public class PaymentRequestRefundAttempt
     public decimal RefundSettledAmount { get; set; }
     
     public decimal RefundCancelledAmount { get; set; }
+}
+
+/// <summary>
+/// Represents each individual payment capture attempt for a payment request.
+/// </summary>
+public class PaymentRequestCaptureAttempt
+{
+    /// <summary>
+    /// Date and time the capture was initiated.
+    /// </summary>
+    public DateTimeOffset? CapturedAt { get; set; }
+    
+    /// <summary>
+    /// The amount that was captured.
+    /// </summary>
+    public decimal CapturedAmount { get; set; }
 }
