@@ -126,6 +126,12 @@ public class PaymentRequestEvent
     public string? PispPaymentInstitutionName { get; set; }
 
     /// <summary>
+    /// If a reusable card token was generated as part of the event this will hold the ID
+    /// of the tokenised card record that can be used with the pay with card token method.
+    /// </summary>
+    public Guid? TokenisedCardID { get; set; }
+
+    /// <summary>
     /// Gets the amount to display with the correct number of decimal places based on the currency type. 
     /// </summary>
     /// <returns>The decimal amount to display for the payment request's currency.</returns>

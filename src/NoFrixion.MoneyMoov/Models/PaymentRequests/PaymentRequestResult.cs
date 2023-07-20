@@ -166,8 +166,7 @@ public class PaymentRequestResult
                         Currency = payEvent.Currency,
                         CardCapturedAmount = capturedAmount,
                         CardAuthorizationID = payEvent.CardAuthorizationResponseID,
-                        CardTokenCustomerID = payEvent.CardTokenCustomerID,
-                        CardTransactionID = payEvent.CardTransactionID,
+                        TokenisedCardID = payEvent.TokenisedCardID?.ToString(),
                         PaymentProcessor = payEvent.PaymentProcessorName
                     };
 
