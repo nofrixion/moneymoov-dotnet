@@ -129,10 +129,10 @@ public static class PaymentRequestExtensions
                         .ToList();
 
                 var settledAmount = 0m;
-                
+
                 if (successfulCaptureEvents.Any())
-                { 
-                    settledAmount = 
+                {
+                    settledAmount =
                         successfulCaptureEvents.Sum(x => x.Amount);
 
                     paymentAttempt.CaptureAttempts =
@@ -144,24 +144,29 @@ public static class PaymentRequestExtensions
                             })
                             .ToList();
                 }
-                
-                if (cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS || 
-                    cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_PAYMENT_SOFT_DECLINE_STATUS)
+
+                if (cardCaptureEvent.EventType == PaymentRequestEventTypesEnum.card_sale &&
+                    (
+                        cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS ||
+                        cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_PAYMENT_SOFT_DECLINE_STATUS ||
+                        cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS ||
+                        cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_CAPTURE_SUCCESS_STATUS
+                    ))
                 {
                     settledAmount = cardCaptureEvent.Amount;
-                    
+
                     if (cardCaptureEvent.PaymentProcessorName == PaymentProcessorsEnum.Checkout)
                     {
                         paymentAttempt.AuthorisedAt = cardCaptureEvent.Inserted;
                         paymentAttempt.AuthorisedAmount = cardCaptureEvent.Amount;
                     }
-                } 
+                }
 
                 paymentAttempt.SettledAt = cardCaptureEvent.Inserted;
                 paymentAttempt.SettledAmount = settledAmount;
 
                 paymentAttempt.AuthorisedAt ??= paymentAttempt.SettledAt;
-                paymentAttempt.AuthorisedAmount = 
+                paymentAttempt.AuthorisedAmount =
                     paymentAttempt.AuthorisedAmount == 0 ?
                         settledAmount : paymentAttempt.AuthorisedAmount;
             }
