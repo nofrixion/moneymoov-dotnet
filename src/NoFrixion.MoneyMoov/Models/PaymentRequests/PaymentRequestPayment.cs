@@ -47,16 +47,11 @@ public class PaymentRequestPayment
     /// For card payments the merchant can request a reusable token for this payer and
     /// use it to submit subsequent merchant initiated payments.
     /// </summary>
-    public string? CardTokenCustomerID { get; set; }
-
-    /// <summary>
-    /// When using a reusable token the transaction ID that created the token is
-    /// also required. This field holds it.
-    /// </summary>
-    public string? CardTransactionID { get; set; }
+    public string? TokenisedCardID { get; set; }
 
     /// <summary>
     /// For card payments this is the ID from the initial successful authorization or sale.
+    /// Required for voids and capture operations.
     /// </summary>
     public string? CardAuthorizationID { get; set; }
 
