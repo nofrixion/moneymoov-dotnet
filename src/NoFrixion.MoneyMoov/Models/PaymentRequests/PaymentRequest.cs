@@ -295,7 +295,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// <summary>
     /// The payment attempts made against this payment request.
     /// </summary>
-    public List<PaymentRequestPaymentAttempt> PaymentAttempts => this.Events.GetPaymentAttempts(this.Amount);
+    public List<PaymentRequestPaymentAttempt> PaymentAttempts => this.Events.GetPaymentAttempts();
 
     public NoFrixionProblem Validate()
     {

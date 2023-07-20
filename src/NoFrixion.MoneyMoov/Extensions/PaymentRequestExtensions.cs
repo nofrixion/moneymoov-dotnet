@@ -20,7 +20,7 @@ namespace NoFrixion.MoneyMoov.Extensions;
 
 public static class PaymentRequestExtensions
 {
-    public static List<PaymentRequestPaymentAttempt> GetPaymentAttempts(this IEnumerable<PaymentRequestEvent> events, decimal amount)
+    public static List<PaymentRequestPaymentAttempt> GetPaymentAttempts(this IEnumerable<PaymentRequestEvent> events)
     {
         if (events == null || !events.Any())
         {
@@ -31,14 +31,14 @@ public static class PaymentRequestExtensions
             var paymentAttempts = new List<PaymentRequestPaymentAttempt>();
 
             paymentAttempts.AddRange(GetCardPaymentAttempts(events));
-            paymentAttempts.AddRange(GetPispPaymentAttempts(events, amount));
+            paymentAttempts.AddRange(GetPispPaymentAttempts(events));
 
             // TODO: Add similar logic for lightning payments.
 
             return paymentAttempts;
         }
     }
-    
+
     /// <summary>
     /// Groups the payment request events into a list of payment attempts for Card payments.
     /// </summary>
@@ -73,15 +73,15 @@ public static class PaymentRequestExtensions
 
                 var initialEvent = cardAuthorizationSetupEvent ?? cardAuthorizationEvent;
                 paymentAttempt = new PaymentRequestPaymentAttempt
-                                     {
-                                         AttemptKey = attempt.Key ?? string.Empty,
-                                         PaymentRequestID = initialEvent.PaymentRequestID,
-                                         InitiatedAt = initialEvent.Inserted,
-                                         PaymentMethod = PaymentMethodTypeEnum.card,
-                                         Currency = initialEvent.Currency,
-                                         AttemptedAmount = cardAuthorizationEvent.Amount,
-                                         PaymentProcessor = initialEvent.PaymentProcessorName
-                                     };
+                {
+                    AttemptKey = attempt.Key ?? string.Empty,
+                    PaymentRequestID = initialEvent.PaymentRequestID,
+                    InitiatedAt = initialEvent.Inserted,
+                    PaymentMethod = PaymentMethodTypeEnum.card,
+                    Currency = initialEvent.Currency,
+                    AttemptedAmount = cardAuthorizationEvent.Amount,
+                    PaymentProcessor = initialEvent.PaymentProcessorName
+                };
 
                 var isSuccessfullAuthorisationEvent =
                     cardAuthorizationEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS
@@ -109,33 +109,61 @@ public static class PaymentRequestExtensions
                 if (string.IsNullOrEmpty(paymentAttempt.AttemptKey))
                 {
                     paymentAttempt = new PaymentRequestPaymentAttempt
-                                         {
-                                             AttemptKey = attempt.Key ?? string.Empty,
-                                             PaymentRequestID = cardCaptureEvent.PaymentRequestID,
-                                             InitiatedAt = cardCaptureEvent.Inserted,
-                                             PaymentMethod = PaymentMethodTypeEnum.card,
-                                             Currency = cardCaptureEvent.Currency,
-                                             AttemptedAmount = cardCaptureEvent.Amount,
-                                             PaymentProcessor = cardCaptureEvent.PaymentProcessorName
-                                         };
+                    {
+                        AttemptKey = attempt.Key ?? string.Empty,
+                        PaymentRequestID = cardCaptureEvent.PaymentRequestID,
+                        InitiatedAt = cardCaptureEvent.Inserted,
+                        PaymentMethod = PaymentMethodTypeEnum.card,
+                        Currency = cardCaptureEvent.Currency,
+                        AttemptedAmount = cardCaptureEvent.Amount,
+                        PaymentProcessor = cardCaptureEvent.PaymentProcessorName
+                    };
                 }
 
-                var isSuccessfullCaptureEvent =
-                    cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS
-                    || cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_PAYMENT_SOFT_DECLINE_STATUS
-                    || cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS
-                    || cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_CAPTURE_SUCCESS_STATUS;
+                var successfulCaptureEvents =
+                    attempt
+                        .Where(x =>
+                            x.EventType == PaymentRequestEventTypesEnum.card_capture &&
+                            (x.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS ||
+                             x.Status == CardPaymentResponseStatus.CARD_CAPTURE_SUCCESS_STATUS))
+                        .ToList();
 
-                if (isSuccessfullCaptureEvent)
+                var settledAmount = 0m;
+                
+                if (successfulCaptureEvents.Any())
+                { 
+                    settledAmount = 
+                        successfulCaptureEvents.Sum(x => x.Amount);
+
+                    paymentAttempt.CaptureAttempts =
+                        successfulCaptureEvents
+                            .Select(x => new PaymentRequestCaptureAttempt()
+                            {
+                                CapturedAt = x.Inserted,
+                                CapturedAmount = x.Amount
+                            })
+                            .ToList();
+                }
+                
+                if (cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS || 
+                    cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_PAYMENT_SOFT_DECLINE_STATUS)
                 {
-                    paymentAttempt.SettledAt = cardCaptureEvent.Inserted;
-                    paymentAttempt.SettledAmount = cardCaptureEvent.Amount;
+                    settledAmount = cardCaptureEvent.Amount;
+                    
                     if (cardCaptureEvent.PaymentProcessorName == PaymentProcessorsEnum.Checkout)
                     {
                         paymentAttempt.AuthorisedAt = cardCaptureEvent.Inserted;
                         paymentAttempt.AuthorisedAmount = cardCaptureEvent.Amount;
                     }
-                }
+                } 
+
+                paymentAttempt.SettledAt = cardCaptureEvent.Inserted;
+                paymentAttempt.SettledAmount = settledAmount;
+
+                paymentAttempt.AuthorisedAt ??= paymentAttempt.SettledAt;
+                paymentAttempt.AuthorisedAmount = 
+                    paymentAttempt.AuthorisedAmount == 0 ?
+                        settledAmount : paymentAttempt.AuthorisedAmount;
             }
 
             // If there is a card void event, then the payment attempt was refunded.
@@ -144,12 +172,14 @@ public static class PaymentRequestExtensions
                 var cardVoidEvents = attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.card_void);
 
                 var refundAttempts = (from cardVoidEvent in cardVoidEvents
-                    where cardVoidEvent.Status == CardPaymentResponseStatus.CARD_VOIDED_SUCCESS_STATUS
-                    select new PaymentRequestRefundAttempt
-                    {
-                        RefundInitiatedAt = cardVoidEvent.Inserted, RefundInitiatedAmount = cardVoidEvent.Amount,
-                        RefundSettledAt = cardVoidEvent.Inserted, RefundSettledAmount = cardVoidEvent.Amount,
-                    }).ToList();
+                                      where cardVoidEvent.Status == CardPaymentResponseStatus.CARD_VOIDED_SUCCESS_STATUS
+                                      select new PaymentRequestRefundAttempt
+                                      {
+                                          RefundInitiatedAt = cardVoidEvent.Inserted,
+                                          RefundInitiatedAmount = cardVoidEvent.Amount,
+                                          RefundSettledAt = cardVoidEvent.Inserted,
+                                          RefundSettledAmount = cardVoidEvent.Amount,
+                                      }).ToList();
 
                 paymentAttempt.RefundAttempts = refundAttempts;
             }
@@ -165,12 +195,12 @@ public static class PaymentRequestExtensions
 
         return cardPaymentAttempts;
     }
-    
+
     /// <summary>
     /// Groups the payment request events into a list of payment attempts for PISP payments.
     /// </summary>
     /// <returns></returns>
-    public static IEnumerable<PaymentRequestPaymentAttempt> GetPispPaymentAttempts(this IEnumerable<PaymentRequestEvent> events, decimal amount)
+    public static IEnumerable<PaymentRequestPaymentAttempt> GetPispPaymentAttempts(this IEnumerable<PaymentRequestEvent> events)
     {
         var pispPaymentAttempts = new List<PaymentRequestPaymentAttempt>();
         // Get PIS attempts.
@@ -205,9 +235,10 @@ public static class PaymentRequestExtensions
                     InitiatedAt = initiateEvent.Inserted,
                     PaymentMethod = PaymentMethodTypeEnum.pisp,
                     Currency = initiateEvent.Currency,
-                    AttemptedAmount = amount,
+                    AttemptedAmount = initiateEvent.Amount,
                     PaymentProcessor = initiateEvent.PaymentProcessorName,
-                    InstitutionID = initiateEvent.PispPaymentServiceProviderID
+                    InstitutionID = initiateEvent.PispPaymentServiceProviderID,
+                    InstitutionName = initiateEvent.PispPaymentInstitutionName
                 };
 
                 foreach (var pispCallbackOrWebhook in attempt.Where(x =>
@@ -249,7 +280,7 @@ public static class PaymentRequestExtensions
 
                     paymentAttempt.SettledAt = settleEvent.Inserted;
                     paymentAttempt.SettledAmount = settleEvent.Amount;
-                    
+
                     paymentAttempt.RefundAttempts = GetPispRefundAttempts(events, settleEvent.PispPaymentInitiationID!).ToList();
                 }
                 else if (attempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure))
@@ -270,7 +301,7 @@ public static class PaymentRequestExtensions
         this IEnumerable<PaymentRequestEvent> events, string pispPaymentInitiationID)
     {
         var pispRefundAttempts = new List<PaymentRequestRefundAttempt>();
-        
+
         // Get pisp refund attempts for the given pisp payment initiation id.
         var pispRefundEvents = events.Where(x =>
                 !string.IsNullOrEmpty(x.PispPaymentInitiationID) &&
@@ -297,7 +328,7 @@ public static class PaymentRequestExtensions
                     RefundInitiatedAt = refundInitiatedEvent.Inserted,
                     RefundInitiatedAmount = refundInitiatedEvent.Amount,
                 };
-                
+
                 if (pispRefundEvent.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_refund_cancelled))
                 {
                     var refundCancelledEvent = pispRefundEvent.First(x =>
@@ -312,13 +343,13 @@ public static class PaymentRequestExtensions
                         x.EventType == PaymentRequestEventTypesEnum.pisp_refund_settled);
 
                     refundAttempt.RefundSettledAt = refundSettledEvent.Inserted;
-                    refundAttempt.RefundSettledAmount = refundSettledEvent.Amount; 
+                    refundAttempt.RefundSettledAmount = refundSettledEvent.Amount;
                 }
-                
+
                 pispRefundAttempts.Add(refundAttempt);
             }
         }
-        
+
         return pispRefundAttempts;
     }
 }

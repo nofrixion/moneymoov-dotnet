@@ -79,6 +79,11 @@ public class PaymentRequestPaymentAttempt
     public List<PaymentRequestRefundAttempt> RefundAttempts { get; set; } = new List<PaymentRequestRefundAttempt>();
 
     /// <summary>
+    /// The capture attempts associated with this payment attempt.
+    /// </summary>
+    public List<PaymentRequestCaptureAttempt> CaptureAttempts { get; set; } = new();
+
+    /// <summary>
     /// The authorised payment currency.
     /// </summary>
     public CurrencyTypeEnum Currency { get; set; } = CurrencyTypeEnum.EUR;
@@ -95,6 +100,12 @@ public class PaymentRequestPaymentAttempt
     /// this will be the ID of the bank the payer used for the attempt.
     /// </summary>
     public string? InstitutionID { get; set; }
+
+    /// <summary>
+    /// Where available this is the name of the institution used by the payer. For example,
+    /// in PIS attempts this will be the name of the bank the payer used for the attempt.
+    /// </summary>
+    public string? InstitutionName { get; set; }
 
     public PaymentResultEnum Status
     {
@@ -117,16 +128,32 @@ public class PaymentRequestPaymentAttempt
 public class PaymentRequestRefundAttempt
 {
     public Guid? RefundPayoutID { get; set; }
-    
+
     public DateTimeOffset? RefundInitiatedAt { get; set; }
-    
+
     public DateTimeOffset? RefundSettledAt { get; set; }
-    
+
     public DateTimeOffset? RefundCancelledAt { get; set; }
-    
+
     public decimal RefundInitiatedAmount { get; set; }
-    
+
     public decimal RefundSettledAmount { get; set; }
-    
+
     public decimal RefundCancelledAmount { get; set; }
+}
+
+/// <summary>
+/// Represents each individual payment capture attempt for a payment request.
+/// </summary>
+public class PaymentRequestCaptureAttempt
+{
+    /// <summary>
+    /// Date and time the capture was initiated.
+    /// </summary>
+    public DateTimeOffset? CapturedAt { get; set; }
+    
+    /// <summary>
+    /// The amount that was captured.
+    /// </summary>
+    public decimal CapturedAmount { get; set; }
 }
