@@ -113,7 +113,7 @@ public class PaymentRequestResult
         CustomerID = paymentRequest.CustomerID;
 
         // Currently only has PIS attempts.
-        var paymentAttempts = paymentRequest.Events.GetPaymentAttempts(paymentRequest.Amount);
+        var paymentAttempts = paymentRequest.Events.GetPaymentAttempts();
 
         if (paymentRequest != null &&
            paymentRequest.Events != null &&
@@ -166,8 +166,7 @@ public class PaymentRequestResult
                         Currency = payEvent.Currency,
                         CardCapturedAmount = capturedAmount,
                         CardAuthorizationID = payEvent.CardAuthorizationResponseID,
-                        CardTokenCustomerID = payEvent.CardTokenCustomerID,
-                        CardTransactionID = payEvent.CardTransactionID,
+                        TokenisedCardID = payEvent.TokenisedCardID?.ToString(),
                         PaymentProcessor = payEvent.PaymentProcessorName
                     };
 
