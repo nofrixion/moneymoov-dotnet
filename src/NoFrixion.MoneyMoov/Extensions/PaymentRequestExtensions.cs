@@ -41,162 +41,65 @@ public static class PaymentRequestExtensions
 
     /// <summary>
     /// Groups the payment request events into a list of payment attempts for Card payments.
+    /// Card events flow:
+    /// 
+    /// Cybersource flow → 
+    /// Card Sale:
+    /// card_payer_authentication_setup → card_authorization → card_sale → card_void
+    /// Card Capture:
+    /// card_payer_authentication_setup → card_authorization → card_capture → card_void
+    /// 
+    /// Checkout flow → 
+    /// Card Sale:
+    /// card_payer_authentication_setup → card_sale → card_void
+    /// Card Capture:
+    /// card_payer_authentication_setup → card_authorization → card_capture → card_void
+    ///
+    /// Card events statuses:
+    ///
+    /// card_payer_authentication_setup:
+    /// Checkout - Pending
+    /// Cybersource - COMPLETED
+    /// card_payer_authentication_setup_failure:
+    /// Checkout - Event itself means 3Dsecure failure. Can be considered a failed attempt.
+    /// card_authorization:
+    /// Cybersource - AUTHORIZED, 202 (Soft decline)
+    /// Checkout - Authorized, CardVerified (In case of checkout, the card_authorization event is logged only in case of Authorize only flag enabled on the payment request. Otherwise, a successful payment, logs a card_sale event)
+    /// card_sale:
+    /// Cybersource - AUTHORIZED, 202 (Soft decline)
+    /// Checkout - AUTHORIZED
+    /// card_capture:
+    /// Cybersource - PENDING
+    /// Checkout - CAPTURED
+    /// card_void:
+    /// Cybersource - VOIDED
+    /// Checkout - VOIDED
     /// </summary>
-    /// <returns></returns>
-    public static IEnumerable<PaymentRequestPaymentAttempt> GetCardPaymentAttempts(this IEnumerable<PaymentRequestEvent> events)
+    /// <returns>A list of payment attempts generated from payment request events.</returns>
+    public static IEnumerable<PaymentRequestPaymentAttempt> GetCardPaymentAttempts(
+        this IEnumerable<PaymentRequestEvent> events)
     {
         var cardPaymentAttempts = new List<PaymentRequestPaymentAttempt>();
 
-        var cardAttempts = events
-            .Where(
-                x => !string.IsNullOrEmpty(x.CardAuthorizationResponseID)
-                     && (x.EventType == PaymentRequestEventTypesEnum.card_payer_authentication_setup
-                         || x.EventType == PaymentRequestEventTypesEnum.card_authorization
-                         || x.EventType == PaymentRequestEventTypesEnum.card_sale
-                         || x.EventType == PaymentRequestEventTypesEnum.card_capture
-                         || x.EventType == PaymentRequestEventTypesEnum.card_void)).OrderBy(x => x.Inserted)
-            .GroupBy(x => x.CardAuthorizationResponseID).ToList();
+        var cardAttempts = events.GetGroupedCardEvents();
 
         foreach (var attempt in cardAttempts)
         {
             var paymentAttempt = new PaymentRequestPaymentAttempt();
-            if (attempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.card_authorization))
-            {
-                var cardAuthorizationEvent = attempt
-                    .Where(x => x.EventType == PaymentRequestEventTypesEnum.card_authorization).First();
 
-                // The CardAuthorizationResponseID is NULL for card_payer_authentication_setup events.
-                var cardAuthorizationSetupEvent = attempt.Where(
-                    x => x.EventType == PaymentRequestEventTypesEnum.card_payer_authentication_setup
-                         && x.CardRequestID == cardAuthorizationEvent.CardRequestID).FirstOrDefault();
-
-
-                var initialEvent = cardAuthorizationSetupEvent ?? cardAuthorizationEvent;
-                paymentAttempt = new PaymentRequestPaymentAttempt
-                {
-                    AttemptKey = attempt.Key ?? string.Empty,
-                    PaymentRequestID = initialEvent.PaymentRequestID,
-                    InitiatedAt = initialEvent.Inserted,
-                    PaymentMethod = PaymentMethodTypeEnum.card,
-                    Currency = initialEvent.Currency,
-                    AttemptedAmount = cardAuthorizationEvent.Amount,
-                    PaymentProcessor = initialEvent.PaymentProcessorName
-                };
-
-                var isSuccessfullAuthorisationEvent =
-                    cardAuthorizationEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS
-                    || cardAuthorizationEvent.Status == CardPaymentResponseStatus.CARD_PAYMENT_SOFT_DECLINE_STATUS
-                    || cardAuthorizationEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_AUTHORIZED_STATUS
-                    || cardAuthorizationEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CARDVERFIED_STATUS;
-
-                // If the card authorization event was successful, then the payment attempt was authorised.
-                if (isSuccessfullAuthorisationEvent)
-                {
-                    paymentAttempt.AuthorisedAt = cardAuthorizationEvent.Inserted;
-                    paymentAttempt.AuthorisedAmount = cardAuthorizationEvent.Amount;
-                }
-            }
-
-            // If the card authorization event was successful and there is a card capture event, then the payment attempt was settled.
-            if (attempt.Any(
-                    x => x.EventType == PaymentRequestEventTypesEnum.card_sale
-                         || x.EventType == PaymentRequestEventTypesEnum.card_capture))
-            {
-                var cardCaptureEvent =
-                    attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.card_sale).FirstOrDefault()
-                    ?? attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.card_capture).First();
-
-                if (string.IsNullOrEmpty(paymentAttempt.AttemptKey))
-                {
-                    paymentAttempt = new PaymentRequestPaymentAttempt
-                    {
-                        AttemptKey = attempt.Key ?? string.Empty,
-                        PaymentRequestID = cardCaptureEvent.PaymentRequestID,
-                        InitiatedAt = cardCaptureEvent.Inserted,
-                        PaymentMethod = PaymentMethodTypeEnum.card,
-                        Currency = cardCaptureEvent.Currency,
-                        AttemptedAmount = cardCaptureEvent.Amount,
-                        PaymentProcessor = cardCaptureEvent.PaymentProcessorName
-                    };
-                }
-
-                var successfulCaptureEvents =
-                    attempt
-                        .Where(x =>
-                            x.EventType == PaymentRequestEventTypesEnum.card_capture &&
-                            (x.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS ||
-                             x.Status == CardPaymentResponseStatus.CARD_CAPTURE_SUCCESS_STATUS))
-                        .ToList();
-
-                var settledAmount = 0m;
-
-                if (successfulCaptureEvents.Any())
-                {
-                    settledAmount =
-                        successfulCaptureEvents.Sum(x => x.Amount);
-
-                    paymentAttempt.CaptureAttempts =
-                        successfulCaptureEvents
-                            .Select(x => new PaymentRequestCaptureAttempt()
-                            {
-                                CapturedAt = x.Inserted,
-                                CapturedAmount = x.Amount
-                            })
-                            .ToList();
-                }
-
-                if (cardCaptureEvent.EventType == PaymentRequestEventTypesEnum.card_sale &&
-                    (
-                        cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS ||
-                        cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_PAYMENT_SOFT_DECLINE_STATUS ||
-                        cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS ||
-                        cardCaptureEvent.Status == CardPaymentResponseStatus.CARD_CAPTURE_SUCCESS_STATUS
-                    ))
-                {
-                    settledAmount = cardCaptureEvent.Amount;
-
-                    if (cardCaptureEvent.PaymentProcessorName == PaymentProcessorsEnum.Checkout)
-                    {
-                        paymentAttempt.AuthorisedAt = cardCaptureEvent.Inserted;
-                        paymentAttempt.AuthorisedAmount = cardCaptureEvent.Amount;
-                    }
-                }
-
-                paymentAttempt.SettledAt = cardCaptureEvent.Inserted;
-                paymentAttempt.SettledAmount = settledAmount;
-
-                paymentAttempt.AuthorisedAt ??= paymentAttempt.SettledAt;
-                paymentAttempt.AuthorisedAmount =
-                    paymentAttempt.AuthorisedAmount == 0 ?
-                        settledAmount : paymentAttempt.AuthorisedAmount;
-            }
-
+            attempt.HandleCardAuthorisationEvents(paymentAttempt);
+            
+            attempt.HandleCardCaptureEvents(paymentAttempt);
+            
+            attempt.HandleCardSaleEvents(paymentAttempt);
+            
             // If there is a card void event, then the payment attempt was refunded.
-            if (attempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.card_void))
-            {
-                var cardVoidEvents = attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.card_void);
+            attempt.HandleCardVoidEvents(paymentAttempt);
 
-                var refundAttempts = (from cardVoidEvent in cardVoidEvents
-                                      where cardVoidEvent.Status == CardPaymentResponseStatus.CARD_VOIDED_SUCCESS_STATUS
-                                      select new PaymentRequestRefundAttempt
-                                      {
-                                          RefundInitiatedAt = cardVoidEvent.Inserted,
-                                          RefundInitiatedAmount = cardVoidEvent.Amount,
-                                          RefundSettledAt = cardVoidEvent.Inserted,
-                                          RefundSettledAmount = cardVoidEvent.Amount,
-                                      }).ToList();
-
-                paymentAttempt.RefundAttempts = refundAttempts;
-            }
-
-            if (attempt.Any(x => x.WalletName != null))
-            {
-                paymentAttempt.WalletName = attempt.First(x => x.WalletName != null).WalletName;
-            }
+            attempt.SetWalletName(paymentAttempt);
 
             cardPaymentAttempts.Add(paymentAttempt);
         }
-
 
         return cardPaymentAttempts;
     }

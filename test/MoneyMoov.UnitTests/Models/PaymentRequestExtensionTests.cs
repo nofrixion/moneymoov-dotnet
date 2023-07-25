@@ -272,8 +272,8 @@ namespace MoneyMoov.UnitTests.Models
             Assert.NotEmpty(cardAttempts);
             Assert.Single(cardAttempts);
             Assert.Equal(PaymentResultEnum.FullyPaid, cardAttempts.First().Status);
-            Assert.Equal(amount, cardAttempts.First().SettledAmount);
-            Assert.Equal(amount, cardAttempts.First().AuthorisedAmount);
+            Assert.Equal(amount, cardAttempts.First().CaptureAttempts.Sum(x=>x.CapturedAmount));
+            Assert.Equal(amount, cardAttempts.First().CardAuthorisedAmount);
             Assert.Equal(CurrencyTypeEnum.EUR, cardAttempts.First().Currency);
             Assert.Equal(PaymentProcessorsEnum.Checkout, cardAttempts.First().PaymentProcessor);
             Assert.Equal(PaymentMethodTypeEnum.card, cardAttempts.First().PaymentMethod);
@@ -338,8 +338,8 @@ namespace MoneyMoov.UnitTests.Models
             Assert.NotEmpty(cardAttempts);
             Assert.Single(cardAttempts);
             Assert.Equal(PaymentResultEnum.FullyPaid, cardAttempts.First().Status);
-            Assert.Equal(amount, cardAttempts.First().SettledAmount);
-            Assert.Equal(amount, cardAttempts.First().AuthorisedAmount);
+            Assert.Equal(amount, cardAttempts.First().CaptureAttempts.Sum(x=>x.CapturedAmount));
+            Assert.Equal(amount, cardAttempts.First().CardAuthorisedAmount);
             Assert.Equal(CurrencyTypeEnum.EUR, cardAttempts.First().Currency);
             Assert.Equal(PaymentProcessorsEnum.Checkout, cardAttempts.First().PaymentProcessor);
             Assert.Equal(PaymentMethodTypeEnum.card, cardAttempts.First().PaymentMethod);

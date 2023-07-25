@@ -41,14 +41,19 @@ public class PaymentRequestPaymentAttempt
     /// If the attempt was authorised this is the timestamp it occurred at.
     /// </summary>
     public DateTimeOffset? AuthorisedAt { get; set; }
+    
+    /// <summary>
+    /// If the card payment attempt was authorised this is the timestamp it occurred at.
+    /// </summary>
+    public DateTimeOffset? CardAuthorisedAt { get; set; }
 
     /// <summary>
-    /// If the attempt was settled this is the timestamp it occurred at.
+    /// If the PISP attempt was settled this is the timestamp it occurred at.
     /// </summary>
     public DateTimeOffset? SettledAt { get; set; }
 
     /// <summary>
-    /// If the attempt failed to settled after the expected settlement time this
+    /// If the PISP attempt failed to settled after the expected settlement time this
     /// is the timestamp the failure was recorded at.
     /// </summary>
     public DateTimeOffset? SettleFailedAt { get; set; }
@@ -67,6 +72,11 @@ public class PaymentRequestPaymentAttempt
     /// The payment amount that was authorised by the payer.
     /// </summary>
     public decimal AuthorisedAmount { get; set; }
+    
+    /// <summary>
+    /// The card payment amount that was authorised by the payer.
+    /// </summary>
+    public decimal CardAuthorisedAmount { get; set; }
 
     /// <summary>
     /// The funds that were received from the payer.
@@ -79,7 +89,7 @@ public class PaymentRequestPaymentAttempt
     public List<PaymentRequestRefundAttempt> RefundAttempts { get; set; } = new List<PaymentRequestRefundAttempt>();
 
     /// <summary>
-    /// The capture attempts associated with this payment attempt.
+    /// The card capture attempts associated with this payment attempt.
     /// </summary>
     public List<PaymentRequestCaptureAttempt> CaptureAttempts { get; set; } = new();
 
@@ -106,16 +116,30 @@ public class PaymentRequestPaymentAttempt
     /// in PIS attempts this will be the name of the bank the payer used for the attempt.
     /// </summary>
     public string? InstitutionName { get; set; }
+    
+    /// <summary>
+    /// For card payments the merchant can request a reusable token for this payer and
+    /// use it to submit subsequent merchant initiated payments.
+    /// </summary>
+    public string? TokenisedCardID { get; set; }
+    
 
     public PaymentResultEnum Status
     {
         get
         {
+            var amountPaid = this switch
+            {
+                var att when att.PaymentMethod == PaymentMethodTypeEnum.pisp && att.SettledAmount > 0 => att.SettledAmount,
+                var att when att.PaymentMethod == PaymentMethodTypeEnum.card && att.CardAuthorisedAmount > 0 => att
+                    .CardAuthorisedAmount,
+                _ => 0
+            };
             return this switch
             {
-                var att when att.SettledAmount > 0 && att.SettledAmount == att.AttemptedAmount => PaymentResultEnum.FullyPaid,
-                var att when att.SettledAmount > 0 && att.SettledAmount > att.AttemptedAmount => PaymentResultEnum.OverPaid,
-                var att when att.SettledAmount > 0 && att.SettledAmount < att.AttemptedAmount => PaymentResultEnum.PartiallyPaid,
+                var att when amountPaid > 0 && amountPaid == att.AttemptedAmount => PaymentResultEnum.FullyPaid,
+                var att when amountPaid > 0 && amountPaid > att.AttemptedAmount => PaymentResultEnum.OverPaid,
+                var att when amountPaid > 0 && amountPaid < att.AttemptedAmount => PaymentResultEnum.PartiallyPaid,
                 var att when att.SettleFailedAt != null => PaymentResultEnum.None,
                 var att when att.AuthorisedAt != null => PaymentResultEnum.Authorized,
                 _ => PaymentResultEnum.None
@@ -156,4 +180,14 @@ public class PaymentRequestCaptureAttempt
     /// The amount that was captured.
     /// </summary>
     public decimal CapturedAmount { get; set; }
+    
+    /// <summary>
+    /// Date and time the capture failed.
+    /// </summary>
+    public DateTimeOffset? CaptureFailedAt { get; set; }
+    
+    /// <summary>
+    /// Capture failure reason.
+    /// </summary>
+    public string? CaptureFailureError { get; set; }
 }
