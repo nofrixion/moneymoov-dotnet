@@ -27,13 +27,13 @@ namespace NoFrixion.MoneyMoov.Models.PaymentRequests
     {
         public PaymentRequestMetrics()
         {
-            TotalAmountsByCurrency = new Dictionary<MetricsEnum, Dictionary<CurrencyTypeEnum, decimal>>
+            TotalAmountsByCurrency = new Dictionary<string, Dictionary<string, decimal>>
             {
-                { MetricsEnum.All, new Dictionary<CurrencyTypeEnum, decimal>() },
-                { MetricsEnum.Paid, new Dictionary<CurrencyTypeEnum, decimal>() },
-                { MetricsEnum.Unpaid, new Dictionary<CurrencyTypeEnum, decimal>() },
-                { MetricsEnum.PartiallyPaid, new Dictionary<CurrencyTypeEnum, decimal>() },
-                { MetricsEnum.Authorized, new Dictionary<CurrencyTypeEnum, decimal>() }
+                { "All", new Dictionary<string, decimal>() },
+                { "Paid", new Dictionary<string, decimal>() },
+                { "Unpaid", new Dictionary<string, decimal>() },
+                { "PartiallyPaid", new Dictionary<string, decimal>() },
+                { "Authorized", new Dictionary<string, decimal>() }
             };
         }
 
@@ -68,6 +68,6 @@ namespace NoFrixion.MoneyMoov.Models.PaymentRequests
         /// <summary>
         /// The total amounts by status and currency.
         /// </summary>
-        public Dictionary<MetricsEnum, Dictionary<CurrencyTypeEnum, decimal>> TotalAmountsByCurrency { get; set; }
+        public Dictionary<string, Dictionary<string, decimal>> TotalAmountsByCurrency { get; set; }
     }
 }
