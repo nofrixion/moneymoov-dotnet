@@ -88,11 +88,13 @@ public static class PaymentRequestExtensions
             var paymentAttempt = new PaymentRequestPaymentAttempt();
 
             attempt.HandleCardAuthorisationEvents(paymentAttempt);
-            
+
             attempt.HandleCardCaptureEvents(paymentAttempt);
-            
+
             attempt.HandleCardSaleEvents(paymentAttempt);
-            
+
+            attempt.HandleCardWebhookEvents(paymentAttempt);
+
             // If there is a card void event, then the payment attempt was refunded.
             attempt.HandleCardVoidEvents(paymentAttempt);
 
