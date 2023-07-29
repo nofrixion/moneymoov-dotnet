@@ -15,7 +15,7 @@
 
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NoFrixion.MoneyMoov.Models.PaymentRequests;
+using NoFrixion.MoneyMoov.Models;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -40,13 +40,13 @@ public class PaymentRequestMetricsTests : MoneyMoovUnitTestBase<PaymentRequestMe
 
         Assert.NotNull(metrics);
 
-        Assert.Equal(10, metrics.All);
-        Assert.Equal(2, metrics.Paid);
-        Assert.Equal(3, metrics.PartiallyPaid);
-        Assert.Equal(1, metrics.Unpaid);
-        Assert.Equal(4, metrics.Authorized);
+        Assert.Equal(10, metrics?.All);
+        Assert.Equal(2, metrics?.Paid);
+        Assert.Equal(3, metrics?.PartiallyPaid);
+        Assert.Equal(1, metrics?.Unpaid);
+        Assert.Equal(4, metrics?.Authorized);
 
-        //Assert.Contains(paymentRequestMetrics.TotalAmountsByCurrency["All"], x => x.Key == CurrencyTypeEnum.EUR.ToString());
-        //Assert.Equal(329.01m, paymentRequestMetrics.TotalAmountsByCurrency["All"][CurrencyTypeEnum.EUR.ToString()]);
+        Assert.Contains(metrics?.TotalAmountsByCurrency[MetricsEnum.All.ToString().ToLower()], x => x.Key == CurrencyTypeEnum.EUR.ToString().ToLower());
+        Assert.Equal(329.01m, metrics?.TotalAmountsByCurrency[MetricsEnum.All.ToString().ToLower()][CurrencyTypeEnum.EUR.ToString().ToLower()]);
     }
 }
