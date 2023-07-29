@@ -55,7 +55,7 @@ public class MerchantPayByBankSetting
     /// Name of the bank payment processor.
     /// </summary>
     [EnumDataType(typeof(PaymentProcessorsEnum))]
-    [JsonConverter(typeof(PaymentProcessorsEnum))]
+    [JsonConverter(typeof(StringEnumConverter))]
     public PaymentProcessorsEnum Processor { get; set; }
 
     /// <summary>
