@@ -111,5 +111,10 @@ public enum PaymentRequestEventTypesEnum
     /// <summary>
     /// A PIS payment is refund is cancelled. The funds have not been transferred back to user.
     /// </summary>
-    pisp_refund_cancelled = 16
+    pisp_refund_cancelled = 16,
+
+    /// <summary>
+    /// A card payment was initiated. A webhook is sent out when the status of the payment changes. 
+    /// </summary>
+    card_webhook = 17,
 }
