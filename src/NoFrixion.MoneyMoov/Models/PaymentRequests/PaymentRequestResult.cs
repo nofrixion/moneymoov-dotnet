@@ -113,7 +113,7 @@ public class PaymentRequestResult
         CustomerID = paymentRequest.CustomerID;
 
         // Currently only has PIS attempts.
-        var paymentAttempts = paymentRequest.Events.GetPaymentAttempts();
+        var paymentAttempts = paymentRequest.PaymentAttempts;
 
         if (paymentRequest != null &&
            paymentRequest.Events != null &&
@@ -135,60 +135,30 @@ public class PaymentRequestResult
                             Currency = payEvent.Currency
                         });
                 }
-                else if (
-                    (payEvent.EventType == PaymentRequestEventTypesEnum.card_authorization ||
-                    payEvent.EventType == PaymentRequestEventTypesEnum.card_sale) &&
-                    (payEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS ||
-                    payEvent.Status == CardPaymentResponseStatus.CARD_PAYMENT_SOFT_DECLINE_STATUS ||
-                    payEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS))
+            }
+
+            foreach (var attempt in paymentAttempts.Where(x => x.PaymentMethod == PaymentMethodTypeEnum.card))
+            {
+                if (attempt.CardAuthorisedAmount > 0)
                 {
-                    decimal amount = Math.Round(payEvent.Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES);
-
-                    // The captured amount can be different to the authorised amount. Card payments can be 
-                    // authorised AND settled, in which case the full amount is captured. They can be authorised
-                    // only in which case the amount is not settled and a subsequent "capture" call is required.
-                    decimal capturedAmount = payEvent switch
-                    {
-                        var p when p.EventType == PaymentRequestEventTypesEnum.card_sale &&
-                            payEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS => amount,
-                        var p when p.EventType == PaymentRequestEventTypesEnum.card_sale &&
-                            payEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS => amount,
-                        _ => 0,
-                    };
-
-                    // Initial authorisation for a card payment.
-                    var payment = new PaymentRequestPayment
+                    Payments.Add(new PaymentRequestPayment
                     {
                         PaymentRequestID = PaymentRequestID,
-                        OccurredAt = payEvent.Inserted,
+                        OccurredAt = attempt.InitiatedAt,
                         PaymentMethod = PaymentMethodTypeEnum.card,
-                        Amount = amount,
-                        Currency = payEvent.Currency,
-                        CardCapturedAmount = capturedAmount,
-                        CardAuthorizationID = payEvent.CardAuthorizationResponseID,
-                        TokenisedCardID = payEvent.TokenisedCardID?.ToString(),
-                        PaymentProcessor = payEvent.PaymentProcessorName
-                    };
-
-                    var relatedCardEvents = orderedEvents.Where(x => x.CardAuthorizationResponseID == payEvent.CardAuthorizationResponseID);
-                    foreach (var relatedEvent in relatedCardEvents)
-                    {
-                        if (relatedEvent.EventType == PaymentRequestEventTypesEnum.card_void)
-                        {
-                            payment.CardIsVoided = true;
-                            payment.Amount = 0;
-                            payment.CardCapturedAmount = 0;
-                            break;
-                        }
-                        else if (relatedEvent.EventType == PaymentRequestEventTypesEnum.card_capture &&
-                            (relatedEvent.Status == CardPaymentResponseStatus.CARD_CAPTURE_SUCCESS_STATUS ||
-                            relatedEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS))
-                        {
-                            payment.CardCapturedAmount += Math.Round(relatedEvent.Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES);
-                        }
-                    }
-
-                    Payments.Add(payment);
+                        Amount = Math.Round(attempt.CardAuthorisedAmount,
+                            PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                        Currency = attempt.Currency,
+                        CardCapturedAmount = Math.Round(attempt.CaptureAttempts.Sum(x => x.CapturedAmount),
+                            PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                        CardAuthorizationID = attempt.AttemptKey,
+                        TokenisedCardID = attempt.TokenisedCardID,
+                        PaymentProcessor = attempt.PaymentProcessor,
+                        RefundedAmount = Math.Round(attempt.RefundAttempts.Sum(x => x.RefundSettledAmount),
+                            PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                        CardIsVoided =
+                            attempt.CardAuthorisedAmount - attempt.RefundAttempts.Sum(x => x.RefundSettledAmount) == 0
+                    });
                 }
             }
 
@@ -206,7 +176,7 @@ public class PaymentRequestResult
                             PaymentMethod = PaymentMethodTypeEnum.pisp,
                             Amount = Math.Round(attempt.SettledAmount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
                             Currency = attempt.Currency,
-                            RefundedAmount = attempt.RefundAttempts.Sum(x=>x.RefundSettledAmount),
+                            RefundedAmount = Math.Round(attempt.RefundAttempts.Sum(x=>x.RefundSettledAmount), PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
                         });
                 }
                 else if (attempt.Status == PaymentResultEnum.Authorized)

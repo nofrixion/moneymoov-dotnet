@@ -49,7 +49,8 @@ public class PaymentRequestResultTests
             Currency = entity.Currency,
             Inserted = DateTime.UtcNow,
             EventType = PaymentRequestEventTypesEnum.card_sale,
-            Status = CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS
+            Status = CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS,
+            CardAuthorizationResponseID = Guid.NewGuid().ToString()
         };
 
         entity.Events = new List<PaymentRequestEvent> { successEvent };
@@ -91,7 +92,8 @@ public class PaymentRequestResultTests
             Currency = entity.Currency,
             Inserted = DateTime.UtcNow,
             EventType = PaymentRequestEventTypesEnum.card_sale,
-            Status = CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS
+            Status = CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS,
+            CardAuthorizationResponseID = "dummy"
         };
 
         entity.Events = new List<PaymentRequestEvent> { successEvent };
@@ -119,7 +121,8 @@ public class PaymentRequestResultTests
             Currency = entity.Currency,
             Inserted = DateTime.UtcNow,
             EventType = PaymentRequestEventTypesEnum.card_sale,
-            Status = CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS
+            Status = CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS,
+            CardAuthorizationResponseID = Guid.NewGuid().ToString()
         };
 
         entity.Events = new List<PaymentRequestEvent> { successEvent };
@@ -282,7 +285,8 @@ public class PaymentRequestResultTests
             Currency = entity.Currency,
             Inserted = DateTime.UtcNow,
             EventType = PaymentRequestEventTypesEnum.card_sale,
-            Status = CardPaymentResponseStatus.CARD_PAYMENT_SOFT_DECLINE_STATUS
+            Status = CardPaymentResponseStatus.CARD_PAYMENT_SOFT_DECLINE_STATUS,
+            CardAuthorizationResponseID = Guid.NewGuid().ToString()
         };
 
         entity.Events = new List<PaymentRequestEvent> { successEvent };
@@ -303,7 +307,9 @@ public class PaymentRequestResultTests
     public void Card_Authorise_And_Capture_Fully_Paid_Payment_Result()
     {
         var entity = GetTestPaymentRequest();
+        entity.CardAuthorizeOnly = true;
 
+        var cardAuthorizationResponseID = Guid.NewGuid().ToString();
         var authoriseEvent = new PaymentRequestEvent
         {
             ID = Guid.NewGuid(),
@@ -312,7 +318,8 @@ public class PaymentRequestResultTests
             Currency = entity.Currency,
             Inserted = DateTime.UtcNow,
             EventType = PaymentRequestEventTypesEnum.card_authorization,
-            Status = CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS
+            Status = CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS,
+            CardAuthorizationResponseID = cardAuthorizationResponseID
         };
 
         var captureEvent = new PaymentRequestEvent
@@ -323,7 +330,8 @@ public class PaymentRequestResultTests
             Currency = entity.Currency,
             Inserted = DateTime.UtcNow,
             EventType = PaymentRequestEventTypesEnum.card_capture,
-            Status = CardPaymentResponseStatus.CARD_CAPTURE_SUCCESS_STATUS
+            Status = CardPaymentResponseStatus.CARD_CAPTURE_SUCCESS_STATUS,
+            CardAuthorizationResponseID = cardAuthorizationResponseID
         };
 
         entity.Events = new List<PaymentRequestEvent> { authoriseEvent, captureEvent };
