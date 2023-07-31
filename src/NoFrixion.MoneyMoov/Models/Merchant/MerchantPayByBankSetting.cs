@@ -54,7 +54,9 @@ public class MerchantPayByBankSetting
     /// <summary>
     /// Name of the bank payment processor.
     /// </summary>
-    public string? Processor { get; set; }
+    [EnumDataType(typeof(PaymentProcessorsEnum))]
+    [JsonConverter(typeof(StringEnumConverter))]
+    public PaymentProcessorsEnum Processor { get; set; }
 
     /// <summary>
     /// ID that the processor uses to identify the bank (personal accounts).
