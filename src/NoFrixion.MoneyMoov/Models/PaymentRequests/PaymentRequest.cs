@@ -25,7 +25,6 @@ using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using NoFrixion.MoneyMoov.Extensions;
-using NoFrixion.MoneyMoov.Models.PaymentRequests;
 
 namespace NoFrixion.MoneyMoov.Models;
 
