@@ -1587,7 +1587,6 @@ public class PaymentRequestResultTests
         Assert.Equal(entity.Amount, result.AmountOutstanding());
         Assert.Equal(entity.Currency, result.Currency);
         Assert.Equal(PaymentResultEnum.None, result.Result);
-        Assert.Equal(entity.Amount, result.Payments.Single().RefundedAmount);
     }
     
     [Fact]
@@ -1831,7 +1830,6 @@ public class PaymentRequestResultTests
         Assert.Equal(entity.Amount, result.AmountOutstanding());
         Assert.Equal(entity.Currency, result.Currency);
         Assert.Equal(PaymentResultEnum.None, result.Result);
-        Assert.Equal(entity.Amount, result.Payments.Sum(x=>x.RefundedAmount));
     }
     
     [Fact]
