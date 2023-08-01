@@ -563,6 +563,80 @@ public class PaymentRequestEventExtensionsTests
     }
 
     /// <summary>
+    /// Tests that payment attempt is not updated from webhooks when there is a card sale event
+    /// that has already updated the attempts fields. 
+    /// </summary>
+    [Fact]
+    public void HandleCardWebhookEvents_CardSale_NoChangesToPaymentAttempt()
+    {
+        // Arrange
+        var paymentAttempt = new PaymentRequestPaymentAttempt();
+        var cardAuthorizationResponseID = Guid.NewGuid().ToString();
+        var paymentRequestID = Guid.NewGuid();
+        var amount = 12.12m;
+
+        var cardEvents = new List<PaymentRequestEvent>
+            {
+                new()
+                {
+                    ID = Guid.NewGuid(),
+                    PaymentRequestID = paymentRequestID,
+                    Amount = amount,
+                    Currency = CurrencyTypeEnum.EUR,
+                    Inserted = DateTimeOffset.UtcNow,
+                    EventType = PaymentRequestEventTypesEnum.card_payer_authentication_setup,
+                    Status = "PENDING",
+                    PaymentProcessorName = PaymentProcessorsEnum.Checkout,
+                    CardAuthorizationResponseID = cardAuthorizationResponseID,
+                    CardRequestID = cardAuthorizationResponseID,
+                },
+                new()
+                {
+                    ID = Guid.NewGuid(),
+                    PaymentRequestID = paymentRequestID,
+                    Amount = amount,
+                    Currency = CurrencyTypeEnum.EUR,
+                    Inserted = DateTimeOffset.UtcNow,
+                    EventType = PaymentRequestEventTypesEnum.card_webhook,
+                    Status = "CAPTURED",
+                    PaymentProcessorName = PaymentProcessorsEnum.Checkout,
+                    CardAuthorizationResponseID = cardAuthorizationResponseID,
+                    CardRequestID = cardAuthorizationResponseID,
+                },
+                new()
+                {
+                    ID = Guid.NewGuid(),
+                    PaymentRequestID = paymentRequestID,
+                    Amount = amount,
+                    Currency = CurrencyTypeEnum.EUR,
+                    Inserted = DateTimeOffset.UtcNow,
+                    EventType = PaymentRequestEventTypesEnum.card_sale,
+                    Status = "CAPTURED",
+                    PaymentProcessorName = PaymentProcessorsEnum.Checkout,
+                    CardAuthorizationResponseID = cardAuthorizationResponseID,
+                    CardRequestID = cardAuthorizationResponseID,
+                }
+            };
+
+        var groupedCardEvents = cardEvents.GroupBy(e => e.CardAuthorizationResponseID);
+
+        groupedCardEvents.First().HandleCardSaleEvents(paymentAttempt);
+
+        // Act
+        groupedCardEvents.Single(x => x.Key == cardAuthorizationResponseID).HandleCardWebhookEvents(paymentAttempt);
+
+        // Assert
+        Assert.Single(paymentAttempt.CaptureAttempts);
+        Assert.Equal(amount, paymentAttempt.CaptureAttempts.First().CapturedAmount);
+        Assert.Equal(amount, paymentAttempt.AttemptedAmount);
+        Assert.Equal(cardAuthorizationResponseID, paymentAttempt.AttemptKey);
+        Assert.Equal(paymentRequestID, paymentAttempt.PaymentRequestID);
+        Assert.Empty(paymentAttempt.RefundAttempts);
+        Assert.Equal(PaymentResultEnum.FullyPaid, paymentAttempt.Status);
+    }
+
+
+    /// <summary>
     /// Tests that payment attempt is updated from webhook event even if card authorisation event isn’t received in the callback.
     /// </summary>
     [Fact]
