@@ -16,6 +16,8 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Extensions;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class PaymentRequestPaymentAttempt
@@ -124,28 +126,7 @@ public class PaymentRequestPaymentAttempt
     public string? TokenisedCardID { get; set; }
     
 
-    public PaymentResultEnum Status
-    {
-        get
-        {
-            var amountPaid = this switch
-            {
-                var att when att.PaymentMethod == PaymentMethodTypeEnum.pisp && att.SettledAmount > 0 => att.SettledAmount,
-                var att when att.PaymentMethod == PaymentMethodTypeEnum.card && att.CardAuthorisedAmount > 0 => att
-                    .CardAuthorisedAmount,
-                _ => 0
-            };
-            return this switch
-            {
-                var att when amountPaid > 0 && amountPaid == att.AttemptedAmount => PaymentResultEnum.FullyPaid,
-                var att when amountPaid > 0 && amountPaid > att.AttemptedAmount => PaymentResultEnum.OverPaid,
-                var att when amountPaid > 0 && amountPaid < att.AttemptedAmount => PaymentResultEnum.PartiallyPaid,
-                var att when att.SettleFailedAt != null => PaymentResultEnum.None,
-                var att when att.AuthorisedAt != null => PaymentResultEnum.Authorized,
-                _ => PaymentResultEnum.None
-            };
-        }
-    }
+    public PaymentResultEnum Status => this.GetPaymentAttemptStatus();
 }
 
 
