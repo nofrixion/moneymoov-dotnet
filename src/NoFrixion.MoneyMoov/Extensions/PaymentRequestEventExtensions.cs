@@ -239,15 +239,19 @@ public static class PaymentRequestEventExtensions
                 cdEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CARDVERFIED_STATUS ||
                 cdEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS)
             {
-
-                paymentAttempt.CardAuthorisedAt = cdEvent.Inserted;
-                paymentAttempt.CardAuthorisedAmount = cdEvent.Amount;
+                if (paymentAttempt.CardAuthorisedAmount == default)
+                {
+                    paymentAttempt.CardAuthorisedAt = cdEvent.Inserted;
+                    paymentAttempt.CardAuthorisedAmount = cdEvent.Amount;
+                }
 
                 //Check event status is capture and no other capture event types in the attempt.
                 //This is because we don’t want to add duplicate captured amount.
-                //Only take the captured amount from event type capture or webhook if event type capture is missing.  
+                //Only take the captured amount from event type capture or webhook if event type capture is missing.
+                //Don't add captured amount if it's already set.
                 if (cdEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS &&
-                    !groupedCardEvent.Any(x => x.EventType == PaymentRequestEventTypesEnum.card_capture))
+                    !groupedCardEvent.Any(x => x.EventType == PaymentRequestEventTypesEnum.card_capture) &&
+                    !paymentAttempt.CaptureAttempts.Any())
                 {
                     //Add success capture attempt.
                     paymentAttempt.CaptureAttempts.Add(new PaymentRequestCaptureAttempt()
