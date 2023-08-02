@@ -132,6 +132,12 @@ public class PaymentRequestEvent
     public Guid? TokenisedCardID { get; set; }
 
     /// <summary>
+    /// Optional field that can be set by payment methods, such as pay by bank, that may want to redirect
+    /// back to the URL that initiated the attempt in the case of a failure condition.
+    /// </summary>
+    public string? OriginUrl { get; set; }
+
+    /// <summary>
     /// Gets the amount to display with the correct number of decimal places based on the currency type. 
     /// </summary>
     /// <returns>The decimal amount to display for the payment request's currency.</returns>

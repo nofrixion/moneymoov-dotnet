@@ -92,6 +92,15 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     public string? CallbackUrl { get; set; }
 
     /// <summary>
+    /// Optional callback URL for payment failures that can occur when the payer is 
+    /// redirected away from the payment page. Typically the payer is only sent away
+    /// from the payment page for pay by bank attempts. If this URL is not set the 
+    /// payer will be redirected back to the original URL the payment attempt was initiated
+    /// from.
+    /// </summary>
+    public string? FailureCallbackUrl { get; set; }
+
+    /// <summary>
     /// If a payment event results in the payment request being classified as fully paid this
     /// success webhook URL will be invoked. The URL will be invoked as a GET request, i.e.
     /// there will be no request body. Two query parameters will be added to the URL. The 

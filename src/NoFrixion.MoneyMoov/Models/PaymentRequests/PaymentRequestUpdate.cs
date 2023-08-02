@@ -149,6 +149,15 @@ public class PaymentRequestUpdate
     public string? CallbackUrl { get; set; }
 
     /// <summary>
+    /// Optional callback URL for payment failures that can occur when the payer is 
+    /// redirected away from the payment page. Typically the payer is only sent away
+    /// from the payment page for pay by bank attempts. If this URL is not set the 
+    /// payer will be redirected back to the original URL the payment attempt was initiated
+    /// from.
+    /// </summary>
+    public string? FailureCallbackUrl { get; set; }
+
+    /// <summary>
     /// For card payments the default behaviour is to authorise and capture the payment at the same
     /// time. If a merchant needs to authorise and then capture at a later point this property needs
     /// to be set to true.
@@ -250,6 +259,7 @@ public class PaymentRequestUpdate
         if (ShippingEmail != null)  dict.Add(nameof(ShippingEmail), ShippingEmail);
         if (BaseOriginUrl != null) dict.Add(nameof(BaseOriginUrl), BaseOriginUrl);
         if (CallbackUrl != null) dict.Add(nameof(CallbackUrl), CallbackUrl);
+        if (FailureCallbackUrl != null) dict.Add(nameof(FailureCallbackUrl), FailureCallbackUrl);
         if (CardAuthorizeOnly != null) dict.Add(nameof(CardAuthorizeOnly), CardAuthorizeOnly.Value.ToString());
         if (CardCreateToken != null) dict.Add(nameof(CardCreateToken), CardCreateToken.Value.ToString());
         if (IgnoreAddressVerification != null) dict.Add(nameof(IgnoreAddressVerification), IgnoreAddressVerification.Value.ToString());
