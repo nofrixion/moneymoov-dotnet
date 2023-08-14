@@ -308,7 +308,8 @@ public static class PaymentRequestEventExtensions
                 || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_sale
                 || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_capture
                 || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_void
-                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_webhook;
+                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_webhook
+                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_refund;
     }
 
     public static List<IGrouping<string?, PaymentRequestEvent>> GetGroupedCardEvents(
