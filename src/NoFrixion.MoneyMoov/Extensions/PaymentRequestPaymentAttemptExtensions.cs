@@ -44,4 +44,27 @@ public static class PaymentRequestPaymentAttemptExtensions
             _ => PaymentResultEnum.None
         };
     }
+
+    public static bool IsCardPaymentVoided(this PaymentRequestPaymentAttempt attempt)
+    {
+        return (attempt.CardAuthorisedAmount -
+                attempt.CaptureAttempts.Sum(y => y.CapturedAmount) -
+                attempt.RefundAttempts.Where(p => p.IsCardVoid)
+                    .Sum(z => z.RefundSettledAmount)) == 0;
+    }
+
+    public static decimal GetAmountAvailableToRefund(this PaymentRequestPaymentAttempt attempt)
+    {
+        return attempt.CaptureAttempts.Sum(x => x.CapturedAmount) -
+                                       attempt.RefundAttempts.Where(x => x.IsCardVoid == false)
+                                           .Sum(y => y.RefundSettledAmount);
+    }
+    
+    public static decimal GetAmountAvailableToVoid(this PaymentRequestPaymentAttempt attempt)
+    {
+        return attempt.CardAuthorisedAmount -
+               attempt.CaptureAttempts.Sum(x => x.CapturedAmount) -
+               attempt.RefundAttempts.Where(x => x.IsCardVoid)
+                   .Sum(y => y.RefundSettledAmount);
+    }
 }

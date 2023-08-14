@@ -117,4 +117,9 @@ public enum PaymentRequestEventTypesEnum
     /// A card payment was initiated. A webhook is sent out when the status of the payment changes. 
     /// </summary>
     card_webhook = 17,
+    
+    /// <summary>
+    /// A card payment was refunded.
+    /// </summary>
+    card_refund = 18,
 }

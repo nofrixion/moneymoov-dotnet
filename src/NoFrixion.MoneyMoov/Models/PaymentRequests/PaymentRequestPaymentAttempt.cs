@@ -145,6 +145,8 @@ public class PaymentRequestRefundAttempt
     public decimal RefundSettledAmount { get; set; }
 
     public decimal RefundCancelledAmount { get; set; }
+    
+    public bool IsCardVoid { get; set; }
 }
 
 /// <summary>
