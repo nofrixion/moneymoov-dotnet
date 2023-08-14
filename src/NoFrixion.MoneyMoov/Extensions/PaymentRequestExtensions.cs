@@ -97,6 +97,8 @@ public static class PaymentRequestExtensions
 
             // If there is a card void event, then the payment attempt was refunded.
             attempt.HandleCardVoidEvents(paymentAttempt);
+            
+            attempt.HandleCardRefundEvents(paymentAttempt);
 
             attempt.SetWalletName(paymentAttempt);
 
