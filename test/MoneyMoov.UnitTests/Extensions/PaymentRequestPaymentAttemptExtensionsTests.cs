@@ -125,4 +125,106 @@ public class PaymentRequestPaymentAttemptExtensionsTests
         // Assert
         Assert.Equal(expectedResult, result);
     }
+
+    [Theory]
+    [InlineData(100, 100, 0)]
+    [InlineData(100, 50, 50)]
+    [InlineData(100, 0, 100)]
+    public void GetAmountAvailableToRefund_Tests(decimal capturedAmount, decimal refundedAmount, decimal result)
+    {
+        // Arrange
+        var paymentRequestPaymentAttempt = new PaymentRequestPaymentAttempt
+        {
+            PaymentMethod = PaymentMethodTypeEnum.card,
+            CardAuthorisedAmount = capturedAmount * 2,
+            CardAuthorisedAt = capturedAmount > 0 ? DateTime.UtcNow : null,
+            CaptureAttempts = new List<PaymentRequestCaptureAttempt>()
+                { new() { CapturedAmount = capturedAmount / 2 }, new() { CapturedAmount = capturedAmount / 2 } },
+            AttemptedAmount = capturedAmount * 2,
+            RefundAttempts = new List<PaymentRequestRefundAttempt>
+            {
+                new()
+                {
+                    RefundSettledAmount = refundedAmount / 2
+                },
+                new()
+                {
+                    RefundSettledAmount = refundedAmount / 2
+                },
+            }
+        };
+
+        if (refundedAmount < capturedAmount)
+        {
+            paymentRequestPaymentAttempt.RefundAttempts.Add(new PaymentRequestRefundAttempt { RefundSettledAmount = 100, IsCardVoid = true});
+        }
+        
+        // Act
+        var amountAvailableToRefund = paymentRequestPaymentAttempt.GetAmountAvailableToRefund();
+        
+        // Assert
+        Assert.Equal(result, amountAvailableToRefund);
+    }
+    
+    [Theory]
+    [InlineData(200.45,100.55,  0, 99.90)]
+    [InlineData(200.45, 100.55,  99.90, 0)]
+    public void GetAmountAvailableToVoid_Tests(decimal cardAuthorisedAmount, decimal capturedAmount, decimal voidedAmount, decimal result)
+    {
+        // Arrange
+        var paymentRequestPaymentAttempt = new PaymentRequestPaymentAttempt
+        {
+            PaymentMethod = PaymentMethodTypeEnum.card,
+            CardAuthorisedAmount = cardAuthorisedAmount,
+            CardAuthorisedAt = cardAuthorisedAmount > 0 ? DateTime.UtcNow : null,
+            CaptureAttempts = new List<PaymentRequestCaptureAttempt>()
+                { new() { CapturedAmount = capturedAmount / 2 }, new() { CapturedAmount = capturedAmount / 2 } },
+            AttemptedAmount = cardAuthorisedAmount,
+            RefundAttempts = new List<PaymentRequestRefundAttempt>
+            {
+                new()
+                {
+                    RefundSettledAmount = voidedAmount,
+                    IsCardVoid = true
+                },
+            }
+        };
+        
+        // Act
+        var amountAvailableToVoid = paymentRequestPaymentAttempt.GetAmountAvailableToVoid();
+        
+        // Assert
+        Assert.Equal(result, amountAvailableToVoid);
+    }
+    
+    [Theory]
+    [InlineData(200,100,  0, false)]
+    [InlineData(200, 100,  100, true)]
+    public void IsCardPaymentVoided_Tests(decimal cardAuthorisedAmount, decimal capturedAmount, decimal voidedAmount, bool result)
+    {
+        // Arrange
+        var paymentRequestPaymentAttempt = new PaymentRequestPaymentAttempt
+        {
+            PaymentMethod = PaymentMethodTypeEnum.card,
+            CardAuthorisedAmount = capturedAmount * 2,
+            CardAuthorisedAt = capturedAmount > 0 ? DateTime.UtcNow : null,
+            CaptureAttempts = new List<PaymentRequestCaptureAttempt>()
+                { new() { CapturedAmount = capturedAmount / 2 }, new() { CapturedAmount = capturedAmount / 2 } },
+            AttemptedAmount = capturedAmount * 2,
+            RefundAttempts = new List<PaymentRequestRefundAttempt>
+            {
+                new()
+                {
+                    RefundSettledAmount = voidedAmount,
+                    IsCardVoid = true
+                },
+            }
+        };
+        
+        // Act
+        var isCardPaymentVoided = paymentRequestPaymentAttempt.IsCardPaymentVoided();
+        
+        // Assert
+        Assert.Equal(result, isCardPaymentVoided);
+    }
 }

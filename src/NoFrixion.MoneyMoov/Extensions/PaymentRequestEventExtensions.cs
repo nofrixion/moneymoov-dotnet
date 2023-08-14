@@ -194,14 +194,42 @@ public static class PaymentRequestEventExtensions
         }
 
         var refundAttempts = (from cardVoidEvent in cardVoidEvents
-                              where cardVoidEvent.Status == CardPaymentResponseStatus.CARD_VOIDED_SUCCESS_STATUS
+                              where cardVoidEvent.Status == CardPaymentResponseStatus.CARD_VOIDED_SUCCESS_STATUS ||
+                                    cardVoidEvent.Status == CardPaymentResponseStatus.CARD_REFUNDED_SUCCESS_STATUS
                               select new PaymentRequestRefundAttempt
                               {
                                   RefundInitiatedAt = cardVoidEvent.Inserted,
                                   RefundInitiatedAmount = cardVoidEvent.Amount,
                                   RefundSettledAt = cardVoidEvent.Inserted,
                                   RefundSettledAmount = cardVoidEvent.Amount,
+                                  IsCardVoid = true
                               }).ToList();
+
+        paymentAttempt.RefundAttempts = refundAttempts;
+    }
+    
+    public static void HandleCardRefundEvents(this IGrouping<string?, PaymentRequestEvent> groupedCardEvent,
+        PaymentRequestPaymentAttempt paymentAttempt)
+    {
+        var cardRefundEvents =
+            groupedCardEvent.Where(x => x.EventType == PaymentRequestEventTypesEnum.card_refund).ToList();
+
+        if (!cardRefundEvents.Any())
+        {
+            return;
+        }
+
+        var refundAttempts = (from cardRefundEvent in cardRefundEvents
+            where cardRefundEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_REFUNDED_SUCCESS_STATUS ||
+                  cardRefundEvent.Status == CardPaymentResponseStatus.CARD_REFUNDED_SUCCESS_STATUS
+            select new PaymentRequestRefundAttempt
+            {
+                RefundInitiatedAt = cardRefundEvent.Inserted,
+                RefundInitiatedAmount = cardRefundEvent.Amount,
+                RefundSettledAt = cardRefundEvent.Inserted,
+                RefundSettledAmount = cardRefundEvent.Amount,
+                IsCardVoid = false
+            }).ToList();
 
         paymentAttempt.RefundAttempts = refundAttempts;
     }
@@ -280,7 +308,8 @@ public static class PaymentRequestEventExtensions
                 || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_sale
                 || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_capture
                 || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_void
-                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_webhook;
+                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_webhook
+                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_refund;
     }
 
     public static List<IGrouping<string?, PaymentRequestEvent>> GetGroupedCardEvents(

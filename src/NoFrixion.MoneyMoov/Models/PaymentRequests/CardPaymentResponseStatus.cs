@@ -63,4 +63,14 @@ public static class CardPaymentResponseStatus
     /// The successful status result returned for a checkout authorisation card payment request.
     /// </summary>
     public const string CARD_CHECKOUT_CARDVERFIED_STATUS = "CardVerified";
+    
+    /// <summary>
+    /// The successful status result returned for a cybersource refund card payment request.
+    /// </summary>
+    public const string CARD_REFUNDED_SUCCESS_STATUS = "PENDING";
+    
+    /// <summary>
+    /// The successful status result returned for a refund card payment request.
+    /// </summary>
+    public const string CARD_CHECKOUT_REFUNDED_SUCCESS_STATUS = "REFUNDED";
 }
