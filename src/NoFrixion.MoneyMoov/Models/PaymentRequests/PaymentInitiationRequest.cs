@@ -33,10 +33,17 @@ public class PaymentInitiationRequest
     /// </summary>
     public decimal PartialAmount { get; set; }
 
+    [Obsolete("Please use OriginUrl instead.")]
+    public string RedirectToOriginUrl 
+    {   
+        get => OriginUrl; 
+        set => OriginUrl = value; 
+    }
+
     /// <summary>
     /// Optional. If set should indicate the origin URL the payer is making the 
     /// payment from. If a pay by bank attempt fails and the payment request does not
     /// have a FailureCallbackUrl set then the payer will be redirected to this URL.
     /// </summary>
-    public string RedirectToOriginUrl { get; set; }
+    public string OriginUrl { get; set; }
 }
