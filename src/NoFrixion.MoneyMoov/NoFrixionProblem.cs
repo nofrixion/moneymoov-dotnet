@@ -204,6 +204,15 @@ public class NoFrixionProblem
     [JsonPropertyName("errors")]
     public Dictionary<string, string[]> Errors { get; set; } = new Dictionary<string, string[]>();
 
+    /// <summary>
+    /// This field can be used when a remote error response cannot be deserialised and it's useful to
+    /// take copy of the raw error. Mainly useful for REST API responses from server that return an 
+    /// unknown, on non-JSON, format.
+    /// </summary>
+    [JsonIgnore]
+    [IgnoreDataMember]
+    public string RawError { get; set; } = string.Empty;
+
     [JsonIgnore]
     [IgnoreDataMember]
     public bool IsEmpty => _isEmpty;
