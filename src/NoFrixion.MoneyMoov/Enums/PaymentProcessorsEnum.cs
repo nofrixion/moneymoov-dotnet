@@ -70,6 +70,11 @@ public enum PaymentProcessorsEnum
     /// <summary>
     /// Processed on Bitcoin testnet.
     /// </summary>
-    BitcoinTestnet
+    BitcoinTestnet,
+
+    /// <summary>
+    /// Agency banking supplier.
+    /// </summary>
+    BankingCircle
 }
 
