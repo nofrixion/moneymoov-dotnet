@@ -192,6 +192,7 @@ public static class PaymentRequestExtensions
 
                     paymentAttempt.SettledAt = settleEvent.Inserted;
                     paymentAttempt.SettledAmount = settleEvent.Amount;
+                    paymentAttempt.ReconciledTransactionID = settleEvent.ReconciledTransactionID;
 
                     paymentAttempt.RefundAttempts = GetPispRefundAttempts(events, settleEvent.PispPaymentInitiationID!).ToList();
                 }

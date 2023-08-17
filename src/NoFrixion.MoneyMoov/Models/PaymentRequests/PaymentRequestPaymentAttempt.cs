@@ -125,6 +125,11 @@ public class PaymentRequestPaymentAttempt
     /// </summary>
     public string? TokenisedCardID { get; set; }
     
+    /// <summary>
+    /// When the payment attempt is settled (only relevant for non-card payments) this is the payin transaction that
+    /// the payment request event was reconciled with.
+    /// </summary>
+    public Guid? ReconciledTransactionID { get; set; }
 
     public PaymentResultEnum Status => this.GetPaymentAttemptStatus();
 }
