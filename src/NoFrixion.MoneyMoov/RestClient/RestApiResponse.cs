@@ -20,31 +20,31 @@ using System.Net.Http.Headers;
 
 namespace NoFrixion.MoneyMoov;
 
-/// <summary>
-/// Provides a non-generic contract for the ApiResponse wrapper.
-/// </summary>
-public interface IRestApiResponse
-{
-    /// <summary>
-    /// Gets or sets the status code (HTTP status code)
-    /// </summary>
-    /// <value>The status code.</value>
-    HttpStatusCode StatusCode { get; }
+///// <summary>
+///// Provides a non-generic contract for the ApiResponse wrapper.
+///// </summary>
+//public interface IRestApiResponse
+//{
+//    /// <summary>
+//    /// Gets or sets the status code (HTTP status code)
+//    /// </summary>
+//    /// <value>The status code.</value>
+//    HttpStatusCode StatusCode { get; }
 
-    Option<Uri> RequestUri { get; }
+//    Option<Uri> RequestUri { get; }
 
-    /// <summary>
-    /// Gets or sets the HTTP headers
-    /// </summary>
-    /// <value>HTTP headers</value>
-    Option<HttpResponseHeaders> Headers { get; }
+//    /// <summary>
+//    /// Gets or sets the HTTP headers
+//    /// </summary>
+//    /// <value>HTTP headers</value>
+//    Option<HttpResponseHeaders> Headers { get; }
 
-    /// <summary>
-    /// Will be set for non 2xx responses and holds any available information about why the 
-    /// request failed.
-    /// </summary>
-    NoFrixionProblem Problem { get; }
-}
+//    /// <summary>
+//    /// Will be set for non 2xx responses and holds any available information about why the 
+//    /// request failed.
+//    /// </summary>
+//    NoFrixionProblem Problem { get; }
+//}
 
 /// <summary>
 /// Base class for REST API Response.
@@ -95,7 +95,7 @@ public class RestApiResponse
 /// <summary>
 /// Generic REST API Response.
 /// </summary>
-public class RestApiResponse<T> : RestApiResponse, IRestApiResponse
+public class RestApiResponse<T> : RestApiResponse //, IRestApiResponse
 {
     /// <summary>
     /// Gets or sets the data (parsed HTTP body)
