@@ -136,6 +136,12 @@ public class PaymentRequestEvent
     /// back to the URL that initiated the attempt in the case of a failure condition.
     /// </summary>
     public string? OriginUrl { get; set; }
+    
+    /// <summary>
+    /// For settlement events (only relevant for non-card payments) this is the payin transaction that
+    /// the payment request event was reconciled with.
+    /// </summary>
+    public Guid? ReconciledTransactionID { get; set; }
 
     /// <summary>
     /// Gets the amount to display with the correct number of decimal places based on the currency type. 
