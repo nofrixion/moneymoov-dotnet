@@ -73,8 +73,13 @@ public enum PaymentProcessorsEnum
     BitcoinTestnet,
 
     /// <summary>
-    /// Agency banking supplier.
+    /// Banking Circle standard accounts.
     /// </summary>
-    BankingCircle
+    BankingCircle,
+
+    /// <summary>
+    /// Banking Circle agency banking accounts.
+    /// </summary>
+    BankingCircleAgency
 }
 
