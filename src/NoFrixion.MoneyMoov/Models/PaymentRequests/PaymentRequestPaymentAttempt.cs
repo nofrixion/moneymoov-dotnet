@@ -16,6 +16,8 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Extensions;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class PaymentRequestPaymentAttempt
@@ -123,29 +125,13 @@ public class PaymentRequestPaymentAttempt
     /// </summary>
     public string? TokenisedCardID { get; set; }
     
+    /// <summary>
+    /// When the payment attempt is settled (only relevant for non-card payments) this is the payin transaction that
+    /// the payment request event was reconciled with.
+    /// </summary>
+    public Guid? ReconciledTransactionID { get; set; }
 
-    public PaymentResultEnum Status
-    {
-        get
-        {
-            var amountPaid = this switch
-            {
-                var att when att.PaymentMethod == PaymentMethodTypeEnum.pisp && att.SettledAmount > 0 => att.SettledAmount,
-                var att when att.PaymentMethod == PaymentMethodTypeEnum.card && att.CardAuthorisedAmount > 0 => att
-                    .CardAuthorisedAmount,
-                _ => 0
-            };
-            return this switch
-            {
-                var att when amountPaid > 0 && amountPaid == att.AttemptedAmount => PaymentResultEnum.FullyPaid,
-                var att when amountPaid > 0 && amountPaid > att.AttemptedAmount => PaymentResultEnum.OverPaid,
-                var att when amountPaid > 0 && amountPaid < att.AttemptedAmount => PaymentResultEnum.PartiallyPaid,
-                var att when att.SettleFailedAt != null => PaymentResultEnum.None,
-                var att when att.AuthorisedAt != null => PaymentResultEnum.Authorized,
-                _ => PaymentResultEnum.None
-            };
-        }
-    }
+    public PaymentResultEnum Status => this.GetPaymentAttemptStatus();
 }
 
 
@@ -164,6 +150,8 @@ public class PaymentRequestRefundAttempt
     public decimal RefundSettledAmount { get; set; }
 
     public decimal RefundCancelledAmount { get; set; }
+    
+    public bool IsCardVoid { get; set; }
 }
 
 /// <summary>

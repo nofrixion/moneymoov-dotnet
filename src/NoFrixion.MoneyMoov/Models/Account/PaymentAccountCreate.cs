@@ -38,6 +38,14 @@ public class PaymentAccountCreate
     public string AccountName { get; set; } = string.Empty;
 
     /// <summary>
+    /// The payment processor the account should be created with. Different processors
+    /// provide different features. Not all payment processors support payment accounts.
+    /// An error is returned if an attempt is made to create an account with a non-supported
+    /// processor.
+    /// </summary>
+    public PaymentProcessorsEnum PaymentProcessor { get; set; } = PaymentProcessorsEnum.Modulr;
+
+    /// <summary>
     /// Places all the payment request's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payment request's non-collection properties 
@@ -48,7 +56,8 @@ public class PaymentAccountCreate
         {
             { nameof(MerchantID), MerchantID.ToString() },
             { nameof(Currency), Currency.ToString() },
-            { nameof(AccountName), AccountName ?? string.Empty }
+            { nameof(AccountName), AccountName ?? string.Empty },
+            { nameof(PaymentProcessor), PaymentProcessor.ToString() },
         };
     }
 }

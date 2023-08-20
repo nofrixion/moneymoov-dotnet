@@ -25,7 +25,6 @@ using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using NoFrixion.MoneyMoov.Extensions;
-using NoFrixion.MoneyMoov.Models.PaymentRequests;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -91,6 +90,15 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// a merchant's web site that displays the results of the payment attempt.
     /// </summary>
     public string? CallbackUrl { get; set; }
+
+    /// <summary>
+    /// Optional callback URL for payment failures that can occur when the payer is 
+    /// redirected away from the payment page. Typically the payer is only sent away
+    /// from the payment page for pay by bank attempts. If this URL is not set the 
+    /// payer will be redirected back to the original URL the payment attempt was initiated
+    /// from.
+    /// </summary>
+    public string? FailureCallbackUrl { get; set; }
 
     /// <summary>
     /// If a payment event results in the payment request being classified as fully paid this

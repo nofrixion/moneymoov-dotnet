@@ -16,7 +16,6 @@
 using LanguageExt;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 
 namespace NoFrixion.MoneyMoov;
 
@@ -148,18 +147,15 @@ public class RestApiClient : IRestApiClient, IDisposable
         {
             return new RestApiResponse(response.StatusCode, requestUri, response.Headers);
         }
-        else if ((int)response.StatusCode >= 400 && (int)response.StatusCode < 500 && response.Content.Headers.ContentLength > 0)
+        else if (response.Content.Headers.ContentLength > 0)
         {
-            var problemDetails = await response.Content.ReadFromJsonAsync<NoFrixionProblem>();
-            return problemDetails != null ?
-                new RestApiResponse(response.StatusCode, requestUri, response.Headers, problemDetails) :
-                new RestApiResponse(response.StatusCode, requestUri, response.Headers,
-                   new NoFrixionProblem(response.StatusCode, $"Json deserialisation failed for type {typeof(NoFrixionProblem)}."));
+            string contentStr = await response.Content.ReadAsStringAsync();
+            var problem = DeserialiseProblem(response.StatusCode, contentStr);
+            return new RestApiResponse(response.StatusCode, requestUri, response.Headers, problem);
         }
         else
         {
             string error = await response.Content.ReadAsStringAsync();
-
             return new RestApiResponse(response.StatusCode, requestUri, response.Headers, new NoFrixionProblem(response.StatusCode, error));
         }
     }
@@ -183,24 +179,44 @@ public class RestApiClient : IRestApiClient, IDisposable
         else if (response.Content.Headers.ContentLength > 0)
         {
             string contentStr = await response.Content.ReadAsStringAsync();
-
-            var problemDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<NoFrixionProblem>(contentStr,
-                new Newtonsoft.Json.JsonSerializerSettings
-                {
-                    ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace
-                });
-
-            if(problemDetails == null)
-            {
-                problemDetails = new NoFrixionProblem(response.StatusCode, $"Json deserialisation failed for type {typeof(NoFrixionProblem)}.");
-            }
-
-            return new RestApiResponse<T>(response.StatusCode, requestUri, response.Headers, problemDetails);
+            var problem = DeserialiseProblem(response.StatusCode, contentStr);
+            return new RestApiResponse<T>(response.StatusCode, requestUri, response.Headers, problem);
         }
         else
         {
-            return new RestApiResponse<T>(response.StatusCode, requestUri, response.Headers, new NoFrixionProblem(response.StatusCode, string.Empty));
+            return new RestApiResponse<T>(response.StatusCode, requestUri, response.Headers, 
+                new NoFrixionProblem(response.StatusCode, "Response content was expected."));
         }
+    }
+
+    /// <summary>
+    /// Attempts to deserialise a problem object from the contents of a failure response.
+    /// </summary>
+    /// <param name="responseStatusCode">The failure HTTP status code of the response.</param>
+    /// <param name="responseContent">The payload of the failure response.</param>
+    /// <returns>A NoFrixionProblem instance.</returns>
+    private NoFrixionProblem DeserialiseProblem(HttpStatusCode responseStatusCode, string responseContent)
+    {
+        bool hadDeserialiseError = false;
+
+        var problem = Newtonsoft.Json.JsonConvert.DeserializeObject<NoFrixionProblem>(responseContent,
+            new Newtonsoft.Json.JsonSerializerSettings
+            {
+                ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace,
+                Error = (sender, args) =>
+                {
+                    hadDeserialiseError = true;
+                    args.ErrorContext.Handled = true;
+                }
+            });
+
+        if (problem == null || hadDeserialiseError)
+        {
+            problem = new NoFrixionProblem(responseStatusCode, $"Json deserialisation failed for type {typeof(NoFrixionProblem)}.");
+            problem.RawError = responseContent;
+        }
+        
+        return problem;
     }
 
     private async Task<RestApiResponse> ExecAsync(

@@ -88,13 +88,17 @@ public static class PaymentRequestExtensions
             var paymentAttempt = new PaymentRequestPaymentAttempt();
 
             attempt.HandleCardAuthorisationEvents(paymentAttempt);
-            
+
             attempt.HandleCardCaptureEvents(paymentAttempt);
-            
+
             attempt.HandleCardSaleEvents(paymentAttempt);
-            
+
+            attempt.HandleCardWebhookEvents(paymentAttempt);
+
             // If there is a card void event, then the payment attempt was refunded.
             attempt.HandleCardVoidEvents(paymentAttempt);
+            
+            attempt.HandleCardRefundEvents(paymentAttempt);
 
             attempt.SetWalletName(paymentAttempt);
 
@@ -107,7 +111,7 @@ public static class PaymentRequestExtensions
     /// <summary>
     /// Groups the payment request events into a list of payment attempts for PISP payments.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>A list of payment initiation attempts for the payment request events.</returns>
     public static IEnumerable<PaymentRequestPaymentAttempt> GetPispPaymentAttempts(this IEnumerable<PaymentRequestEvent> events)
     {
         var pispPaymentAttempts = new List<PaymentRequestPaymentAttempt>();
@@ -127,7 +131,7 @@ public static class PaymentRequestExtensions
         foreach (var attempt in pispAttempts)
         {
             // The pisp_initiate event should always be present but if for some reason it's not the next best event
-            // will be sued as the starting point for the attempt.
+            // will be used as the starting point for the attempt.
             var initiateEvent =
                 attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_initiate).FirstOrDefault() ??
                 attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_callback).FirstOrDefault() ??
@@ -188,6 +192,7 @@ public static class PaymentRequestExtensions
 
                     paymentAttempt.SettledAt = settleEvent.Inserted;
                     paymentAttempt.SettledAmount = settleEvent.Amount;
+                    paymentAttempt.ReconciledTransactionID = settleEvent.ReconciledTransactionID;
 
                     paymentAttempt.RefundAttempts = GetPispRefundAttempts(events, settleEvent.PispPaymentInitiationID!).ToList();
                 }

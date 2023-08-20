@@ -66,7 +66,7 @@ public static class PaymentRequestEventExtensions
         }
 
         paymentAttempt.CardAuthorisedAt = cardAuthorizationEvent.Inserted;
-        
+
         paymentAttempt.CardAuthorisedAmount = cardAuthorizationEvent.Amount;
 
     }
@@ -150,7 +150,7 @@ public static class PaymentRequestEventExtensions
                 paymentAttempt.CardAuthorisedAmount = paymentAttempt.CardAuthorisedAmount == 0
                     ? cardSaleEvent.Amount
                     : paymentAttempt.CardAuthorisedAmount;
-                
+
                 if (string.IsNullOrEmpty(paymentAttempt.TokenisedCardID))
                 {
                     paymentAttempt.TokenisedCardID = cardSaleEvent.TokenisedCardID?.ToString();
@@ -194,16 +194,102 @@ public static class PaymentRequestEventExtensions
         }
 
         var refundAttempts = (from cardVoidEvent in cardVoidEvents
-            where cardVoidEvent.Status == CardPaymentResponseStatus.CARD_VOIDED_SUCCESS_STATUS
+                              where cardVoidEvent.Status == CardPaymentResponseStatus.CARD_VOIDED_SUCCESS_STATUS ||
+                                    cardVoidEvent.Status == CardPaymentResponseStatus.CARD_REFUNDED_SUCCESS_STATUS
+                              select new PaymentRequestRefundAttempt
+                              {
+                                  RefundInitiatedAt = cardVoidEvent.Inserted,
+                                  RefundInitiatedAmount = cardVoidEvent.Amount,
+                                  RefundSettledAt = cardVoidEvent.Inserted,
+                                  RefundSettledAmount = cardVoidEvent.Amount,
+                                  IsCardVoid = true
+                              }).ToList();
+
+        paymentAttempt.RefundAttempts = refundAttempts;
+    }
+    
+    public static void HandleCardRefundEvents(this IGrouping<string?, PaymentRequestEvent> groupedCardEvent,
+        PaymentRequestPaymentAttempt paymentAttempt)
+    {
+        var cardRefundEvents =
+            groupedCardEvent.Where(x => x.EventType == PaymentRequestEventTypesEnum.card_refund).ToList();
+
+        if (!cardRefundEvents.Any())
+        {
+            return;
+        }
+
+        var refundAttempts = (from cardRefundEvent in cardRefundEvents
+            where cardRefundEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_REFUNDED_SUCCESS_STATUS ||
+                  cardRefundEvent.Status == CardPaymentResponseStatus.CARD_REFUNDED_SUCCESS_STATUS
             select new PaymentRequestRefundAttempt
             {
-                RefundInitiatedAt = cardVoidEvent.Inserted,
-                RefundInitiatedAmount = cardVoidEvent.Amount,
-                RefundSettledAt = cardVoidEvent.Inserted,
-                RefundSettledAmount = cardVoidEvent.Amount,
+                RefundInitiatedAt = cardRefundEvent.Inserted,
+                RefundInitiatedAmount = cardRefundEvent.Amount,
+                RefundSettledAt = cardRefundEvent.Inserted,
+                RefundSettledAmount = cardRefundEvent.Amount,
+                IsCardVoid = false
             }).ToList();
 
         paymentAttempt.RefundAttempts = refundAttempts;
+    }
+
+    public static void HandleCardWebhookEvents(this IGrouping<string?, PaymentRequestEvent> groupedCardEvent,
+        PaymentRequestPaymentAttempt paymentAttempt)
+    {
+        var cardWebhookEvents = groupedCardEvent
+            .Where(x => x.EventType == PaymentRequestEventTypesEnum.card_webhook)
+            .ToList();
+
+        if (!cardWebhookEvents.Any())
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(paymentAttempt.AttemptKey))
+        {
+            var firstEvent = cardWebhookEvents.First();
+
+            paymentAttempt.AttemptKey = groupedCardEvent.Key ?? string.Empty;
+            paymentAttempt.PaymentRequestID = firstEvent.PaymentRequestID;
+            paymentAttempt.InitiatedAt = firstEvent.Inserted;
+            paymentAttempt.PaymentMethod = PaymentMethodTypeEnum.card;
+            paymentAttempt.Currency = firstEvent.Currency;
+            paymentAttempt.AttemptedAmount = firstEvent.Amount;
+            paymentAttempt.PaymentProcessor = firstEvent.PaymentProcessorName;
+        }
+
+        foreach (var cdEvent in cardWebhookEvents)
+        {
+            //Check payment is authorised.
+            if (cdEvent.Status == CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS ||
+                cdEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_AUTHORIZED_STATUS ||
+                cdEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CARDVERFIED_STATUS ||
+                cdEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS)
+            {
+                if (paymentAttempt.CardAuthorisedAmount == default)
+                {
+                    paymentAttempt.CardAuthorisedAt = cdEvent.Inserted;
+                    paymentAttempt.CardAuthorisedAmount = cdEvent.Amount;
+                }
+
+                //Check event status is capture and no other capture event types in the attempt.
+                //This is because we don’t want to add duplicate captured amount.
+                //Only take the captured amount from event type capture or webhook if event type capture is missing.
+                //Don't add captured amount if it's already set.
+                if (cdEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_CAPTURED_STATUS &&
+                    !groupedCardEvent.Any(x => x.EventType == PaymentRequestEventTypesEnum.card_capture) &&
+                    !paymentAttempt.CaptureAttempts.Any())
+                {
+                    //Add success capture attempt.
+                    paymentAttempt.CaptureAttempts.Add(new PaymentRequestCaptureAttempt()
+                    {
+                        CapturedAmount = cdEvent.Amount,
+                        CapturedAt = cdEvent.Inserted,
+                    });
+                }
+            }
+        }
     }
 
     public static void SetWalletName(this IGrouping<string?, PaymentRequestEvent> groupedCardEvent,
@@ -214,14 +300,16 @@ public static class PaymentRequestEventExtensions
             paymentAttempt.WalletName = groupedCardEvent.First(x => x.WalletName != null).WalletName;
         }
     }
-    
+
     private static bool IsCardRelatedEvent(this PaymentRequestEvent paymentRequestEvent)
     {
         return paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_payer_authentication_setup
                 || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_authorization
                 || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_sale
                 || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_capture
-                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_void;
+                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_void
+                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_webhook
+                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_refund;
     }
 
     public static List<IGrouping<string?, PaymentRequestEvent>> GetGroupedCardEvents(
@@ -253,7 +341,7 @@ public static class PaymentRequestEventExtensions
                    paymentRequestEvent.Status == CardPaymentResponseStatus.CARD_CAPTURE_SUCCESS_STATUS
                );
     }
-    
+
     private static bool IsSoftDeclineSaleEvent(this PaymentRequestEvent paymentRequestEvent)
     {
         return paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_sale &&
@@ -273,7 +361,7 @@ public static class PaymentRequestEventExtensions
     private static List<PaymentRequestEvent> GetAllCardSaleEvents(
         this IGrouping<string?, PaymentRequestEvent> groupedCardEvent)
     {
-        return groupedCardEvent.Any(x=>x.EventType == PaymentRequestEventTypesEnum.card_sale) ? groupedCardEvent
+        return groupedCardEvent.Any(x => x.EventType == PaymentRequestEventTypesEnum.card_sale) ? groupedCardEvent
             .Where(x => x.EventType == PaymentRequestEventTypesEnum.card_sale)
             .ToList() : new List<PaymentRequestEvent>();
     }
