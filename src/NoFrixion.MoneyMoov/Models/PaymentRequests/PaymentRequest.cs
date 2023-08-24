@@ -304,6 +304,24 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// The payment attempts made against this payment request.
     /// </summary>
     public List<PaymentRequestPaymentAttempt> PaymentAttempts => this.Events.GetPaymentAttempts();
+    
+    /// <summary>
+    /// Total amount received for this payment request.
+    /// </summary>
+    /// <returns>The total amount received in decimal.</returns>
+    public decimal AmountReceived { get; set; }
+    
+    /// <summary>
+    /// Total amount refunded for this payment request.
+    /// </summary>
+    /// <returns>The total amount refunded in decimal.</returns>
+    public decimal AmountRefunded { get; set; }
+    
+    /// <summary>
+    /// Total amount that has been authorised but not settled for this payment request.
+    /// </summary>
+    /// <returns>The total amount pending in decimal.</returns>
+    public decimal AmountPending { get; set; }
 
     public NoFrixionProblem Validate()
     {
@@ -359,6 +377,65 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     public static decimal GetDisplayAmount(decimal amount, CurrencyTypeEnum currency)
     {
         return IsFiat(currency) ? Math.Round(amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES) : amount;
+    }
+
+    /// <summary>
+    /// Gets the total amount received for this payment request.
+    /// </summary>
+    /// <returns>The total amount received in decimal.</returns>
+    public decimal GetTotalAmountReceived()
+    {
+        if (!PaymentAttempts.Any())
+        {
+            return 0;
+        }
+
+        return PaymentAttempts
+            .Sum(pa =>
+                pa.PaymentMethod switch
+                {
+                    PaymentMethodTypeEnum.card => pa.CardAuthorisedAmount,
+                    PaymentMethodTypeEnum.pisp => pa.SettledAmount,
+                    _ => 0
+                });
+    }
+
+    /// <summary>
+    /// Gets the total amount refunded for this payment request.
+    /// </summary>
+    /// <returns>The total amount refunded in decimal.</returns>
+    public decimal GetTotalAmountRefunded()
+    {
+        if (!PaymentAttempts.Any())
+        {
+            return 0;
+        }
+
+        return PaymentAttempts
+            .Sum(pa => pa.RefundAttempts
+                .Sum(ra => ra.RefundSettledAmount));
+    }
+
+    /// <summary>
+    /// Gets the total amount pending for this payment request.
+    /// This is mainly for PISP payments where the amount is
+    /// authorised but not yet settled.
+    /// </summary>
+    /// <returns>The total amount pending in decimal.</returns>
+    public decimal GetTotalAmountPending()
+    {
+        if (!PaymentAttempts.Any())
+        {
+            return 0;
+        }
+
+        return PaymentAttempts
+            .Sum(pa =>
+                pa.PaymentMethod switch
+                {
+                    PaymentMethodTypeEnum.pisp => pa.AuthorisedAmount - pa.SettledAmount,
+                    _ => 0
+                });
     }
 
     /// <summary>
