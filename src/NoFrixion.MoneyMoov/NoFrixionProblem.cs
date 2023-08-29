@@ -357,6 +357,11 @@ public class NoFrixionProblem
         return htmlError;
     }
 
+    /// <summary>
+    /// Will be true if an attempt was made to deserialise a problem JSON response.
+    /// </summary>
+    public bool WasParseFailure => !string.IsNullOrEmpty(RawError);
+
     public static NoFrixionProblem FromJson(string json)
     {
        return Newtonsoft.Json.JsonConvert.DeserializeObject<NoFrixionProblem>(json,
