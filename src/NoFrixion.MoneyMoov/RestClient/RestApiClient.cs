@@ -212,7 +212,7 @@ public class RestApiClient : IRestApiClient, IDisposable
 
         if (problem == null || hadDeserialiseError)
         {
-            problem = new NoFrixionProblem(responseStatusCode, $"Json deserialisation failed for type {typeof(NoFrixionProblem)}.");
+            problem = new NoFrixionProblem(responseStatusCode, $"API error response was not in the recognised problem format.");
             problem.RawError = responseContent;
         }
         
