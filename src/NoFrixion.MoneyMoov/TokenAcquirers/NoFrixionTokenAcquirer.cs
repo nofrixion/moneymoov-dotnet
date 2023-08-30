@@ -107,7 +107,7 @@ public class NoFrixionTokenAcquirer : ITokenAcquirer
     /// <returns>A token response which, if successful, contains the issued JWT tokens.</returns>
     public async Task<AccessTokenResponse> GetToken(string code, string redirectUrl)
     {
-        var client = _httpClientFactory.CreateClient("NoFrixionIdentityClient");
+        var client = _httpClientFactory.CreateClient(HttpClientConstants.HTTP_NOFRIXION_IDENTITY_CLIENT_NAME);
 
         var tokenUrl = $"{_config[ConfigKeys.NOFRIXION_IDENTITY_DOMAIN]}/connect/token";
 
@@ -133,7 +133,7 @@ public class NoFrixionTokenAcquirer : ITokenAcquirer
 
     public async Task<AccessTokenResponse> RefreshToken(string refreshToken)
     {
-        var client = _httpClientFactory.CreateClient("NoFrixionIdentityClient");
+        var client = _httpClientFactory.CreateClient(HttpClientConstants.HTTP_NOFRIXION_IDENTITY_CLIENT_NAME);
 
         var tokenUrl = $"{_config[ConfigKeys.NOFRIXION_IDENTITY_DOMAIN]}/connect/token";
 
