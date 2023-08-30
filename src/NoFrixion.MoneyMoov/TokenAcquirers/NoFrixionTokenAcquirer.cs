@@ -58,7 +58,7 @@ public class NoFrixionTokenAcquirer : ITokenAcquirer
             TokenTypesEnum.Standard => TokenConstants.NOFRIXION_STANDARD_SCOPE,
             TokenTypesEnum.Strong => TokenConstants.NOFRIXION_STRONG_SCOPE,
             TokenTypesEnum.UserApiToken => TokenConstants.NOFRIXION_STANDARD_SCOPE,
-            _ => _config[ConfigKeys.IDENTITY_SERVER_AUDIENCE]
+            _ => _config[IdentityConfigKeys.IDENTITY_SERVER_AUDIENCE]
         };
 
         var scopes = tokenType switch
@@ -83,8 +83,8 @@ public class NoFrixionTokenAcquirer : ITokenAcquirer
 
         var urlBuilder = new StringBuilder();
 
-        urlBuilder.Append($"{_config[ConfigKeys.NOFRIXION_IDENTITY_DOMAIN]}/connect/authorize");
-        urlBuilder.Append($"?client_id={_config[ConfigKeys.NOFRIXION_IDENTITY_CLIENTID]}");
+        urlBuilder.Append($"{_config[IdentityConfigKeys.NOFRIXION_IDENTITY_DOMAIN]}/connect/authorize");
+        urlBuilder.Append($"?client_id={_config[IdentityConfigKeys.NOFRIXION_IDENTITY_CLIENTID]}");
         urlBuilder.Append($"&scope={System.Uri.EscapeDataString(scopes)}");
         urlBuilder.Append("&response_type=code");
         urlBuilder.Append($"&state={state}");
@@ -109,14 +109,14 @@ public class NoFrixionTokenAcquirer : ITokenAcquirer
     {
         var client = _httpClientFactory.CreateClient(HttpClientConstants.HTTP_NOFRIXION_IDENTITY_CLIENT_NAME);
 
-        var tokenUrl = $"{_config[ConfigKeys.NOFRIXION_IDENTITY_DOMAIN]}/connect/token";
+        var tokenUrl = $"{_config[IdentityConfigKeys.NOFRIXION_IDENTITY_DOMAIN]}/connect/token";
 
         var tokenResponse = await client.RequestAuthorizationCodeTokenAsync(new AuthorizationCodeTokenRequest
         {
             Address = tokenUrl,
 
-            ClientId = _config[ConfigKeys.NOFRIXION_IDENTITY_CLIENTID]!,
-            ClientSecret = _config[ConfigKeys.NOFRIXION_IDENTITY_CLIENTSECRET],
+            ClientId = _config[IdentityConfigKeys.NOFRIXION_IDENTITY_CLIENTID]!,
+            ClientSecret = _config[IdentityConfigKeys.NOFRIXION_IDENTITY_CLIENTSECRET],
 
             Code = code,
 
@@ -135,14 +135,14 @@ public class NoFrixionTokenAcquirer : ITokenAcquirer
     {
         var client = _httpClientFactory.CreateClient(HttpClientConstants.HTTP_NOFRIXION_IDENTITY_CLIENT_NAME);
 
-        var tokenUrl = $"{_config[ConfigKeys.NOFRIXION_IDENTITY_DOMAIN]}/connect/token";
+        var tokenUrl = $"{_config[IdentityConfigKeys.NOFRIXION_IDENTITY_DOMAIN]}/connect/token";
 
         var tokenResponse = await client.RequestRefreshTokenAsync(new RefreshTokenRequest
         {
             Address = tokenUrl,
 
-            ClientId = _config[ConfigKeys.NOFRIXION_IDENTITY_CLIENTID]!,
-            ClientSecret = _config[ConfigKeys.NOFRIXION_IDENTITY_CLIENTSECRET],
+            ClientId = _config[IdentityConfigKeys.NOFRIXION_IDENTITY_CLIENTID]!,
+            ClientSecret = _config[IdentityConfigKeys.NOFRIXION_IDENTITY_CLIENTSECRET],
 
             RefreshToken = refreshToken,
         });
