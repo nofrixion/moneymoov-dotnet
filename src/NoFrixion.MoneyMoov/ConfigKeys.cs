@@ -584,4 +584,9 @@ public class ConfigKeys
     /// The cron schedule to synchronise transactions with Banking Circle.
     /// </summary>
     public const string BANKING_CIRCLE_TRANSACTION_SYNCHRONISATION_SCHEDULE = "BankingCircle:TransactionSynchronisationSchedule";
+    
+    /// <summary>
+    /// A configuration setting to indicate whether the new current accounts is enabled or not.
+    /// </summary>
+    public const string NOFRIXION_NEW_CURRENT_ACCOUNTS_ENABLED = "NoFrixion:NewCurrentAccountsEnabled";
 }
