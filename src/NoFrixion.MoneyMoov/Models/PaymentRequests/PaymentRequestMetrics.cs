@@ -13,22 +13,12 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using System.Runtime.Serialization;
-
 namespace NoFrixion.MoneyMoov.Models;
 
-public enum MetricsEnum
+public class PaymentRequestMetrics : MetricBase
 {
-    All = 0,
-    Unpaid = 1,
-    PartiallyPaid = 2,
-    Paid = 3,
-    Authorized = 4,
-}
-
-public class PaymentRequestMetrics
-{
-    public PaymentRequestMetrics()
+    public 
+        PaymentRequestMetrics()
     {
         TotalAmountsByCurrency = new Dictionary<string, Dictionary<string, decimal>>()
             {
@@ -64,12 +54,4 @@ public class PaymentRequestMetrics
     /// Total payment request count with status Authorized.
     /// </summary>
     public int Authorized { get; set; }
-
-    // The below could have been nested with the above 
-    // This preserves backwards compatibility with the existing API
-
-    /// <summary>
-    /// The total amounts by status and currency.
-    /// </summary>
-    public Dictionary<string, Dictionary<string, decimal>> TotalAmountsByCurrency { get; set; }
 }
