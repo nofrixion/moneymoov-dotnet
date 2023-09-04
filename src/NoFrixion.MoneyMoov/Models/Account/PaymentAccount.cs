@@ -38,14 +38,14 @@ public class PaymentAccount
     public AccountStatus Status { get; set; }
 
     /// <summary>
-    /// The current available balance of the account. Calculated by subtracting any pending payments from the current balance.
-    /// </summary>
-    public decimal AvailableBalance { get; set; }
-
-    /// <summary>
     /// Balance of the account.
     /// </summary>
     public decimal Balance { get; set; }
+
+    /// <summary>
+    /// Total of the payouts that have been submitted for processing.
+    /// </summary>
+    public decimal SubmittedPayoutsBalance { get; set; }
 
     /// <summary>
     /// Timestamp when the account was created.
@@ -116,4 +116,9 @@ public class PaymentAccount
     /// Is the default account
     /// </summary>
     public bool IsDefault { get; set; }
+
+    /// <summary>
+    /// The current available balance of the account. Calculated by subtracting any submitted payments from the current balance.
+    /// </summary>
+    public decimal AvailableBalance => Balance - SubmittedPayoutsBalance;
 }
