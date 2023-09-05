@@ -127,6 +127,11 @@ public class PayoutCreate
     public bool AllowIncomplete { get; set; } = false;
 
     /// <summary>
+    /// An optional list of tag ids to add to the payout.
+    /// </summary>
+    public List<Guid>? TagIds { get; set; }
+
+    /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payout's non-collection properties 

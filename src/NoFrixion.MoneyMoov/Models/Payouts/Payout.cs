@@ -191,6 +191,11 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// </summary>
     public string InvoiceID { get; set; } = string.Empty;
 
+    /// <summary>
+    /// An optional list of descriptive tags attached to the payout.
+    /// </summary>
+    public List<Tag> Tags { get; set; } = new List<Tag>();
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
