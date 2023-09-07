@@ -26,7 +26,7 @@ public enum MetricsEnum
     All = 0,
     
     /// <summary>
-    /// For use with payment requests and payouts.
+    /// For use with payment requests.
     /// </summary>
     Unpaid = 1,
     
@@ -49,6 +49,16 @@ public enum MetricsEnum
     /// For use with PendingApproval payouts.
     /// </summary>
     PendingApproval = 5,
+    
+    /// <summary>
+    /// For use with InProgress payouts.
+    /// </summary>
+    InProgress = 6,
+    
+    /// <summary>
+    /// For use with Failed payouts.
+    /// </summary>
+    Failed = 7
 }
 
 /// <summary>
