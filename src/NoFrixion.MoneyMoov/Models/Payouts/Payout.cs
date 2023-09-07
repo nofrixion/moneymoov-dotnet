@@ -174,6 +174,21 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// </summary>
     public string SourceAccountName { get; set; } = string.Empty;
 
+    /// <summary>
+    /// The IBAN of the account the payout is being made from.
+    /// </summary>
+    public string? SourceAccountIban { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// The account number of the account the payout is being made from.
+    /// </summary>
+    public string? SourceAccountNumber { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// The sort code of the account the payout is being made from.
+    /// </summary>
+    public string? SourceAccountSortcode { get; set; } = string.Empty;
+    
     [Obsolete("Please use Destination.")]
     [System.Text.Json.Serialization.JsonIgnore]
     public Counterparty? DestinationAccount
