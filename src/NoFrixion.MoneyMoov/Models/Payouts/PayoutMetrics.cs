@@ -22,9 +22,10 @@ public class PayoutMetrics : MetricBase
         TotalAmountsByCurrency = new Dictionary<string, Dictionary<string, decimal>>()
         {
             { MetricsEnum.All.ToString(), new Dictionary<string, decimal>() },
-            { MetricsEnum.Paid.ToString(), new Dictionary<string, decimal>() },
-            { MetricsEnum.Unpaid.ToString(), new Dictionary<string, decimal>() },
+            { MetricsEnum.InProgress.ToString(), new Dictionary<string, decimal>() },
             { MetricsEnum.PendingApproval.ToString(), new Dictionary<string, decimal>() },
+            { MetricsEnum.Failed.ToString(), new Dictionary<string, decimal>() },
+            { MetricsEnum.Paid.ToString(), new Dictionary<string, decimal>() },
         };
     }
 
@@ -34,14 +35,19 @@ public class PayoutMetrics : MetricBase
     public decimal All { get; set; }
     
     /// <summary>
-    /// Payouts with status Unknown, Rejected, Failed, Pending, PendingInput, Queued or QueuedUpstream.
+    /// Payouts with Pending, Queued or QueuedUpstream status.
     /// </summary>
-    public decimal Unpaid { get; set; }
+    public decimal InProgress { get; set; }
     
     /// <summary>
     /// Payouts with PendingApproval status.
     /// </summary>
     public decimal PendingApproval { get; set; }
+
+    /// <summary>
+    /// Payouts with Failed, Rejected, PendingInput or Unknown status. 
+    /// </summary>
+    public decimal Failed { get; set; }
     
     /// <summary>
     /// Payouts with Processed status.
