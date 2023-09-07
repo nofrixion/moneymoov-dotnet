@@ -40,12 +40,12 @@ public class PayoutMetrics : MetricBase
     public decimal InProgress { get; set; }
     
     /// <summary>
-    /// Payouts with PendingApproval status.
+    /// Payouts with PendingApproval or PendingInput status.
     /// </summary>
     public decimal PendingApproval { get; set; }
 
     /// <summary>
-    /// Payouts with Failed, Rejected, PendingInput or Unknown status. 
+    /// Payouts with Failed, Rejected or Unknown status. 
     /// </summary>
     public decimal Failed { get; set; }
     
