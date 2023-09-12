@@ -121,4 +121,9 @@ public class PaymentAccount
     /// The current available balance of the account. Calculated by subtracting any submitted payments from the current balance.
     /// </summary>
     public decimal AvailableBalance => Balance - SubmittedPayoutsBalance;
+
+    /// <summary>
+    /// The payment account supplier name. A payment account can be supplied by multiple payment processors. 
+    /// </summary>
+    public PaymentProcessorsEnum AccountSupplierName { get; set; }
 }
