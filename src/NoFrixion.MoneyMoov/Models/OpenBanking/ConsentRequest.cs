@@ -56,4 +56,10 @@ public class ConsentRequest
     /// MoneyMoov server for verification.
     /// </summary>
     public string SuccessWebHookUrl { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Optional setting. If connected accounts is enabled. After a successful consent authorisation,
+    /// NoFrixion will pull all authorised EUR and GBP account information and store them along NoFrixion payment accounts.  
+    /// </summary>
+    public bool IsConnectedAccounts { get; set; } 
 }
