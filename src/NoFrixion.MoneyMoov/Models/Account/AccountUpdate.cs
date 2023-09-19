@@ -17,8 +17,6 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class AccountUpdate
 {
-    public Guid UserId { get; }
-
     public Guid? AccountID { get; set; }
 
     public string? AccountName { get; set; }
