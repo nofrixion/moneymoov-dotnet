@@ -41,5 +41,10 @@ public enum AccountIdentifierType
     /// <summary>
     /// Direct debit.
     /// </summary>
-    DD = 3
+    DD = 3,
+
+    /// <summary>
+    /// Bitcoin address.
+    /// </summary>
+    Bitcoin = 4
 }
