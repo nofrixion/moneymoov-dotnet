@@ -323,6 +323,11 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// <returns>The total amount pending in decimal.</returns>
     public decimal AmountPending { get; set; }
 
+    public string FormattedAmount => DisplayCurrencyAndAmount(Currency, Amount);
+
+    public string CustomerName =>
+        Addresses.Any() ? $"{Addresses.First().FirstName} {Addresses.First().LastName}" : string.Empty;
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
@@ -442,7 +447,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// Combines the display currency symbol and amount.
     /// </summary>
     public static string DisplayCurrencyAndAmount(CurrencyTypeEnum currency, decimal amount) =>
-        GetCurrencySymbol(currency) + (IsFiat(currency) ? amount.ToString("0.00") : amount);
+        GetCurrencySymbol(currency) + (IsFiat(currency) ? amount.ToString("N2") : amount.ToString("N4"));
 
     private static bool IsFiat(CurrencyTypeEnum currency) =>
         currency switch
