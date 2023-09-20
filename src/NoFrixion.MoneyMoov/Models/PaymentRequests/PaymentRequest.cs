@@ -372,7 +372,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     public static string GetCurrencySymbol(CurrencyTypeEnum currency) =>
         currency switch
             {
-                CurrencyTypeEnum.BTC or CurrencyTypeEnum.TBTC => "₿",
+                CurrencyTypeEnum.BTC => "₿",
                 //CurrencyTypeEnum.LBTC => "⚡",
                 CurrencyTypeEnum.GBP => "£",
                 CurrencyTypeEnum.EUR => "€",
@@ -452,7 +452,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     private static bool IsFiat(CurrencyTypeEnum currency) =>
         currency switch
             {
-                CurrencyTypeEnum.BTC or CurrencyTypeEnum.TBTC => false,
+                CurrencyTypeEnum.BTC => false,
                 _ => true
             };
 }
