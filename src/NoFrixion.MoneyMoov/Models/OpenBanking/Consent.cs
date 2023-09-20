@@ -24,14 +24,14 @@ public class Consent
     public string InstitutionID { get; set; } = string.Empty;
     public string EmailAddress { get; set; } = string.Empty;
     public bool IsEnabled { get; set; }
-    public string CallbackUrl { get; set; } = string.Empty;
+    public string? CallbackUrl { get; set; }
 
     /// <summary>
     /// A web hook URL to send an HTTP request to when the open banking consent
     /// is successfuly authorised. This web hook lets the calling application 
     /// know when a consent is ready to be used.
     /// </summary>
-    public string SuccessWebHookUrl { get; set; } = string.Empty;
+    public string? SuccessWebHookUrl { get; set; }
 
     public PaymentProcessorsEnum Provider { get; set; }
     public DateTimeOffset ExpiryDate { get; set; }
