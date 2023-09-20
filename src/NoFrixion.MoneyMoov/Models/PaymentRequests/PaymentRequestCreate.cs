@@ -391,6 +391,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(SuccessWebHookUrl), SuccessWebHookUrl ?? string.Empty);
         dict.Add(nameof(Title), Title ?? string.Empty);
         dict.Add(nameof(PartialPaymentSteps), PartialPaymentSteps ?? string.Empty);
+        dict.Add(nameof(NotificationEmailAddresses), NotificationEmailAddresses ?? string.Empty);
 
         return dict;
     }

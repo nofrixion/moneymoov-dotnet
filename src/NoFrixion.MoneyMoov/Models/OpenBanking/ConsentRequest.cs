@@ -24,9 +24,8 @@ public class ConsentRequest
     /// The email address that identifies the end user that will be authorising the 
     /// open banking consent request.
     /// </summary>
-    [Required]
     [EmailAddress]
-    public string EmailAddress { get; set; } = string.Empty;
+    public string? EmailAddress { get; set; }
 
     /// <summary>
     /// The institution ID the open banking consent is being requested for.
@@ -46,7 +45,7 @@ public class ConsentRequest
     /// user back to the application that they originally started the open banking authorisation
     /// from.
     /// </summary>
-    public string CallbackUrl { get; set; } = string.Empty;
+    public string? CallbackUrl { get; set; }
 
     /// <summary>
     /// Optional URL that will be called by the MoneyMoov server upon a successful open banking
@@ -55,7 +54,7 @@ public class ConsentRequest
     /// web hooks can easily be spoofed and should NOT be trusted without calling back to the 
     /// MoneyMoov server for verification.
     /// </summary>
-    public string SuccessWebHookUrl { get; set; } = string.Empty;
+    public string? SuccessWebHookUrl { get; set; }
 
     /// <summary>
     /// Optional setting. If connected accounts is enabled. After a successful consent authorisation,
