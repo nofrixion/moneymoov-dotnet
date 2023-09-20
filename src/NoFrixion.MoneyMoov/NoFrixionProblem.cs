@@ -298,38 +298,45 @@ public class NoFrixionProblem
     /// </summary>
     public string ToTextErrorMessage()
     {
-        string error = string.Empty;
-
-        if (Status != 0)
+        if (IsEmpty)
         {
-            error = $"Error Status Code {Status}";
+            return string.Empty;
         }
-
-        if (!string.IsNullOrEmpty(Title))
+        else
         {
-            error += ": " + Title;
-        }
+            string error = string.Empty;
 
-        if (!string.IsNullOrEmpty(Detail))
-        {
-            error += ". " + Detail;
-        }
-
-        if (Errors.Count > 0)
-        {
-            error += " Validation errors: ";
-            foreach (var kvp in Errors)
+            if (Status != 0)
             {
-                error += kvp.Key + ": " + string.Join(',', kvp.Value);
+                error = $"Error Status Code {Status}";
             }
-        }
 
-        if (!string.IsNullOrEmpty(error))
-        {
-            error = error.TrimEnd('.') + ".";
-        }
+            if (!string.IsNullOrEmpty(Title))
+            {
+                error += ": " + Title;
+            }
 
-        return error;
+            if (!string.IsNullOrEmpty(Detail))
+            {
+                error += ". " + Detail;
+            }
+
+            if (Errors.Count > 0)
+            {
+                error += " Validation errors: ";
+                foreach (var kvp in Errors)
+                {
+                    error += kvp.Key + ": " + string.Join(',', kvp.Value);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                error = error.TrimEnd('.') + ".";
+            }
+
+            return error;
+        }
     }
 
     /// <summary>
@@ -337,24 +344,31 @@ public class NoFrixionProblem
     /// </summary>
     public string ToHtmlErrorMessage()
     {
-        string htmlError = string.Empty;
-
-        if (!string.IsNullOrEmpty(Title))
+        if (IsEmpty)
         {
-            htmlError = $"<p><strong>{Title}</strong>: {Detail}</p>";
+            return string.Empty;
         }
-
-        if (Errors.Count > 0)
+        else
         {
-            htmlError += "<ul>";
-            foreach (var kvp in Errors)
+            string htmlError = string.Empty;
+
+            if (!string.IsNullOrEmpty(Title))
             {
-                htmlError += $"<li>{kvp.Key}: {string.Join(',', kvp.Value)}</li>";
+                htmlError = $"<p><strong>{Title}</strong>: {Detail}</p>";
             }
-            htmlError += "</ul>";
-        }
 
-        return htmlError;
+            if (Errors.Count > 0)
+            {
+                htmlError += "<ul>";
+                foreach (var kvp in Errors)
+                {
+                    htmlError += $"<li>{kvp.Key}: {string.Join(',', kvp.Value)}</li>";
+                }
+                htmlError += "</ul>";
+            }
+
+            return htmlError;
+        }
     }
 
     /// <summary>
