@@ -318,6 +318,12 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// An optional list of tag ids to add to the payment request
     /// </summary>
     public List<Guid>? TagIds { get; set; }
+
+    /// <summary>
+    /// An optional list of tag values to set on the payment request. If no matching
+    /// tag exists it will be created.
+    /// </summary>
+    public List<string>? Tags { get; set; }
     
     public NoFrixionProblem Validate()
     {

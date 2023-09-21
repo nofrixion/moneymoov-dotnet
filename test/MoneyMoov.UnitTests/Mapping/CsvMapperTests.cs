@@ -141,7 +141,8 @@ XXX Volvo, ,Deposit,Vehicle,5002027,10000, Order for car XXX , someone@somemotor
             { "ShippingFirstName", "{First Name}" },
             { "ShippingLastName", "{Surname}" },
             { "Title", "{Vehicle Description}" },
-            { "UseHostedPaymentPage", "true" }
+            { "UseHostedPaymentPage", "true" },
+            { "Tags", "[\"abc\", \"def\"]" }
         };
 
         using var reader = new StringReader(csv);
@@ -168,5 +169,9 @@ XXX Volvo, ,Deposit,Vehicle,5002027,10000, Order for car XXX , someone@somemotor
         Assert.Equal(PartialPaymentMethodsEnum.Partial, results[0].Model.PartialPaymentMethod);
         Assert.True(results[0].Model.UseHostedPaymentPage);
         Assert.Equal("Order for car XXX", results[0].Model.Title);
+        Assert.NotNull(results[0].Model.Tags);
+        Assert.Equal(2, results[0].Model.Tags?.Count);
+        Assert.Equal("abc", results[0].Model.Tags?[0]);
+        Assert.Equal("def", results[0].Model.Tags?[1]);
     }
 }
