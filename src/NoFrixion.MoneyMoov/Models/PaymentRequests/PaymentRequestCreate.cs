@@ -318,6 +318,12 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// An optional list of tag ids to add to the payment request
     /// </summary>
     public List<Guid>? TagIds { get; set; }
+
+    /// <summary>
+    /// An optional list of tag values to set on the payment request. If no matching
+    /// tag exists it will be created.
+    /// </summary>
+    public List<string>? Tags { get; set; }
     
     public NoFrixionProblem Validate()
     {
@@ -391,6 +397,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(SuccessWebHookUrl), SuccessWebHookUrl ?? string.Empty);
         dict.Add(nameof(Title), Title ?? string.Empty);
         dict.Add(nameof(PartialPaymentSteps), PartialPaymentSteps ?? string.Empty);
+        dict.Add(nameof(NotificationEmailAddresses), NotificationEmailAddresses ?? string.Empty);
 
         return dict;
     }

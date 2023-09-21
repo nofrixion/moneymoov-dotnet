@@ -126,4 +126,25 @@ public class PaymentAccount
     /// The payment account supplier name. A payment account can be supplied by multiple payment processors. 
     /// </summary>
     public PaymentProcessorsEnum AccountSupplierName { get; set; }
+
+    /// <summary>
+    /// Indicates if the payment account is an externally connected account.
+    /// Externally connected account can be used to view account balances and transactions. 
+    /// </summary>
+    public bool IsConnectedAccount { get; set; }
+
+    /// <summary>
+    /// The Icon for external accounts
+    /// </summary>
+    public string ExternalAccountIcon { get; set; }
+
+    /// <summary>
+    /// The bank name for external accounts
+    /// </summary>
+    public string BankName { get; set; }
+    
+    /// <summary>
+    /// The date that the external account will expire
+    /// </summary>
+    public DateTimeOffset? ExpiryDate { get; set; }
 }

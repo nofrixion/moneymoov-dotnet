@@ -88,6 +88,14 @@ public static class CsvMapper
                                         property.SetValue(result.Model, enumValue);
                                     }
                                 }
+                                else if (property.PropertyType == typeof(List<string>))
+                                {
+                                    if (!string.IsNullOrEmpty(formattedValue))
+                                    {
+                                        var stringItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(formattedValue);
+                                        property.SetValue(result.Model, stringItems);
+                                    }
+                                }
                                 else
                                 {
                                     property.SetValue(result.Model, Convert.ChangeType(formattedValue, property.PropertyType));
