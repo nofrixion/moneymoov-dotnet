@@ -15,7 +15,7 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using Quartz.Util;
+using NoFrixion.MoneyMoov.Extensions;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -58,46 +58,61 @@ public class PaymentRequestEmailNotification
     /// Substitutes the payment request properties into the fields that can be set from payment request properties.
     /// </summary>
     /// <param name="paymentRequest">The payment request to set the substitution variables from.</param>
+    /// <param name="csvMappedRow">The CSV row in header, value pairs. Allows csv fields that aren't used in the 
+    /// payment request to still be sued in the email template.</param>
     /// <returns>A new payment request email notification instance with the substitution variables set.</returns>
-    public PaymentRequestEmailNotification SubstituteVariables(PaymentRequest paymentRequest)
+    public PaymentRequestEmailNotification SubstituteVariables(PaymentRequest paymentRequest, IDictionary<string, object> csvMappedRow)
     {
         var notification = new PaymentRequestEmailNotification
         {
             TemplateName = TemplateName
         };
 
-        notification.ToEmailAddress = Substitute(ToEmailAddress, paymentRequest);
-        notification.FromEmailAddress = Substitute(FromEmailAddress, paymentRequest);
-        notification.Subject = Substitute(Subject, paymentRequest);
+        notification.ToEmailAddress = Substitute(ToEmailAddress, paymentRequest, csvMappedRow);
+        notification.FromEmailAddress = Substitute(FromEmailAddress, paymentRequest, csvMappedRow);
+        notification.Subject = Substitute(Subject, paymentRequest, csvMappedRow);
 
         foreach (var kvp in TemplateVariables)
         {
-            notification.TemplateVariables.Add(kvp.Key, Substitute(kvp.Value, paymentRequest));
+            notification.TemplateVariables.Add(kvp.Key, Substitute(kvp.Value, paymentRequest, csvMappedRow));
         }
 
         return notification;
     }
 
-    private string Substitute(string formatString, PaymentRequest paymentRequest)
+    private string Substitute(string formatString, PaymentRequest paymentRequest, IDictionary<string, object> csvMappedRow)
     {
         if (string.IsNullOrEmpty(formatString))
         {
             return formatString;
         }
 
-        string substitutedString = formatString;
+        //string substitutedString = formatString;
 
-        foreach (var property in typeof(PaymentRequest).GetProperties())
-        {
-            string matchString = "{" + property.Name + "}";
+        IDictionary<string, object> payReqMapping = typeof(PaymentRequest)
+            .GetProperties()
+            .ToDictionary(
+                prop => prop.Name,
+                prop => prop.GetValue(paymentRequest, null) ?? string.Empty
+            );
 
-            if (substitutedString.Contains(matchString))
-            {
-                string propValue = property.GetValue(paymentRequest, null)?.ToString() ?? string.Empty;
-                substitutedString = substitutedString.Replace(matchString, propValue, StringComparison.InvariantCultureIgnoreCase);
-            }
-        }
+        // First stage is to substitute payment request fields.
+        //substitutedString = CsvMapper.SubstitutePlaceholdersWithValues(substitutedString, payReqMapping);
 
-        return substitutedString;
+        //foreach (var property in typeof(PaymentRequest).GetProperties())
+        //{
+        //    string matchString = "{" + property.Name + "}";
+
+        //    if (substitutedString.Contains(matchString))
+        //    {
+        //        string propValue = property.GetValue(paymentRequest, null)?.ToString() ?? string.Empty;
+        //        substitutedString = substitutedString.Replace(matchString, propValue, StringComparison.InvariantCultureIgnoreCase);
+        //    }
+        //}
+
+        // Second stage is to substitute csv mapped results.
+        //substitutedString = substitutedString.Substitute(csvMappedRow);
+
+        return formatString.Substitute(payReqMapping).Substitute(csvMappedRow);
     }
 }
