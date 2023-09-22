@@ -156,4 +156,20 @@ public static class StringExtensions
             return false;
         }
     }
+
+    /// <summary>
+    /// Takes a format string, e.g. "{Property1} and {Property2}", and attempts to find matching
+    /// items in teh dictionary to replace the placeholder keys with.
+    /// </summary>
+    /// <param name="template">The template string with the format keys.</param>
+    /// <param name="record">A dictionary with values that can be sued to substitute into the string template.</param>
+    /// <returns>The template string with substitutions done.</returns>
+    public static string Substitute(this string template, IDictionary<string, object> record)
+    {
+        return Regex.Replace(template, @"\{(.+?)\}", match =>
+        {
+            string columnName = match.Groups[1].Value;
+            return record.ContainsKey(columnName) ? record[columnName]?.ToString()?.Trim() ?? string.Empty : "{" + columnName + "}";
+        });
+    }
 }
