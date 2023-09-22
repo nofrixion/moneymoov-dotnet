@@ -87,31 +87,12 @@ public class PaymentRequestEmailNotification
             return formatString;
         }
 
-        //string substitutedString = formatString;
-
         IDictionary<string, object> payReqMapping = typeof(PaymentRequest)
             .GetProperties()
             .ToDictionary(
                 prop => prop.Name,
                 prop => prop.GetValue(paymentRequest, null) ?? string.Empty
             );
-
-        // First stage is to substitute payment request fields.
-        //substitutedString = CsvMapper.SubstitutePlaceholdersWithValues(substitutedString, payReqMapping);
-
-        //foreach (var property in typeof(PaymentRequest).GetProperties())
-        //{
-        //    string matchString = "{" + property.Name + "}";
-
-        //    if (substitutedString.Contains(matchString))
-        //    {
-        //        string propValue = property.GetValue(paymentRequest, null)?.ToString() ?? string.Empty;
-        //        substitutedString = substitutedString.Replace(matchString, propValue, StringComparison.InvariantCultureIgnoreCase);
-        //    }
-        //}
-
-        // Second stage is to substitute csv mapped results.
-        //substitutedString = substitutedString.Substitute(csvMappedRow);
 
         return formatString.Substitute(payReqMapping).Substitute(csvMappedRow);
     }
