@@ -409,7 +409,8 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
             int tagIdNumber = 0;
             foreach (var tagId in TagIds)
             {
-                    dict.Add($"{nameof(TagIds)}[{tagIdNumber}]", tagId.ToString());
+                dict.Add($"{nameof(TagIds)}[{tagIdNumber}]", tagId.ToString());
+                tagIdNumber++;
             }
         }
 
