@@ -15,7 +15,7 @@
 
 using CsvHelper;
 using System.Globalization;
-using System.Text.RegularExpressions;
+using NoFrixion.MoneyMoov.Extensions;
 
 namespace NoFrixion.MoneyMoov;
 
@@ -27,11 +27,17 @@ public class CsvMapResult<T> where T : new()
 
     public NoFrixionProblem Problem { get; set; }
 
+    /// <summary>
+    /// The CSV row mapped to header, value pairs.
+    /// </summary>
+    public IDictionary<string, object> CsvMappedRow { get; set; }
+
     public CsvMapResult()
     {
         CsvRow = string.Empty;
         Model = new T();
         Problem = NoFrixionProblem.Empty;
+        CsvMappedRow = new Dictionary<string, object>();
     }
 }
 
@@ -64,6 +70,8 @@ public static class CsvMapper
                 }
                 else
                 {
+                    result.CsvMappedRow = (IDictionary<string, object>)record;
+
                     try
                     {
                         foreach (var property in typeof(T).GetProperties())
@@ -71,7 +79,7 @@ public static class CsvMapper
                             if (mapping.ContainsKey(property.Name))
                             {
                                 string template = mapping[property.Name];
-                                string formattedValue = SubstitutePlaceholdersWithValues(template, (IDictionary<string, object>)record);
+                                string formattedValue = template.Substitute((IDictionary<string, object>)record);
 
                                 if (property.PropertyType == typeof(Guid))
                                 {
@@ -86,6 +94,14 @@ public static class CsvMapper
                                     {
                                         var enumValue = Enum.Parse(property.PropertyType, formattedValue, true);
                                         property.SetValue(result.Model, enumValue);
+                                    }
+                                }
+                                else if (property.PropertyType == typeof(List<string>))
+                                {
+                                    if (!string.IsNullOrEmpty(formattedValue))
+                                    {
+                                        var stringItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(formattedValue);
+                                        property.SetValue(result.Model, stringItems);
                                     }
                                 }
                                 else
@@ -104,15 +120,6 @@ public static class CsvMapper
                 yield return result;
             }
         }
-    }
-
-    private static string SubstitutePlaceholdersWithValues(string template, IDictionary<string, object> record)
-    {
-        return Regex.Replace(template, @"\{(.+?)\}", match =>
-        {
-            string columnName = match.Groups[1].Value;
-            return record[columnName]?.ToString()?.Trim() ?? string.Empty;
-        });
     }
 }
 

@@ -23,6 +23,11 @@ namespace NoFrixion.MoneyMoov.Models;
 public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
 {
     /// <summary>
+    /// THe maximum number of tags that can be set when creating a payment request.
+    /// </summary>
+    public const int MAXIMUM_TAG_COUNT = 10;
+
+    /// <summary>
     /// The ID of the merchant to create the payment request for.
     /// </summary>
     public Guid MerchantID { get; set; }
@@ -318,6 +323,12 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// An optional list of tag ids to add to the payment request
     /// </summary>
     public List<Guid>? TagIds { get; set; }
+
+    /// <summary>
+    /// An optional list of tag values to set on the payment request. If no matching
+    /// tag exists it will be created.
+    /// </summary>
+    public List<string>? Tags { get; set; }
     
     public NoFrixionProblem Validate()
     {
@@ -392,6 +403,34 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(Title), Title ?? string.Empty);
         dict.Add(nameof(PartialPaymentSteps), PartialPaymentSteps ?? string.Empty);
         dict.Add(nameof(NotificationEmailAddresses), NotificationEmailAddresses ?? string.Empty);
+
+        if (TagIds?.Count() > 0)
+        {
+            int tagIdNumber = 0;
+            foreach (var tagId in TagIds)
+            {
+                dict.Add($"{nameof(TagIds)}[{tagIdNumber}]", tagId.ToString());
+                tagIdNumber++;
+            }
+        }
+
+        if (Tags?.Count() > 0)
+        {
+            int tagNumber = 0;
+            foreach(var tag in Tags)
+            {
+                if (!string.IsNullOrEmpty(tag))
+                {
+                    dict.Add($"{nameof(Tags)}[{tagNumber}]", tag.Trim());
+
+                    tagNumber++;
+                    if (tagNumber > MAXIMUM_TAG_COUNT)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
 
         return dict;
     }
