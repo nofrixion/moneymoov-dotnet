@@ -39,7 +39,7 @@ public class AccountIdentifier
 
             if (!string.IsNullOrEmpty(BitcoinAddress))
             {
-                return AccountIdentifierType.Bitcoin;
+                return AccountIdentifierType.BTC;
             }
 
             // Return default
@@ -139,12 +139,12 @@ public class AccountIdentifier
     private string _bitcoinAddress;
     public string BitcoinAddress
     {
-        get => _accountNumber;
+        get => _bitcoinAddress;
         set
         {
             if (!string.IsNullOrEmpty(value))
             {
-                _bitcoinAddress = value.Trim().Replace(" ", string.Empty);
+                _bitcoinAddress = value.Trim();
             }
             else
             {
@@ -159,6 +159,7 @@ public class AccountIdentifier
     public string Summary =>   
         Type == AccountIdentifierType.IBAN ? Type.ToString() + ": " + IBAN :
         Type == AccountIdentifierType.SCAN ? Type.ToString() + ": " + SortCode + " / " + AccountNumber :
+        Type == AccountIdentifierType.BTC ? Type.ToString() + ": " + BitcoinAddress :
          "No identifier.";
 
     public virtual Dictionary<string, string> ToDictionary(string keyPrefix)

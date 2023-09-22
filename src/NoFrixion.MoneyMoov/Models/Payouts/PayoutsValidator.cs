@@ -226,9 +226,9 @@ public static class PayoutsValidator
         }
 
         if (payout.Destination != null && 
-            !(payout.Type == AccountIdentifierType.IBAN || payout.Type == AccountIdentifierType.SCAN || payout.Type == AccountIdentifierType.Bitcoin))
+            !(payout.Type == AccountIdentifierType.IBAN || payout.Type == AccountIdentifierType.SCAN || payout.Type == AccountIdentifierType.BTC))
         {
-            yield return new ValidationResult("Only destination types of IBAN, SCAN or Bitcoin are supported.", new string[] { nameof(payout.Type) });
+            yield return new ValidationResult("Only destination types of IBAN, SCAN or BTC are supported.", new string[] { nameof(payout.Type) });
         }
 
         if (payout.Type == AccountIdentifierType.IBAN && payout.Destination?.Identifier != null &&
@@ -265,7 +265,7 @@ public static class PayoutsValidator
             yield return new ValidationResult($"Currency {payout.Currency} cannot be used with SCAN destinations.", new string[] { nameof(payout.Currency) });
         }
 
-        if (payout.Type != AccountIdentifierType.Bitcoin && !ValidateTheirReference(payout.TheirReference, payout.Type))
+        if (payout.Type != AccountIdentifierType.BTC && !ValidateTheirReference(payout.TheirReference, payout.Type))
         {
             yield return new ValidationResult("Their reference must consist of at least 6 alphanumeric characters that are not all the same " +
                 "(non alphanumeric characters do not get counted towards this minimum value). " +

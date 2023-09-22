@@ -46,5 +46,5 @@ public enum AccountIdentifierType
     /// <summary>
     /// Bitcoin address.
     /// </summary>
-    Bitcoin = 4
+    BTC = 4
 }
