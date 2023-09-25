@@ -7,6 +7,7 @@
 // 
 //  History:
 //  21 10 2021  Donal O'Connor   Created, Carmichael House, Dublin, Ireland.
+//  19 09 2023  Aaron Clauson    Added Bitcoin support.
 // 
 //  License:
 //  MIT.
@@ -34,6 +35,11 @@ public class AccountIdentifier
             if (!string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber))
             {
                 return AccountIdentifierType.SCAN;
+            }
+
+            if (!string.IsNullOrEmpty(BitcoinAddress))
+            {
+                return AccountIdentifierType.BTC;
             }
 
             // Return default
@@ -126,12 +132,34 @@ public class AccountIdentifier
             }
         }
     }
+
+    /// <summary>
+    /// Bitcoin address destination.
+    /// </summary>
+    private string _bitcoinAddress;
+    public string BitcoinAddress
+    {
+        get => _bitcoinAddress;
+        set
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                _bitcoinAddress = value.Trim();
+            }
+            else
+            {
+                _bitcoinAddress = value;
+            }
+        }
+    }
+
     /// <summary>
     /// Summary of the account identifier's most important properties.
     /// </summary>
     public string Summary =>   
         Type == AccountIdentifierType.IBAN ? Type.ToString() + ": " + IBAN :
         Type == AccountIdentifierType.SCAN ? Type.ToString() + ": " + SortCode + " / " + AccountNumber :
+        Type == AccountIdentifierType.BTC ? Type.ToString() + ": " + BitcoinAddress :
          "No identifier.";
 
     public virtual Dictionary<string, string> ToDictionary(string keyPrefix)
@@ -142,7 +170,8 @@ public class AccountIdentifier
             { keyPrefix + nameof(BIC), BIC ?? string.Empty},
             { keyPrefix + nameof(IBAN), IBAN ?? string.Empty},
             { keyPrefix + nameof(SortCode), SortCode ?? string.Empty},
-            { keyPrefix + nameof(AccountNumber), AccountNumber ?? string.Empty}
+            { keyPrefix + nameof(AccountNumber), AccountNumber ?? string.Empty},
+            { keyPrefix + nameof(BitcoinAddress), BitcoinAddress ?? string.Empty}
         };
     }
 
@@ -153,12 +182,13 @@ public class AccountIdentifier
             (!string.IsNullOrEmpty(BIC) ? BIC : string.Empty) +
             (!string.IsNullOrEmpty(IBAN) ? IBAN : string.Empty) +
             (!string.IsNullOrEmpty(SortCode) ? SortCode : string.Empty) +
-            (!string.IsNullOrEmpty(AccountNumber) ? AccountNumber : string.Empty);
+            (!string.IsNullOrEmpty(AccountNumber) ? AccountNumber : string.Empty) +
+            (!string.IsNullOrEmpty(BitcoinAddress) ? BitcoinAddress : string.Empty);
         return HashHelper.CreateHash(input);
     }
 
     public override string ToString()
     {
-        return $"Type: {Type}, Currency: {Currency}, BIC: {BIC}, IBAN: {IBAN}, SortCode: {SortCode}, AccountNumber: {AccountNumber}, Summary: {Summary}";
+        return $"Type: {Type}, Currency: {Currency}, BIC: {BIC}, IBAN: {IBAN}, SortCode: {SortCode}, AccountNumber: {AccountNumber}, Bitcoin Address: {BitcoinAddress}, Summary: {Summary}";
     }
 }

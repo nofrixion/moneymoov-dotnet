@@ -31,7 +31,7 @@ public class PayoutCreate
     public CurrencyTypeEnum Currency { get; set; }
 
     [Required(ErrorMessage = "Amount is required.")]
-    [Range(0.01, double.MaxValue,ErrorMessage ="Minimum value of 0.01 is required for Amount")]
+    [Range(0.0001, double.MaxValue,ErrorMessage = "Minimum value of 0.0001 is required for Amount")]
     public decimal Amount { get; set; }
 
     /// <summary>
@@ -39,8 +39,7 @@ public class PayoutCreate
     /// </summary>
     public string? YourReference { get; set; }
 
-    [Required(ErrorMessage = "Their Reference is required.")]
-    public string TheirReference { get; set; } = string.Empty;
+    public string? TheirReference { get; set; }
 
     [Obsolete("Please use Destination.")]
     public Guid? DestinationAccountID
@@ -146,7 +145,7 @@ public class PayoutCreate
             { nameof(Currency), Currency.ToString() },
             { nameof(Amount), Amount.ToString() },
             { nameof(YourReference), YourReference ?? string.Empty },
-            { nameof(TheirReference), TheirReference },
+            { nameof(TheirReference), TheirReference ?? string.Empty},
             { nameof(InvoiceID), InvoiceID ?? string.Empty },
             { nameof(AllowIncomplete), AllowIncomplete.ToString() },
         };

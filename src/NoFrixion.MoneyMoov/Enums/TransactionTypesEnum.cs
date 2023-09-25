@@ -57,5 +57,11 @@ public enum TransactionTypesEnum
     /// A reversal of a previous payout.
     /// </summary>
     [Display(Name = "Reversal")]
-    Reversal = 5
+    Reversal = 5,
+
+    [Display(Name = "Bitcoin")]
+    BTC = 6,
+
+    [Display(Name = "Bitcoin Testnet")]
+    BTC_TEST = 7
 }
