@@ -21,31 +21,31 @@ namespace NoFrixion.MoneyMoov
         /// <summary>
         /// Something went wrong and the event type is unknown.
         /// </summary>
-        unknown = 0,
+        Unknown = 0,
 
         /// <summary>
         /// A payout was authorised by an approver.
         /// </summary>
-        authorise = 1,
+        Authorise = 1,
 
         /// <summary>
         /// A payout was initiated with the supplier. 
         /// </summary>
-        initiate = 2,
+        Initiate = 2,
 
         /// <summary>
         /// A payout was initiated. A webhook is sent out when the status of the payment changes.
         /// </summary>
-        webhook = 3,
+        Webhook = 3,
 
         /// <summary>
         /// A payout was successful and verified through supplier transaction. 
         /// </summary>
-        settle = 4,
+        Settle = 4,
 
         /// <summary>
         /// A payout was initiated but the funds failed to settle.
         /// </summary>
-        failure = 5,
+        Failure = 5,
     }
 }
