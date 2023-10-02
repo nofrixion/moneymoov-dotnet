@@ -138,6 +138,9 @@ public static class MoneyMoovUrlBuilder
     /// </summary>
     public static class OpenBankingApi
     {
+        public static string AccountUrl(string moneyMoovBaseUrl, Guid accountId)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/account/{accountId}";
+
         public static string AccountsUrl(string moneyMoovBaseUrl, Guid consentID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.openbanking}/accounts/{consentID}";
 
