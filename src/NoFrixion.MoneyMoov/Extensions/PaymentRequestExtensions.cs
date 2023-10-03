@@ -105,6 +105,24 @@ public static class PaymentRequestExtensions
             cardPaymentAttempts.Add(paymentAttempt);
         }
 
+        var failedCardAttempts = events
+            .Where(e =>
+                e.EventType == PaymentRequestEventTypesEnum.card_payer_authentication_failure);
+
+        foreach (var failedCardAttempt in failedCardAttempts)
+        {
+            var failedAttempt = new PaymentRequestPaymentAttempt();
+            failedAttempt.AttemptKey = failedCardAttempt.CardRequestID ?? string.Empty;
+            failedAttempt.PaymentRequestID = failedCardAttempt.PaymentRequestID;
+            failedAttempt.InitiatedAt = failedCardAttempt.Inserted;
+            failedAttempt.PaymentMethod = PaymentMethodTypeEnum.card;
+            failedAttempt.AttemptedAmount = failedCardAttempt.Amount;
+            failedAttempt.Currency = failedCardAttempt.Currency;
+            failedAttempt.PaymentProcessor = failedCardAttempt.PaymentProcessorName;
+
+            cardPaymentAttempts.Add(failedAttempt);
+        }
+
         return cardPaymentAttempts;
     }
 
