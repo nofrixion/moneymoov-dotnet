@@ -60,15 +60,15 @@ public static class PaymentRequestEventExtensions
 
 
         // If the card authorization event was successful, then the payment attempt was authorised.
-        if (!isSuccessfullAuthorisationEvent)
+        if (isSuccessfullAuthorisationEvent)
         {
-            return;
+            paymentAttempt.CardAuthorisedAt = cardAuthorizationEvent.Inserted;
+            paymentAttempt.CardAuthorisedAmount = cardAuthorizationEvent.Amount;
         }
-
-        paymentAttempt.CardAuthorisedAt = cardAuthorizationEvent.Inserted;
-
-        paymentAttempt.CardAuthorisedAmount = cardAuthorizationEvent.Amount;
-
+        else
+        {
+            paymentAttempt.CardAuthoriseFailedAt = cardAuthorizationEvent.Inserted;
+        }
     }
 
     public static void HandleCardCaptureEvents(this IGrouping<string?, PaymentRequestEvent> groupedCardEvents,
@@ -94,6 +94,7 @@ public static class PaymentRequestEventExtensions
             }
             else
             {
+                paymentAttempt.CardAuthoriseFailedAt = cardCaptureEvent.Inserted;
                 // Failed capture events are added to the capture attempts list.
                 paymentAttempt.CaptureAttempts.AddRange(new[]
                 {
@@ -143,7 +144,7 @@ public static class PaymentRequestEventExtensions
                     }
                 });
 
-                // In case if checkout, we don't get a card authorisation event. Hence, to fill the authorised
+                // In case of Checkout, we don't get a card authorisation event. Hence, to fill the authorised
                 // amount and authorised at date, we use the card sale event.
                 paymentAttempt.CardAuthorisedAt ??= cardSaleEvent.Inserted;
 
@@ -162,6 +163,7 @@ public static class PaymentRequestEventExtensions
             // Soft decline event means that it has to be captured later.
             if (!cardSaleEvent.IsSoftDeclineSaleEvent())
             {
+                paymentAttempt.CardAuthoriseFailedAt = cardSaleEvent.Inserted;
                 paymentAttempt.CaptureAttempts.AddRange(new[]
                 {
                     new PaymentRequestCaptureAttempt

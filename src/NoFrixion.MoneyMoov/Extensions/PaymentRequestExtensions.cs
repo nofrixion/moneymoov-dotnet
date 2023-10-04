@@ -105,6 +105,7 @@ public static class PaymentRequestExtensions
             cardPaymentAttempts.Add(paymentAttempt);
         }
 
+        // Handle failed Checkout events
         var failedCardAttempts = events
             .Where(e =>
                 e.EventType == PaymentRequestEventTypesEnum.card_payer_authentication_failure);
@@ -119,6 +120,7 @@ public static class PaymentRequestExtensions
             failedAttempt.AttemptedAmount = failedCardAttempt.Amount;
             failedAttempt.Currency = failedCardAttempt.Currency;
             failedAttempt.PaymentProcessor = failedCardAttempt.PaymentProcessorName;
+            failedAttempt.CardAuthoriseFailedAt = failedCardAttempt.Inserted;
 
             cardPaymentAttempts.Add(failedAttempt);
         }
