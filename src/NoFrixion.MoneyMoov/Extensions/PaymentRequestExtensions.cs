@@ -105,10 +105,15 @@ public static class PaymentRequestExtensions
             cardPaymentAttempts.Add(paymentAttempt);
         }
 
-        // Handle failed Checkout events
+        // Handle failed auth setup events
         var failedCardAttempts = events
             .Where(e =>
-                e.EventType == PaymentRequestEventTypesEnum.card_payer_authentication_failure);
+                e.EventType == PaymentRequestEventTypesEnum.card_payer_authentication_failure ||
+                (e.EventType == PaymentRequestEventTypesEnum.card_payer_authentication_setup &&
+                 (!string.IsNullOrWhiteSpace(e.ErrorMessage) ||
+                  !string.IsNullOrWhiteSpace(e.ErrorReason) ||
+                  (e.Status != CardPaymentResponseStatus.CARD_PAYER_AUTHENTICATION_SETUP_COMPLETE &&
+                   e.Status != CardPaymentResponseStatus.CARD_CAPTURE_SUCCESS_STATUS))));
 
         foreach (var failedCardAttempt in failedCardAttempts)
         {
@@ -120,7 +125,7 @@ public static class PaymentRequestExtensions
             failedAttempt.AttemptedAmount = failedCardAttempt.Amount;
             failedAttempt.Currency = failedCardAttempt.Currency;
             failedAttempt.PaymentProcessor = failedCardAttempt.PaymentProcessorName;
-            failedAttempt.CardAuthoriseFailedAt = failedCardAttempt.Inserted;
+            failedAttempt.CardPayerAuthenticationSetupFailedAt = failedCardAttempt.Inserted;
 
             cardPaymentAttempts.Add(failedAttempt);
         }
