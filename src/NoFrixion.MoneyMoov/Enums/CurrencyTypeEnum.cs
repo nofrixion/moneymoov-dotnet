@@ -41,11 +41,5 @@ public enum CurrencyTypeEnum
     /// Bitcoin.
     /// </summary>
     [EnumMember(Value = "BTC")]
-    BTC = 1001,
-
-    /// <summary>
-    /// Testnet Bitcoin.
-    /// </summary>
-    [EnumMember(Value = "TBTC")]
-    TBTC = 1002
+    BTC = 1001
 }

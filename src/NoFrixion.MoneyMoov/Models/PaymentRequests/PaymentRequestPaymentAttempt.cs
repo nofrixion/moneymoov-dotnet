@@ -48,6 +48,18 @@ public class PaymentRequestPaymentAttempt
     /// If the card payment attempt was authorised this is the timestamp it occurred at.
     /// </summary>
     public DateTimeOffset? CardAuthorisedAt { get; set; }
+    
+    /// <summary>
+    /// If the card payment attempt authorisation was not succesfully set up
+    /// this is the timestamp it occurred at.
+    /// </summary>
+    public DateTimeOffset? CardPayerAuthenticationSetupFailedAt { get; set; }
+    
+    /// <summary>
+    /// If the card payment attempt was not succesfully authorised this is the timestamp
+    /// it occurred at.
+    /// </summary>
+    public DateTimeOffset? CardAuthoriseFailedAt { get; set; }
 
     /// <summary>
     /// If the PISP attempt was settled this is the timestamp it occurred at.

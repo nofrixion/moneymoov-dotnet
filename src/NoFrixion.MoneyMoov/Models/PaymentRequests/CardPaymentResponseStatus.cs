@@ -37,6 +37,11 @@ public static class CardPaymentResponseStatus
     public const string CARD_CAPTURE_SUCCESS_STATUS = "PENDING";
 
     /// <summary>
+    /// Status response that indicates the payer authentication setup completed successfully.
+    /// </summary>
+    public const string CARD_PAYER_AUTHENTICATION_SETUP_COMPLETE = "COMPLETED";
+
+    /// <summary>
     /// A soft decline is a special error response to a card authorisation. It indicates
     /// the authorisation was successful but that an address, card verification number,
     /// or other secondary validation check failed. The authorisation needs to be explicitly 

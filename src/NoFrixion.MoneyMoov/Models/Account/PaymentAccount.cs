@@ -134,6 +134,11 @@ public class PaymentAccount
     public bool IsConnectedAccount { get; set; }
 
     /// <summary>
+    /// The ID of the consent used to connect the external account.
+    /// </summary>
+    public Guid? ConsentID { get; set; }
+
+    /// <summary>
     /// The Icon for external accounts
     /// </summary>
     public string ExternalAccountIcon { get; set; }

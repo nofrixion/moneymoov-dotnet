@@ -322,6 +322,16 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// </summary>
     /// <returns>The total amount pending in decimal.</returns>
     public decimal AmountPending { get; set; }
+    
+    /// <summary>
+    /// Details of the user who created the Payment Request
+    /// </summary>
+    public User? CreatedByUser { get; set; }
+    
+    /// <summary>
+    /// Description of the merchant token in case the Payment request was created using a merchant token.
+    /// </summary>
+    public string? MerchantTokenDescription { get; set; }
 
     public string FormattedAmount => DisplayCurrencyAndAmount(Currency, Amount);
 
@@ -372,7 +382,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     public static string GetCurrencySymbol(CurrencyTypeEnum currency) =>
         currency switch
             {
-                CurrencyTypeEnum.BTC or CurrencyTypeEnum.TBTC => "₿",
+                CurrencyTypeEnum.BTC => "₿",
                 //CurrencyTypeEnum.LBTC => "⚡",
                 CurrencyTypeEnum.GBP => "£",
                 CurrencyTypeEnum.EUR => "€",
@@ -452,7 +462,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     private static bool IsFiat(CurrencyTypeEnum currency) =>
         currency switch
             {
-                CurrencyTypeEnum.BTC or CurrencyTypeEnum.TBTC => false,
+                CurrencyTypeEnum.BTC => false,
                 _ => true
             };
 }

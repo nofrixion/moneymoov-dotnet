@@ -35,6 +35,11 @@ public class UserInvite
     public string MerchantName { get; set; } = string.Empty;
     public string Message { get; set; } = string.Empty;
 
+    /// <summary>
+    /// If true, indicates the invitee's email address corresponds to an existing MoneyMoov user.
+    /// </summary>
+    public bool IsInviteeRegistered { get; set; }
+
     public UserInviteStatusEnum Status
     {
         get

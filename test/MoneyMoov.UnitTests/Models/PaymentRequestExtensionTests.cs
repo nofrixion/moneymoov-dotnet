@@ -347,7 +347,7 @@ namespace MoneyMoov.UnitTests.Models
 
 
         [Fact]
-        public void GetCardPaymentAttempts_CardFailure_None_Test()
+        public void GetCardPaymentAttempts_CardFailure_Test()
         {
             var cardAuthorizationResponseID = Guid.NewGuid().ToString();
             var paymentRequestID = Guid.NewGuid();
@@ -388,11 +388,13 @@ namespace MoneyMoov.UnitTests.Models
 
             Assert.NotNull(cardAttempts);
             Assert.NotEmpty(cardAttempts);
-            Assert.Single(cardAttempts);
+            Assert.Equal(2, cardAttempts.Count());
             Assert.Equal(PaymentResultEnum.None, cardAttempts.First().Status);
             Assert.Equal(0, cardAttempts.First().SettledAmount);
             Assert.Equal(0, cardAttempts.First().AuthorisedAmount);
             Assert.Equal(CurrencyTypeEnum.EUR, cardAttempts.First().Currency);
+            Assert.Equal(PaymentResultEnum.None, cardAttempts.Last().Status);
+            Assert.NotNull(cardAttempts.Last().CardPayerAuthenticationSetupFailedAt);
         }
     }
 }

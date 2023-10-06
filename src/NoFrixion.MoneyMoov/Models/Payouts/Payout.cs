@@ -72,7 +72,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// <summary>
     /// Gets or Sets destination reference ID
     /// </summary>
-    public string TheirReference { get; set; } = string.Empty;
+    public string? TheirReference { get; set; }
 
     [Obsolete("Please use Destination.")]
     [System.Text.Json.Serialization.JsonIgnore]
