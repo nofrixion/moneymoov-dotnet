@@ -16,11 +16,6 @@ namespace NoFrixion.MoneyMoov;
 
 public class PaymentRequestConstants
 {
-    public const string DESCRIPTION_ALLOWED_CHARS_REGEX = @"[a-zA-Z0-9\-_\.@&\*%\$#!:;'""()\[\]\/\\ ]+";
-
-    public const string DESCRIPTION_ERROR_MESSAGE =
-        @"The Description can only contain alphanumeric characters and -_.@&*%$#!:;'""/\ and space.";
-
     public const string CUSTOMER_ID_CHARS_REGEX = @"[a-zA-Z0-9\-]+";
 
     public const string CUSTOMER_ID_ERROR_MESSAGE =
