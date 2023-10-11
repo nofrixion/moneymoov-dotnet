@@ -115,6 +115,16 @@ public class PayoutUpdate
     public List<Guid>? TagIds { get; set; }
 
     /// <summary>
+    /// Should this payout be scheduled for a future date?
+    /// </summary>
+    public bool Scheduled { get; set; }
+    
+    /// <summary>
+    /// The date the payout should be submitted.
+    /// </summary>
+    public DateTimeOffset? ScheduleDate { get; set; }
+    
+    /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payout's non-collection properties 

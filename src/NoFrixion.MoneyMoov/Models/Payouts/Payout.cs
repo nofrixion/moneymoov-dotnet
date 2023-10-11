@@ -211,6 +211,16 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// </summary>
     public List<Tag> Tags { get; set; } = new List<Tag>();
 
+    /// <summary>
+    /// Should this payout be scheduled for a future date?
+    /// </summary>
+    public bool Scheduled { get; set; }
+    
+    /// <summary>
+    /// The date the payout should be submitted.
+    /// </summary>
+    public DateTimeOffset? ScheduledDate { get; set; }
+    
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
