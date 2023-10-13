@@ -31,6 +31,11 @@ public class Transaction : IWebhookPayload
     public Guid AccountID { get; set; }
 
     /// <summary>
+    /// The name of the account the transaction belongs to.
+    /// </summary>
+    public string AccountName { get; set; }
+
+    /// <summary>
     /// The ID of the merchant that owns the account.
     /// </summary>
     public Guid MerchantID { get; set; }
