@@ -183,6 +183,9 @@ public static class MoneyMoovUrlBuilder
         public static string PayoutsUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}";
 
+        public static string BulkPayoutsUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/bulk";
+
         public static string GetByInvoiceIDUrl(string moneyMoovBaseUrl, string invoiceID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/getbyinvoiceid/{invoiceID}";
 
