@@ -100,6 +100,10 @@ public static class PayoutsValidator
     /// </summary>
     public const string FALLBACK_THEIR_REFERENCE = "NFXN {0}";
 
+    /// <summary>
+    /// Number of days in the future that a payout can be scheduled for.
+    /// </summary>
+    public const int PAYOUT_SCHEDULE_DAYS_IN_FUTURE = 60;
     public static bool ValidateIBAN(string iban)
     {
         if (string.IsNullOrEmpty(iban))
@@ -279,6 +283,21 @@ public static class PayoutsValidator
             yield return new ValidationResult("Your reference can only contain alphanumeric, space, hyphen(-) and underscore (_) characters. " +
             $"The maximum allowed length of the field is {YOUR_REFERENCE_MAXIMUM_LENGTH} characters.",
             new string[] { nameof(payout.YourReference) });
+        }
+
+        if (payout is { Scheduled: true, ScheduleDate: null })
+        {
+            yield return new ValidationResult($"ScheduleDate must have a value if Scheduled is true.", new string[] { nameof(payout.ScheduleDate) });
+        }
+        
+        if (payout.Scheduled && payout.ScheduleDate <= DateTimeOffset.UtcNow)
+        {
+            yield return new ValidationResult($"ScheduleDate {payout.ScheduleDate} must be in the future.", new string[] { nameof(payout.ScheduleDate) });
+        }
+        
+        if (payout.Scheduled && payout.ScheduleDate > DateTimeOffset.UtcNow.AddDays(PAYOUT_SCHEDULE_DAYS_IN_FUTURE))
+        {
+            yield return new ValidationResult($"ScheduleDate {payout.ScheduleDate} cannot be more than {PAYOUT_SCHEDULE_DAYS_IN_FUTURE} days in the future.", new string[] { nameof(payout.ScheduleDate) });
         }
     }
 
