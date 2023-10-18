@@ -78,7 +78,7 @@ public class PaymentRequestEmailNotificationTests : MoneyMoovUnitTestBase<Paymen
         Assert.Equal("jane.doe@nofrixion.com", substitutedNotification.ToEmailAddress);
         Assert.Equal("support@nofrixion.com", substitutedNotification.FromEmailAddress);
         Assert.Equal("Super Title", substitutedNotification.Subject);
-        Assert.Equal("€10,001.99", substitutedNotification.TemplateVariables["DisplayAmount"]);
+        Assert.Equal("â‚¬10,001.99", substitutedNotification.TemplateVariables["DisplayAmount"]);
         Assert.Equal("1234", substitutedNotification.TemplateVariables["OrderID"]);
         Assert.Equal("Jane Doe", substitutedNotification.TemplateVariables["CustomerName"]);
         Assert.Equal("Super Title", substitutedNotification.TemplateVariables["Title"]);
@@ -146,7 +146,7 @@ public class PaymentRequestEmailNotificationTests : MoneyMoovUnitTestBase<Paymen
         Assert.Equal("jane.doe@nofrixion.com", substitutedNotification.ToEmailAddress);
         Assert.Equal("support@nofrixion.com", substitutedNotification.FromEmailAddress);
         Assert.Equal("Super Title", substitutedNotification.Subject);
-        Assert.Equal("€10,001.99", substitutedNotification.TemplateVariables["DisplayAmount"]);
+        Assert.Equal("â‚¬10,001.99", substitutedNotification.TemplateVariables["DisplayAmount"]);
         Assert.Equal("1234", substitutedNotification.TemplateVariables["OrderID"]);
         Assert.Equal("Jane Doe", substitutedNotification.TemplateVariables["CustomerName"]);
         Assert.Equal("Super Title", substitutedNotification.TemplateVariables["Title"]);
