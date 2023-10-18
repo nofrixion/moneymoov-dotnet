@@ -188,6 +188,11 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// The sort code of the account the payout is being made from.
     /// </summary>
     public string? SourceAccountSortcode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The available balance of the account the payout is being made from.
+    /// </summary>
+    public decimal? SourceAccountAvailableBalance { get; set; }
     
     [Obsolete("Please use Destination.")]
     [System.Text.Json.Serialization.JsonIgnore]
