@@ -33,4 +33,8 @@ public class AccountTransactionMetrics
     public decimal TotalOutgoingAmount { get; set; }
     
     public int NumberOfTransactions { get; set; }
+    
+    public int NumberOfIncomingTransactions { get; set; }
+    
+    public int NumberOfOutgoingTransactions { get; set; }
 }
