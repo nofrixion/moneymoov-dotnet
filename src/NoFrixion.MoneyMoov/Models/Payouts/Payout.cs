@@ -224,7 +224,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// <summary>
     /// The date the payout should be submitted.
     /// </summary>
-    public DateTimeOffset? ScheduledDate { get; set; }
+    public DateTimeOffset? ScheduleDate { get; set; }
     
     public NoFrixionProblem Validate()
     {
