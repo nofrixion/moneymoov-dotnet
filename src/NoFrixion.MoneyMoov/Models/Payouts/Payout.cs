@@ -225,7 +225,23 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// The date the payout should be submitted.
     /// </summary>
     public DateTimeOffset? ScheduleDate { get; set; }
+
+    /// <summary>
+    /// The number of authorisers required for this payout. Is determined by business settings
+    /// on the source account and/or merchant.
+    /// </summary>
+    public int AuthorisersRequiredCount { get; set; }
+
+    /// <summary>
+    /// The number of distinct authorisers that have authorised the payout.
+    /// </summary>
+    public int AuthorisersCompletedCount { get; set; }
     
+    /// <summary>
+    /// True if the user who loaded the payout has authorised it.
+    /// </summary>
+    public bool HasCurrentUserAuthorised { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
