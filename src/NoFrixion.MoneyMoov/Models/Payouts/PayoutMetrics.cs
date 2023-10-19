@@ -26,6 +26,7 @@ public class PayoutMetrics : MetricBase
             { MetricsEnum.PendingApproval.ToString(), new Dictionary<string, decimal>() },
             { MetricsEnum.Failed.ToString(), new Dictionary<string, decimal>() },
             { MetricsEnum.Paid.ToString(), new Dictionary<string, decimal>() },
+            { MetricsEnum.Scheduled.ToString(), new Dictionary<string, decimal>() },
         };
     }
 
@@ -53,4 +54,9 @@ public class PayoutMetrics : MetricBase
     /// Payouts with Processed status.
     /// </summary>
     public decimal Paid { get; set; }
+    
+    /// <summary>
+    /// Payouts with Scheduled status.
+    /// </summary>
+    public decimal Scheduled { get; set; }
 }
