@@ -167,6 +167,8 @@ public class Payout : IValidatableObject, IWebhookPayload
 
     public string? CreatedBy { get; set; }
 
+    public string? CreatedByEmailAddress { get; set; }
+
     public DateTimeOffset Inserted { get; set; }
 
     /// <summary>
