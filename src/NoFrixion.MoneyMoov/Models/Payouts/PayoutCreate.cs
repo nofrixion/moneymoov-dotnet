@@ -139,7 +139,18 @@ public class PayoutCreate
     /// The date the payout should be submitted.
     /// </summary>
     public DateTimeOffset? ScheduleDate { get; set; }
-    
+
+    /// <summary>
+    /// For Bitcoin payouts, when this flag is set the network fee will be deducted from the send amount.
+    /// THis is particularly useful for sweeps where it can be difficult to calculate the exact fee required.
+    /// </summary>
+    public bool BitcoinSubtractFeeFromAmount { get; set; }
+
+    /// <summary>
+    /// The Bitcoin fee rate to apply in Satoshis per virtual byte.
+    /// </summary>
+    public int BitcoinFeeSatsPerVbyte { get; set; }
+
     /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
