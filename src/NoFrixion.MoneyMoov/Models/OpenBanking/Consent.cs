@@ -33,6 +33,13 @@ public class Consent
     /// </summary>
     public string? SuccessWebHookUrl { get; set; }
 
+    /// <summary>
+    /// Optional callback URL for open banking consent authorisation failure. 
+    /// If the URL is set, the calling application will be redirected here with the error message.
+    /// If it’s not set it will fall back on default page that will show the error message. 
+    /// </summary>
+    public string? FailureCallbackUrl { get; set; }
+
     public PaymentProcessorsEnum Provider { get; set; }
     public DateTimeOffset ExpiryDate { get; set; }
     public DateTimeOffset Inserted { get; set; }

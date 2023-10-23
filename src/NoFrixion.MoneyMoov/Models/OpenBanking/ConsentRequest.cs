@@ -8,7 +8,7 @@
 // 
 //  History:
 //  15 Dec 2022  Arif Matin    Created, Harcourt Street, Dublin, Ireland.
-//  17 Dec 2022  Aaron Clauson Renamed from AccountAuthorisationRequest toConsentRequest.
+//  17 Dec 2022  Aaron Clauson Renamed from AccountAuthorisationRequest to ConsentRequest.
 // 
 //  License:
 //  Proprietary NoFrixion.
@@ -56,9 +56,18 @@ public class ConsentRequest
     /// </summary>
     public string? SuccessWebHookUrl { get; set; }
 
+
+    /// <summary>
+    /// Optional URL for open banking consent authorisation failure. 
+    /// If the URL is set, the calling application will be redirected here with the error
+    /// message as query parameter. If it’s not set it will fall back on default page that
+    /// will show the error message. 
+    /// </summary>
+    public string? FailureCallbackUrl { get; set; }
+
     /// <summary>
     /// Optional setting. If connected accounts is enabled. After a successful consent authorisation,
     /// NoFrixion will pull all authorised EUR and GBP account information and store them along NoFrixion payment accounts.  
     /// </summary>
-    public bool IsConnectedAccounts { get; set; } 
+    public bool IsConnectedAccounts { get; set; }
 }
