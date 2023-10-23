@@ -229,6 +229,17 @@ public class Payout : IValidatableObject, IWebhookPayload
     public DateTimeOffset? ScheduleDate { get; set; }
 
     /// <summary>
+    /// For Bitcoin payouts, when this flag is set the network fee will be deducted from the send amount.
+    /// THis is particularly useful for sweeps where it can be difficult to calculate the exact fee required.
+    /// </summary>
+    public bool BitcoinSubtractFeeFromAmount { get; set; }
+
+    /// <summary>
+    /// The Bitcoin fee rate to apply in Satoshis per virtual byte.
+    /// </summary>
+    public int BitcoinFeeSatsPerVbyte { get; set; }
+
+    /// <summary>
     /// The number of authorisers required for this payout. Is determined by business settings
     /// on the source account and/or merchant.
     /// </summary>
@@ -240,9 +251,14 @@ public class Payout : IValidatableObject, IWebhookPayload
     public int AuthorisersCompletedCount { get; set; }
     
     /// <summary>
-    /// True if the user who loaded the payout has authorised it.
+    /// True if the payout can be authorised by the user who loaded it.
     /// </summary>
-    public bool HasCurrentUserAuthorised { get; set; }
+    public bool CanAuthorise { get; set; }
+
+    /// <summary>
+    /// True if the payout can be updated by the user who loaded it.
+    /// </summary>
+    public bool CanUpdate { get; set; }
 
     public NoFrixionProblem Validate()
     {
