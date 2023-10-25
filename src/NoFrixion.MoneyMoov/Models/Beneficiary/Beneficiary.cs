@@ -28,15 +28,13 @@ public class Beneficiary : IValidatableObject
     
     public Guid MerchantID { get; set; }
 
+    public Guid? AccountID { get; set; }
+
     /// <summary>
     /// The descriptive name for the beneficiary.
     /// </summary>
     [Required(ErrorMessage = "Name is required.")]
     public string Name { get; set; } = string.Empty;
-
-    public string? YourReference { get; set; }
-
-    public string? TheirReference { get; set; }
 
     /// <summary>
     /// Gets or Sets the currency.
@@ -89,9 +87,8 @@ public class Beneficiary : IValidatableObject
         {
             { nameof(ID), ID.ToString() },
             { nameof(MerchantID), MerchantID.ToString() },
+            { nameof(AccountID), AccountID?.ToString() ?? string.Empty },
             { nameof(Name), Name },
-            { nameof(YourReference), YourReference ?? string.Empty },
-            { nameof(TheirReference), TheirReference ?? string.Empty},
             { nameof(Currency), Currency.ToString() }
         };
 
@@ -117,8 +114,6 @@ public class Beneficiary : IValidatableObject
             ID = Guid.NewGuid(),
             Type = Destination?.Identifier?.Type ?? AccountIdentifierType.Unknown,
             Currency = Currency,
-            YourReference = YourReference ?? string.Empty,
-            TheirReference = TheirReference ?? string.Empty,
             Destination = Destination
         };
     }
