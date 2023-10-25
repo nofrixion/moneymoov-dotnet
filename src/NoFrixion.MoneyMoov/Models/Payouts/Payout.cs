@@ -309,7 +309,7 @@ public class Payout : IValidatableObject, IWebhookPayload
                 Math.Round(Amount, 2).ToString() +
                 Destination.GetApprovalHash() +
                 Status.ToString() +
-                Scheduled.ToString() +
+                Scheduled.GetValueOrDefault().ToString() +
                 ScheduleDate?.ToString("o");
 
             return HashHelper.CreateHash(input);
