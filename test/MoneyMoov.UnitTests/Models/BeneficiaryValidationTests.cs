@@ -38,8 +38,6 @@ public class BeneficairyValidationTests : MoneyMoovUnitTestBase<BeneficairyValid
             ID = Guid.NewGuid(),
             MerchantID = Guid.NewGuid(),
             Name = "Test",
-            YourReference = "Your-Ref-123",
-            TheirReference = "Their-Ref-123",
             Currency = CurrencyTypeEnum.EUR,
             Destination = new Counterparty
             { 
