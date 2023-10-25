@@ -290,12 +290,12 @@ public static class PayoutsValidator
             yield return new ValidationResult($"ScheduleDate must have a value if Scheduled is true.", new string[] { nameof(payout.ScheduleDate) });
         }
         
-        if (payout.Scheduled && payout.ScheduleDate <= DateTimeOffset.UtcNow)
+        if (payout.Scheduled.GetValueOrDefault() && payout.ScheduleDate <= DateTimeOffset.UtcNow)
         {
             yield return new ValidationResult($"ScheduleDate {payout.ScheduleDate} must be in the future.", new string[] { nameof(payout.ScheduleDate) });
         }
         
-        if (payout.Scheduled && payout.ScheduleDate > DateTimeOffset.UtcNow.AddDays(PAYOUT_SCHEDULE_DAYS_IN_FUTURE))
+        if (payout.Scheduled.GetValueOrDefault() && payout.ScheduleDate > DateTimeOffset.UtcNow.AddDays(PAYOUT_SCHEDULE_DAYS_IN_FUTURE))
         {
             yield return new ValidationResult($"ScheduleDate {payout.ScheduleDate} cannot be more than {PAYOUT_SCHEDULE_DAYS_IN_FUTURE} days in the future.", new string[] { nameof(payout.ScheduleDate) });
         }
