@@ -117,7 +117,7 @@ public class PayoutUpdate
     /// <summary>
     /// Should this payout be scheduled for a future date?
     /// </summary>
-    public bool Scheduled { get; set; }
+    public bool? Scheduled { get; set; }
     
     /// <summary>
     /// The date the payout should be submitted.
