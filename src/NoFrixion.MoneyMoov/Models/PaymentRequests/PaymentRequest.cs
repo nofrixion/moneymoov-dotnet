@@ -289,14 +289,13 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// <summary>
     /// Gets the symbol for the payment request currency.
     /// </summary>
-    public string DisplayCurrencySymbol() => GetCurrencySymbol(Currency);
+    public string DisplayCurrencySymbol() => PaymentAmount.GetCurrencySymbol(Currency);
 
     /// <summary>
     /// Gets the amount to display with the correct number of decimal places based on the currency type. 
     /// </summary>
     /// <returns>The decimal amount to display for the payment request's currency.</returns>
-    public decimal DisplayAmount() =>
-        IsFiat(Currency) ? Math.Round(Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES) : Amount;
+    public decimal DisplayAmount() => PaymentAmount.GetRoundedAmount(Currency, Amount);
 
     public string? NotificationEmailAddresses { get; set; }
 
@@ -333,7 +332,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// </summary>
     public string? MerchantTokenDescription { get; set; }
 
-    public string FormattedAmount => DisplayCurrencyAndAmount(Currency, Amount);
+    public string FormattedAmount => PaymentAmount.DisplayCurrencyAndAmount(Currency, Amount);
 
     public string CustomerName =>
         Addresses.Any() ? $"{Addresses.First().FirstName} {Addresses.First().LastName}" : string.Empty;
@@ -377,21 +376,6 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
 
             return successWebHookUri.Uri;
         }
-    }
-
-    public static string GetCurrencySymbol(CurrencyTypeEnum currency) =>
-        currency switch
-            {
-                CurrencyTypeEnum.BTC => "₿",
-                //CurrencyTypeEnum.LBTC => "⚡",
-                CurrencyTypeEnum.GBP => "£",
-                CurrencyTypeEnum.EUR => "€",
-                _ => "€"
-            };
-
-    public static decimal GetDisplayAmount(decimal amount, CurrencyTypeEnum currency)
-    {
-        return IsFiat(currency) ? Math.Round(amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES) : amount;
     }
 
     /// <summary>
@@ -452,17 +436,4 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
                     _ => 0
                 });
     }
-
-    /// <summary>
-    /// Combines the display currency symbol and amount.
-    /// </summary>
-    public static string DisplayCurrencyAndAmount(CurrencyTypeEnum currency, decimal amount) =>
-        GetCurrencySymbol(currency) + (IsFiat(currency) ? amount.ToString("N2") : amount.ToString("N4"));
-
-    private static bool IsFiat(CurrencyTypeEnum currency) =>
-        currency switch
-            {
-                CurrencyTypeEnum.BTC => false,
-                _ => true
-            };
 }
