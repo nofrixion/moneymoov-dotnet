@@ -65,6 +65,11 @@ public class Payout : IValidatableObject, IWebhookPayload
     public decimal Amount { get; set; }
 
     /// <summary>
+    /// Currency and formatted amount string.
+    /// </summary>
+    public string FormattedAmount => PaymentAmount.DisplayCurrencyAndAmount(Currency, Amount);
+
+    /// <summary>
     /// Gets or Sets your reference ID
     /// </summary>
     public string? YourReference { get; set; }
@@ -260,6 +265,16 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// </summary>
     public bool CanUpdate { get; set; }
 
+    /// <summary>
+    /// True if the payout was loaded for a user and that user has already authorised the latest version of the payout.
+    /// </summary>
+    public bool HasCurrentUserAuthorised {  get; set; }
+
+    /// <summary>
+    /// A list of the email addresses of all the users who have usccessfully authorised the latest version of the payout.
+    /// </summary>
+    public List<string>? AuthorisedBy { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
@@ -308,7 +323,7 @@ public class Payout : IValidatableObject, IWebhookPayload
                 Currency +
                 Math.Round(Amount, 2).ToString() +
                 Destination.GetApprovalHash() +
-                Status.ToString() +
+                //Status.ToString() +
                 Scheduled.GetValueOrDefault().ToString() +
                 ScheduleDate?.ToString("o");
 
