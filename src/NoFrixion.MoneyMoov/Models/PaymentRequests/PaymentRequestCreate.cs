@@ -327,7 +327,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// tag exists it will be created.
     /// </summary>
     public List<string>? Tags { get; set; }
-    
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
