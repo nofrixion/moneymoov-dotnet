@@ -1,14 +1,13 @@
 ﻿// -----------------------------------------------------------------------------
-//  Filename: Beneficiary.cs
+//  Filename: BeneficiaryCreate.cs
 // 
-//  Description: Class containing information for a beneficiary:
+//  Description: Class containing information for a beneficiary to be created:
 // 
 //  Author(s):
-//  Donal O'Connor (donal@nofrixion.com)
+//  Saurav Maiti (saurav@nofrixion.com)
 // 
 //  History:
-//  11 05 2022  Donal O'Connor   Created, Carmichael House,
-// Dublin, Ireland.
+//  02 11 2023  Saurav Maiti   Created, Harcourt Street, Dublin, Ireland.
 // 
 //  License:
 //  MIT.
@@ -18,7 +17,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class Beneficiary : IValidatableObject
+public class BeneficiaryCreate : IValidatableObject
 {
     public Guid ID { get; set; }
 
@@ -45,8 +44,6 @@ public class Beneficiary : IValidatableObject
     public Counterparty? Destination { get; set; }
     
     public string? ApprovalCallbackUrl { get; set; }
-    
-    public bool IsActive { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -77,6 +74,33 @@ public class Beneficiary : IValidatableObject
         return isValid ?
             NoFrixionProblem.Empty :
             new NoFrixionProblem($"The {nameof(Beneficiary)} had one or more validation errors.", validationResults);
+    }
+
+    /// <summary>
+    /// Places all the beneficiary's properties into a dictionary. Useful for testing
+    /// when HTML form encoding is required.
+    /// </summary>
+    /// <returns>A dictionary with all the beneficiary's non-collection properties 
+    /// represented as key-value pairs.</returns>
+    public Dictionary<string, string> ToDictionary()
+    {
+        var dict = new Dictionary<string, string>
+        {
+            { nameof(ID), ID.ToString() },
+            { nameof(MerchantID), MerchantID.ToString() },
+            { nameof(AccountID), AccountID?.ToString() ?? string.Empty },
+            { nameof(Name), Name },
+            { nameof(Currency), Currency.ToString() }
+        };
+
+        if (Destination != null)
+        {
+            dict = dict.Concat(Destination.ToDictionary($"{nameof(Destination)}."))
+                .ToLookup(x => x.Key, x => x.Value)
+                .ToDictionary(x => x.Key, g => g.First());
+        }
+
+        return dict;
     }
 
     /// <summary>
