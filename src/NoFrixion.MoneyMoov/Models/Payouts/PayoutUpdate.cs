@@ -136,6 +136,11 @@ public class PayoutUpdate
     public int? BitcoinFeeSatsPerVbyte { get; set; }
 
     /// <summary>
+    /// Optional. The ID of the beneficiary to use for the payout destination.
+    /// </summary>
+    public Guid? BeneficiaryID { get; set; }
+
+    /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payout's non-collection properties 
