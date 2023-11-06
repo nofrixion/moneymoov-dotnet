@@ -126,7 +126,7 @@ public class PayoutUpdate
 
     /// <summary>
     /// For Bitcoin payouts, when this flag is set the network fee will be deducted from the send amount.
-    /// THis is particularly useful for sweeps where it can be difficult to calculate the exact fee required.
+    /// This is particularly useful for sweeps where it can be difficult to calculate the exact fee required.
     /// </summary>
     public bool? BitcoinSubtractFeeFromAmount { get; set; }
 
@@ -134,6 +134,11 @@ public class PayoutUpdate
     /// The Bitcoin fee rate to apply in Satoshis per virtual byte.
     /// </summary>
     public int? BitcoinFeeSatsPerVbyte { get; set; }
+
+    /// <summary>
+    /// Optional. The ID of the beneficiary to use for the payout destination.
+    /// </summary>
+    public Guid? BeneficiaryID { get; set; }
 
     /// <summary>
     /// Places all the payout's properties into a dictionary.
