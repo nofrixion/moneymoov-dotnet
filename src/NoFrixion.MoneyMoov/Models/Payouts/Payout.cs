@@ -275,6 +275,11 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// </summary>
     public List<string>? AuthorisedBy { get; set; }
 
+    /// <summary>
+    /// If the payout destination is a beneficairy this will be the ID of it.
+    /// </summary>
+    public Guid? BeneficiaryID { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
