@@ -1,7 +1,8 @@
 ﻿// -----------------------------------------------------------------------------
 //  Filename: BeneficiaryEventTypeEnum.cs
 // 
-//  Description: TODO:
+//  Description: Enum for the different types of beneficiary events that can
+//  occur.
 // 
 //  Author(s):
 //  Saurav Maiti (saurav@nofrixion.com)
@@ -17,6 +18,5 @@ namespace NoFrixion.MoneyMoov.Enums;
 
 public enum BeneficiaryEventTypeEnum
 {
-    Authorise,
-    AuthorisationVoid
+    Authorise
 }
