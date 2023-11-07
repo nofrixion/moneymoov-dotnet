@@ -46,7 +46,7 @@ public class Beneficiary : IValidatableObject
     
     public string? ApprovalCallbackUrl { get; set; }
     
-    public bool Enabled { get; set; }
+    public bool IsEnabled { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
