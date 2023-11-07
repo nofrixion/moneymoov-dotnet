@@ -16,6 +16,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
+#nullable disable
 namespace NoFrixion.MoneyMoov.Models;
 
 public class Beneficiary : IValidatableObject
@@ -42,11 +43,29 @@ public class Beneficiary : IValidatableObject
     [Required(ErrorMessage = "Currency is required.")]
     public CurrencyTypeEnum Currency { get; set; }
 
-    public Counterparty? Destination { get; set; }
+    public Counterparty Destination { get; set; }
     
-    public string? ApprovalCallbackUrl { get; set; }
+    public string ApprovalCallbackUrl { get; set; }
     
     public bool IsEnabled { get; set; }
+    
+    /// <summary>
+    /// Gets a hash of the critical fields for the beneficiary. This hash is
+    /// used to ensure a beneficiary's details are not modified between the time the
+    /// authorisation is given and the time the beneficiary is enabled.
+    /// </summary>
+    /// <returns>A hash of the beneficiary's critical fields.</returns>
+    public string GetApprovalHash()
+    {
+            var input =
+                MerchantID + (AccountID != null && AccountID != Guid.Empty
+                    ? AccountID.ToString()
+                    : string.Empty) +
+                Currency +
+                Destination.GetApprovalHash();
+
+            return HashHelper.CreateHash(input);
+    }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

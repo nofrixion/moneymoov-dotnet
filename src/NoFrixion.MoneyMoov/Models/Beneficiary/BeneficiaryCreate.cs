@@ -15,6 +15,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
+#nullable disable
 namespace NoFrixion.MoneyMoov.Models;
 
 public class BeneficiaryCreate : IValidatableObject
@@ -41,7 +42,7 @@ public class BeneficiaryCreate : IValidatableObject
     [Required(ErrorMessage = "Currency is required.")]
     public CurrencyTypeEnum Currency { get; set; }
 
-    public Counterparty? Destination { get; set; }
+    public Counterparty Destination { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -111,7 +112,7 @@ public class BeneficiaryCreate : IValidatableObject
         return new Payout
         {
             ID = Guid.NewGuid(),
-            Type = Destination?.Identifier?.Type ?? AccountIdentifierType.Unknown,
+            Type = Destination.Identifier?.Type ?? AccountIdentifierType.Unknown,
             Currency = Currency,
             Destination = Destination
         };
