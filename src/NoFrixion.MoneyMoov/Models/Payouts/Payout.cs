@@ -185,12 +185,12 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// The IBAN of the account the payout is being made from.
     /// </summary>
     public string? SourceAccountIban { get; set; } = string.Empty;
-    
+
     /// <summary>
     /// The account number of the account the payout is being made from.
     /// </summary>
     public string? SourceAccountNumber { get; set; } = string.Empty;
-    
+
     /// <summary>
     /// The sort code of the account the payout is being made from.
     /// </summary>
@@ -200,7 +200,12 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// The available balance of the account the payout is being made from.
     /// </summary>
     public decimal? SourceAccountAvailableBalance { get; set; }
-    
+
+    /// <summary>
+    /// The available balance of the account the payout is being made from.
+    /// </summary>
+    public string FormattedSourceAccountAvailableBalance => PaymentAmount.DisplayCurrencyAndAmount(Currency, SourceAccountAvailableBalance ?? decimal.Zero);
+
     [Obsolete("Please use Destination.")]
     [System.Text.Json.Serialization.JsonIgnore]
     public Counterparty? DestinationAccount
@@ -227,11 +232,15 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// Should this payout be scheduled for a future date?
     /// </summary>
     public bool? Scheduled { get; set; }
-    
+
     /// <summary>
     /// The date the payout should be submitted.
     /// </summary>
     public DateTimeOffset? ScheduleDate { get; set; }
+
+    public string FormattedScheduleDayOnly => PaymentSchedule.GetFormattedScheduleDayOnly(ScheduleDate);
+
+    public string FormattedSchedule => PaymentSchedule.GetFormattedSchedule(ScheduleDate);
 
     /// <summary>
     /// For Bitcoin payouts, when this flag is set the network fee will be deducted from the send amount.
@@ -243,6 +252,9 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// The Bitcoin fee rate to apply in Satoshis per virtual byte.
     /// </summary>
     public int BitcoinFeeSatsPerVbyte { get; set; }
+
+    public string FormattedBitcoinFee => $"{BitcoinFeeSatsPerVbyte} sats/vbyte" +
+        (BitcoinSubtractFeeFromAmount ? " (fee will be subtracted from amount)" : "");
 
     /// <summary>
     /// The number of authorisers required for this payout. Is determined by business settings
