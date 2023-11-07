@@ -42,8 +42,6 @@ public class BeneficiaryCreate : IValidatableObject
     public CurrencyTypeEnum Currency { get; set; }
 
     public Counterparty? Destination { get; set; }
-    
-    public string? ApprovalCallbackUrl { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
