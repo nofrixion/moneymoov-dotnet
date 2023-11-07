@@ -97,6 +97,18 @@ public class PayoutUpdate
         set => Destination = value;
     }
 
+    [Obsolete("Please use Destination.")]
+    public string? DestinationBitcoinAddress
+    {
+        get => Destination?.Identifier?.BitcoinAddress;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier.BitcoinAddress = value;
+        }
+    }
+
     public Counterparty? Destination { get; set; }
 
     /// <summary>
