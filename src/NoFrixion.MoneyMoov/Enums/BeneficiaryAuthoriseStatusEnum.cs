@@ -1,7 +1,7 @@
 ﻿// -----------------------------------------------------------------------------
 //  Filename: BeneficiaryAuthoriseStatusEnum.cs
 // 
-//  Description: TODO:
+//  Description: Status of a beneficiary authorisation event.
 // 
 //  Author(s):
 //  Saurav Maiti (saurav@nofrixion.com)
@@ -10,7 +10,7 @@
 //  02 11 2023  Saurav Maiti Created, Harcourt Street, Dublin, Ireland.
 // 
 //  License:
-//  Proprietary NoFrixion.
+//  MIT.
 // -----------------------------------------------------------------------------
 
 using Newtonsoft.Json;
