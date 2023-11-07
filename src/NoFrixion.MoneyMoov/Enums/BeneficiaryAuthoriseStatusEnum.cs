@@ -24,5 +24,4 @@ public enum BeneficiaryAuthoriseStatusEnum
     
     Success,
     Failure,
-    Voided
 }
