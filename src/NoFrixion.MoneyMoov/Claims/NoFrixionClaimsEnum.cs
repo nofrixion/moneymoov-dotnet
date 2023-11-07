@@ -57,6 +57,19 @@ public enum NoFrixionClaimsEnum
     /// Rule fields.
     /// </summary>
     rulehash,
+    
+    /// <summary>
+    /// The name of the claim to add to strong (SCA) NoFrixion JWT access tokens 
+    /// that can be used to authroise a beneficiary and that holds the beneficiary ID.
+    /// </summary>
+    beneficiaryid,
+
+    /// <summary>
+    /// The name of the claim to add to strong (SCA) NoFrixion JWT access tokens 
+    /// that can be used to authorise a beneficiary and that holds a hash of the critical
+    /// beneficiary fields.
+    /// </summary>
+    beneficiaryhash,
 
     approvetype,
 

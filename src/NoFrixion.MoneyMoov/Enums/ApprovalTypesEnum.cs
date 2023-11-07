@@ -29,5 +29,7 @@ public enum ApproveTypesEnum
 
     BatchPayout = 5,
 
-    PayByNoFrixion = 6
+    PayByNoFrixion = 6,
+    
+    Beneficiary = 7
 }
