@@ -1,14 +1,13 @@
 ﻿// -----------------------------------------------------------------------------
-//  Filename: Beneficiary.cs
+//  Filename: BeneficiaryCreate.cs
 // 
-//  Description: Class containing information for a beneficiary:
+//  Description: Class containing information for a beneficiary to be created:
 // 
 //  Author(s):
-//  Donal O'Connor (donal@nofrixion.com)
+//  Saurav Maiti (saurav@nofrixion.com)
 // 
 //  History:
-//  11 05 2022  Donal O'Connor   Created, Carmichael House,
-// Dublin, Ireland.
+//  02 11 2023  Saurav Maiti   Created, Harcourt Street, Dublin, Ireland.
 // 
 //  License:
 //  MIT.
@@ -19,7 +18,7 @@ using System.ComponentModel.DataAnnotations;
 #nullable disable
 namespace NoFrixion.MoneyMoov.Models;
 
-public class Beneficiary : IValidatableObject
+public class BeneficiaryCreate : IValidatableObject
 {
     public Guid ID { get; set; }
 
@@ -44,28 +43,6 @@ public class Beneficiary : IValidatableObject
     public CurrencyTypeEnum Currency { get; set; }
 
     public Counterparty Destination { get; set; }
-    
-    public string ApprovalCallbackUrl { get; set; }
-    
-    public bool IsEnabled { get; set; }
-    
-    /// <summary>
-    /// Gets a hash of the critical fields for the beneficiary. This hash is
-    /// used to ensure a beneficiary's details are not modified between the time the
-    /// authorisation is given and the time the beneficiary is enabled.
-    /// </summary>
-    /// <returns>A hash of the beneficiary's critical fields.</returns>
-    public string GetApprovalHash()
-    {
-            var input =
-                MerchantID + (AccountID != null && AccountID != Guid.Empty
-                    ? AccountID.ToString()
-                    : string.Empty) +
-                Currency +
-                Destination.GetApprovalHash();
-
-            return HashHelper.CreateHash(input);
-    }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -99,6 +76,33 @@ public class Beneficiary : IValidatableObject
     }
 
     /// <summary>
+    /// Places all the beneficiary's properties into a dictionary. Useful for testing
+    /// when HTML form encoding is required.
+    /// </summary>
+    /// <returns>A dictionary with all the beneficiary's non-collection properties 
+    /// represented as key-value pairs.</returns>
+    public Dictionary<string, string> ToDictionary()
+    {
+        var dict = new Dictionary<string, string>
+        {
+            { nameof(ID), ID.ToString() },
+            { nameof(MerchantID), MerchantID.ToString() },
+            { nameof(AccountID), AccountID?.ToString() ?? string.Empty },
+            { nameof(Name), Name },
+            { nameof(Currency), Currency.ToString() }
+        };
+
+        if (Destination != null)
+        {
+            dict = dict.Concat(Destination.ToDictionary($"{nameof(Destination)}."))
+                .ToLookup(x => x.Key, x => x.Value)
+                .ToDictionary(x => x.Key, g => g.First());
+        }
+
+        return dict;
+    }
+
+    /// <summary>
     /// Maps the beneficiary to a Payout. Used for creating a new Payout and also validating the 
     /// Beneficiary.
     /// </summary>
@@ -108,7 +112,7 @@ public class Beneficiary : IValidatableObject
         return new Payout
         {
             ID = Guid.NewGuid(),
-            Type = Destination?.Identifier?.Type ?? AccountIdentifierType.Unknown,
+            Type = Destination.Identifier?.Type ?? AccountIdentifierType.Unknown,
             Currency = Currency,
             Destination = Destination
         };
