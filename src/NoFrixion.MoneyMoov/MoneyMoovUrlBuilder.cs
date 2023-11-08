@@ -268,6 +268,18 @@ public static class MoneyMoovUrlBuilder
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.webhooks}/{merchantID}";
     }
 
+    public static class BeneficiariesApi
+    {
+        public static string BeneficiaryUrl(string moneyMoovBaseUrl, Guid beneficiaryID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.beneficiaries}/{beneficiaryID}";
+
+        public static string BeneficiaryUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.beneficiaries}";
+
+        public static string AuthoriseBeneficiaryUrl(string moneyMoovBaseUrl, Guid beneficiaryID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.beneficiaries}/authorise/{beneficiaryID}";
+    }
+
     public static string AccountStatementApiUrl(string moneyMoovBaseUrl, string? accountId = null)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.ACCOUNTS_ENDPOINT}/{accountId ?? "#accountid#"}/{MoneyMoovApiEndPoints.ACCOUNT_STATEMENT_ENDPOINT}";

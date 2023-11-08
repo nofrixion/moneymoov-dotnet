@@ -36,6 +36,8 @@ public interface IMoneyMoovClient
     IUserInviteClient UserInviteClient();
 
     IWebhookClient WebhookClient();
+    
+    IBeneficiaryClient BeneficiaryClient();
 
     Uri? GetBaseUrl();
 }
@@ -100,4 +102,7 @@ public class MoneyMoovClient : IMoneyMoovClient
 
     public IWebhookClient WebhookClient()
         => new WebhookClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
+    
+    public IBeneficiaryClient BeneficiaryClient()
+        => new BeneficiaryClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 }
