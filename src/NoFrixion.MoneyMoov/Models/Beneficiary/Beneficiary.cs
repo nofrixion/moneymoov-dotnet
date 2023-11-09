@@ -15,6 +15,7 @@
 // -----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using JetBrains.Annotations;
 
 #nullable disable
 namespace NoFrixion.MoneyMoov.Models;
@@ -26,10 +27,11 @@ public class Beneficiary : IValidatableObject
     /// <summary>
     /// Gets or Sets the merchant id.
     /// </summary>
-    
     public Guid MerchantID { get; set; }
-
+    
     public Guid? AccountID { get; set; }
+    
+    [CanBeNull] public PaymentAccount Account { get; set; }
 
     /// <summary>
     /// The descriptive name for the beneficiary.
