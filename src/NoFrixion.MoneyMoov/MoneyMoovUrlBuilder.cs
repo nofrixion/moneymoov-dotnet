@@ -200,6 +200,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string SubmitBatchPayoutUrl(string moneyMoovBaseUrl, Guid payoutID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/{MoneyMoovResources.batch}/submit/{payoutID}";
+
+        public static string CancelScheduledPayoutUrl(string moneyMoovBaseUrl, Guid payoutID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/cancel/{payoutID}";
     }
 
     /// <summary>
