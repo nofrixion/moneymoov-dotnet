@@ -198,9 +198,9 @@ public class PaymentRequestPaymentAttemptExtensionsTests
     }
     
     [Theory]
-    [InlineData(200,100,  0, false)]
-    [InlineData(200, 100,  100, true)]
-    public void IsCardPaymentVoided_Tests(decimal cardAuthorisedAmount, decimal capturedAmount, decimal voidedAmount, bool result)
+    [InlineData(100,  0, false)]
+    [InlineData(100,  100, true)]
+    public void IsCardPaymentVoided_Tests(decimal capturedAmount, decimal voidedAmount, bool result)
     {
         // Arrange
         var paymentRequestPaymentAttempt = new PaymentRequestPaymentAttempt
