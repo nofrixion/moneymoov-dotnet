@@ -30,8 +30,6 @@ public class BeneficiaryIdentifier
 
     public Guid BeneficiaryID { get; set; }
 
-    public Guid MerchantID { get; set; }
-
     public string IBAN { get; set; }
 
     public DateTimeOffset Inserted { get; set; }
