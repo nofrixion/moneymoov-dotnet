@@ -297,6 +297,11 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// </summary>
     public string? BeneficiaryName { get; set; }
 
+    /// <summary>
+    /// The activity associated with the payout.
+    /// </summary>
+    public List<PayoutActivity>? Activity { get; set; }
+    
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
