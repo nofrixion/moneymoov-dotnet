@@ -16,6 +16,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 #nullable disable
 namespace NoFrixion.MoneyMoov.Models;
@@ -28,9 +29,9 @@ public class Beneficiary : IValidatableObject
     /// Gets or Sets the merchant id.
     /// </summary>
     public Guid MerchantID { get; set; }
-    
+
     public Guid? AccountID { get; set; }
-    
+
     [CanBeNull] public PaymentAccount Account { get; set; }
 
     /// <summary>
@@ -46,11 +47,19 @@ public class Beneficiary : IValidatableObject
     public CurrencyTypeEnum Currency { get; set; }
 
     public Counterparty Destination { get; set; }
-    
+
     public string ApprovalCallbackUrl { get; set; }
-    
+
     public bool IsEnabled { get; set; }
-    
+
+    // Don't serialize the events if there are none.
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    public virtual IEnumerable<BeneficiaryEvent> BeneficiaryEvents { get; set; }
+    public bool ShouldSerializeBeneficiaryEvents()
+    {
+        return BeneficiaryEvents != null && BeneficiaryEvents.Any();
+    }
+
     /// <summary>
     /// Gets a hash of the critical fields for the beneficiary. This hash is
     /// used to ensure a beneficiary's details are not modified between the time the
@@ -59,14 +68,14 @@ public class Beneficiary : IValidatableObject
     /// <returns>A hash of the beneficiary's critical fields.</returns>
     public string GetApprovalHash()
     {
-            var input =
-                MerchantID + (AccountID != null && AccountID != Guid.Empty
-                    ? AccountID.ToString()
-                    : string.Empty) +
-                Currency +
-                Destination.GetApprovalHash();
+        var input =
+            MerchantID + (AccountID != null && AccountID != Guid.Empty
+                ? AccountID.ToString()
+                : string.Empty) +
+            Currency +
+            Destination.GetApprovalHash();
 
-            return HashHelper.CreateHash(input);
+        return HashHelper.CreateHash(input);
     }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -89,7 +98,7 @@ public class Beneficiary : IValidatableObject
 
         // Apply biz validation rules.
         var bizValidationResults = Validate(context);
-        if(bizValidationResults.Count() > 0)
+        if (bizValidationResults.Count() > 0)
         {
             isValid = false;
             validationResults.AddRange(bizValidationResults);
