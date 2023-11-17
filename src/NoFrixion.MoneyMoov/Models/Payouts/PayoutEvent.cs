@@ -1,7 +1,7 @@
 //  -----------------------------------------------------------------------------
-//   Filename: PayoutActivity.cs
+//   Filename: PayoutEvent.cs
 // 
-//   Description: Payout activity:
+//   Description: Payout event:
 // 
 //   Author(s):
 //   Donal O'Connor (donal@nofrixion.com)
@@ -16,16 +16,7 @@
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public enum ActivityAction
-{
-    Created = 0,
-    Updated = 1,
-    Queued = 2,
-    Initiated = 3,
-    Settled = 4,
-}
-
-public class PayoutActivity
+public class PayoutEvent
 {
     public Guid UserID { get; set; }
 
@@ -35,6 +26,5 @@ public class PayoutActivity
 
     public PayoutStatus Status { get; set; }
     
-    public ActivityAction ActivityAction { get; set; }
-        
+    public PayoutEventTypesEnum EventType { get; set; }
 }

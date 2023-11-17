@@ -300,7 +300,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// <summary>
     /// The activity associated with the payout.
     /// </summary>
-    public List<PayoutActivity>? Activity { get; set; }
+    public List<PayoutEvent>? Events { get; set; }
     
     public NoFrixionProblem Validate()
     {

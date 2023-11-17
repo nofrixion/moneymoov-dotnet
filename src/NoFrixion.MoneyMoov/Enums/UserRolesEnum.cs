@@ -20,34 +20,34 @@ namespace NoFrixion.MoneyMoov;
 public enum UserRolesEnum : int
 {
     /// <summary>
-    /// User accounts with this role have access to all actions on an account or
-    /// merchant that don't require strong customer authentication.
+    /// For new users that were invited to a merchant and accepted. It's then up to the 
+    /// inviter to set the required role they wish them to have. This role has no
+    /// permissions.
     /// </summary>
-    User = 1,
-
-    /// <summary>
-    /// User accounts with this role have the same access as the "User" role plus
-    /// the additional actions that require strong customer authentication.
-    /// </summary>
-    Approver = 2,
-
-    /// <summary>
-    /// User accounts with this role have the same access as the "Approver" role plus
-    /// the additional admin actions such as assigning or modifying user roles.
-    /// </summary>
-    AdminApprover = 3,
-
+    NewlyRegistered = 1,
+    
     /// <summary>
     /// User accounts in this role only have permission to user the payment requests 
     /// to facilitate the receiving of payments. This role has broadly the same capabilities 
     /// granted to a merchant (non-User) token.
     /// </summary>
-    PaymentRequestor = 4,
+    PaymentRequestor = 2,
+    
+    /// <summary>
+    /// User accounts with this role have access to all actions on an account or
+    /// merchant that don't require strong customer authentication.
+    /// </summary>
+    User = 3,
 
     /// <summary>
-    /// For new users that were invited to a merchant and accepted. It's then up to the 
-    /// inviter to set the required role they wish them to have. This role has no
-    /// permissions.
+    /// User accounts with this role have the same access as the "User" role plus
+    /// the additional actions that require strong customer authentication.
     /// </summary>
-    NewlyRegistered = 5
+    Approver = 4,
+
+    /// <summary>
+    /// User accounts with this role have the same access as the "Approver" role plus
+    /// the additional admin actions such as assigning or modifying user roles.
+    /// </summary>
+    AdminApprover = 5,
 }
