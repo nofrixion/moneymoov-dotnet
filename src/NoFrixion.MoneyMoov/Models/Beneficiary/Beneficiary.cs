@@ -47,7 +47,12 @@ public class Beneficiary : IValidatableObject
     public CurrencyTypeEnum Currency { get; set; }
 
     public Counterparty Destination { get; set; }
-
+    
+    /// <summary>
+    /// The ID of the beneficiary identifier.
+    /// </summary>
+    public Guid BeneficiaryIdentifierID { get; set; }
+    
     public string ApprovalCallbackUrl { get; set; }
 
     public bool IsEnabled { get; set; }

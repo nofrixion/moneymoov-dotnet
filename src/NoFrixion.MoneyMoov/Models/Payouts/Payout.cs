@@ -302,9 +302,9 @@ public class Payout : IValidatableObject, IWebhookPayload
     public List<string>? AuthorisedBy { get; set; }
 
     /// <summary>
-    /// If the payout destination is a beneficairy this will be the ID of it.
+    /// If the payout destination is a beneficairy this will be the ID of it's identifier.
     /// </summary>
-    public Guid? BeneficiaryID { get; set; }
+    public Guid? BeneficiaryIdentifierID { get; set; }
 
     /// <summary>
     /// If the payout is using a beneficiary for the destination this is the name of the it.
