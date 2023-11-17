@@ -81,5 +81,7 @@ public enum NoFrixionClaimsEnum
 
     approvesignature,
 
-    approveamr
+    approveamr,
+
+    authoriseassertion
 }

@@ -32,6 +32,8 @@ public class ApproveResultModel
 
     public string KeyID { get; set; } = string.Empty;
 
+    public string CredentialJson { get; set; } = string.Empty;
+
     public ApproveResultModel()
     { }
 
@@ -54,10 +56,11 @@ public class ApproveResultModel
             ChallengeBase64Url = claims.FirstOrDefault(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.approvehash)?.Value ?? string.Empty;
             Signature = claims.FirstOrDefault(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.approvesignature)?.Value ?? string.Empty;
             KeyID = claims.FirstOrDefault(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.approvekeyid)?.Value ?? string.Empty;
+            CredentialJson = claims.FirstOrDefault(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.authoriseassertion)?.Value ?? string.Empty;
         }
     }
 
-    public ClaimsIdentity UpdateIdentity(ClaimsIdentity claimsIdentity, AuthenticationTypesEnum authenticationType)
+    public ClaimsIdentity UpdateIdentity(ClaimsIdentity claimsIdentity, AuthenticationTypesEnum authenticationType, string assertion)
     {
         var cleanedClaims = claimsIdentity.Claims.ToList();
         cleanedClaims.RemoveAll(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.approvetype);
@@ -69,10 +72,12 @@ public class ApproveResultModel
         var hashClaim = new Claim(ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.approvehash, ChallengeBase64Url);
         var idClaim = new Claim(ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.approveid, ID.ToString());
         var amrClaim = new Claim(ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.approveamr, authenticationType.ToString());
+        var assertionClaim = new Claim(ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.authoriseassertion, assertion);
         cleanedClaims.Add(approveTypeClaim);
         cleanedClaims.Add(hashClaim);
         cleanedClaims.Add(idClaim);
         cleanedClaims.Add(amrClaim);
+        cleanedClaims.Add(assertionClaim);
 
         // Create a new identity with the adjusted claims and then persist to the authentication cookie.
         return new ClaimsIdentity(cleanedClaims, authenticationType.ToString(),
