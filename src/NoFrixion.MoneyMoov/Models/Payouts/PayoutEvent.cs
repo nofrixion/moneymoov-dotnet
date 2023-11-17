@@ -1,0 +1,45 @@
+//  -----------------------------------------------------------------------------
+//   Filename: PayoutEvent.cs
+// 
+//   Description: Payout event:
+// 
+//   Author(s):
+//   Donal O'Connor (donal@nofrixion.com)
+// 
+//   History:
+//   16 11 2023  Donal O'Connor   Created, Harcourt Street,
+//  Dublin, Ireland.
+// 
+//   License:
+//   Proprietary NoFrixion.
+//  -----------------------------------------------------------------------------
+
+namespace NoFrixion.MoneyMoov.Models;
+
+public class PayoutEvent
+{
+    /// <summary>
+    /// The user id of the user who the event is for.
+    /// </summary>
+    public Guid UserID { get; set; }
+
+    /// <summary>
+    /// The user name of the user who the event is for.
+    /// </summary>
+    public string? UserName { get; set; }
+
+    /// <summary>
+    /// Event timestamp.
+    /// </summary>
+    public DateTimeOffset Timestamp { get; set; }
+
+    /// <summary>
+    /// Status of the payout.
+    /// </summary>
+    public PayoutStatus Status { get; set; }
+    
+    /// <summary>
+    /// The event type.
+    /// </summary>
+    public PayoutEventTypesEnum EventType { get; set; }
+}
