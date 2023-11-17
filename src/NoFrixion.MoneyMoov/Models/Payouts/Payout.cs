@@ -196,6 +196,20 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// </summary>
     public string? SourceAccountSortcode { get; set; } = string.Empty;
 
+    public AccountIdentifier? SourceAccountIdentifier
+    {
+        get
+        {
+            var srcAccountIdentifier = new AccountIdentifier
+            {
+                IBAN = SourceAccountIban,
+                SortCode = SourceAccountSortcode,
+                AccountNumber = SourceAccountNumber
+            };
+            return srcAccountIdentifier;
+        }
+    }
+
     /// <summary>
     /// The available balance of the account the payout is being made from.
     /// </summary>
