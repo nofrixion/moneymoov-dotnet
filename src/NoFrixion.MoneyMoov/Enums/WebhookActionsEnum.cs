@@ -26,5 +26,5 @@ public enum WebhookActionsEnum
 
     Updated,
 
-    Deteted
+    Deleted
 }

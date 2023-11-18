@@ -71,11 +71,9 @@ public class BeneficiarySerialisationTests : MoneyMoovUnitTestBase<BeneficiarySe
         Assert.Equal("1e92214c-1650-49c4-760c-08db1746a020", beneficiary?.ID.ToString());
         Assert.Equal("2186d737-50a1-48b0-a7e7-7f39cb40407e", beneficiary?.MerchantID.ToString());
         Assert.Equal("Test Beneficiary", beneficiary?.Name);
-        Assert.Equal("YourRef", beneficiary.YourReference);
-        Assert.Equal("TheirRef", beneficiary.TheirReference);
-        Assert.Equal("Destination account", beneficiary.Destination?.Name);
-        Assert.Equal(AccountIdentifierType.IBAN, beneficiary.Destination?.Identifier?.Type);
-        Assert.Equal("GB33BUKB20201555555555", beneficiary.Destination?.Identifier?.IBAN);
+        Assert.Equal("Destination account", beneficiary?.Destination?.Name);
+        Assert.Equal(AccountIdentifierType.IBAN, beneficiary?.Destination?.Identifier?.Type);
+        Assert.Equal("GB33BUKB20201555555555", beneficiary?.Destination?.Identifier?.IBAN);
     }
 
     /// <summary>
@@ -113,12 +111,9 @@ public class BeneficiarySerialisationTests : MoneyMoovUnitTestBase<BeneficiarySe
         Assert.NotNull(beneficiary?.Destination?.Identifier);
         Assert.Equal("1e92214c-1650-49c4-760c-08db1746a020", beneficiary?.ID.ToString());
         Assert.Equal("2186d737-50a1-48b0-a7e7-7f39cb40407e", beneficiary?.MerchantID.ToString());
-        Assert.Equal("Test Beneficiary", beneficiary.Name);
-        Assert.Equal("YourRef", beneficiary.YourReference);
-        Assert.Equal("TheirRef", beneficiary.TheirReference);
-        Assert.Equal("Destination account", beneficiary.Destination?.Name);
+        Assert.Equal("Test Beneficiary", beneficiary?.Name);
+        Assert.Equal("Destination account", beneficiary?.Destination?.Name);
         Assert.Equal(AccountIdentifierType.IBAN, beneficiary?.Destination?.Identifier?.Type);
         Assert.Equal("GB33BUKB20201555555555", beneficiary?.Destination?.Identifier?.IBAN);
     }
-
 }

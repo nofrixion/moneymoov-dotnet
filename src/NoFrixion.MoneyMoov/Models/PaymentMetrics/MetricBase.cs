@@ -58,7 +58,12 @@ public enum MetricsEnum
     /// <summary>
     /// For use with Failed payouts.
     /// </summary>
-    Failed = 7
+    Failed = 7,
+    
+    /// <summary>
+    /// Scheduled payouts.
+    /// </summary>
+    Scheduled = 8,
 }
 
 /// <summary>

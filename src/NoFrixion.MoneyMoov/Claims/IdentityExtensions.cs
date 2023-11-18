@@ -109,20 +109,6 @@ public static class IdentityExtensions
         return principal.Identities.First().Claims.SingleOrDefault(x => x.Type == ClaimTypes.Email).Value;
     }
 
-    public static bool HasAdminApproverRole(this IIdentity identity)
-    {
-        var claimsIdentity = identity as ClaimsIdentity;
-
-        if (claimsIdentity == null)
-        {
-            return false;
-        }
-        else
-        {
-            return claimsIdentity.Claims.Any(x => x.Type == ClaimTypes.Role && x.Value == UserRolesEnum.AdminApprover.ToString());
-        }
-    }
-
     public static bool IsComplianceOfficer(this IIdentity identity)
         => IsComplianceOfficer(identity as ClaimsIdentity);
 

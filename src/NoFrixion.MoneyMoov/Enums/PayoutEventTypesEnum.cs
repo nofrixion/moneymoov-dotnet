@@ -47,5 +47,20 @@ namespace NoFrixion.MoneyMoov
         /// A payout was initiated but the funds failed to settle.
         /// </summary>
         Failure = 5,
+        
+        /// <summary>
+        /// A payout was created.
+        /// </summary>
+        Created = 6,
+        
+        /// <summary>
+        /// A payout was queued.
+        /// </summary>
+        Queued = 7,
+        
+        /// <summary>
+        /// A payout was scheduled.
+        /// </summary>
+        Scheduled = 8,
     }
 }

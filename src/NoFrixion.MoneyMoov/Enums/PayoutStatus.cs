@@ -81,5 +81,11 @@ public enum PayoutStatus
     /// until they are provided.
     /// </summary>
     [EnumMember(Value = "PENDING_INPUT")]
-    PENDING_INPUT = 8
+    PENDING_INPUT = 8,
+    
+    /// <summary>
+    /// Means the payout has been scheduled for processing at a future date.
+    /// </summary>
+    [EnumMember(Value = "SCHEDULED")]
+    SCHEDULED = 9,
 }

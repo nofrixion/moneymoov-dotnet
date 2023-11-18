@@ -74,8 +74,6 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// An optional description for the payment request. If set this field will appear
     /// on the transaction record for some card processors.
     /// </summary>
-    [RegularExpression(PaymentRequestConstants.DESCRIPTION_ALLOWED_CHARS_REGEX,
-        ErrorMessage = PaymentRequestConstants.DESCRIPTION_ERROR_MESSAGE)]
     public string? Description { get; set; }
 
     /// <summary>
@@ -329,7 +327,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// tag exists it will be created.
     /// </summary>
     public List<string>? Tags { get; set; }
-    
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);

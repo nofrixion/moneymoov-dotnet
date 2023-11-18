@@ -183,6 +183,9 @@ public static class MoneyMoovUrlBuilder
         public static string PayoutsUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}";
 
+        public static string BulkPayoutsUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/bulk";
+
         public static string GetByInvoiceIDUrl(string moneyMoovBaseUrl, string invoiceID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/getbyinvoiceid/{invoiceID}";
 
@@ -197,6 +200,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string SubmitBatchPayoutUrl(string moneyMoovBaseUrl, Guid payoutID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/{MoneyMoovResources.batch}/submit/{payoutID}";
+
+        public static string CancelScheduledPayoutUrl(string moneyMoovBaseUrl, Guid payoutID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/cancel/{payoutID}";
     }
 
     /// <summary>
@@ -263,6 +269,18 @@ public static class MoneyMoovUrlBuilder
 
         public static string AllWebhooksUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.webhooks}/{merchantID}";
+    }
+
+    public static class BeneficiariesApi
+    {
+        public static string BeneficiaryUrl(string moneyMoovBaseUrl, Guid beneficiaryID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.beneficiaries}/{beneficiaryID}";
+
+        public static string BeneficiaryUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.beneficiaries}";
+
+        public static string AuthoriseBeneficiaryUrl(string moneyMoovBaseUrl, Guid beneficiaryID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.beneficiaries}/authorise/{beneficiaryID}";
     }
 
     public static string AccountStatementApiUrl(string moneyMoovBaseUrl, string? accountId = null)

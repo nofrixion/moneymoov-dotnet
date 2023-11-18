@@ -1,38 +1,34 @@
 ﻿// -----------------------------------------------------------------------------
-//  Filename: Beneficiary.cs
+//  Filename: BeneficiaryCreate.cs
 // 
-//  Description: Class containing information for a beneficiary:
+//  Description: Class containing information for a beneficiary to be created:
 // 
 //  Author(s):
-//  Donal O'Connor (donal@nofrixion.com)
+//  Saurav Maiti (saurav@nofrixion.com)
 // 
 //  History:
-//  11 05 2022  Donal O'Connor   Created, Carmichael House,
-// Dublin, Ireland.
+//  02 11 2023  Saurav Maiti   Created, Harcourt Street, Dublin, Ireland.
 // 
 //  License:
 //  MIT.
 // -----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using JetBrains.Annotations;
-using Newtonsoft.Json;
 
 #nullable disable
 namespace NoFrixion.MoneyMoov.Models;
 
-public class Beneficiary : IValidatableObject
+public class BeneficiaryCreate : IValidatableObject
 {
     public Guid ID { get; set; }
 
     /// <summary>
     /// Gets or Sets the merchant id.
     /// </summary>
+    
     public Guid MerchantID { get; set; }
 
     public Guid? AccountID { get; set; }
-
-    [CanBeNull] public PaymentAccount Account { get; set; }
 
     /// <summary>
     /// The descriptive name for the beneficiary.
@@ -47,41 +43,6 @@ public class Beneficiary : IValidatableObject
     public CurrencyTypeEnum Currency { get; set; }
 
     public Counterparty Destination { get; set; }
-    
-    /// <summary>
-    /// The ID of the beneficiary identifier.
-    /// </summary>
-    public Guid BeneficiaryIdentifierID { get; set; }
-    
-    public string ApprovalCallbackUrl { get; set; }
-
-    public bool IsEnabled { get; set; }
-
-    // Don't serialize the events if there are none.
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public virtual IEnumerable<BeneficiaryEvent> BeneficiaryEvents { get; set; }
-    public bool ShouldSerializeBeneficiaryEvents()
-    {
-        return BeneficiaryEvents != null && BeneficiaryEvents.Any();
-    }
-
-    /// <summary>
-    /// Gets a hash of the critical fields for the beneficiary. This hash is
-    /// used to ensure a beneficiary's details are not modified between the time the
-    /// authorisation is given and the time the beneficiary is enabled.
-    /// </summary>
-    /// <returns>A hash of the beneficiary's critical fields.</returns>
-    public string GetApprovalHash()
-    {
-        var input =
-            MerchantID + (AccountID != null && AccountID != Guid.Empty
-                ? AccountID.ToString()
-                : string.Empty) +
-            Currency +
-            Destination.GetApprovalHash();
-
-        return HashHelper.CreateHash(input);
-    }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -103,7 +64,7 @@ public class Beneficiary : IValidatableObject
 
         // Apply biz validation rules.
         var bizValidationResults = Validate(context);
-        if (bizValidationResults.Count() > 0)
+        if(bizValidationResults.Count() > 0)
         {
             isValid = false;
             validationResults.AddRange(bizValidationResults);
@@ -112,6 +73,33 @@ public class Beneficiary : IValidatableObject
         return isValid ?
             NoFrixionProblem.Empty :
             new NoFrixionProblem($"The {nameof(Beneficiary)} had one or more validation errors.", validationResults);
+    }
+
+    /// <summary>
+    /// Places all the beneficiary's properties into a dictionary. Useful for testing
+    /// when HTML form encoding is required.
+    /// </summary>
+    /// <returns>A dictionary with all the beneficiary's non-collection properties 
+    /// represented as key-value pairs.</returns>
+    public Dictionary<string, string> ToDictionary()
+    {
+        var dict = new Dictionary<string, string>
+        {
+            { nameof(ID), ID.ToString() },
+            { nameof(MerchantID), MerchantID.ToString() },
+            { nameof(AccountID), AccountID?.ToString() ?? string.Empty },
+            { nameof(Name), Name },
+            { nameof(Currency), Currency.ToString() }
+        };
+
+        if (Destination != null)
+        {
+            dict = dict.Concat(Destination.ToDictionary($"{nameof(Destination)}."))
+                .ToLookup(x => x.Key, x => x.Value)
+                .ToDictionary(x => x.Key, g => g.First());
+        }
+
+        return dict;
     }
 
     /// <summary>
@@ -124,7 +112,7 @@ public class Beneficiary : IValidatableObject
         return new Payout
         {
             ID = Guid.NewGuid(),
-            Type = Destination?.Identifier?.Type ?? AccountIdentifierType.Unknown,
+            Type = Destination.Identifier?.Type ?? AccountIdentifierType.Unknown,
             Currency = Currency,
             Destination = Destination
         };

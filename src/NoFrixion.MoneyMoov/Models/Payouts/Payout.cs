@@ -65,6 +65,11 @@ public class Payout : IValidatableObject, IWebhookPayload
     public decimal Amount { get; set; }
 
     /// <summary>
+    /// Currency and formatted amount string.
+    /// </summary>
+    public string FormattedAmount => PaymentAmount.DisplayCurrencyAndAmount(Currency, Amount);
+
+    /// <summary>
     /// Gets or Sets your reference ID
     /// </summary>
     public string? YourReference { get; set; }
@@ -167,6 +172,8 @@ public class Payout : IValidatableObject, IWebhookPayload
 
     public string? CreatedBy { get; set; }
 
+    public string? CreatedByEmailAddress { get; set; }
+
     public DateTimeOffset Inserted { get; set; }
 
     /// <summary>
@@ -178,17 +185,41 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// The IBAN of the account the payout is being made from.
     /// </summary>
     public string? SourceAccountIban { get; set; } = string.Empty;
-    
+
     /// <summary>
     /// The account number of the account the payout is being made from.
     /// </summary>
     public string? SourceAccountNumber { get; set; } = string.Empty;
-    
+
     /// <summary>
     /// The sort code of the account the payout is being made from.
     /// </summary>
     public string? SourceAccountSortcode { get; set; } = string.Empty;
-    
+
+    public AccountIdentifier? SourceAccountIdentifier
+    {
+        get
+        {
+            var srcAccountIdentifier = new AccountIdentifier
+            {
+                IBAN = SourceAccountIban,
+                SortCode = SourceAccountSortcode,
+                AccountNumber = SourceAccountNumber
+            };
+            return srcAccountIdentifier;
+        }
+    }
+
+    /// <summary>
+    /// The available balance of the account the payout is being made from.
+    /// </summary>
+    public decimal? SourceAccountAvailableBalance { get; set; }
+
+    /// <summary>
+    /// The available balance of the account the payout is being made from.
+    /// </summary>
+    public string FormattedSourceAccountAvailableBalance => PaymentAmount.DisplayCurrencyAndAmount(Currency, SourceAccountAvailableBalance ?? decimal.Zero);
+
     [Obsolete("Please use Destination.")]
     [System.Text.Json.Serialization.JsonIgnore]
     public Counterparty? DestinationAccount
@@ -211,6 +242,80 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// </summary>
     public List<Tag> Tags { get; set; } = new List<Tag>();
 
+    /// <summary>
+    /// Should this payout be scheduled for a future date?
+    /// </summary>
+    public bool? Scheduled { get; set; }
+
+    /// <summary>
+    /// The date the payout should be submitted.
+    /// </summary>
+    public DateTimeOffset? ScheduleDate { get; set; }
+
+    public string FormattedScheduleDayOnly => PaymentSchedule.GetFormattedScheduleDayOnly(ScheduleDate);
+
+    public string FormattedSchedule => PaymentSchedule.GetFormattedSchedule(ScheduleDate);
+
+    /// <summary>
+    /// For Bitcoin payouts, when this flag is set the network fee will be deducted from the send amount.
+    /// THis is particularly useful for sweeps where it can be difficult to calculate the exact fee required.
+    /// </summary>
+    public bool BitcoinSubtractFeeFromAmount { get; set; }
+
+    /// <summary>
+    /// The Bitcoin fee rate to apply in Satoshis per virtual byte.
+    /// </summary>
+    public int BitcoinFeeSatsPerVbyte { get; set; }
+
+    public string FormattedBitcoinFee => $"{BitcoinFeeSatsPerVbyte} sats/vbyte" +
+        (BitcoinSubtractFeeFromAmount ? " (fee will be subtracted from amount)" : "");
+
+    /// <summary>
+    /// The number of authorisers required for this payout. Is determined by business settings
+    /// on the source account and/or merchant.
+    /// </summary>
+    public int AuthorisersRequiredCount { get; set; }
+
+    /// <summary>
+    /// The number of distinct authorisers that have authorised the payout.
+    /// </summary>
+    public int AuthorisersCompletedCount { get; set; }
+    
+    /// <summary>
+    /// True if the payout can be authorised by the user who loaded it.
+    /// </summary>
+    public bool CanAuthorise { get; set; }
+
+    /// <summary>
+    /// True if the payout can be updated by the user who loaded it.
+    /// </summary>
+    public bool CanUpdate { get; set; }
+
+    /// <summary>
+    /// True if the payout was loaded for a user and that user has already authorised the latest version of the payout.
+    /// </summary>
+    public bool HasCurrentUserAuthorised {  get; set; }
+
+    /// <summary>
+    /// A list of the email addresses of all the users who have usccessfully authorised the latest version of the payout.
+    /// </summary>
+    public List<string>? AuthorisedBy { get; set; }
+
+    /// <summary>
+    /// If the payout destination is a beneficairy this will be the ID of it's identifier.
+    /// </summary>
+    public Guid? BeneficiaryIdentifierID { get; set; }
+
+    /// <summary>
+    /// If the payout is using a beneficiary for the destination this is the name of the it.
+    /// </summary>
+    public string? BeneficiaryName { get; set; }
+
+    /// <summary>
+    /// The activity associated with the payout.
+    /// </summary>
+    public List<PayoutEvent>? Events { get; set; }
+    
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
@@ -259,7 +364,9 @@ public class Payout : IValidatableObject, IWebhookPayload
                 Currency +
                 Math.Round(Amount, 2).ToString() +
                 Destination.GetApprovalHash() +
-                Status.ToString();
+                //Status.ToString() +
+                Scheduled.GetValueOrDefault().ToString() +
+                ScheduleDate?.ToString("o");
 
             return HashHelper.CreateHash(input);
         }

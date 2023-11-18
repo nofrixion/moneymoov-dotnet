@@ -97,6 +97,18 @@ public class PayoutUpdate
         set => Destination = value;
     }
 
+    [Obsolete("Please use Destination.")]
+    public string? DestinationBitcoinAddress
+    {
+        get => Destination?.Identifier?.BitcoinAddress;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier.BitcoinAddress = value;
+        }
+    }
+
     public Counterparty? Destination { get; set; }
 
     /// <summary>
@@ -113,6 +125,32 @@ public class PayoutUpdate
     /// An optional list of tag ids to add to the payout.
     /// </summary>
     public List<Guid>? TagIds { get; set; }
+
+    /// <summary>
+    /// Should this payout be scheduled for a future date?
+    /// </summary>
+    public bool? Scheduled { get; set; }
+    
+    /// <summary>
+    /// The date the payout should be submitted.
+    /// </summary>
+    public DateTimeOffset? ScheduleDate { get; set; }
+
+    /// <summary>
+    /// For Bitcoin payouts, when this flag is set the network fee will be deducted from the send amount.
+    /// This is particularly useful for sweeps where it can be difficult to calculate the exact fee required.
+    /// </summary>
+    public bool? BitcoinSubtractFeeFromAmount { get; set; }
+
+    /// <summary>
+    /// The Bitcoin fee rate to apply in Satoshis per virtual byte.
+    /// </summary>
+    public int? BitcoinFeeSatsPerVbyte { get; set; }
+
+    /// <summary>
+    /// Optional. The ID of the beneficiary identifier to use for the payout destination.
+    /// </summary>
+    public Guid? BeneficiaryIdentifierID { get; set; }
 
     /// <summary>
     /// Places all the payout's properties into a dictionary.
