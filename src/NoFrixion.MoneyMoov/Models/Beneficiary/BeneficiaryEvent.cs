@@ -24,11 +24,11 @@ public class BeneficiaryEvent
 
     public Guid BeneficiaryID { get; set; }
 
-    public BeneficiaryAuthoriseStatusEnum EventStatus { get; set; }
+    public string EventStatus { get; set; }
 
     public BeneficiaryEventTypeEnum EventType { get; set; }
 
-    public Guid? AuthoriserID { get; set; }
+    public Guid? UserID { get; set; }
 
     public string AuthoriserHash { get; set; }
 
@@ -38,5 +38,5 @@ public class BeneficiaryEvent
 
     public DateTimeOffset Inserted { get; set; }
 
-    public User Authoriser { get; set; }
+    public User User { get; set; }
 }
