@@ -18,5 +18,6 @@ namespace NoFrixion.MoneyMoov.Enums;
 
 public enum BeneficiaryEventTypeEnum
 {
-    Authorise
+    Authorise,
+    Update
 }
