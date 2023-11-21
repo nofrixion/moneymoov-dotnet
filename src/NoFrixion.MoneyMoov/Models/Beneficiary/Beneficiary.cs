@@ -56,6 +56,8 @@ public class Beneficiary : IValidatableObject
     public string ApprovalCallbackUrl { get; set; }
 
     public bool IsEnabled { get; set; }
+    
+    public DateTimeOffset LastUpdated { get; set; }
 
     // Don't serialize the events if there are none.
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -74,11 +76,12 @@ public class Beneficiary : IValidatableObject
     public string GetApprovalHash()
     {
         var input =
-            MerchantID + (AccountID != null && AccountID != Guid.Empty
+            Name + MerchantID + (AccountID != null && AccountID != Guid.Empty
                 ? AccountID.ToString()
                 : string.Empty) +
             Currency +
-            Destination.GetApprovalHash();
+            Destination.GetApprovalHash()
+            + LastUpdated.ToString("o");
 
         return HashHelper.CreateHash(input);
     }
