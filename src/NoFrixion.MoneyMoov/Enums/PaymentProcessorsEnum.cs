@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
 // Filename: PaymentProcessorsEnum.cs
 //
-// Description: List of the processors that are supported for processing card
+// Description: List of the processors that are supported for processing
 // payment requests.
 //
 // Author(s):
@@ -80,6 +80,11 @@ public enum PaymentProcessorsEnum
     /// <summary>
     /// Banking Circle agency banking accounts.
     /// </summary>
-    BankingCircleAgency
+    BankingCircleAgency,
+
+    /// <summary>
+    /// Processor to simulate payment initiation payments. 
+    /// </summary>
+    Simulator
 }
 
