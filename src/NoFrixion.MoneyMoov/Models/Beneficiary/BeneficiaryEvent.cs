@@ -36,6 +36,8 @@ public class BeneficiaryEvent
 
     public string ErrorMessage { get; set; }
     
+    public string BeneficiaryName { get; set; }
+    
     public CurrencyTypeEnum Currency { get; set; }
     
     public Guid? AccountID { get; set; }
