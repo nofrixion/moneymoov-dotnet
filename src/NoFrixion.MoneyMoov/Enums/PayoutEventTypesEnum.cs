@@ -72,5 +72,10 @@ namespace NoFrixion.MoneyMoov
         /// A payout's associated beneficiary was disabled.
         /// </summary>
         BeneficiaryDisabled = 10,
+        
+        /// <summary>
+        /// A payout was edited.
+        /// </summary>
+        Edited = 11,
     }
 }
