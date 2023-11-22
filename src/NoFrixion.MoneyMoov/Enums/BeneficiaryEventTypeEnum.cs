@@ -18,7 +18,28 @@ namespace NoFrixion.MoneyMoov.Enums;
 
 public enum BeneficiaryEventTypeEnum
 {
-    Authorise,
-    Update,
-    Disable
+    /// <summary>
+    /// Something went wrong and the event type is unknown.
+    /// </summary>
+    Unknown = 0,
+    
+    /// <summary>
+    /// A beneficiary was created.
+    /// </summary>
+    Create = 1,
+    
+    /// <summary>
+    /// A beneficiary was authorised by an approver.
+    /// </summary>
+    Authorise = 2,
+    
+    /// <summary>
+    /// A beneficiary was updated.
+    /// </summary>
+    Update = 3,
+    
+    /// <summary>
+    /// A beneficiary was disabled.
+    /// </summary>
+    Disable = 4,
 }

@@ -35,6 +35,20 @@ public class BeneficiaryEvent
     public string ErrorReason { get; set; }
 
     public string ErrorMessage { get; set; }
+    
+    public CurrencyTypeEnum Currency { get; set; }
+    
+    public Guid? AccountID { get; set; }
+    
+    public string AccountName { get; set; }
+    
+    public string IBAN { get; set; }
+    
+    public string AccountNumber { get; set; }
+    
+    public string SortCode { get; set; }
+    
+    public string BitcoinAddress { get; set; }
 
     public DateTimeOffset Inserted { get; set; }
 
