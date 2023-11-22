@@ -38,7 +38,7 @@ public class BeneficiaryEvent
     
     public string BeneficiaryName { get; set; }
     
-    public CurrencyTypeEnum Currency { get; set; }
+    public CurrencyTypeEnum? Currency { get; set; }
     
     public Guid? AccountID { get; set; }
     
