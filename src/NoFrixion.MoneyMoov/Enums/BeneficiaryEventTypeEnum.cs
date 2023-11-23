@@ -42,4 +42,9 @@ public enum BeneficiaryEventTypeEnum
     /// A beneficiary was disabled.
     /// </summary>
     Disable = 4,
+    
+    /// <summary>
+    /// A beneficiary was enabled.
+    /// </summary>
+    Enable = 5,
 }
