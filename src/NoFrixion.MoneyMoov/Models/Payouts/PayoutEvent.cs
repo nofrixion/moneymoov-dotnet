@@ -42,4 +42,9 @@ public class PayoutEvent
     /// The event type.
     /// </summary>
     public PayoutEventTypesEnum EventType { get; set; }
+
+    /// <summary>
+    /// The name of the rule that triggered the event.
+    /// </summary>
+    public string? RuleName { get; set; }
 }

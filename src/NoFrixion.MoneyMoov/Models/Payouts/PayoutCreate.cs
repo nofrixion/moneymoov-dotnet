@@ -31,7 +31,7 @@ public class PayoutCreate
     public CurrencyTypeEnum Currency { get; set; }
 
     [Required(ErrorMessage = "Amount is required.")]
-    [Range(0.0001, double.MaxValue,ErrorMessage = "Minimum value of 0.0001 is required for Amount")]
+    [Range(0.00001, double.MaxValue,ErrorMessage = "Minimum value of 0.00001 is required for Amount")]
     public decimal Amount { get; set; }
 
     /// <summary>
