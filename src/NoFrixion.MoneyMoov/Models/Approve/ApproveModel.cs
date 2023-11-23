@@ -44,8 +44,6 @@ public class ApproveModel
     public string? Username { get; set; }
 
     public string? ApproveAction { get; set; }
-    
-    public bool IsUpdateApproval { get; set; }
 
     public NameValueCollection ToQueryParams()
     {
