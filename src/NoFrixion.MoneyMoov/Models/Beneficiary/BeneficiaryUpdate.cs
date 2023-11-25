@@ -75,9 +75,4 @@ public class BeneficiaryUpdate
 
         return dict;
     }
-
-    public bool IsDestinationUpdated()
-    {
-        return Destination != null && Destination.Identifier != null && (Destination.Name != null || Destination.Identifier.IBAN != null || Destination.Identifier.AccountNumber != null || Destination.Identifier.BitcoinAddress != null || Destination.Identifier.SortCode != null);
-    }
 }
