@@ -62,5 +62,20 @@ namespace NoFrixion.MoneyMoov
         /// A payout was scheduled.
         /// </summary>
         Scheduled = 8,
+        
+        /// <summary>
+        /// A payout's associated beneficiary was updated.
+        /// </summary>
+        BeneficiaryUpdated = 9,
+        
+        /// <summary>
+        /// A payout's associated beneficiary was disabled.
+        /// </summary>
+        BeneficiaryDisabled = 10,
+        
+        /// <summary>
+        /// A payout was edited.
+        /// </summary>
+        Edited = 11,
     }
 }

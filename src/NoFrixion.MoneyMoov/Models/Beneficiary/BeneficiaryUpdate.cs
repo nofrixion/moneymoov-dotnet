@@ -78,6 +78,6 @@ public class BeneficiaryUpdate
 
     public bool IsDestinationUpdated()
     {
-        return Destination != null && Destination.Identifier != null && (Destination.Identifier.IBAN != null || Destination.Identifier.AccountNumber != null || Destination.Identifier.BitcoinAddress != null || Destination.Identifier.SortCode != null);
+        return Destination != null && Destination.Identifier != null && (Destination.Name != null || Destination.Identifier.IBAN != null || Destination.Identifier.AccountNumber != null || Destination.Identifier.BitcoinAddress != null || Destination.Identifier.SortCode != null);
     }
 }

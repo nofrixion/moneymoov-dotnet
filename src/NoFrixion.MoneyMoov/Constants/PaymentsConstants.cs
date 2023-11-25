@@ -68,7 +68,7 @@ public static class PaymentsConstants
 
     public const string PISP_REFERENCE_PREFIX = "pisp";
 
-    public const int PISP_REFERENCE_MAX_LENGTH = 17;
+    public const int PISP_REFERENCE_MAX_LENGTH = 18;
 
     public const string PISP_SETTLED_STATUS = "SETTLED";
 
@@ -77,9 +77,4 @@ public static class PaymentsConstants
     public const string PISP_REFUND_CANCELLED_STATUS = "PAYOUT DELETED";
 
     public const string NOFRIXION_OPEN_BANKING_PROVIDER_ID = "nofrixion";
-
-    /// <summary>
-    /// The provider ID to set on sandbox bank entries that should be processed with the NoFrixion pay by bank simulator.
-    /// </summary>
-    public const string NOFRIXION_PAYBYBANK_SIMULATOR_PROVIDERID = "simulator";
 }

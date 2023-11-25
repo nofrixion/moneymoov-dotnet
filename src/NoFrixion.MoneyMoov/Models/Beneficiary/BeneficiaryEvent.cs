@@ -24,19 +24,35 @@ public class BeneficiaryEvent
 
     public Guid BeneficiaryID { get; set; }
 
-    public BeneficiaryAuthoriseStatusEnum EventStatus { get; set; }
+    public string EventStatus { get; set; }
 
     public BeneficiaryEventTypeEnum EventType { get; set; }
 
-    public Guid? AuthoriserID { get; set; }
+    public Guid? UserID { get; set; }
 
     public string AuthoriserHash { get; set; }
 
     public string ErrorReason { get; set; }
 
     public string ErrorMessage { get; set; }
+    
+    public string BeneficiaryName { get; set; }
+    
+    public CurrencyTypeEnum? Currency { get; set; }
+    
+    public Guid? AccountID { get; set; }
+    
+    public string AccountName { get; set; }
+    
+    public string IBAN { get; set; }
+    
+    public string AccountNumber { get; set; }
+    
+    public string SortCode { get; set; }
+    
+    public string BitcoinAddress { get; set; }
 
     public DateTimeOffset Inserted { get; set; }
 
-    public User Authoriser { get; set; }
+    public User User { get; set; }
 }
