@@ -25,6 +25,8 @@ public interface IRestApiClient
 
     Task<RestApiResponse<T>> GetAsync<T>(string path, string accessToken);
 
+    Task<RestApiResponse<T>> PostAsync<T>(string path);
+
     Task<RestApiResponse> PostAsync(string path, HttpContent content);
 
     Task<RestApiResponse> PostAsync(string path, string accessToken);
@@ -78,6 +80,9 @@ public class RestApiClient : IRestApiClient, IDisposable
 
     public Task<RestApiResponse<T>> GetAsync<T>(string path, string accessToken) 
         => ExecAsync<T>(BuildRequest(HttpMethod.Get, path, accessToken, Option<HttpContent>.None));
+
+    public Task<RestApiResponse<T>> PostAsync<T>(string path)
+        => ExecAsync<T>(BuildRequest(HttpMethod.Post, path, string.Empty, Option<HttpContent>.None));
 
     public Task<RestApiResponse> PostAsync(string path, HttpContent content)
         => ExecAsync(BuildRequest(HttpMethod.Post, path, string.Empty, content));
