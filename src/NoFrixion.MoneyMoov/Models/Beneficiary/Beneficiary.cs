@@ -57,6 +57,31 @@ public class Beneficiary : IValidatableObject
 
     public bool IsEnabled { get; set; }
     
+    /// <summary>
+    /// A list of the email addresses of all the users who have usccessfully authorised the latest version of the beneficiary.
+    /// </summary>
+    [CanBeNull] public List<string> AuthorisedBy { get; set; }
+    
+    /// <summary>
+    /// True if the beneficiary was loaded for a user and that user has already authorised the latest version of the beneficiary.
+    /// </summary>
+    public bool HasCurrentUserAuthorised {  get; set; }
+    
+    /// <summary>
+    /// The number of authorisers required for this beneficiary. Is determined by business settings
+    /// on the source account and/or merchant.
+    /// </summary>
+    public int AuthorisersRequiredCount { get; set; }
+
+    /// <summary>
+    /// The number of distinct authorisers that have authorised the beneficiary.
+    /// </summary>
+    public int AuthorisersCompletedCount { get; set; }
+    
+    public string CreatedByEmailAddress { get; set; }
+    
+    public string Nonce { get; set; }
+    
     public DateTimeOffset LastUpdated { get; set; }
 
     // Don't serialize the events if there are none.
@@ -81,7 +106,7 @@ public class Beneficiary : IValidatableObject
                 : string.Empty) +
             Currency +
             Destination.GetApprovalHash()
-            + LastUpdated.ToString("o");
+            + (string.IsNullOrEmpty(Nonce) ? string.Empty : Nonce);
 
         return HashHelper.CreateHash(input);
     }
