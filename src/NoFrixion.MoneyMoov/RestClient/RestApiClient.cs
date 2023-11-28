@@ -42,8 +42,12 @@ public interface IRestApiClient
     Task<RestApiResponse> PutAsync(string path, string accessToken);
 
     Task<RestApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content);
+    
+    Task<RestApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content, string rowVersion);
 
     Task<RestApiResponse> DeleteAsync(string path, string accessToken);
+    
+    Task<RestApiResponse> DeleteAsync(string path, string accessToken, string rowVersion);
 
     Uri GetBaseUri();
 
@@ -107,9 +111,15 @@ public class RestApiClient : IRestApiClient, IDisposable
 
     public Task<RestApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content)
         => ExecAsync<T>(BuildRequest(HttpMethod.Put, path, accessToken, content));
+    
+    public Task<RestApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content, string rowVersion)
+        => ExecAsync<T>(BuildRequest(HttpMethod.Put, path, accessToken, content, rowVersion));
 
     public Task<RestApiResponse> DeleteAsync(string path, string accessToken)
         => ExecAsync(BuildRequest(HttpMethod.Delete, path, accessToken, Option<HttpContent>.None));
+    
+    public Task<RestApiResponse> DeleteAsync(string path, string accessToken, string rowVersion)
+        => ExecAsync(BuildRequest(HttpMethod.Delete, path, accessToken, Option<HttpContent>.None, rowVersion));
 
     public NoFrixionProblem CheckAccessToken(string accessToken, string callerName)
     {
@@ -127,7 +137,8 @@ public class RestApiClient : IRestApiClient, IDisposable
         HttpMethod method,
         string path,
         string accessToken,
-        Option<HttpContent> httpContent)
+        Option<HttpContent> httpContent,
+        string? rowVersion = null)
     {
         HttpRequestMessage request = new HttpRequestMessage(method, path);
 
@@ -136,6 +147,11 @@ public class RestApiClient : IRestApiClient, IDisposable
         if (!string.IsNullOrEmpty(accessToken))
         {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+        
+        if (!string.IsNullOrEmpty(rowVersion))
+        {
+            request.Headers.TryAddWithoutValidation("If-Match", rowVersion);
         }
 
         if(httpContent.IsSome)
