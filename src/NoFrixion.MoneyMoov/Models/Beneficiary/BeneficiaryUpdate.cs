@@ -22,7 +22,7 @@ public class BeneficiaryUpdate
     /// <summary>
     /// ID of the account to which the beneficiary belongs.
     /// </summary>
-    public Guid? AccountID { get; set; }
+    public string? AccountID { get; set; }
 
     /// <summary>
     /// The descriptive name for the beneficiary.
