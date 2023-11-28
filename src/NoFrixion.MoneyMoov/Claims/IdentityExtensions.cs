@@ -72,19 +72,40 @@ public static class IdentityExtensions
     /// </summary>
     /// <param name="principal">The claims principal wrapping the claims set by the Identity server.</param>
     /// <returns>The User's ID or an empty GUID if it could not be extracted.</returns>
-    public static Guid GetUserID(this ClaimsPrincipal principal)
+    public static Guid GetMoneyMoovUserID(this ClaimsPrincipal principal)
     {
-        var namesClaimValue = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var nameClaimValue = principal.FindFirst(ClaimTypes.Name)?.Value;
 
-        if (string.IsNullOrEmpty(namesClaimValue))
+        if (string.IsNullOrEmpty(nameClaimValue))
         {
             return Guid.Empty;
         }
         else
         {
-            namesClaimValue = namesClaimValue.Replace(ClaimsConstants.NOFRIXION_NAMEID_PREFIX, "");
+            Guid.TryParse(nameClaimValue, out Guid id);
 
-            Guid.TryParse(namesClaimValue, out Guid id);
+            return id;
+        }
+    }
+
+    /// <summary>
+    /// Attempts to get the UserID from the claim set by the NoFrixion Identity server.
+    /// </summary>
+    /// <param name="principal">The claims principal wrapping the claims set by the Identity server.</param>
+    /// <returns>The User's ID or an empty GUID if it could not be extracted.</returns>
+    public static Guid GetIdentityServerUserID(this ClaimsPrincipal principal)
+    {
+        var nameIdentifierClaimValue = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(nameIdentifierClaimValue))
+        {
+            return Guid.Empty;
+        }
+        else
+        {
+            nameIdentifierClaimValue = nameIdentifierClaimValue.Replace(ClaimsConstants.NOFRIXION_NAMEID_PREFIX, "");
+
+            Guid.TryParse(nameIdentifierClaimValue, out Guid id);
 
             return id;
         }
