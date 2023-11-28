@@ -122,4 +122,9 @@ public enum PaymentRequestEventTypesEnum
     /// A card payment was refunded.
     /// </summary>
     card_refund = 18,
+
+    /// <summary>
+    /// A previously generated Bitcoin Lightning invoice has expired.
+    /// </summary>
+    lightning_invoice_expired = 19,
 }
