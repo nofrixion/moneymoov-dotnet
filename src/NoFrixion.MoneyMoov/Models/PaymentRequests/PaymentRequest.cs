@@ -334,6 +334,11 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
 
     public string FormattedAmount => PaymentAmount.DisplayCurrencyAndAmount(Currency, Amount);
 
+    /// <summary>
+    /// Date and time of expiration of the lightning invoice.
+    /// </summary>
+    public DateTimeOffset? LightningInvoiceExpiresAt { get; set; }
+
     public string CustomerName =>
         Addresses.Any() ? $"{Addresses.First().FirstName} {Addresses.First().LastName}" : string.Empty;
 

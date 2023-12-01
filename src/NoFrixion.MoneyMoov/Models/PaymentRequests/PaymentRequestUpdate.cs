@@ -227,6 +227,16 @@ public class PaymentRequestUpdate
     /// An optional list of tag ids to add to the payment request
     /// </summary>
     public List<Guid>? TagIds { get; set; }
+
+    /// <summary>
+    /// Bitcoin Lightning invoice for the payment request.
+    /// </summary>
+    public string? LightningInvoice { get; set; }
+
+    /// <summary>
+    /// Date and time of expiration of the lightning invoice.
+    /// </summary>
+    public DateTimeOffset? LightningInvoiceExpiresAt { get; set; }
     
     /// <summary>
     /// Places all the payment request's properties into a dictionary. Useful for testing
