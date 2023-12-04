@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
 // Filename: LightningInvoice.cs
 //
-// Description: Represents a Bitcoin \Llighting invoice.
+// Description: Represents a Bitcoin Lighting invoice.
 //
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)
