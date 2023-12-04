@@ -62,5 +62,5 @@ public class Invoice
 
     public DateTimeOffset LastUpdated { get; set; }
     
-    public IEnumerable<InvoicePayment>? Payments { get; set; }
+    public IEnumerable<InvoicePayment>? InvoicePayments { get; set; }
 }
