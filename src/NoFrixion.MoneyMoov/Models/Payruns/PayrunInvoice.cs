@@ -13,19 +13,29 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Models.Invoices;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class PayrunInvoice
 {
-   public string? InvoiceNumber { get; set; }
+    public Guid ID { get; set; }
+    
+    public Guid PayRunID { get; set; }
+    
+    public string? Name { get; set; }
+    
+    public string? InvoiceNumber { get; set; }
 
     public string? PaymentTerms { get; set; }
     
-    public DateTimeOffset InvoiceDate { get; set; }
+    public DateTimeOffset Date { get; set; }
     
     public DateTimeOffset DueDate { get; set; }
    
     public string? Contact { get; set; }
+    
+    public string? DestinationAccountName { get; set; }
     
     public string? DestinationIban { get; set; }
     
@@ -41,14 +51,18 @@ public class PayrunInvoice
 
     public decimal? Taxes { get; set; }
     
-    public decimal? TotalAmount { get; set; }
+    public decimal TotalAmount { get; set; }
 
-    public decimal? OutstandingAmount { get; set; }
+    public decimal OutstandingAmount { get; set; }
     
-    public string? InvoiceStatus { get; set; }
+    public decimal? SubTotal { get; set; }
+    
+    public string? Status { get; set; }
 
     public string? Reference { get; set; }
 
     public string? RemittanceEmail { get; set; }
+    
+    public IEnumerable<InvoicePayment>? InvoicePayments { get; set; }
 }
 

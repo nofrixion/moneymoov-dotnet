@@ -23,7 +23,8 @@ public class Payrun
     public Guid ID { get; set; }
     public string? Name { get; set; }
     public Guid MerchantID { get; set; }
-    public List<Invoice> Invoices { get; set; } = null!;
+    
+    public List<PayrunInvoice> Invoices { get; set; } = null!;
     
     public decimal TotalAmount { get; set; }
     public DateTimeOffset Inserted { get; set; }
