@@ -1,7 +1,7 @@
 //  -----------------------------------------------------------------------------
 //   Filename: PayrunStatus.cs
 // 
-//   Description: TODO:
+//   Description: Payrun status enum:
 // 
 //   Author(s):
 //   Donal O'Connor (donal@nofrixion.com)
