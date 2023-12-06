@@ -45,8 +45,6 @@ public class PayrunInvoice
 
     public CurrencyTypeEnum Currency { get; set; }
     
-    public decimal? Subtotal { get; set; }
-
     public decimal? Discounts { get; set; }
 
     public decimal? Taxes { get; set; }
