@@ -82,6 +82,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// <summary>
     /// If set to true indicates the payout has been flagged as safe to process after transaction monitoring.
     /// </summary>
+    
     public bool CanProcess { get; set; }
     
     [Obsolete("Please use Destination.")]
