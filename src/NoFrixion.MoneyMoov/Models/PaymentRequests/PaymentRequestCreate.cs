@@ -296,6 +296,9 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
 
     [JsonIgnore]
     public string? LightningInvoice { get; set; }
+
+    [JsonIgnore]
+    public DateTimeOffset? LightningInvoiceExpiresAt { get; set; }
     
     [EmailAddressMultiple(ErrorMessage = PaymentRequestConstants.NOTIFICATION_EMAIL_ADDRESSES_ERROR_MESSAGE)]
     public string? NotificationEmailAddresses { get; set; }

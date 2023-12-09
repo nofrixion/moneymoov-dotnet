@@ -47,4 +47,9 @@ public class PayoutEvent
     /// The name of the rule that triggered the event.
     /// </summary>
     public string? RuleName { get; set; }
+
+    /// <summary>
+    /// Reason for the error, if any.
+    /// </summary>
+    public string? ErrorReason { get; set; }
 }

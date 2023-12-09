@@ -106,4 +106,14 @@ public class PaymentRequestMinimal
     /// Account ID of connected customers in Stripe
     /// </summary>
     public string? StripeAccountID { get; set; }
+
+    /// <summary>
+    /// Lightning invoice ID, if any.
+    /// </summary>
+    public string? LightningInvoice { get; set; }
+
+    /// <summary>
+    /// Date and time of expiration of the lightning invoice.
+    /// </summary>
+    public DateTimeOffset? LightningInvoiceExpiresAt { get; set; }
 }

@@ -77,5 +77,10 @@ namespace NoFrixion.MoneyMoov
         /// A payout was edited.
         /// </summary>
         Edited = 11,
+        
+        /// <summary>
+        /// A payout was rejected by an approver.
+        /// </summary>
+        RejectedApproval = 12
     }
 }
