@@ -88,4 +88,10 @@ public enum PayoutStatus
     /// </summary>
     [EnumMember(Value = "SCHEDULED")]
     SCHEDULED = 9,
+
+    /// <summary>
+    /// Enum REJECTED_APPROVAL for value: REJECTED_APPROVAL
+    /// </summary>
+    [EnumMember(Value = "REJECTED_APPROVAL")]
+    REJECTED_APPROVAL = 10,
 }
