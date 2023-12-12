@@ -61,7 +61,17 @@ public class Beneficiary : IValidatableObject
     /// A list of the email addresses of all the users who have usccessfully authorised the latest version of the beneficiary.
     /// </summary>
     [CanBeNull] public List<string> AuthorisedBy { get; set; }
-    
+
+    /// <summary>
+    /// True if the beneficiary can be authorised by the user who loaded it.
+    /// </summary>
+    public bool CanAuthorise { get; set; }
+
+    /// <summary>
+    /// True if the beneficiary can be updated by the user who loaded it.
+    /// </summary>
+    public bool CanUpdate { get; set; }
+
     /// <summary>
     /// True if the beneficiary was loaded for a user and that user has already authorised the latest version of the beneficiary.
     /// </summary>
