@@ -71,8 +71,7 @@ public class PaymentRequestEvent
     public string? LightningInvoice { get; set; }
 
     /// <summary>
-    /// For Bitcoin Lightning payments this field holds the hash of the Lightning invoice that was
-    /// created for the payment attempt.
+    /// For Bitcoin Lightning payments the hash of the invoice presented to the payer.
     /// </summary>
     public string? LightningRHash { get; set; }
 

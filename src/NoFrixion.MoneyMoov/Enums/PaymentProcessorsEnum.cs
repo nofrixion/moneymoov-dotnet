@@ -88,13 +88,13 @@ public enum PaymentProcessorsEnum
     Simulator,
 
     /// <summary>
-    /// Processed on Lightning mainnet.
+    /// Processed on Lightning Bitcoin mainnet.
     /// </summary>
     Lightning,
 
     /// <summary>
-    /// Processed on Lightning testnet.
+    /// Processed on Lightning Bitcoin testnet.
     /// </summary>
-    LightningTestnet,
+    LightningTestnet
 }
 
