@@ -85,6 +85,16 @@ public enum PaymentProcessorsEnum
     /// <summary>
     /// Processor to simulate payment initiation payments. 
     /// </summary>
-    Simulator
+    Simulator,
+
+    /// <summary>
+    /// Processed on Lightning mainnet.
+    /// </summary>
+    Lightning,
+
+    /// <summary>
+    /// Processed on Lightning testnet.
+    /// </summary>
+    LightningTestnet,
 }
 

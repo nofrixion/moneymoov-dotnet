@@ -14,8 +14,8 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using NoFrixion.MoneyMoov.Extensions;
 using NoFrixion.MoneyMoov.Models.PaymentRequests;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class PaymentRequestResult
@@ -112,7 +112,6 @@ public class PaymentRequestResult
         PispAuthorizations = new List<PaymentRequestAuthorization>();
         CustomerID = paymentRequest.CustomerID;
 
-        // Currently only has PIS attempts.
         var paymentAttempts = paymentRequest.PaymentAttempts;
 
         if (paymentRequest != null &&

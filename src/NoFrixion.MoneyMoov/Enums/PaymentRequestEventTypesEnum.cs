@@ -127,4 +127,9 @@ public enum PaymentRequestEventTypesEnum
     /// A previously generated Bitcoin Lightning invoice has expired.
     /// </summary>
     lightning_invoice_expired = 19,
+
+    /// <summary>
+    /// A previously generated Bitcoin Lightning invoice was cancelled.
+    /// </summary>
+    lightning_invoice_cancelled = 20,
 }
