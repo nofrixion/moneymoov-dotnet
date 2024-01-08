@@ -20,9 +20,9 @@ namespace NoFrixion.MoneyMoov.Models;
 public class BeneficiaryUpdate
 {
     /// <summary>
-    /// ID of the account to which the beneficiary belongs.
+    /// ID of the accounts which are authorised to act as a source for the beneficiary.
     /// </summary>
-    public string? AccountID { get; set; }
+    public List<Guid>? SourceAccountIDs { get; set; }
 
     /// <summary>
     /// The descriptive name for the beneficiary.
@@ -33,7 +33,6 @@ public class BeneficiaryUpdate
 
     public Counterparty? Destination { get; set; }
     
-
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
@@ -71,6 +70,14 @@ public class BeneficiaryUpdate
             dict = dict.Concat(Destination.ToDictionary($"{nameof(Destination)}."))
                 .ToLookup(x => x.Key, x => x.Value)
                 .ToDictionary(x => x.Key, g => g.First());
+        }
+
+        if (SourceAccountIDs?.Count() > 0)
+        {
+            for (int i = 0; i<SourceAccountIDs.Count(); i++)
+            {
+                dict.Add($"{nameof(SourceAccountIDs)}[{i}]", SourceAccountIDs[i].ToString());
+            }
         }
 
         return dict;
