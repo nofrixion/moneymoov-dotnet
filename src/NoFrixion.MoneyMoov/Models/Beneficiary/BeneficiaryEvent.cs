@@ -54,5 +54,12 @@ public class BeneficiaryEvent
 
     public DateTimeOffset Inserted { get; set; }
 
+    /// <summary>
+    /// A hash of the source account ID's that are authorised to use the beneficiary.
+    /// An empty value means the beneficairy can be used by all the merchant's source
+    /// accounts.
+    /// </summary>
+    public string SourceAccountsHash { get; set; }
+
     public User User { get; set; }
 }
