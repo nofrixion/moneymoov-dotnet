@@ -8,6 +8,7 @@
 // 
 //  History:
 //  14 02 2023  Saurav Maiti Created, Harcourt Street, Dublin, Ireland.
+//  09 01 2024  Aaron Clauson   Added report permissions.
 // 
 //  License:
 //  MIT.
@@ -61,5 +62,20 @@ public enum MerchantTokenPermissionsEnum
     /// <summary>
     /// Permission to delete a payout
     /// </summary>
-    DeletePayout = 256
+    DeletePayout = 256,
+
+    /// <summary>
+    /// Permission to create a report.
+    /// </summary>
+    CreateReport = 512,
+
+    /// <summary>
+    /// Permission to edit, retrieve and initiate a report.
+    /// </summary>
+    EditReport = 1024,
+
+    /// <summary>
+    /// Permission to delete a report.
+    /// </summary>
+    DeleteReport = 2048
 }
