@@ -32,8 +32,7 @@ public static class PaymentRequestExtensions
 
             paymentAttempts.AddRange(GetCardPaymentAttempts(events));
             paymentAttempts.AddRange(GetPispPaymentAttempts(events));
-
-            // TODO: Add similar logic for lightning payments.
+            paymentAttempts.AddRange(GetLightningPaymentAttempts(events));
 
             return paymentAttempts;
         }
@@ -291,5 +290,65 @@ public static class PaymentRequestExtensions
         }
 
         return pispRefundAttempts;
+    }
+
+    /// <summary>
+    /// Groups the payment request events into a list of payment attempts for Lightning payments.
+    /// </summary>
+    /// <returns>A list of Lightning attempts for the payment request events.</returns>
+    public static IEnumerable<PaymentRequestPaymentAttempt> GetLightningPaymentAttempts(this IEnumerable<PaymentRequestEvent> events)
+    {
+        var lightningPaymentAttempts = new List<PaymentRequestPaymentAttempt>();
+        
+        var lightningAttempts = events.Where(x => !string.IsNullOrEmpty(x.LightningRHash) &&
+                                                           ((x.EventType == PaymentRequestEventTypesEnum.lightning_invoice_created) ||
+                                                            (x.EventType == PaymentRequestEventTypesEnum.lightning_invoice_paid) ||
+                                                            (x.EventType == PaymentRequestEventTypesEnum.lightning_invoice_expired)))
+            .OrderBy(x => x.Inserted)
+            .GroupBy(x => x.LightningRHash)
+            .ToList();
+
+        foreach (var attempt in lightningAttempts)
+        {
+            // The invoice created event should always be present but if for some reason it's not the next best event
+            // will be used as the starting point for the attempt.
+            var initiateEvent =
+                attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.lightning_invoice_created).FirstOrDefault() ??
+                attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.lightning_invoice_paid).FirstOrDefault() ??
+                attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.lightning_invoice_expired).FirstOrDefault();
+
+            if (initiateEvent != null)
+            {
+                var paymentAttempt = new PaymentRequestPaymentAttempt
+                {
+                    AttemptKey = attempt.Key ?? string.Empty,
+                    PaymentRequestID = initiateEvent.PaymentRequestID,
+                    InitiatedAt = initiateEvent.Inserted,
+                    PaymentMethod = PaymentMethodTypeEnum.lightning,
+                    Currency = initiateEvent.Currency,
+                    AttemptedAmount = initiateEvent.Amount,
+                    PaymentProcessor = initiateEvent.PaymentProcessorName
+                };
+
+                if (attempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.lightning_invoice_paid))
+                {
+                    var settleEvent = attempt.First(x => x.EventType == PaymentRequestEventTypesEnum.lightning_invoice_paid);
+
+                    paymentAttempt.SettledAt = settleEvent.Inserted;
+                    paymentAttempt.SettledAmount = settleEvent.Amount;
+                    paymentAttempt.ReconciledTransactionID = settleEvent.ReconciledTransactionID;
+                }
+                else if (attempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.lightning_invoice_expired))
+                {
+                    var settleFailedEvent = attempt.First(x => x.EventType == PaymentRequestEventTypesEnum.lightning_invoice_expired);
+
+                    paymentAttempt.SettleFailedAt = settleFailedEvent.Inserted;
+                }
+
+                lightningPaymentAttempts.Add(paymentAttempt);
+            }
+        }
+
+        return lightningPaymentAttempts;
     }
 }

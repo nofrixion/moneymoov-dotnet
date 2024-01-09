@@ -44,8 +44,6 @@ public class PayrunInvoice
     public string? DestinationSortCode { get; set; }
 
     public CurrencyTypeEnum Currency { get; set; }
-    
-    public decimal? Subtotal { get; set; }
 
     public decimal? Discounts { get; set; }
 

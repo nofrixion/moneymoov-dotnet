@@ -66,9 +66,14 @@ public class PaymentRequestEvent
     public string? CardAuthorizationResponseID { get; set; }
 
     /// <summary>
-    /// For Bitcoin Lightning payments this filed holds the invoice presented to the payer.
+    /// For Bitcoin Lightning payments this field holds the invoice presented to the payer.
     /// </summary>
     public string? LightningInvoice { get; set; }
+
+    /// <summary>
+    /// For Bitcoin Lightning payments the hash of the invoice presented to the payer.
+    /// </summary>
+    public string? LightningRHash { get; set; }
 
     /// <summary>
     /// For a payment initiation this is the service provider ID selected by the payer, typically

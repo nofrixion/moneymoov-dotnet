@@ -8,6 +8,7 @@
 // 
 //  History:
 //  02 11 2023  Saurav Maiti   Created, Harcourt Street, Dublin, Ireland.
+//  06 01 2024  Aaron Clauson  Switched AccountID to SourceAccountIDs to support multiuse.
 // 
 //  License:
 //  MIT.
@@ -28,7 +29,7 @@ public class BeneficiaryCreate : IValidatableObject
     
     public Guid MerchantID { get; set; }
 
-    public Guid? AccountID { get; set; }
+    public List<Guid> SourceAccountIDs { get; set; }
 
     /// <summary>
     /// The descriptive name for the beneficiary.
@@ -87,7 +88,6 @@ public class BeneficiaryCreate : IValidatableObject
         {
             { nameof(ID), ID.ToString() },
             { nameof(MerchantID), MerchantID.ToString() },
-            { nameof(AccountID), AccountID?.ToString() ?? string.Empty },
             { nameof(Name), Name },
             { nameof(Currency), Currency.ToString() }
         };
@@ -97,6 +97,14 @@ public class BeneficiaryCreate : IValidatableObject
             dict = dict.Concat(Destination.ToDictionary($"{nameof(Destination)}."))
                 .ToLookup(x => x.Key, x => x.Value)
                 .ToDictionary(x => x.Key, g => g.First());
+        }
+
+        if (SourceAccountIDs?.Count() > 0)
+        {
+            for(int i=0; i<SourceAccountIDs.Count(); i++)
+            {
+                dict.Add($"{nameof(SourceAccountIDs)}[{i}]", SourceAccountIDs[i].ToString());
+            }
         }
 
         return dict;

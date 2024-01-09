@@ -17,6 +17,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace NoFrixion.MoneyMoov;
 
@@ -63,5 +64,11 @@ public enum TransactionTypesEnum
     BTC = 6,
 
     [Display(Name = "Bitcoin Testnet")]
-    BTC_TEST = 7
+    BTC_TEST = 7,
+
+    [Display(Name = "Lightning Bitcoin")]
+    LBTC = 8,
+
+    [Display(Name = "Lightning Bitcoin Testnet")]
+    LBTC_TEST = 9
 }

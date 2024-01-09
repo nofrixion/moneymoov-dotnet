@@ -30,10 +30,6 @@ public class Beneficiary : IValidatableObject
     /// </summary>
     public Guid MerchantID { get; set; }
 
-    public Guid? AccountID { get; set; }
-
-    [CanBeNull] public PaymentAccount Account { get; set; }
-
     /// <summary>
     /// The descriptive name for the beneficiary.
     /// </summary>
@@ -61,7 +57,17 @@ public class Beneficiary : IValidatableObject
     /// A list of the email addresses of all the users who have usccessfully authorised the latest version of the beneficiary.
     /// </summary>
     [CanBeNull] public List<string> AuthorisedBy { get; set; }
-    
+
+    /// <summary>
+    /// True if the beneficiary can be authorised by the user who loaded it.
+    /// </summary>
+    public bool CanAuthorise { get; set; }
+
+    /// <summary>
+    /// True if the beneficiary can be updated by the user who loaded it.
+    /// </summary>
+    public bool CanUpdate { get; set; }
+
     /// <summary>
     /// True if the beneficiary was loaded for a user and that user has already authorised the latest version of the beneficiary.
     /// </summary>
@@ -87,6 +93,9 @@ public class Beneficiary : IValidatableObject
     // Don't serialize the events if there are none.
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public virtual IEnumerable<BeneficiaryEvent> BeneficiaryEvents { get; set; }
+
+    public virtual IEnumerable<PaymentAccount> SourceAccounts { get; set; }
+
     public bool ShouldSerializeBeneficiaryEvents()
     {
         return BeneficiaryEvents != null && BeneficiaryEvents.Any();
@@ -101,8 +110,8 @@ public class Beneficiary : IValidatableObject
     public string GetApprovalHash()
     {
         var input =
-            Name + MerchantID + (AccountID != null && AccountID != Guid.Empty
-                ? AccountID.ToString()
+            Name + MerchantID + (SourceAccounts?.Count() > 0
+                ? string.Join(',', SourceAccounts.Select(x => x.ID.ToString()))
                 : string.Empty) +
             Currency +
             Destination.GetApprovalHash()

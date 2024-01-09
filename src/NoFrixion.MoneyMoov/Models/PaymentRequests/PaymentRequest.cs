@@ -400,6 +400,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
                 {
                     PaymentMethodTypeEnum.card => pa.CardAuthorisedAmount,
                     PaymentMethodTypeEnum.pisp => pa.SettledAmount,
+                    PaymentMethodTypeEnum.lightning => pa.SettledAmount,
                     _ => 0
                 });
     }

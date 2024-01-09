@@ -25,6 +25,8 @@ public static class PaymentRequestPaymentAttemptExtensions
         {
             var att when att.PaymentMethod == PaymentMethodTypeEnum.pisp && att.SettledAmount > 0 => att
                 .SettledAmount,
+            var att when att.PaymentMethod == PaymentMethodTypeEnum.lightning && att.SettledAmount > 0 => att
+                .SettledAmount,
             var att when att.PaymentMethod == PaymentMethodTypeEnum.card && att.CardAuthorisedAmount > 0 => att
                 .CardAuthorisedAmount,
             _ => 0
