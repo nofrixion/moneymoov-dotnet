@@ -77,5 +77,10 @@ public enum MerchantTokenPermissionsEnum
     /// <summary>
     /// Permission to delete a report.
     /// </summary>
-    DeleteReport = 2048
+    DeleteReport = 2048,
+
+    /// <summary>
+    /// Permission to execute and get report results.
+    /// </summary>
+    ExecuteReport = 4096
 }
