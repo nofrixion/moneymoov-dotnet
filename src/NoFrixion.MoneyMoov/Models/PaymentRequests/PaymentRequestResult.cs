@@ -62,6 +62,11 @@ public class PaymentRequestResult
     public const string PISP_YAPILY_PENDING_STATUS = "PENDING";
 
     /// <summary>
+    /// The status return in the Yapily callback for a payment authorisation error. 
+    /// </summary>
+    public const string PISP_YAPILY_AUTHORISATION_ERROR = "payment_authorisation_error";
+
+    /// <summary>
     /// The ID of the payment request the result is for.
     /// </summary>
     public Guid PaymentRequestID { get; set; }
