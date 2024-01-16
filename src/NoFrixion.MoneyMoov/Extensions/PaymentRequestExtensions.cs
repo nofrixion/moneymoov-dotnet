@@ -204,8 +204,9 @@ public static class PaymentRequestExtensions
                         _ => null
                     };
 
-                    //check error status for modulr
-                    if (pispCallbackOrWebhook.Status == PaymentRequestResult.PISP_YAPILY_AUTHORISATION_ERROR)
+                    if (pispCallbackOrWebhook.Status is PaymentRequestResult.PISP_YAPILY_AUTHORISATION_ERROR 
+                        or PaymentRequestResult.PISP_MODULR_AUTHORISATION_ERROR 
+                        or PaymentRequestResult.PISP_NOFRIXION_AUTHORISATION_ERROR)
                     {
                         paymentAttempt.PispAuthorisationFailedAt = pispCallbackOrWebhook.Inserted;
                     }
