@@ -11,10 +11,8 @@
 //  Dublin, Ireland.
 // 
 //   License:
-//   Proprietary NoFrixion.
+//   MIT.
 //  -----------------------------------------------------------------------------
-
-using NoFrixion.MoneyMoov.Models.Invoices;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -23,9 +21,9 @@ public class Payrun
     public Guid ID { get; set; }
     public string? Name { get; set; }
     public Guid MerchantID { get; set; }
-    
+
     public List<PayrunInvoice> Invoices { get; set; } = null!;
-    
+
     public decimal TotalAmount { get; set; }
     public DateTimeOffset Inserted { get; set; }
     public DateTimeOffset LastUpdated { get; set; }

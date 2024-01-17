@@ -37,6 +37,8 @@ public enum MoneyMoovResources
 
     payouts,
 
+    reports,
+
     rules,
 
     tokens,
@@ -206,6 +208,17 @@ public static class MoneyMoovUrlBuilder
         
         public static string RejectPayoutUrl(string moneyMoovBaseUrl, Guid payoutID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/reject/{payoutID}";
+    }
+
+    /// <summary>
+    /// Available endpoint URLs for the Reports resource.
+    /// </summary>
+    public static class ReportsApi
+    {
+        public static string ReportResultUrl(string moneyMoovBaseUrl, Guid reportID, int? statementNumber)
+            => statementNumber != null ?
+                $"{moneyMoovBaseUrl}/{MoneyMoovResources.reports}/{reportID}/result/{statementNumber}" :
+                $"{moneyMoovBaseUrl}/{MoneyMoovResources.reports}/{reportID}/result";
     }
 
     /// <summary>
