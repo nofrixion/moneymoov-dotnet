@@ -43,18 +43,18 @@ public class PaymentRequestPaymentAttempt
     /// If the attempt was authorised this is the timestamp it occurred at.
     /// </summary>
     public DateTimeOffset? AuthorisedAt { get; set; }
-    
+
     /// <summary>
     /// If the card payment attempt was authorised this is the timestamp it occurred at.
     /// </summary>
     public DateTimeOffset? CardAuthorisedAt { get; set; }
-    
+
     /// <summary>
     /// If the card payment attempt authorisation was not succesfully set up
     /// this is the timestamp it occurred at.
     /// </summary>
     public DateTimeOffset? CardPayerAuthenticationSetupFailedAt { get; set; }
-    
+
     /// <summary>
     /// If the card payment attempt was not succesfully authorised this is the timestamp
     /// it occurred at.
@@ -86,7 +86,7 @@ public class PaymentRequestPaymentAttempt
     /// The payment amount that was authorised by the payer.
     /// </summary>
     public decimal AuthorisedAmount { get; set; }
-    
+
     /// <summary>
     /// The card payment amount that was authorised by the payer.
     /// </summary>
@@ -130,18 +130,23 @@ public class PaymentRequestPaymentAttempt
     /// in PIS attempts this will be the name of the bank the payer used for the attempt.
     /// </summary>
     public string? InstitutionName { get; set; }
-    
+
     /// <summary>
     /// For card payments the merchant can request a reusable token for this payer and
     /// use it to submit subsequent merchant initiated payments.
     /// </summary>
     public string? TokenisedCardID { get; set; }
-    
+
     /// <summary>
     /// When the payment attempt is settled (only relevant for non-card payments) this is the payin transaction that
     /// the payment request event was reconciled with.
     /// </summary>
     public Guid? ReconciledTransactionID { get; set; }
+
+    /// <summary>
+    /// Timestamp for PSIP bank authorisation error or failure.  
+    /// </summary>
+    public DateTimeOffset? PispAuthorisationFailedAt { get; set; }
 
     public PaymentResultEnum Status => this.GetPaymentAttemptStatus();
 }
@@ -162,7 +167,7 @@ public class PaymentRequestRefundAttempt
     public decimal RefundSettledAmount { get; set; }
 
     public decimal RefundCancelledAmount { get; set; }
-    
+
     public bool IsCardVoid { get; set; }
 }
 
@@ -175,17 +180,17 @@ public class PaymentRequestCaptureAttempt
     /// Date and time the capture was initiated.
     /// </summary>
     public DateTimeOffset? CapturedAt { get; set; }
-    
+
     /// <summary>
     /// The amount that was captured.
     /// </summary>
     public decimal CapturedAmount { get; set; }
-    
+
     /// <summary>
     /// Date and time the capture failed.
     /// </summary>
     public DateTimeOffset? CaptureFailedAt { get; set; }
-    
+
     /// <summary>
     /// Capture failure reason.
     /// </summary>

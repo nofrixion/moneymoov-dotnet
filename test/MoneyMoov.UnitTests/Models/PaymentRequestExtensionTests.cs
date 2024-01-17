@@ -272,7 +272,7 @@ namespace MoneyMoov.UnitTests.Models
             Assert.NotEmpty(cardAttempts);
             Assert.Single(cardAttempts);
             Assert.Equal(PaymentResultEnum.FullyPaid, cardAttempts.First().Status);
-            Assert.Equal(amount, cardAttempts.First().CaptureAttempts.Sum(x=>x.CapturedAmount));
+            Assert.Equal(amount, cardAttempts.First().CaptureAttempts.Sum(x => x.CapturedAmount));
             Assert.Equal(amount, cardAttempts.First().CardAuthorisedAmount);
             Assert.Equal(CurrencyTypeEnum.EUR, cardAttempts.First().Currency);
             Assert.Equal(PaymentProcessorsEnum.Checkout, cardAttempts.First().PaymentProcessor);
@@ -338,7 +338,7 @@ namespace MoneyMoov.UnitTests.Models
             Assert.NotEmpty(cardAttempts);
             Assert.Single(cardAttempts);
             Assert.Equal(PaymentResultEnum.FullyPaid, cardAttempts.First().Status);
-            Assert.Equal(amount, cardAttempts.First().CaptureAttempts.Sum(x=>x.CapturedAmount));
+            Assert.Equal(amount, cardAttempts.First().CaptureAttempts.Sum(x => x.CapturedAmount));
             Assert.Equal(amount, cardAttempts.First().CardAuthorisedAmount);
             Assert.Equal(CurrencyTypeEnum.EUR, cardAttempts.First().Currency);
             Assert.Equal(PaymentProcessorsEnum.Checkout, cardAttempts.First().PaymentProcessor);
@@ -395,6 +395,64 @@ namespace MoneyMoov.UnitTests.Models
             Assert.Equal(CurrencyTypeEnum.EUR, cardAttempts.First().Currency);
             Assert.Equal(PaymentResultEnum.None, cardAttempts.Last().Status);
             Assert.NotNull(cardAttempts.Last().CardPayerAuthenticationSetupFailedAt);
+        }
+
+
+        [Theory]
+        [InlineData(PaymentRequestResult.PISP_YAPILY_AUTHORISATION_ERROR, PaymentProcessorsEnum.Yapily)]
+        [InlineData(PaymentRequestResult.PISP_MODULR_AUTHORISATION_ERROR, PaymentProcessorsEnum.Modulr)]
+        [InlineData(PaymentRequestResult.PISP_NOFRIXION_AUTHORISATION_ERROR, PaymentProcessorsEnum.Nofrixion)]
+        public void GetPispPaymentAttempts_Bank_Authorisation_Failure(string status, PaymentProcessorsEnum paymentProcessor)
+        {
+            var paymentRequestID = Guid.NewGuid();
+            var paymentInitiationID = Guid.NewGuid().ToString();
+            var paymentServiceProviderID = "bankofireland";
+            var amount = 12.12m;
+
+            var pispEvent1 = new PaymentRequestEvent
+            {
+                ID = Guid.NewGuid(),
+                PaymentRequestID = paymentRequestID,
+                Amount = amount,
+                Currency = CurrencyTypeEnum.EUR,
+                Inserted = DateTime.UtcNow,
+                EventType = PaymentRequestEventTypesEnum.pisp_initiate,
+                Status = PaymentRequestResult.PISP_YAPILY_PENDING_STATUS,
+                PaymentProcessorName = paymentProcessor,
+                PispPaymentInitiationID = paymentInitiationID,
+                PispPaymentServiceProviderID = paymentServiceProviderID,
+                PispPaymentInstitutionName = "Bank of Ireland"
+            };
+
+            var pispEvent2 = new PaymentRequestEvent
+            {
+                ID = Guid.NewGuid(),
+                PaymentRequestID = paymentRequestID,
+                Amount = amount,
+                Currency = CurrencyTypeEnum.EUR,
+                Inserted = DateTime.UtcNow,
+                EventType = PaymentRequestEventTypesEnum.pisp_callback,
+                Status = status,
+                PaymentProcessorName = paymentProcessor,
+                PispPaymentInitiationID = paymentInitiationID,
+                PispPaymentServiceProviderID = paymentServiceProviderID,
+                PispPaymentInstitutionName = "Bank of Ireland"
+            };
+
+            var pispEvents = new List<PaymentRequestEvent> { pispEvent1, pispEvent2 };
+
+            var pispAttempts = pispEvents.GetPispPaymentAttempts();
+
+            Assert.NotNull(pispAttempts);
+            Assert.NotEmpty(pispAttempts);
+            Assert.Single(pispAttempts);
+            Assert.Equal(PaymentResultEnum.None, pispAttempts.First().Status);
+            Assert.Equal(0, pispAttempts.First().SettledAmount);
+            Assert.Equal(0, pispAttempts.First().AuthorisedAmount);
+            Assert.Equal(CurrencyTypeEnum.EUR, pispAttempts.First().Currency);
+            Assert.Equal(paymentProcessor, pispAttempts.First().PaymentProcessor);
+            Assert.Equal(PaymentMethodTypeEnum.pisp, pispAttempts.First().PaymentMethod);
+            Assert.NotNull(pispAttempts.First().PispAuthorisationFailedAt);
         }
     }
 }

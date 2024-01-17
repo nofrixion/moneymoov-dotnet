@@ -96,7 +96,7 @@ public static class PaymentRequestExtensions
 
             // If there is a card void event, then the payment attempt was refunded.
             attempt.HandleCardVoidEvents(paymentAttempt);
-            
+
             attempt.HandleCardRefundEvents(paymentAttempt);
 
             attempt.SetWalletName(paymentAttempt);
@@ -204,6 +204,13 @@ public static class PaymentRequestExtensions
                         _ => null
                     };
 
+                    if (pispCallbackOrWebhook.Status is PaymentRequestResult.PISP_YAPILY_AUTHORISATION_ERROR 
+                        or PaymentRequestResult.PISP_MODULR_AUTHORISATION_ERROR 
+                        or PaymentRequestResult.PISP_NOFRIXION_AUTHORISATION_ERROR)
+                    {
+                        paymentAttempt.PispAuthorisationFailedAt = pispCallbackOrWebhook.Inserted;
+                    }
+
                     if (authorisationEvent != null)
                     {
                         paymentAttempt.AuthorisedAt = authorisationEvent.Inserted;
@@ -299,7 +306,7 @@ public static class PaymentRequestExtensions
     public static IEnumerable<PaymentRequestPaymentAttempt> GetLightningPaymentAttempts(this IEnumerable<PaymentRequestEvent> events)
     {
         var lightningPaymentAttempts = new List<PaymentRequestPaymentAttempt>();
-        
+
         var lightningAttempts = events.Where(x => !string.IsNullOrEmpty(x.LightningRHash) &&
                                                            ((x.EventType == PaymentRequestEventTypesEnum.lightning_invoice_created) ||
                                                             (x.EventType == PaymentRequestEventTypesEnum.lightning_invoice_paid) ||

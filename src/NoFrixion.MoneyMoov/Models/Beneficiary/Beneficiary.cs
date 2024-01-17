@@ -110,15 +110,27 @@ public class Beneficiary : IValidatableObject
     public string GetApprovalHash()
     {
         var input =
-            Name + MerchantID + (SourceAccounts?.Count() > 0
-                ? string.Join(',', SourceAccounts.Select(x => x.ID.ToString()))
-                : string.Empty) +
+            Name + 
+            MerchantID + 
+            GetSourceAccountsHash() +
             Currency +
             Destination.GetApprovalHash()
             + (string.IsNullOrEmpty(Nonce) ? string.Empty : Nonce);
 
         return HashHelper.CreateHash(input);
     }
+
+    /// <summary>
+    /// Gets a hash of the source account IDs authorised for the beneficiary.
+    /// If no source accounts are associated it means the beneficiary is authorised for all
+    /// the merchant's accounts.
+    /// </summary>
+    /// <returns>A hash of the source accounts or an empty string if the beneficiary is authorised
+    /// for all the merchant's accounts.</returns>
+    public string GetSourceAccountsHash()
+        => SourceAccounts?.Count() > 0
+                ? HashHelper.CreateHash(string.Join(',', SourceAccounts.Select(x => x.ID.ToString())))
+                : string.Empty;
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
