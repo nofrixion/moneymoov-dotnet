@@ -66,6 +66,11 @@ public enum WebhookResourceTypesEnum
     /// <remarks>
     /// This is the equivalent of the webhooks version 1 Payout.
     /// </remarks>
-    TransactionPayout = 32
+    TransactionPayout = 32,
+
+    /// <summary>
+    /// Will trigger notifications for report, including account statement, related events.
+    /// </summary>
+    Report = 64
 }
 
