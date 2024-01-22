@@ -48,6 +48,11 @@ public class PaymentAccount
     public decimal SubmittedPayoutsBalance { get; set; }
 
     /// <summary>
+    /// Total of the payins that are in a pending/review state.
+    /// </summary>
+    public decimal PendingPayinsBalance { get; set; }
+    
+    /// <summary>
     /// Timestamp when the account was created.
     /// </summary>
     public DateTimeOffset Inserted { get; set; }
@@ -120,7 +125,7 @@ public class PaymentAccount
     /// <summary>
     /// The current available balance of the account. Calculated by subtracting any submitted payments from the current balance.
     /// </summary>
-    public decimal AvailableBalance => Balance - SubmittedPayoutsBalance;
+    public decimal AvailableBalance => Balance - (SubmittedPayoutsBalance + PendingPayinsBalance);
 
     /// <summary>
     /// The payment account supplier name. A payment account can be supplied by multiple payment processors. 
