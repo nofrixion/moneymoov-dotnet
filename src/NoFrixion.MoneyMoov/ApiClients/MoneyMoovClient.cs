@@ -29,6 +29,8 @@ public interface IMoneyMoovClient
 
     IPayoutClient PayoutClient();
 
+    IReportClient ReportClient();
+
     IRuleClient RuleClient();
 
     IUserClient UserClient();
@@ -79,6 +81,9 @@ public class MoneyMoovClient : IMoneyMoovClient
     public IAccountClient AccountClient()
         => new AccountClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 
+    public IBeneficiaryClient BeneficiaryClient()
+        => new BeneficiaryClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
+
     public IMerchantClient MerchantClient()
         => new MerchantClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 
@@ -91,6 +96,9 @@ public class MoneyMoovClient : IMoneyMoovClient
     public IPayoutClient PayoutClient()
         => new PayoutClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 
+    public IReportClient ReportClient()
+        => new ReportClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
+
     public IRuleClient RuleClient()
         => new RuleClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 
@@ -102,7 +110,4 @@ public class MoneyMoovClient : IMoneyMoovClient
 
     public IWebhookClient WebhookClient()
         => new WebhookClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
-    
-    public IBeneficiaryClient BeneficiaryClient()
-        => new BeneficiaryClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 }
