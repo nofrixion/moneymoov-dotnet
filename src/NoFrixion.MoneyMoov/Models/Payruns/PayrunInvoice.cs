@@ -13,6 +13,7 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
 using NoFrixion.MoneyMoov.Models.Invoices;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -25,7 +26,8 @@ public class PayrunInvoice
     
     public string? Name { get; set; }
     
-    public string? InvoiceNumber { get; set; }
+    [Required]
+    public required string InvoiceNumber { get; set; }
 
     public string? PaymentTerms { get; set; }
     
@@ -33,8 +35,8 @@ public class PayrunInvoice
     
     public DateTimeOffset DueDate { get; set; }
    
-    public string? Contact { get; set; }
-    
+    public string Contact { get; set; } = null!;
+
     public string? DestinationAccountName { get; set; }
     
     public string? DestinationIban { get; set; }
@@ -59,7 +61,8 @@ public class PayrunInvoice
 
     public string? Reference { get; set; }
 
-    public string? RemittanceEmail { get; set; }
+    [EmailAddress]
+    public required string RemittanceEmail { get; set; }
     
     public IEnumerable<InvoicePayment>? InvoicePayments { get; set; }
 }
