@@ -107,6 +107,12 @@ public class PaymentRequestResult
     public List<PaymentRequestPayment> Payments { get; set; }
 
     public List<PaymentRequestAuthorization> PispAuthorizations { get; set; }
+    
+    public decimal AmountReceived { get; set; }
+    
+    public decimal AmountRefunded { get; set; }
+    
+    public decimal AmountPending { get; set; }
 
     /// <summary>
     /// The customer id
@@ -133,6 +139,12 @@ public class PaymentRequestResult
            paymentRequest.Events != null &&
            paymentRequest.Events.Count() > 0)
         {
+            AmountReceived = paymentRequest.GetTotalAmountReceived();
+            
+            AmountRefunded = paymentRequest.GetTotalAmountRefunded();
+            
+            AmountPending = paymentRequest.GetTotalAmountPending();
+            
             var orderedEvents = paymentRequest.Events.OrderByDescending(x => x.Inserted);
 
             foreach (var payEvent in orderedEvents)
