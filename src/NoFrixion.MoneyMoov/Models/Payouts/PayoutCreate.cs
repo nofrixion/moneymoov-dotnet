@@ -186,4 +186,9 @@ public class PayoutCreate
 
         return dict;
     }
+
+    public override string ToString()
+    {
+        return $"{nameof(AccountID)}: {AccountID}, {nameof(Type)}: {Type}, {nameof(Description)}: {Description}, {nameof(Currency)}: {Currency}, {nameof(Amount)}: {Amount}, {nameof(YourReference)}: {YourReference}, {nameof(TheirReference)}: {TheirReference}, {nameof(Destination)}: {Destination}, {nameof(Scheduled)}: {Scheduled}, {nameof(ScheduleDate)}: {ScheduleDate}";
+    }
 }

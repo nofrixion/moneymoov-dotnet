@@ -20,5 +20,6 @@ public enum PayrunStatus
 {
     None = 0,
     Draft = 1,
-    Completed = 2, 
+    Submitted = 2,
+    Completed = 3, 
 }
