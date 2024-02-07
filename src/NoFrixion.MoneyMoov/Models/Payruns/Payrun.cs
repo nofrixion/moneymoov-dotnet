@@ -28,4 +28,6 @@ public class Payrun
     public DateTimeOffset Inserted { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
     public DateTimeOffset? ScheduleDate { get; set; }
+    
+    public List<PayrunSourceAccount> SourceAccounts { get; set; } = new();
 }
