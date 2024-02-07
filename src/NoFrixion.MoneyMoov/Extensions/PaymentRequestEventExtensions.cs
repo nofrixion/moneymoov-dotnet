@@ -197,7 +197,8 @@ public static class PaymentRequestEventExtensions
 
         var refundAttempts = (from cardVoidEvent in cardVoidEvents
                               where cardVoidEvent.Status == CardPaymentResponseStatus.CARD_VOIDED_SUCCESS_STATUS ||
-                                    cardVoidEvent.Status == CardPaymentResponseStatus.CARD_REFUNDED_SUCCESS_STATUS
+                                    cardVoidEvent.Status == CardPaymentResponseStatus.CARD_CYBERSOURCE_AUTHORISATION_VOIDED_SUCCESS_STATUS ||
+                                    cardVoidEvent.Status == CardPaymentResponseStatus.CARD_CYBERSOURCE_CAPTURE_VOIDED_SUCCESS_STATUS
                               select new PaymentRequestRefundAttempt
                               {
                                   RefundInitiatedAt = cardVoidEvent.Inserted,
@@ -223,7 +224,7 @@ public static class PaymentRequestEventExtensions
 
         var refundAttempts = (from cardRefundEvent in cardRefundEvents
             where cardRefundEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_REFUNDED_SUCCESS_STATUS ||
-                  cardRefundEvent.Status == CardPaymentResponseStatus.CARD_REFUNDED_SUCCESS_STATUS
+                  cardRefundEvent.Status == CardPaymentResponseStatus.CARD_CYBERSOURCE_REFUNDED_SUCCESS_STATUS
             select new PaymentRequestRefundAttempt
             {
                 RefundInitiatedAt = cardRefundEvent.Inserted,
