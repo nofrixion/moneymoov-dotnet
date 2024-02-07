@@ -62,5 +62,7 @@ public class PayrunInvoice
     public string? RemittanceEmail { get; set; }
     
     public IEnumerable<InvoicePayment>? InvoicePayments { get; set; }
+    
+    public bool IsEnabled { get; set; }
 }
 

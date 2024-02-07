@@ -22,12 +22,3 @@ public class PayrunCreate
 
     public List<PayrunInvoice> Invoices { get; set; } = new List<PayrunInvoice>();
 }
-
-public class PayrunUpdate
-{
-    public Guid ID { get; set; }
-    
-    public string Name { get; set; } = string.Empty;
-    
-    public Dictionary<CurrencyTypeEnum, Guid>? SourceAccounts { get; set; }
-}

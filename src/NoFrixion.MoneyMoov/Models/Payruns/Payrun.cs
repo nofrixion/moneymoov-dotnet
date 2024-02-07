@@ -29,5 +29,5 @@ public class Payrun
     public DateTimeOffset LastUpdated { get; set; }
     public DateTimeOffset? ScheduleDate { get; set; }
     
-    public List<PayrunSourceAccount> SourceAccounts { get; set; } = new();
+    public List<PaymentAccount> SourceAccounts { get; set; } = new();
 }
