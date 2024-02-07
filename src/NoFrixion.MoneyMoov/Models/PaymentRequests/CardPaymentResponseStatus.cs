@@ -55,6 +55,16 @@ public static class CardPaymentResponseStatus
     public const string CARD_VOIDED_SUCCESS_STATUS = "VOIDED";
 
     /// <summary>
+    /// The successful status result returned for a CyberSource void card authorisation.
+    /// </summary>
+    public const string CARD_CYBERSOURCE_AUTHORISATION_VOIDED_SUCCESS_STATUS = "REVERSED";
+
+    /// <summary>
+    /// The successful status result returned for a CyberSource void card capture or sale.
+    /// </summary>
+    public const string CARD_CYBERSOURCE_CAPTURE_VOIDED_SUCCESS_STATUS = "VOIDED";
+
+    /// <summary>
     /// The successful status for a checkout.com captured card payment.
     /// </summary>
     public const string CARD_CHECKOUT_CAPTURED_STATUS = "CAPTURED";
@@ -72,7 +82,7 @@ public static class CardPaymentResponseStatus
     /// <summary>
     /// The successful status result returned for a cybersource refund card payment request.
     /// </summary>
-    public const string CARD_REFUNDED_SUCCESS_STATUS = "PENDING";
+    public const string CARD_CYBERSOURCE_REFUNDED_SUCCESS_STATUS = "PENDING";
     
     /// <summary>
     /// The successful status result returned for a refund card payment request.
