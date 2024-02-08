@@ -34,7 +34,7 @@ public static class PaymentSchedule
         scheduleDate == null ? NO_SCHEDULED_DATE_DESCRIPTION : GetScheduleDayOnlyString(scheduleDate.Value);
 
     public static string GetScheduleDayOnlyString(DateTimeOffset scheduleDate) =>
-        $"{scheduleDate.ToString("MMM")} {GetDateSuffix(scheduleDate.Day)}";
+        $"{scheduleDate.ToString("MMM")} {scheduleDate.Day}" + (scheduleDate.Year == DateTimeOffset.Now.Year ? string.Empty : $", {scheduleDate.Year}");
 
     public static string GetDateSuffix(int num)
     {
