@@ -82,5 +82,15 @@ public enum MerchantTokenPermissionsEnum
     /// <summary>
     /// Permission to execute and get report results.
     /// </summary>
-    ExecuteReport = 4096
+    ExecuteReport = 4096,
+
+    /// <summary>
+    /// Permission to create a new payment account.
+    /// </summary>
+    CreatePaymentAccount = 8192,
+
+    /// <summary>
+    /// Permission to edit details on a payment account.
+    /// </summary>
+    EditPaymentAccount = 16384,
 }
