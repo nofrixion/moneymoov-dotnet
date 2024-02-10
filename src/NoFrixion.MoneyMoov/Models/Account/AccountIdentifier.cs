@@ -161,6 +161,15 @@ public class AccountIdentifier
         Type == AccountIdentifierType.SCAN ? Type.ToString() + ": " + SortCode + " / " + AccountNumber :
         Type == AccountIdentifierType.BTC ? Type.ToString() + ": " + BitcoinAddress :
          "No identifier.";
+    
+    /// <summary>
+    /// Summary of the account identifier's most important properties.
+    /// </summary>
+    public string DisplaySummary =>   
+        Type == AccountIdentifierType.IBAN ? IBAN :
+        Type == AccountIdentifierType.SCAN ? SortCode + " / " + AccountNumber :
+        Type == AccountIdentifierType.BTC ? BitcoinAddress :
+        "No identifier.";
 
     public virtual Dictionary<string, string> ToDictionary(string keyPrefix)
     {
