@@ -23,4 +23,5 @@ public enum PayrunStatus
     Submitted = 2,
     Completed = 3, 
     Rejected = 4,
+    AuthorisationPending = 5,
 }
