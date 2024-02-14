@@ -14,6 +14,8 @@
 //   MIT.
 //  -----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Enums;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class Payrun
@@ -28,6 +30,8 @@ public class Payrun
     public DateTimeOffset Inserted { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
     public DateTimeOffset? ScheduleDate { get; set; }
-    
+
+    public PayrunStatus Status { get; set; }
+
     public List<PaymentAccount> SourceAccounts { get; set; } = new();
 }
