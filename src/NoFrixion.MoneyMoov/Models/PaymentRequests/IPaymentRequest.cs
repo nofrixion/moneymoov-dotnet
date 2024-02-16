@@ -48,7 +48,7 @@ public interface IPaymentRequest
 
     public bool CardIgnoreCVN { get; set; }
 
-    [Obsolete("This field has been deprecated and is no longer needed to reconcile payments.")]
+    [Obsolete("This field has been deprecated. Recipient reference will be set automatically to reconcile payments.")]
     public string? PispRecipientReference { get; set; }
 
     public string? CustomerEmailAddress { get; set; }
