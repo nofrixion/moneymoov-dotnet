@@ -262,7 +262,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// </summary>
     //[RegularExpression(@"^([a-zA-Z0-9 ]{6,18})$",
     //ErrorMessage = @"The recipient reference must be between 6 and 18 characters and can only contain alphanumeric characters and space.")]
-    [Obsolete("This field has been deprecated and is no longer needed to reconcile payments.")]
+    [Obsolete("This field has been deprecated. Recipient reference will be set automatically to reconcile payments.")]
     public string? PispRecipientReference { get; set; }
 
     /// <summary>
