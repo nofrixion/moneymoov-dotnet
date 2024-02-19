@@ -31,5 +31,7 @@ public enum ApproveTypesEnum
 
     PayByNoFrixion = 6,
     
-    Beneficiary = 7
+    Beneficiary = 7,
+    
+    Payrun = 8
 }
