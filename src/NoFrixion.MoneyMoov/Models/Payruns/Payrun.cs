@@ -41,4 +41,8 @@ public class Payrun
     public PayrunStatus Status { get; set; }
 
     public List<PaymentAccount> SourceAccounts { get; set; } = new();
+    
+    public User? LastUpdatedBy { get; set; } = null!;
+    
+    public User? Authoriser { get; set; } = null!;
 }
