@@ -21,24 +21,26 @@ namespace NoFrixion.MoneyMoov.Models;
 public class Payrun
 {
     public Guid ID { get; set; }
-    
+
     public Guid? BatchPayoutID { get; set; }
-    
+
     public string? Name { get; set; }
-    
+
     public Guid MerchantID { get; set; }
 
     public List<PayrunInvoice> Invoices { get; set; } = null!;
 
     public decimal TotalAmount { get; set; }
-    
+
     public DateTimeOffset Inserted { get; set; }
-    
+
     public DateTimeOffset LastUpdated { get; set; }
-    
+
     public DateTimeOffset? ScheduleDate { get; set; }
 
     public PayrunStatus Status { get; set; }
+
+    public string? Notes { get; set; }
 
     public List<PaymentAccount> SourceAccounts { get; set; } = new();
     
