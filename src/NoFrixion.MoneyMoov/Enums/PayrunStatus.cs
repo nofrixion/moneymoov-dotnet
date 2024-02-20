@@ -25,4 +25,5 @@ public enum PayrunStatus
     Rejected = 4,
     AuthorisationPending = 5,
     PayoutsCreated = 6,
+    Edited = 7,
 }
