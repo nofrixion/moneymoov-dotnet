@@ -25,6 +25,11 @@ public class Payout : IValidatableObject, IWebhookPayload
     public Guid ID { get; set; }
 
     /// <summary>
+    /// The ID of the payrun that this payout is associated with.
+    /// </summary>
+    public Guid? PayrunID { get; set; }
+    
+    /// <summary>
     /// Gets or Sets Account Id of sending account
     /// </summary>
     public Guid AccountID { get; set; }
