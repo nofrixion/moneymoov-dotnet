@@ -41,6 +41,8 @@ public class Payrun
     public PayrunStatus Status { get; set; }
 
     public string? Notes { get; set; }
+    
+    public string? RejectReason { get; set; }
 
     public List<PaymentAccount> SourceAccounts { get; set; } = new();
     
