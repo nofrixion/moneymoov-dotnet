@@ -200,4 +200,54 @@ public class PayoutsValidatorTests
             Assert.StartsWith(expectedTheirReference, safeTheirRef);
         }
     }
+
+    [Fact]
+    public void GetReferencesFromInvoices()
+    {
+        // var more = " +3 more";
+        
+        var invoiceReferences = new List<string?>
+        {
+            "ref-17555555777777",
+            "ref-1",
+            "ref-2",
+            "ref-3",
+            "ref-4",
+            "ref-5",
+            "ref-6",
+            "ref-7",
+            "ref-8",
+            "ref-9",
+            "ref-10",
+            "ref-11",
+            "ref-12",
+            "ref-13",
+            "ref-14",
+            "ref-15",
+            "ref-16",
+            "ref-175555557",
+            "ref-18",
+            "ref-19",
+            "ref-20",
+            "ref-21",
+            "ref-22",
+            "ref-23",
+            "ref-24",
+        };
+        
+        var theirReferenceIban = PayoutsValidator.GetTheirReferenceFromInvoices(CurrencyTypeEnum.EUR, invoiceReferences);
+        
+        _logger.LogDebug(theirReferenceIban);
+        _logger.LogDebug("Their IBAN reference length={Length}", theirReferenceIban.Length);
+        
+        var theirReferenceScan = PayoutsValidator.GetTheirReferenceFromInvoices(CurrencyTypeEnum.GBP, invoiceReferences);
+        
+        _logger.LogDebug(theirReferenceScan);
+        _logger.LogDebug("Their SCAN reference length={Length}", theirReferenceScan.Length);
+        
+        var yourReference = PayoutsValidator.GetYourReferenceFromInvoices(invoiceReferences);
+        
+        _logger.LogDebug(yourReference);
+        _logger.LogDebug("Your reference length={YourReferenceLength}", yourReference.Length);
+    }
 }
