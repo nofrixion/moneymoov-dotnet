@@ -147,7 +147,10 @@ public static class PaymentRequestExtensions
                                                             (x.EventType == PaymentRequestEventTypesEnum.pisp_settle) ||
                                                             (x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure) ||
                                                             (x.EventType == PaymentRequestEventTypesEnum.pisp_refund_initiated) ||
-                                                            (x.EventType == PaymentRequestEventTypesEnum.pisp_refund_settled)))
+                                                            (x.EventType == PaymentRequestEventTypesEnum.pisp_refund_settled) ||
+                                                            (x.EventType == PaymentRequestEventTypesEnum.direct_debit_initiate) ||
+                                                            (x.EventType == PaymentRequestEventTypesEnum.direct_debit_paid) ||
+                                                            (x.EventType == PaymentRequestEventTypesEnum.direct_debit_failed)))
             .OrderBy(x => x.Inserted)
             .GroupBy(x => x.PispPaymentInitiationID)
             .ToList();
@@ -160,7 +163,8 @@ public static class PaymentRequestExtensions
                 attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_initiate).FirstOrDefault() ??
                 attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_callback).FirstOrDefault() ??
                 attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_webhook).FirstOrDefault() ??
-                attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle).FirstOrDefault();
+                attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle).FirstOrDefault() ??
+                attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.direct_debit_initiate).FirstOrDefault();
 
             if (initiateEvent != null)
             {
@@ -233,6 +237,21 @@ public static class PaymentRequestExtensions
                 {
                     var settleFailedEvent = attempt.First(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure);
 
+                    paymentAttempt.SettleFailedAt = settleFailedEvent.Inserted;
+                }
+                else if (attempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.direct_debit_paid))
+                {
+                    var settleEvent = attempt.First(x => x.EventType == PaymentRequestEventTypesEnum.direct_debit_paid);
+                    
+                    paymentAttempt.SettledAt = settleEvent.Inserted;
+                    paymentAttempt.SettledAmount = settleEvent.Amount;
+                    paymentAttempt.ReconciledTransactionID = settleEvent.ReconciledTransactionID;
+                }
+                else if (attempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.direct_debit_failed))
+                {
+                    var settleFailedEvent =
+                        attempt.First(x => x.EventType == PaymentRequestEventTypesEnum.direct_debit_failed);
+                    
                     paymentAttempt.SettleFailedAt = settleFailedEvent.Inserted;
                 }
 
