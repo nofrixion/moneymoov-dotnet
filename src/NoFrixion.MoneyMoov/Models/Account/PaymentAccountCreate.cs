@@ -43,7 +43,7 @@ public class PaymentAccountCreate
     /// An error is returned if an attempt is made to create an account with a non-supported
     /// processor.
     /// </summary>
-    public PaymentProcessorsEnum PaymentProcessor { get; set; } = PaymentProcessorsEnum.Modulr;
+    public PaymentProcessorsEnum PaymentProcessor { get; set; } = PaymentProcessorsEnum.BankingCircleAgency;
 
     /// <summary>
     /// Places all the payment request's properties into a dictionary.
