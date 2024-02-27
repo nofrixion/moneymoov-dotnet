@@ -26,7 +26,7 @@ public class PayrunEvent
 
     public PayrunEventTypeEnum Type { get; set; }
     
-    public DateTimeOffset Inserted { get; set; }
+    public DateTimeOffset TimeStamp { get; set; }
     
     public User? User { get; set; }
 }

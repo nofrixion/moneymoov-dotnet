@@ -40,15 +40,9 @@ public class Payrun
 
     public PayrunStatus Status { get; set; }
 
-    public string? Notes { get; set; }
-    
-    public string? RejectReason { get; set; }
-
     public List<PaymentAccount> SourceAccounts { get; set; } = new();
     
     public User? LastUpdatedBy { get; set; } = null!;
-    
-    public User? Authoriser { get; set; } = null!;
     
     public List<PayrunEvent> Events { get; set; } = new();
 }
