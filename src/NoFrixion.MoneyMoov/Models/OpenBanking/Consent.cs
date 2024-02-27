@@ -21,6 +21,9 @@ namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 public class Consent
 {
     public Guid ID { get; set; }
+
+    public Guid MerchantID { get; set; }
+
     public string InstitutionID { get; set; } = string.Empty;
     public string EmailAddress { get; set; } = string.Empty;
     public bool IsEnabled { get; set; }
