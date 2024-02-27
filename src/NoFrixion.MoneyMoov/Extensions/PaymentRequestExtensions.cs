@@ -149,7 +149,7 @@ public static class PaymentRequestExtensions
                                                             (x.EventType == PaymentRequestEventTypesEnum.pisp_refund_initiated) ||
                                                             (x.EventType == PaymentRequestEventTypesEnum.pisp_refund_settled) ||
                                                             (x.EventType == PaymentRequestEventTypesEnum.direct_debit_initiate) ||
-                                                            (x.EventType == PaymentRequestEventTypesEnum.direct_debit_paid) ||
+                                                            (x.EventType == PaymentRequestEventTypesEnum.direct_debit_create) ||
                                                             (x.EventType == PaymentRequestEventTypesEnum.direct_debit_failed)))
             .OrderBy(x => x.Inserted)
             .GroupBy(x => x.PispPaymentInitiationID)
@@ -182,8 +182,10 @@ public static class PaymentRequestExtensions
                 };
 
                 foreach (var pispCallbackOrWebhook in attempt.Where(x =>
-                    x.EventType == PaymentRequestEventTypesEnum.pisp_callback ||
-                    x.EventType == PaymentRequestEventTypesEnum.pisp_webhook))
+                    x.EventType is 
+                        PaymentRequestEventTypesEnum.pisp_callback or
+                        PaymentRequestEventTypesEnum.pisp_webhook or
+                        PaymentRequestEventTypesEnum.direct_debit_create))
                 {
                     var authorisationEvent = pispCallbackOrWebhook switch
                     {
@@ -205,6 +207,8 @@ public static class PaymentRequestExtensions
                             && cbk.Status == PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS => cbk,
                         PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.Simulator
                             && cbk.Status == PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS => cbk,
+                        PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.BankingCircleDirectDebit
+                            && cbk.Status == PaymentRequestResult.PISP_BANKINGCIRCLE_DIRECTDEBIT_CREATED_STATUS => cbk,
                         _ => null
                     };
 
@@ -233,25 +237,16 @@ public static class PaymentRequestExtensions
 
                     paymentAttempt.RefundAttempts = GetPispRefundAttempts(events, settleEvent.PispPaymentInitiationID!).ToList();
                 }
-                else if (attempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure))
+                else if (attempt.Any(x => 
+                             x.EventType is 
+                                 PaymentRequestEventTypesEnum.pisp_settle_failure or
+                                 PaymentRequestEventTypesEnum.direct_debit_failed))
                 {
-                    var settleFailedEvent = attempt.First(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure);
+                    var settleFailedEvent = attempt.First(x => 
+                        x.EventType is 
+                            PaymentRequestEventTypesEnum.pisp_settle_failure or
+                            PaymentRequestEventTypesEnum.direct_debit_failed);
 
-                    paymentAttempt.SettleFailedAt = settleFailedEvent.Inserted;
-                }
-                else if (attempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.direct_debit_paid))
-                {
-                    var settleEvent = attempt.First(x => x.EventType == PaymentRequestEventTypesEnum.direct_debit_paid);
-                    
-                    paymentAttempt.SettledAt = settleEvent.Inserted;
-                    paymentAttempt.SettledAmount = settleEvent.Amount;
-                    paymentAttempt.ReconciledTransactionID = settleEvent.ReconciledTransactionID;
-                }
-                else if (attempt.Any(x => x.EventType == PaymentRequestEventTypesEnum.direct_debit_failed))
-                {
-                    var settleFailedEvent =
-                        attempt.First(x => x.EventType == PaymentRequestEventTypesEnum.direct_debit_failed);
-                    
                     paymentAttempt.SettleFailedAt = settleFailedEvent.Inserted;
                 }
 
