@@ -21,7 +21,7 @@ public static class PaymentAmount
     /// Combines the display currency symbol and amount.
     /// </summary>
     public static string DisplayCurrencyAndAmount(CurrencyTypeEnum currency, decimal amount) =>
-        GetCurrencySymbol(currency) +  GetDisplayAmount(currency, amount);
+        GetCurrencySymbol(currency) + " " + GetDisplayAmount(currency, amount);
 
     public static string GetDisplayAmount(CurrencyTypeEnum currency, decimal amount) =>
         IsFiat(currency) ? amount.ToString("N2") : amount.ToString("N8");

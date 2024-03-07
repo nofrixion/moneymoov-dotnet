@@ -340,4 +340,59 @@ public static class PayoutsValidator
             return ValidateTheirReference(theirReference, identifierType) ? theirReference : fallbackTheirReference;
         }
     }
+    
+    public static string GetYourReferenceFromInvoices(List<string?> invoiceReferences)
+    {
+        return GetDelimitedStringInRange(invoiceReferences, YOUR_REFERENCE_MAXIMUM_LENGTH);
+    }
+    
+    public static string GetTheirReferenceFromInvoices(CurrencyTypeEnum currency, List<string?> invoiceReferences)
+    {
+        var maxLength = currency == CurrencyTypeEnum.GBP ? THEIR_REFERENCE_SCAN_MAXIMUM_LENGTH : THEIR_REFERENCE_IBAN_MAXIMUM_LENGTH;
+        
+        return MakeSafeTheirReference(currency == CurrencyTypeEnum.EUR ? AccountIdentifierType.IBAN : AccountIdentifierType.SCAN, GetDelimitedStringInRange(invoiceReferences, maxLength));
+    }
+    
+    /// <summary>
+    /// Builds a delimted string from a list of strings, ensuring the total length does not exceed the character limit.
+    /// </summary>
+    /// <param name="collection">The collection of strings</param>
+    /// <param name="characterLimit">The character limit</param>
+    /// <returns>A delimited string</returns>
+    private static string GetDelimitedStringInRange(List<string?> collection, int characterLimit)
+    {
+        const string more = " ...";
+        
+        var sb = new StringBuilder(characterLimit);
+        var remaining = collection.Count;
+        
+        foreach(var s in collection)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                continue;
+            }
+            
+            if (remaining == collection.Count && s.Length > characterLimit)
+            {
+                return s[..(characterLimit - 3)] + "...";
+            }
+            
+            if (sb.Length + 2 + s.Length > characterLimit - more.Length)
+            {
+                sb.Append(more);
+                break;
+            }
+            
+            if (sb.Length > 0)
+            {
+                sb.Append(" . ");
+            }
+            
+            sb.Append(s);
+            remaining--;
+        }
+
+        return sb.ToString();
+    }
 }

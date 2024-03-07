@@ -189,7 +189,7 @@ public class PaymentRequestUpdate
     public bool? IgnoreAddressVerification { get; set; }
     public bool? CardIgnoreCVN { get; set; }
 
-    [Obsolete("This field will be set automatically to ensure the best chance of matching a payin to a payment reuqest.")]
+    [Obsolete("This field has been deprecated. Recipient reference will be set automatically to reconcile payments.")]
     public string? PispRecipientReference { get; set; }
 
     /// <summary>

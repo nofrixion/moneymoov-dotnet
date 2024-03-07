@@ -164,6 +164,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// on the payee's transaction record. Note that it is not guaranteed that the sending bank will use this
     /// reference and in practice it has been observed to be supported by only half to two thirds of banks.
     /// </summary>
+    [Obsolete("This field has been deprecated. Recipient reference will be set automatically to reconcile payments.")]
     public string? PispRecipientReference { get; set; }
 
     /// <summary>
