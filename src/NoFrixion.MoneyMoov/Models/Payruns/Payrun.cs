@@ -46,5 +46,7 @@ public class Payrun
     
     public List<PayrunEvent> Events { get; set; } = new();
     
-    public List<Payout> Payouts { get; set; } = new();
+    public List<Payout>? Payouts { get; set; }
+    
+    public List<PayrunPayment>? Payments { get; set; }
 }
