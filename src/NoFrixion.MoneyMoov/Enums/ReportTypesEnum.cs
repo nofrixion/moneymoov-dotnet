@@ -23,4 +23,9 @@ public enum ReportTypesEnum
     /// A SWIFT MT940 Customer Statement report.
     /// </summary>
     SwiftCustomerStatement = 1,
+
+    /// <summary>
+    /// A customer activity report for MoneyMoov. 
+    /// </summary>
+    CustomerActivity = 2,
 }

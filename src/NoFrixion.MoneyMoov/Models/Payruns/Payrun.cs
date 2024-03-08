@@ -45,4 +45,8 @@ public class Payrun
     public User? LastUpdatedBy { get; set; } = null!;
     
     public List<PayrunEvent> Events { get; set; } = new();
+    
+    public List<Payout>? Payouts { get; set; }
+    
+    public List<PayrunPayment>? Payments { get; set; }
 }
