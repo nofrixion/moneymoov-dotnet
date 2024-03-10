@@ -28,7 +28,7 @@ public class Payrun
 
     public Guid MerchantID { get; set; }
 
-    public List<PayrunInvoice>? Invoices { get; set; } = null!;
+    public List<PayrunInvoice> Invoices { get; set; } = null!;
 
     public decimal TotalAmount { get; set; }
 
