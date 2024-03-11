@@ -81,5 +81,10 @@ public enum NoFrixionClaimsEnum
 
     approvesignature,
 
-    approveamr
+    approveamr,
+
+    /// <summary>
+    /// Set to true if the authenticated identity is for a NoFrixion operations officer.
+    /// </summary>
+    isoperations
 }
