@@ -132,4 +132,29 @@ public enum PaymentRequestEventTypesEnum
     /// A previously generated Bitcoin Lightning invoice was cancelled.
     /// </summary>
     lightning_invoice_cancelled = 20,
+    
+    /// <summary>
+    /// Just initiated a Direct Debit payment process.
+    /// </summary>
+    direct_debit_initiate = 21,
+    
+    /// <summary>
+    /// Customer and payment info has been sent to Banking Circle for processing.
+    /// </summary>
+    direct_debit_create = 22,
+    
+    /// <summary>
+    /// Received a state change notification from Banking Circle for a direct debit payment.
+    /// </summary>
+    direct_debit_state_change = 23,
+    
+    /// <summary>
+    /// Received a notification from Banking Circle that a direct debit payment has been paid.
+    /// </summary>
+    direct_debit_paid = 24,
+    
+    /// <summary>
+    /// Received a final negative status update from a Banking Circle direct debit payment.
+    /// </summary>
+    direct_debit_failed = 25
 }
