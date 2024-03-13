@@ -133,6 +133,12 @@ public static class IdentityExtensions
     public static bool IsComplianceOfficer(this IIdentity identity)
         => IsComplianceOfficer(identity as ClaimsIdentity);
 
+    public static bool IsOperationsOfficer(this IIdentity identity)
+        => IsOperationsOfficer(identity as ClaimsIdentity);
+
+    public static bool IsNoFrixionOfficer(this IIdentity identity)
+        => IsComplianceOfficer(identity as ClaimsIdentity) || IsOperationsOfficer(identity as ClaimsIdentity);
+
     public static bool IsComplianceOfficer(this ClaimsIdentity claimsIdentity)
     {
         if (claimsIdentity == null)
@@ -146,6 +152,19 @@ public static class IdentityExtensions
         }
     }
 
+    public static bool IsOperationsOfficer(this ClaimsIdentity claimsIdentity)
+    {
+        if (claimsIdentity == null)
+        {
+            return false;
+        }
+        else
+        {
+            var isOperationsOfficerClaimType = ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.isoperations;
+            return claimsIdentity.Claims.Any(x => x.Type == isOperationsOfficerClaimType && x.Value == Boolean.TrueString);
+        }
+    }
+
     public static bool IsUserToken(this IIdentity identity)
     {
         var claimsIdentity = identity as ClaimsIdentity;
@@ -156,7 +175,7 @@ public static class IdentityExtensions
         }
         else
         {
-            return !identity.IsComplianceOfficer() && claimsIdentity.Claims.Any(x => x.Type == ClaimTypes.Name);
+            return !identity.IsNoFrixionOfficer() && claimsIdentity.Claims.Any(x => x.Type == ClaimTypes.Name);
         }
     }
 
@@ -179,6 +198,10 @@ public static class IdentityExtensions
         if (claimsIdentity.IsComplianceOfficer())
         {
             return "Compliance " + claimsIdentity.GetEmailAddress();
+        }
+        if (claimsIdentity.IsOperationsOfficer())
+        {
+            return "Operations " + claimsIdentity.GetEmailAddress();
         }
         else
         {

@@ -28,7 +28,7 @@ public class Payrun
 
     public Guid MerchantID { get; set; }
 
-    public List<PayrunInvoice> Invoices { get; set; } = null!;
+    public List<PayrunInvoice>? Invoices { get; set; } = null!;
 
     public decimal TotalAmount { get; set; }
 
@@ -45,4 +45,8 @@ public class Payrun
     public User? LastUpdatedBy { get; set; } = null!;
     
     public List<PayrunEvent> Events { get; set; } = new();
+    
+    public List<Payout>? Payouts { get; set; }
+    
+    public List<PayrunPayment>? Payments { get; set; }
 }
