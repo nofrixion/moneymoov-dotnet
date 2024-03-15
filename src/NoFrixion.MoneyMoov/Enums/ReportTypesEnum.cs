@@ -28,4 +28,9 @@ public enum ReportTypesEnum
     /// A customer activity report for MoneyMoov. 
     /// </summary>
     CustomerActivity = 2,
+
+    /// <summary>
+    /// A reconciliation report for safegaurded accounts.
+    /// </summary>
+    SafeGuardingReconciliation = 3
 }
