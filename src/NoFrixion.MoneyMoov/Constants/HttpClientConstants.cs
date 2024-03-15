@@ -35,6 +35,8 @@ public static class HttpClientConstants
 
     public static string HTTP_BANKINGCIRCLE_AUTHORISATION_CLIENT_NAME = "BankingCircleAuthorisationClient";
 
+    public static string HTTP_BANKINGCIRCLE_DIRECTDEBIT_API_CLIENT_NAME = "BankingCircleDirectDebitApiClient";
+
     /// <summary>
     /// The minimum value the timeout for the HTTP client timeout can be set to. The HTTP client
     /// timeout is for services, such as Modulr and CyberSource, that use HTTP clients to

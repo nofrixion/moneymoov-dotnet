@@ -70,5 +70,11 @@ public enum TransactionTypesEnum
     LBTC = 8,
 
     [Display(Name = "Lightning Bitcoin Testnet")]
-    LBTC_TEST = 9
+    LBTC_TEST = 9,
+    
+    /// <summary>
+    /// The European Union, SEPA Direct Debit network.
+    /// </summary>
+    [Display(Name = "SEPA Direct Debit")]
+    SEPA_DD = 10
 }

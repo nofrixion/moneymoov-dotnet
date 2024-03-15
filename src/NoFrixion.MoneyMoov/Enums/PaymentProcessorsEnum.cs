@@ -95,6 +95,11 @@ public enum PaymentProcessorsEnum
     /// <summary>
     /// Processed on Lightning Bitcoin testnet.
     /// </summary>
-    LightningTestnet
+    LightningTestnet,
+    
+    /// <summary>
+    /// To pay with SEPA Direct Debit, handled by Banking Circle.
+    /// </summary>
+    BankingCircleDirectDebit
 }
 
