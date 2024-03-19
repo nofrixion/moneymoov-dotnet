@@ -19,7 +19,7 @@ namespace NoFrixion.MoneyMoov.Models;
 public class Report : IWebhookPayload
 {
     public Guid ID { get; set; }
-    public Guid MerchantID { get; set; }
+    public Guid? MerchantID { get; set; }
     public Guid? CreatedByUserID { get; set; }
     public ReportTypesEnum ReportType { get; set; }
     public string ReportName { get; set; } = string.Empty;
