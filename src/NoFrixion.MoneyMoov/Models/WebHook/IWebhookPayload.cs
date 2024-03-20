@@ -19,7 +19,7 @@ public interface IWebhookPayload
 {
     public Guid ID { get; set; }
 
-    public Guid? MerchantID { get; set; }
+    public Guid MerchantID { get; set; }
 
     public DateTimeOffset Inserted { get; set; }
 }
