@@ -81,6 +81,11 @@ namespace NoFrixion.MoneyMoov
         /// <summary>
         /// A payout was rejected by an approver.
         /// </summary>
-        RejectedApproval = 12
+        RejectedApproval = 12,
+
+        /// <summary>
+        /// The payout has been authorised due to a submission from a trusted source.
+        /// </summary>
+        TrustedAuthorise = 13
     }
 }
