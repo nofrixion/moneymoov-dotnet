@@ -93,4 +93,9 @@ public enum MerchantTokenPermissionsEnum
     /// Permission to edit details on a payment account.
     /// </summary>
     EditPaymentAccount = 16384,
+
+    /// <summary>
+    /// Permission to create and submit a payout from a trusted source.
+    /// </summary>
+    TrustedSubmitPayout = 32768
 }

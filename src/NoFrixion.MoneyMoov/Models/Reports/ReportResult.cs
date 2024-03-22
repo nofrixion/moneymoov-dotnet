@@ -18,7 +18,7 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class ReportResult
 {
-    public Guid MerchantID { get; set; }
+    public Guid? MerchantID { get; set; }
     public ReportTypesEnum ReportType { get; set; }
     public string ReportName { get; set; } = string.Empty;
     public DateTimeOffset LastCompletedAt { get; set; }
