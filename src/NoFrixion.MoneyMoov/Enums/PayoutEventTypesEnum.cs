@@ -86,6 +86,11 @@ namespace NoFrixion.MoneyMoov
         /// <summary>
         /// The payout has been authorised due to a submission from a trusted source.
         /// </summary>
-        TrustedAuthorise = 13
+        TrustedAuthorise = 13,
+        
+        /// <summary>
+        /// The payout has been signed.
+        /// </summary>
+        Signed = 14
     }
 }
