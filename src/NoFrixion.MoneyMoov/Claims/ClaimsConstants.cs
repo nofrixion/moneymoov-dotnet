@@ -23,4 +23,8 @@ public static class ClaimsConstants
     /// The prefix NoFrixion Identity use on the name ID scope in their tokens.
     /// </summary>
     public const string NOFRIXION_NAMEID_PREFIX = "nf|";
+    
+    public const string TWO_FACTOR_ENABLED = "two_factor_enabled";
+    
+    public const string PASSKEY_ADDED = "passkey_added";
 }
