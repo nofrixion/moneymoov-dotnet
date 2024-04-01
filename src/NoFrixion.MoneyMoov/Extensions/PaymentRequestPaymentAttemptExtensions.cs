@@ -29,6 +29,8 @@ public static class PaymentRequestPaymentAttemptExtensions
                 .SettledAmount,
             var att when att.PaymentMethod == PaymentMethodTypeEnum.card && att.CardAuthorisedAmount > 0 => att
                 .CardAuthorisedAmount,
+            var att when att.PaymentMethod == PaymentMethodTypeEnum.directDebit && att.SettledAmount > 0 => att
+                .SettledAmount,
             _ => 0
         };
 
