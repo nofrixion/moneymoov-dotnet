@@ -33,6 +33,7 @@ public static class PaymentRequestExtensions
             paymentAttempts.AddRange(GetCardPaymentAttempts(events));
             paymentAttempts.AddRange(GetPispPaymentAttempts(events));
             paymentAttempts.AddRange(GetLightningPaymentAttempts(events));
+            paymentAttempts.AddRange(GetDirectDebitPaymentAttempts(events));
 
             return paymentAttempts;
         }
@@ -371,5 +372,68 @@ public static class PaymentRequestExtensions
         }
 
         return lightningPaymentAttempts;
+    }
+
+    /// <summary>
+    /// Gets payment requests attempts for Direct Debit payments.
+    /// </summary>
+    /// <param name="events">Entire list of payment request events</param>
+    /// <returns>List of Direct Debit payment attempts.</returns>
+    public static IEnumerable<PaymentRequestPaymentAttempt> GetDirectDebitPaymentAttempts(this IEnumerable<PaymentRequestEvent> events)
+    {
+        var ddPaymentAttempts = new List<PaymentRequestPaymentAttempt>();
+        
+        var ddAttempts = events
+            .Where(x => x.EventType is
+                PaymentRequestEventTypesEnum.direct_debit_create or
+                PaymentRequestEventTypesEnum.direct_debit_failed or 
+                PaymentRequestEventTypesEnum.direct_debit_paid)
+            .OrderBy(x => x.Inserted)
+            .GroupBy(x => x.DirectDebitPaymentID)
+            .ToList();
+        
+        foreach (var attempt in ddAttempts)
+        {
+            var createEvent = attempt.FirstOrDefault(x =>
+                x.EventType is PaymentRequestEventTypesEnum.direct_debit_create);
+
+            if (createEvent is null)
+            {
+                continue;
+            }
+            
+            var paymentAttempt = new PaymentRequestPaymentAttempt
+            {
+                AttemptKey = attempt.Key ?? string.Empty,
+                PaymentRequestID = createEvent.PaymentRequestID,
+                InitiatedAt = createEvent.Inserted,
+                PaymentMethod = PaymentMethodTypeEnum.directDebit,
+                Currency = createEvent.Currency,
+                AttemptedAmount = createEvent.Amount,
+                PaymentProcessor = createEvent.PaymentProcessorName
+            };
+            
+            if (attempt.Any(x => 
+                    x.EventType is PaymentRequestEventTypesEnum.direct_debit_paid))
+            {
+                var paidEvent = attempt.First(x => 
+                    x.EventType is PaymentRequestEventTypesEnum.direct_debit_paid);
+
+                paymentAttempt.AuthorisedAt = paidEvent.Inserted;
+                paymentAttempt.AuthorisedAmount = paidEvent.Amount;
+            }
+            else if (attempt.Any(x => 
+                         x.EventType is PaymentRequestEventTypesEnum.direct_debit_failed))
+            {
+                var settleFailedEvent = attempt.First(x => 
+                    x.EventType is PaymentRequestEventTypesEnum.direct_debit_failed);
+
+                paymentAttempt.SettleFailedAt = settleFailedEvent.Inserted;
+            }
+
+            ddPaymentAttempts.Add(paymentAttempt);
+        }
+
+        return ddPaymentAttempts;
     }
 }

@@ -77,4 +77,9 @@ public class MerchantPayByBankSetting
     /// Optional image URL to be displayed with the message.
     /// </summary>
     public string? MessageImageUrl { get; set; }
+
+    /// <summary>
+    /// The list of country codes representing the banks the country supports.
+    /// </summary>
+    public List<string> BankCountryCodes { get; set; } = new List<string>();
 }

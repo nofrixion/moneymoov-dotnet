@@ -225,6 +225,37 @@ public class PaymentRequestResult
                 }
             }
 
+            foreach (var attempt in paymentAttempts.Where(x => x.PaymentMethod == PaymentMethodTypeEnum.directDebit))
+            {
+                if (attempt.Status == PaymentResultEnum.FullyPaid ||
+                    attempt.Status == PaymentResultEnum.PartiallyPaid ||
+                    attempt.Status == PaymentResultEnum.OverPaid)
+                {
+                    Payments.Add(
+                        new PaymentRequestPayment
+                        {
+                            PaymentRequestID = PaymentRequestID,
+                            OccurredAt = attempt.InitiatedAt,
+                            PaymentMethod = PaymentMethodTypeEnum.directDebit,
+                            Amount = Math.Round(attempt.SettledAmount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                            Currency = attempt.Currency,
+                            RefundedAmount = Math.Round(attempt.RefundAttempts.Sum(x => x.RefundSettledAmount), PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                        });
+                }
+                else if (attempt.Status == PaymentResultEnum.Authorized)
+                {
+                    PispAuthorizations.Add(
+                        new PaymentRequestAuthorization
+                        {
+                            PaymentRequestID = PaymentRequestID,
+                            OccurredAt = attempt.InitiatedAt,
+                            PaymentMethod = PaymentMethodTypeEnum.directDebit,
+                            Amount = Math.Round(attempt.AuthorisedAmount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                            Currency = attempt.Currency,
+                        });
+                }
+            }
+
             Currency = paymentRequest.Currency;
             Amount = Payments.Where(x => x.Currency == Currency).Sum(x => x.Amount)
                      - Payments.Where(x => x.Currency == Currency).Sum(x => x.RefundedAmount); // Refunds are negative payments.

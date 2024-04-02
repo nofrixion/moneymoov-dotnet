@@ -50,5 +50,10 @@ public enum PaymentMethodTypeEnum
     /// <summary>
     /// Pay with Google Pay
     /// </summary>
-    googlePay = 32
+    googlePay = 32,
+    
+    /// <summary>
+    /// Pay with BankingCircle Direct Debit.
+    /// </summary>
+    directDebit = 64
 }

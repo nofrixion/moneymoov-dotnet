@@ -81,15 +81,10 @@ public abstract class ApiPageResponseBase<T> : PageResponse<T>
         // to ensure "content" is required (not null)
         Content = content ?? throw new ArgumentNullException("content is a required property for PageResponse and cannot be null");
         PageNumber = pageNumber;
-        PageSize = pageSize > maxPageSize ? maxPageSize : pageSize;
+        PageSize = pageSize;
         TotalPages = totalPages;
         TotalSize = totalSize;
     }
-
-    /// <summary>
-    /// Max size of each page
-    /// </summary>
-    const int maxPageSize = 50;
 
     /// <summary>
     /// Returns the string presentation of the object
