@@ -312,14 +312,20 @@ public class Payout : IValidatableObject, IWebhookPayload
     public List<string>? AuthorisedBy { get; set; }
 
     /// <summary>
-    /// If the payout destination is a beneficairy this will be the ID of it's identifier.
+    /// If the payout destination is a beneficiary this will be the ID of it's identifier.
     /// </summary>
     public Guid? BeneficiaryIdentifierID { get; set; }
 
     /// <summary>
     /// If the payout is using a beneficiary for the destination this is the name of the it.
     /// </summary>
+    [Obsolete("Please use Beneficiary.")]
     public string? BeneficiaryName { get; set; }
+    
+    /// <summary>
+    /// Optional beneficiary associated with the payout.
+    /// </summary>
+    public Beneficiary? Beneficiary { get; set; }
 
     /// <summary>
     /// The activity associated with the payout.
