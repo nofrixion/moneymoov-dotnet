@@ -17,7 +17,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace NoFrixion.MoneyMoov;
 
@@ -76,5 +75,17 @@ public enum TransactionTypesEnum
     /// The European Union, SEPA Direct Debit network.
     /// </summary>
     [Display(Name = "SEPA Direct Debit")]
-    SEPA_DD = 10
+    SEPA_DD = 10,
+
+    /// <summary>
+    /// Payment was sent, or received, over a SEPA scheme but the exact one is unknown.
+    /// </summary>
+    [Display(Name = "SEPA")]
+    SEPA = 11,
+
+    /// <summary>
+    /// The transaction type was not recognised.
+    /// </summary>
+    [Display(Name = "Unknown type")]
+    Unknown = 12
 }
