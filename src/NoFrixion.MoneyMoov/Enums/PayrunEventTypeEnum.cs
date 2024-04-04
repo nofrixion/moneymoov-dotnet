@@ -33,6 +33,4 @@ public enum PayrunEventTypeEnum
     AuthorisationRequested = 6,
     
     Completed = 7,
-    
-    Approved = 8,
 }
