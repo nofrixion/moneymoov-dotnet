@@ -86,5 +86,9 @@ public enum NoFrixionClaimsEnum
     /// <summary>
     /// Set to true if the authenticated identity is for a NoFrixion operations officer.
     /// </summary>
-    isoperations
+    isoperations,
+    
+    two_factor_enabled,
+    
+    passkey_added
 }

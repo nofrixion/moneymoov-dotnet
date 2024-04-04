@@ -25,6 +25,20 @@ namespace NoFrixion.MoneyMoov.Claims;
 
 public static class IdentityExtensions
 {
+    public static bool TwoFactorEnabled(this IIdentity identity)
+    {
+        var twoFactorEnabledClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == NoFrixionClaimsEnum.two_factor_enabled.ToString())?.Value;
+
+        return bool.TryParse(twoFactorEnabledClaim, out var twoFactorEnabled) && twoFactorEnabled;
+    }
+    
+    public static bool PasskeyAdded(this IIdentity identity)
+    {
+        var passkeyClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == NoFrixionClaimsEnum.passkey_added.ToString())?.Value;
+
+        return bool.TryParse(passkeyClaim, out var passkeyEnabled) && passkeyEnabled;
+    }
+    
     public static Guid GetMerchantId(this IIdentity identity)
     {
         var merchantIDClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.merchantid)?.Value;
