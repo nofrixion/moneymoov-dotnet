@@ -35,5 +35,9 @@ public class UserRole
     public string EmailAddress { get; set; }
 
     public UserRolesEnum RoleType { get; set; }
+    
+    public DateTimeOffset DateJoined { get; set; }
+    
+    public string InvitedBy { get; set; }
 }
 
