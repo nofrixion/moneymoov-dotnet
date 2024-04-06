@@ -25,7 +25,7 @@ public class PaymentAccountCreate
     public Guid MerchantID { get; set;}
 
     /// <summary>
-    /// Currency for the account, only EUR and GBP are supported.
+    /// Currency for the account, only EUR, GBP, and in sandbox BTC are supported.
     /// </summary>
     public CurrencyTypeEnum Currency { get; set; } = CurrencyTypeEnum.EUR;
 
@@ -43,7 +43,13 @@ public class PaymentAccountCreate
     /// An error is returned if an attempt is made to create an account with a non-supported
     /// processor.
     /// </summary>
-    public PaymentProcessorsEnum PaymentProcessor { get; set; } = PaymentProcessorsEnum.BankingCircleAgency;
+    [Obsolete("This property is not used. The PaymentProcessor will be set by default.")]
+    public PaymentProcessorsEnum PaymentProcessor { get; set; } = PaymentProcessorsEnum.None;
+
+    /// <summary>
+    /// For internal use only. Leave empty unless requested otherwise.
+    /// </summary>
+    public Guid PhysicalAccountID { get; set; }
 
     /// <summary>
     /// Places all the payment request's properties into a dictionary.
@@ -57,7 +63,7 @@ public class PaymentAccountCreate
             { nameof(MerchantID), MerchantID.ToString() },
             { nameof(Currency), Currency.ToString() },
             { nameof(AccountName), AccountName ?? string.Empty },
-            { nameof(PaymentProcessor), PaymentProcessor.ToString() },
+            { nameof(PhysicalAccountID), PhysicalAccountID.ToString() },
         };
     }
 }
