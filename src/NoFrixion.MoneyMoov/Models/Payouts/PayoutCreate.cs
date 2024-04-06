@@ -150,11 +150,17 @@ public class PayoutCreate
     /// The Bitcoin fee rate to apply in Satoshis per virtual byte.
     /// </summary>
     public int BitcoinFeeSatsPerVbyte { get; set; }
-
+    
     /// <summary>
     /// Optional. The ID of the beneficiary identifier to use for the payout destination.
     /// </summary>
+    [Obsolete("Please use BeneficiaryID to set the beneficiary.")]
     public Guid? BeneficiaryIdentifierID { get; set; }
+
+    /// <summary>
+    /// Optional. The ID of the beneficiary to use for the payout destination.
+    /// </summary>
+    public Guid? BeneficiaryID { get; set; }
 
     /// <summary>
     /// Places all the payout's properties into a dictionary.
@@ -174,7 +180,7 @@ public class PayoutCreate
             { nameof(TheirReference), TheirReference ?? string.Empty},
             { nameof(InvoiceID), InvoiceID ?? string.Empty },
             { nameof(AllowIncomplete), AllowIncomplete.ToString() },
-            { nameof(BeneficiaryIdentifierID), BeneficiaryIdentifierID?.ToString() ?? string.Empty }
+            { nameof(BeneficiaryID), BeneficiaryID?.ToString() ?? string.Empty }
         };
 
         if (Destination != null)

@@ -35,5 +35,9 @@ public class User
 
     public List<UserRole> Roles { get; set; } = new List<UserRole>();
     
+    public bool TwoFactorEnabled { get; set; }
+    
+    public bool PasskeyAdded { get; set; }
+    
     public bool IsEmpty() => ID == Guid.Empty && EmailAddress == string.Empty;
 }
