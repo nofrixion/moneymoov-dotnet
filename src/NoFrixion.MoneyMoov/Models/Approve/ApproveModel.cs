@@ -44,6 +44,8 @@ public class ApproveModel
     public string? Username { get; set; }
 
     public string? ApproveAction { get; set; }
+    
+    public string? UserEmail { get; set; }
 
     public NameValueCollection ToQueryParams()
     {
@@ -53,7 +55,8 @@ public class ApproveModel
             { nameof(ID), ID.ToString() },
             { nameof(ReturnUrl), ReturnUrl },
             { nameof(ClientID), ClientID },
-            { nameof(State), State }
+            { nameof(State), State },
+            { nameof(UserEmail), UserEmail }
         };
     }
 }
