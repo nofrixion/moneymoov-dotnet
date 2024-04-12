@@ -27,6 +27,19 @@ public class AccountIdentifier
     {
         get
         {
+            if(Currency == CurrencyTypeEnum.GBP.ToString())
+            {
+                // UK Faster Payments can support both SCAN and IBAN identifiers. Default to SCAN.
+                if (!string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber))
+                {
+                    return AccountIdentifierType.SCAN;
+                }
+                else if(!string.IsNullOrEmpty(IBAN))
+                {
+                    return AccountIdentifierType.IBAN;
+                }
+            }
+
             if (!string.IsNullOrEmpty(IBAN))
             {
                 return AccountIdentifierType.IBAN;
