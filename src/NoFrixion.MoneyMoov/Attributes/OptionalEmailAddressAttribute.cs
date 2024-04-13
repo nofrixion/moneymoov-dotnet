@@ -28,10 +28,15 @@ public class OptionalEmailAddressAttribute : ValidationAttribute
         }
 
         var emailAddressAttribute = new EmailAddressAttribute();
+
         if (emailAddressAttribute.IsValid(value))
         {
             return ValidationResult.Success!;
         }
-        return new ValidationResult("The email address is not in a correct format.");
+
+        return new ValidationResult(
+            FormatErrorMessage(validationContext.DisplayName),
+            new[] { validationContext.MemberName ?? string.Empty }
+        );
     }
 }

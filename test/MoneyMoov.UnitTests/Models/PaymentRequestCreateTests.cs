@@ -367,6 +367,6 @@ public class PaymentRequestCreateTests
         var validationProb = paymentRequest.Validate();
 
         Assert.False(validationProb.IsEmpty);
-        Assert.Contains("The CustomerEmailAddress field is not a valid e-mail address.", validationProb.Errors.Single().Value.Single());
+        Assert.Contains("The field CustomerEmailAddress is invalid.", validationProb.Errors.Single().Value.Single());
     }
 }
