@@ -148,6 +148,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// <summary>
     /// Optionally the shipping email address for the customer.
     /// </summary>
+    //[OptionalEmailAddress]
     [EmailAddress]
     public string? ShippingEmail { get; set; }
 
@@ -288,6 +289,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// Optional email address for the customer. If the tokenise card option is set then the customer email address
     /// is mandatory.
     /// </summary>
+    //[OptionalEmailAddress]
     [EmailAddress]
     public string? CustomerEmailAddress { get; set; }
 
