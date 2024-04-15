@@ -59,7 +59,7 @@ public class PayoutCreate
         set
         {
             Destination ??= new Counterparty();
-            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.EUR };
             Destination.Identifier.IBAN = value;
         }
     }
@@ -71,7 +71,7 @@ public class PayoutCreate
         set
         {
             Destination ??= new Counterparty();
-            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.GBP };
             Destination.Identifier.AccountNumber = value;
         }
     }
@@ -83,7 +83,7 @@ public class PayoutCreate
         set
         {
             Destination ??= new Counterparty();
-            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.GBP };
             Destination.Identifier.SortCode = value;
         }
     }

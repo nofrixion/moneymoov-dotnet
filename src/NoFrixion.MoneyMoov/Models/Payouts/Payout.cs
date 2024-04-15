@@ -109,7 +109,7 @@ public class Payout : IValidatableObject, IWebhookPayload
         set
         {
             Destination ??= new Counterparty();
-            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier ??= new AccountIdentifier{Currency = CurrencyTypeEnum.EUR};
             Destination.Identifier.IBAN = value;
         }
     }
@@ -122,7 +122,7 @@ public class Payout : IValidatableObject, IWebhookPayload
         set
         {
             Destination ??= new Counterparty();
-            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.GBP };
             Destination.Identifier.AccountNumber = value;
         }
     }
@@ -135,7 +135,7 @@ public class Payout : IValidatableObject, IWebhookPayload
         set
         {
             Destination ??= new Counterparty();
-            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.GBP };
             Destination.Identifier.SortCode = value;
         }
     }
@@ -214,7 +214,8 @@ public class Payout : IValidatableObject, IWebhookPayload
             {
                 IBAN = SourceAccountIban,
                 SortCode = SourceAccountSortcode,
-                AccountNumber = SourceAccountNumber
+                AccountNumber = SourceAccountNumber,
+                Currency = Currency
             };
             return srcAccountIdentifier;
         }

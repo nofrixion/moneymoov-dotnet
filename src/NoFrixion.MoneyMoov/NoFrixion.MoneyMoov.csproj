@@ -24,4 +24,8 @@
     <PackageReference Include="Quartz" Version="3.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Extensions\AccountIdentifierExtensions.cs" />
+  </ItemGroup>
+
 </Project>

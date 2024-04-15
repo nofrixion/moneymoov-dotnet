@@ -151,7 +151,8 @@ public class PayoutsValidatorTests
                 Name = "Joe Bloggs",
                 Identifier = new AccountIdentifier
                 {
-                    IBAN = "IE36ULSB98501017331006"
+                    IBAN = "IE36ULSB98501017331006",
+                    Currency = CurrencyTypeEnum.EUR
                 }
             }
         };

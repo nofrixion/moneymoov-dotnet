@@ -175,7 +175,7 @@ public class Beneficiary : IValidatableObject
             ID = Guid.NewGuid(),
             Type = Destination?.Identifier?.Type ?? AccountIdentifierType.Unknown,
             Currency = Currency,
-            Destination = Destination
+            Destination = Destination,
         };
     }
 }

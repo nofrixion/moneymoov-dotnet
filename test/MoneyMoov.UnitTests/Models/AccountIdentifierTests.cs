@@ -36,7 +36,8 @@ public class AccountIdentifierTests : MoneyMoovUnitTestBase<AccountIdentifierTes
         var accountIdentifier = new AccountIdentifier
         {
             BIC = "  MODR  123 ",
-            IBAN = " GB42MO CK00000070629 907 "
+            IBAN = " GB42MO CK00000070629 907 ",
+            Currency = CurrencyTypeEnum.EUR
         };
 
         Assert.Equal(AccountIdentifierType.IBAN, accountIdentifier.Type);
@@ -55,7 +56,8 @@ public class AccountIdentifierTests : MoneyMoovUnitTestBase<AccountIdentifierTes
         var accountIdentifier = new AccountIdentifier
         {
             SortCode = " 12 34 56 ",
-            AccountNumber = " 00000070629 907 "
+            AccountNumber = " 00000070629 907 ",
+            Currency = CurrencyTypeEnum.EUR
         };
 
         Assert.Equal(AccountIdentifierType.SCAN, accountIdentifier.Type);

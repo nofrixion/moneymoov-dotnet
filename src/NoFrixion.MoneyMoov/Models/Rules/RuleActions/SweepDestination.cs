@@ -86,7 +86,7 @@ public class SweepDestination : Counterparty, IValidatableObject
                 new string[] { nameof(Identifier) });
         }
 
-        if (string.IsNullOrEmpty(Identifier?.Currency))
+        if (Identifier?.Currency == CurrencyTypeEnum.None)
         {
             yield return new ValidationResult($"The destination identifier currency must be set.",
                 new string[] { nameof(Identifier.Currency) });
