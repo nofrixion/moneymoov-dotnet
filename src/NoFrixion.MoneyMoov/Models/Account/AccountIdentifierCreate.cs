@@ -18,46 +18,6 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class AccountIdentifierCreate
 {
-    /// <summary>
-    /// The type of the account identifier.
-    /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    public AccountIdentifierType Type
-    {
-        get
-        {
-            if(Currency == CurrencyTypeEnum.GBP)
-            {
-                // UK Faster Payments can support both SCAN and IBAN identifiers. Default to SCAN.
-                if (!string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber))
-                {
-                    return AccountIdentifierType.SCAN;
-                }
-                else if(!string.IsNullOrEmpty(IBAN))
-                {
-                    return AccountIdentifierType.IBAN;
-                }
-            }
-
-            if (!string.IsNullOrEmpty(IBAN))
-            {
-                return AccountIdentifierType.IBAN;
-            }
-
-            if (!string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber))
-            {
-                return AccountIdentifierType.SCAN;
-            }
-
-            if (!string.IsNullOrEmpty(BitcoinAddress))
-            {
-                return AccountIdentifierType.BTC;
-            }
-
-            // Return default
-            return AccountIdentifierType.Unknown;
-        }
-    }
 
     /// <summary>
     /// The currency for the account.
@@ -177,13 +137,10 @@ public class AccountIdentifierCreate
             { keyPrefix + nameof(BitcoinAddress), BitcoinAddress ?? string.Empty}
         };
     }
-    
+
     /// <summary>
     /// Summary of the account identifier's most important properties.
     /// </summary>
-    public string Summary =>   
-        Type == AccountIdentifierType.IBAN ? Type.ToString() + ": " + IBAN :
-        Type == AccountIdentifierType.SCAN ? Type.ToString() + ": " + SortCode + " / " + AccountNumber :
-        Type == AccountIdentifierType.BTC ? Type.ToString() + ": " + BitcoinAddress :
-        "No identifier.";
+    public string Summary =>
+        $"IBAN: {IBAN}, BIC: {BIC}, SortCode: {SortCode}, AccountNumber: {AccountNumber}, BitcoinAddress: {BitcoinAddress}";
 }
