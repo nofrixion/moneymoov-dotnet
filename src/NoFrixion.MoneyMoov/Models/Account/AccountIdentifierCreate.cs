@@ -1,25 +1,22 @@
 ﻿// -----------------------------------------------------------------------------
-//  Filename: AccountIdentifier.cs
+//  Filename: AccountIdentifierCreate.cs
 // 
-//  Description: Account identifier:
+//  Description: Account identifier Create model
 //  Author(s):
-//  Donal O'Connor (donal@nofrixion.com)
+//  saurav@nofrixion.com (saurav@nofrixion.com)
 // 
 //  History:
-//  21 10 2021  Donal O'Connor   Created, Carmichael House, Dublin, Ireland.
-//  19 09 2023  Aaron Clauson    Added Bitcoin support.
+//  16 04 2024  Saurav Maiti   Created, Harcourt street, Dublin, Ireland.
 // 
 //  License:
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-
 namespace NoFrixion.MoneyMoov.Models;
 
 #nullable disable
 
-public class AccountIdentifier: IValidatableObject
+public class AccountIdentifierCreate
 {
     /// <summary>
     /// The type of the account identifier.
@@ -65,7 +62,7 @@ public class AccountIdentifier: IValidatableObject
     /// <summary>
     /// The currency for the account.
     /// </summary>
-    public required CurrencyTypeEnum Currency { get; set; }
+    public CurrencyTypeEnum? Currency { get; set; }
 
     /// <summary>
     /// The Bank Identifier Code for an IBAN.
@@ -168,29 +165,6 @@ public class AccountIdentifier: IValidatableObject
         }
     }
 
-    /// <summary>
-    /// Summary of the account identifier's most important properties.
-    /// </summary>
-    public string Summary =>   
-        Type == AccountIdentifierType.IBAN ? Type.ToString() + ": " + IBAN :
-        Type == AccountIdentifierType.SCAN ? Type.ToString() + ": " + SortCode + " / " + AccountNumber :
-        Type == AccountIdentifierType.BTC ? Type.ToString() + ": " + BitcoinAddress :
-         "No identifier.";
-    
-    /// <summary>
-    /// Summary of the account identifier's most important properties.
-    /// </summary>
-    public string DisplaySummary =>   
-        Type == AccountIdentifierType.IBAN ? IBAN :
-        Type == AccountIdentifierType.SCAN ? DisplayScanSummary :
-        Type == AccountIdentifierType.BTC ? BitcoinAddress :
-        "No identifier.";
-
-    public string DisplayScanSummary =>
-        !string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber) && SortCode.Length == 6
-            ? $"{SortCode[..2]}-{SortCode.Substring(2, 2)}-{SortCode.Substring(4, 2)} {AccountNumber}"
-            : "No identifier.";
-
     public virtual Dictionary<string, string> ToDictionary(string keyPrefix)
     {
         return new Dictionary<string, string>
@@ -203,79 +177,13 @@ public class AccountIdentifier: IValidatableObject
             { keyPrefix + nameof(BitcoinAddress), BitcoinAddress ?? string.Empty}
         };
     }
-
-    public string GetApprovalHash()
-    {
-        string input =
-            Currency +
-            (!string.IsNullOrEmpty(BIC) ? BIC : string.Empty) +
-            (!string.IsNullOrEmpty(IBAN) ? IBAN : string.Empty) +
-            (!string.IsNullOrEmpty(SortCode) ? SortCode : string.Empty) +
-            (!string.IsNullOrEmpty(AccountNumber) ? AccountNumber : string.Empty) +
-            (!string.IsNullOrEmpty(BitcoinAddress) ? BitcoinAddress : string.Empty);
-        return HashHelper.CreateHash(input);
-    }
-
-    public override string ToString()
-    {
-        return $"Type: {Type}, Currency: {Currency}, BIC: {BIC}, IBAN: {IBAN}, SortCode: {SortCode}, AccountNumber: {AccountNumber}, Bitcoin Address: {BitcoinAddress}, Summary: {Summary}";
-    }
-
-    public NoFrixionProblem Validate()
-    {
-        var validationResults = new List<ValidationResult>();
-        var validationContext = new ValidationContext(this, serviceProvider: null, items: null);
-        var isValid = Validator.TryValidateObject(this, validationContext, validationResults, true);
-        
-        if (!isValid)
-        {
-            return new NoFrixionProblem($"The {nameof(AccountIdentifier)} had one or more validation errors.", validationResults);
-        }
-        
-        return NoFrixionProblem.Empty;
-    }
-
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        switch (Currency)
-        {
-            case CurrencyTypeEnum.GBP:
-            {
-                if (string.IsNullOrEmpty(SortCode) || string.IsNullOrEmpty(AccountNumber))
-                {
-                    yield return new ValidationResult(
-                        "Sort code and account number are required for GBP account identifier.",
-                        new[] { nameof(SortCode), nameof(AccountNumber) });
-                }
-
-                break;
-            }
-            case CurrencyTypeEnum.EUR:
-            {
-                if (string.IsNullOrEmpty(IBAN))
-                {
-                    yield return new ValidationResult("IBAN is required for EUR account identifier.",
-                        new[] { nameof(IBAN) });
-                }
-
-                break;
-            }
-            case CurrencyTypeEnum.BTC:
-            {
-                if (string.IsNullOrEmpty(BitcoinAddress))
-                {
-                    yield return new ValidationResult("Bitcoin address is required for BTC account identifier.",
-                        new[] { nameof(BitcoinAddress) });
-                }
-
-                break;
-            }
-            default:
-            {
-                yield return new ValidationResult("Currency is required for account identifier.",
-                    new[] { nameof(Currency) });
-                break;
-            }
-        }
-    }
+    
+    /// <summary>
+    /// Summary of the account identifier's most important properties.
+    /// </summary>
+    public string Summary =>   
+        Type == AccountIdentifierType.IBAN ? Type.ToString() + ": " + IBAN :
+        Type == AccountIdentifierType.SCAN ? Type.ToString() + ": " + SortCode + " / " + AccountNumber :
+        Type == AccountIdentifierType.BTC ? Type.ToString() + ": " + BitcoinAddress :
+        "No identifier.";
 }

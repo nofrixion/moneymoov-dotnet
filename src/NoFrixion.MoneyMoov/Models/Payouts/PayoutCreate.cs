@@ -47,7 +47,7 @@ public class PayoutCreate
         get => Destination?.AccountID;
         set
         {
-            Destination ??= new Counterparty();
+            Destination ??= new CounterpartyCreate();
             Destination.AccountID = value;
         }
     }
@@ -58,8 +58,8 @@ public class PayoutCreate
         get => Destination?.Identifier?.IBAN;
         set
         {
-            Destination ??= new Counterparty();
-            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.EUR };
+            Destination ??= new CounterpartyCreate();
+            Destination.Identifier ??= new AccountIdentifierCreate { Currency = CurrencyTypeEnum.EUR };
             Destination.Identifier.IBAN = value;
         }
     }
@@ -70,8 +70,8 @@ public class PayoutCreate
         get => Destination?.Identifier?.AccountNumber;
         set
         {
-            Destination ??= new Counterparty();
-            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.GBP };
+            Destination ??= new CounterpartyCreate();
+            Destination.Identifier ??= new AccountIdentifierCreate { Currency = CurrencyTypeEnum.GBP };
             Destination.Identifier.AccountNumber = value;
         }
     }
@@ -82,8 +82,8 @@ public class PayoutCreate
         get => Destination?.Identifier?.SortCode;
         set
         {
-            Destination ??= new Counterparty();
-            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.GBP };
+            Destination ??= new CounterpartyCreate();
+            Destination.Identifier ??= new AccountIdentifierCreate { Currency = CurrencyTypeEnum.GBP };
             Destination.Identifier.SortCode = value;
         }
     }
@@ -94,19 +94,19 @@ public class PayoutCreate
         get => Destination?.Name;
         set
         {
-            Destination ??= new Counterparty();
+            Destination ??= new CounterpartyCreate();
             Destination.Name = value;
         }
     }
 
     [Obsolete("Please use Destination.")]
-    public Counterparty? DestinationAccount
+    public CounterpartyCreate? DestinationAccount
     {
         get => Destination;
         set => Destination = value;
     }
 
-    public Counterparty? Destination { get; set; }
+    public CounterpartyCreate? Destination { get; set; }
 
     /// <summary>
     /// Optional field to associate the payout with the invoice from an external 
@@ -177,7 +177,7 @@ public class PayoutCreate
             { nameof(Currency), Currency.ToString() },
             { nameof(Amount), Amount.ToString() },
             { nameof(YourReference), YourReference ?? string.Empty },
-            { nameof(TheirReference), TheirReference ?? string.Empty},
+            { nameof(TheirReference), TheirReference ?? string.Empty },
             { nameof(InvoiceID), InvoiceID ?? string.Empty },
             { nameof(AllowIncomplete), AllowIncomplete.ToString() },
             { nameof(BeneficiaryID), BeneficiaryID?.ToString() ?? string.Empty }

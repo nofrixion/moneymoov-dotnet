@@ -92,13 +92,5 @@ public class SweepDestination : Counterparty, IValidatableObject
                 new string[] { nameof(Identifier.Currency) });
         }
 
-        if (Identifier != null)
-        {
-            foreach (var err in Identifier.Validate(validationContext))
-            {
-                yield return err;
-            }
-        }
-        
     }
 }

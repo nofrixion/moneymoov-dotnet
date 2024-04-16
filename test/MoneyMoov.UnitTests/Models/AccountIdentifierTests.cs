@@ -64,4 +64,77 @@ public class AccountIdentifierTests : MoneyMoovUnitTestBase<AccountIdentifierTes
         Assert.Equal("123456", accountIdentifier.SortCode);
         Assert.Equal("00000070629907", accountIdentifier.AccountNumber);
     }
+
+    [Fact]
+    public void AccountIdentifier_Validate_EUR_Success()
+    {
+        var accountIdentifier = new AccountIdentifier
+        {
+            BIC = "MODR123",
+            IBAN = "GB42MOCK00000070629907",
+            Currency = CurrencyTypeEnum.EUR
+        };
+        
+        var validationResults = accountIdentifier.Validate();
+        
+        Assert.True(validationResults.IsEmpty);
+    }
+    
+    [Fact]
+    public void AccountIdentifier_Validate_GBP_Success()
+    {
+        var accountIdentifier = new AccountIdentifier
+        {
+            SortCode = "123456",
+            AccountNumber = "00000070629907",
+            Currency = CurrencyTypeEnum.GBP
+        };
+        
+        var validationResults = accountIdentifier.Validate();
+        
+        Assert.True(validationResults.IsEmpty);
+    }
+    
+    [Fact]
+    public void AccountIdentifier_Validate_EUR_No_IBAN_Failure()
+    {
+        var accountIdentifier = new AccountIdentifier
+        {
+            BIC = "MODR123",
+            Currency = CurrencyTypeEnum.EUR
+        };
+        
+        var validationResults = accountIdentifier.Validate();
+        
+        Assert.False(validationResults.IsEmpty);
+    }
+    
+    [Fact]
+    public void AccountIdentifier_Validate_GBP_No_SortCode_Failure()
+    {
+        var accountIdentifier = new AccountIdentifier
+        {
+            AccountNumber = "00000070629907",
+            Currency = CurrencyTypeEnum.GBP
+        };
+        
+        var validationResults = accountIdentifier.Validate();
+        
+        Assert.False(validationResults.IsEmpty);
+    }
+    
+    [Fact]
+    public void AccountIdentifier_Validate_GBP_No_AccountNumber_Failure()
+    {
+        var accountIdentifier = new AccountIdentifier
+        {
+            SortCode = "123456",
+            Currency = CurrencyTypeEnum.GBP
+        };
+        
+        var validationResults = accountIdentifier.Validate();
+        
+        Assert.False(validationResults.IsEmpty);
+    }
+    
 }
