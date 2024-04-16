@@ -91,5 +91,14 @@ public class SweepDestination : Counterparty, IValidatableObject
             yield return new ValidationResult($"The destination identifier currency must be set.",
                 new string[] { nameof(Identifier.Currency) });
         }
+
+        if (Identifier != null)
+        {
+            foreach (var err in Identifier.Validate(validationContext))
+            {
+                yield return err;
+            }
+        }
+        
     }
 }

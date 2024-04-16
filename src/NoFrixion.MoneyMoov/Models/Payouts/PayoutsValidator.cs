@@ -269,6 +269,14 @@ public static class PayoutsValidator
             yield return new ValidationResult($"Currency {payout.Currency} cannot be used with SCAN destinations.", new string[] { nameof(payout.Currency) });
         }
 
+        if (payout.Destination?.Identifier != null)
+        {
+            foreach (var err in payout.Destination.Identifier.Validate(validationContext))
+            {
+                yield return err;
+            } 
+        }
+
         if (payout.Type != AccountIdentifierType.BTC && !ValidateTheirReference(payout.TheirReference, payout.Type))
         {
             yield return new ValidationResult("Their reference must consist of at least 6 alphanumeric characters that are not all the same " +
