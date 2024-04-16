@@ -65,7 +65,7 @@ public class PayrunInvoice : IValidatableObject
     public string? Reference { get; set; }
 
     [EmailAddress]
-    public required string RemittanceEmail { get; set; }
+    public string? RemittanceEmail { get; set; }
     
     public IEnumerable<InvoicePayment>? InvoicePayments { get; set; }
     
