@@ -173,7 +173,7 @@ public class AccountIdentifier: IValidatableObject
     /// </summary>
     public string Summary =>   
         Type == AccountIdentifierType.IBAN ? Type.ToString() + ": " + IBAN :
-        Type == AccountIdentifierType.SCAN ? Type.ToString() + ": " + SortCode + " / " + AccountNumber :
+        Type == AccountIdentifierType.SCAN ? Type.ToString() + ": " + DisplayScanSummary :
         Type == AccountIdentifierType.BTC ? Type.ToString() + ": " + BitcoinAddress :
          "No identifier.";
     
