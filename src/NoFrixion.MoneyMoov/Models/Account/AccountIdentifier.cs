@@ -13,11 +13,13 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 #nullable disable
 
-public class AccountIdentifier
+public class AccountIdentifier: IValidatableObject
 {
     /// <summary>
     /// The type of the account identifier.
@@ -27,7 +29,7 @@ public class AccountIdentifier
     {
         get
         {
-            if(Currency == CurrencyTypeEnum.GBP.ToString())
+            if(Currency == CurrencyTypeEnum.GBP)
             {
                 // UK Faster Payments can support both SCAN and IBAN identifiers. Default to SCAN.
                 if (!string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber))
@@ -63,7 +65,7 @@ public class AccountIdentifier
     /// <summary>
     /// The currency for the account.
     /// </summary>
-    public string Currency { get; set; }
+    public required CurrencyTypeEnum Currency { get; set; }
 
     /// <summary>
     /// The Bank Identifier Code for an IBAN.
@@ -180,15 +182,20 @@ public class AccountIdentifier
     /// </summary>
     public string DisplaySummary =>   
         Type == AccountIdentifierType.IBAN ? IBAN :
-        Type == AccountIdentifierType.SCAN ? SortCode + " / " + AccountNumber :
+        Type == AccountIdentifierType.SCAN ? DisplayScanSummary :
         Type == AccountIdentifierType.BTC ? BitcoinAddress :
         "No identifier.";
+
+    public string DisplayScanSummary =>
+        !string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber) && SortCode.Length == 6
+            ? $"{SortCode[..2]}-{SortCode.Substring(2, 2)}-{SortCode.Substring(4, 2)} {AccountNumber}"
+            : "No identifier.";
 
     public virtual Dictionary<string, string> ToDictionary(string keyPrefix)
     {
         return new Dictionary<string, string>
         {
-            { keyPrefix + nameof(Currency), Currency ?? string.Empty},
+            { keyPrefix + nameof(Currency), Currency.ToString()},
             { keyPrefix + nameof(BIC), BIC ?? string.Empty},
             { keyPrefix + nameof(IBAN), IBAN ?? string.Empty},
             { keyPrefix + nameof(SortCode), SortCode ?? string.Empty},
@@ -200,7 +207,7 @@ public class AccountIdentifier
     public string GetApprovalHash()
     {
         string input =
-            (!string.IsNullOrEmpty(Currency) ? Currency.ToString() : string.Empty) +
+            Currency +
             (!string.IsNullOrEmpty(BIC) ? BIC : string.Empty) +
             (!string.IsNullOrEmpty(IBAN) ? IBAN : string.Empty) +
             (!string.IsNullOrEmpty(SortCode) ? SortCode : string.Empty) +
@@ -212,5 +219,63 @@ public class AccountIdentifier
     public override string ToString()
     {
         return $"Type: {Type}, Currency: {Currency}, BIC: {BIC}, IBAN: {IBAN}, SortCode: {SortCode}, AccountNumber: {AccountNumber}, Bitcoin Address: {BitcoinAddress}, Summary: {Summary}";
+    }
+
+    public NoFrixionProblem Validate()
+    {
+        var validationResults = new List<ValidationResult>();
+        var validationContext = new ValidationContext(this, serviceProvider: null, items: null);
+        var isValid = Validator.TryValidateObject(this, validationContext, validationResults, true);
+        
+        if (!isValid)
+        {
+            return new NoFrixionProblem($"The {nameof(AccountIdentifier)} had one or more validation errors.", validationResults);
+        }
+        
+        return NoFrixionProblem.Empty;
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        switch (Currency)
+        {
+            case CurrencyTypeEnum.GBP:
+            {
+                if (string.IsNullOrEmpty(SortCode) || string.IsNullOrEmpty(AccountNumber))
+                {
+                    yield return new ValidationResult(
+                        "Sort code and account number are required for GBP account identifier.",
+                        new[] { nameof(SortCode), nameof(AccountNumber) });
+                }
+
+                break;
+            }
+            case CurrencyTypeEnum.EUR:
+            {
+                if (string.IsNullOrEmpty(IBAN))
+                {
+                    yield return new ValidationResult("IBAN is required for EUR account identifier.",
+                        new[] { nameof(IBAN) });
+                }
+
+                break;
+            }
+            case CurrencyTypeEnum.BTC:
+            {
+                if (string.IsNullOrEmpty(BitcoinAddress))
+                {
+                    yield return new ValidationResult("Bitcoin address is required for BTC account identifier.",
+                        new[] { nameof(BitcoinAddress) });
+                }
+
+                break;
+            }
+            default:
+            {
+                yield return new ValidationResult("Currency is required for account identifier.",
+                    new[] { nameof(Currency) });
+                break;
+            }
+        }
     }
 }

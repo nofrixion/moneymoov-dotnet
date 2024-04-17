@@ -98,7 +98,9 @@ public class BeneficiarySerialisationTests : MoneyMoovUnitTestBase<BeneficiarySe
                     ""identifier"":{
                         ""type"":""IBAN"",
                         ""iban"":""GB33BUKB20201555555555"",
-                        ""summary"":""IBAN: GB33BUKB20201555555555""
+                        ""summary"":""IBAN: GB33BUKB20201555555555"",
+                        ""currency"":""EUR""
+                        
                 }}  
             }";
 
