@@ -1,27 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-	<AssemblyVersion>1.1.247.0</AssemblyVersion>
-	<FileVersion>1.1.247.0</FileVersion>
-	<GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-	<NoWarn>$(NoWarn);1591</NoWarn>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyVersion>1.1.247.0</AssemblyVersion>
+        <FileVersion>1.1.247.0</FileVersion>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
 
-  <ItemGroup>
-	<PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
-	<PackageReference Include="CsvHelper" Version="30.0.1" />
-	<PackageReference Include="IdentityModel" Version="6.1.0" />
-    <PackageReference Include="LanguageExt.Core" Version="4.4.3" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.35.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Quartz" Version="3.6.2" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
+        <PackageReference Include="CsvHelper" Version="30.0.1" />
+        <PackageReference Include="IdentityModel" Version="6.1.0" />
+        <PackageReference Include="LanguageExt.Core" Version="4.4.3" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.35.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Quartz" Version="3.6.2" />
+    </ItemGroup>
 
 </Project>
