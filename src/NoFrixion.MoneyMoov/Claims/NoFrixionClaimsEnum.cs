@@ -90,5 +90,7 @@ public enum NoFrixionClaimsEnum
     
     two_factor_enabled,
     
-    passkey_added
+    passkey_added,
+    
+    verfied_by_api_key,
 }
