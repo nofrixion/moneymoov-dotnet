@@ -46,6 +46,13 @@ public static class IdentityExtensions
         return merchantIDClaim?.ToGuid() ?? Guid.Empty;
     }
 
+    public static Guid VerfiedByApiKey(this IIdentity identity)
+    {
+        var verifiedClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.verfied_by_api_key)?.Value;
+
+        return verifiedClaim?.ToGuid() ?? Guid.Empty;
+    }
+    
     public static bool IsVerfiedByApiKey(this IIdentity identity)
     {
         var verifiedClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.verfied_by_api_key)?.Value;

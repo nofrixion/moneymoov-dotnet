@@ -93,4 +93,6 @@ public enum NoFrixionClaimsEnum
     passkey_added,
     
     verfied_by_api_key,
+    
+    appid,
 }
