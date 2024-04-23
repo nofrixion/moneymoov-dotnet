@@ -72,7 +72,7 @@ public static class IdentityExtensions
 
     public static bool HasAudience(this IIdentity identity, params string[] audiences)
     {
-        return audiences.Any(audience => ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == "aud")?.Value == audience);
+        return audiences.Where(a => !string.IsNullOrEmpty(a)).Any(audience => ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == "aud")?.Value == audience);
     }
 
     public static User GetUser(this IIdentity identity)
