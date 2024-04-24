@@ -46,6 +46,20 @@ public static class IdentityExtensions
         return merchantIDClaim?.ToGuid() ?? Guid.Empty;
     }
 
+    public static string ApiAppId(this IIdentity identity)
+    {
+        var verifiedClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.appid)?.Value;
+
+        return verifiedClaim ?? string.Empty;
+    }
+    
+    public static bool IsVerfiedByApiKey(this IIdentity identity)
+    {
+        var verifiedClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.verfied_by_api_key)?.Value;
+
+        return bool.TryParse(verifiedClaim, out var verifiedByApiKey) && verifiedByApiKey;
+    }
+    
     public static bool MerchantIdExists(this IIdentity identity)
     {
         return identity != null && ((ClaimsIdentity)identity).Claims.Any(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.merchantid);
@@ -58,7 +72,10 @@ public static class IdentityExtensions
 
     public static bool HasAudience(this IIdentity identity, params string[] audiences)
     {
-        return audiences.Any(audience => ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == "aud")?.Value == audience);
+        return audiences
+            .Where(a => !string.IsNullOrEmpty(a))
+            .Any(audience => ((ClaimsIdentity)identity)?
+                .FindFirst(x => x.Type == "aud")?.Value == audience);
     }
 
     public static User GetUser(this IIdentity identity)
