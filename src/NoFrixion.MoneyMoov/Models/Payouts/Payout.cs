@@ -322,7 +322,12 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// </summary>
     [Obsolete("Please use Beneficiary.")]
     public string? BeneficiaryName { get; set; }
-    
+
+    /// <summary>
+    /// The name of the payrun that this payout is associated with.
+    /// </summary>
+    public string? PayrunName { get; set; }
+
     /// <summary>
     /// Optional beneficiary associated with the payout.
     /// </summary>
