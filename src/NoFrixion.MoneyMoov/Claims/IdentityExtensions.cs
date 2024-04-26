@@ -130,7 +130,25 @@ public static class IdentityExtensions
 
         if (string.IsNullOrEmpty(nameIdentifierClaimValue))
         {
-            return Guid.Empty;
+            var subClaimValue = principal.FindFirst("sub")?.Value;
+            
+            if (string.IsNullOrEmpty(subClaimValue))
+            {
+                return Guid.Empty;
+            }
+            else
+            {
+                subClaimValue = subClaimValue.Replace(ClaimsConstants.NOFRIXION_NAMEID_PREFIX, "");
+
+                if (Guid.TryParse(subClaimValue, out Guid id))
+                {
+                    return id;
+                }
+                else
+                {
+                    return Guid.Empty;
+                }
+            }
         }
         else
         {
