@@ -152,7 +152,7 @@ public class Payout : IValidatableObject, IWebhookPayload
         }
     }
 
-    public string MerchantTokenDescription { get; set; } = string.Empty;
+    public string? MerchantTokenDescription { get; set; }
 
     /// <summary>
     /// Gets or Sets the status of payout request
@@ -189,28 +189,35 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// <summary>
     /// The name of the account the payout is being made from.
     /// </summary>
-    public string SourceAccountName { get; set; } = string.Empty;
+    public string? SourceAccountName { get; set; }
 
     /// <summary>
     /// The IBAN of the account the payout is being made from.
     /// </summary>
-    public string? SourceAccountIban { get; set; } = string.Empty;
+    public string? SourceAccountIban { get; set; }
 
     /// <summary>
     /// The account number of the account the payout is being made from.
     /// </summary>
-    public string? SourceAccountNumber { get; set; } = string.Empty;
+    public string? SourceAccountNumber { get; set; }
 
     /// <summary>
     /// The sort code of the account the payout is being made from.
     /// </summary>
-    public string? SourceAccountSortcode { get; set; } = string.Empty;
+    public string? SourceAccountSortcode { get; set; }
 
     public AccountIdentifier? SourceAccountIdentifier
     {
         get
         {
-            var srcAccountIdentifier = new AccountIdentifier
+            AccountIdentifier? srcAccountIdentifier = null;
+            
+            if (string.IsNullOrEmpty(SourceAccountIban) && string.IsNullOrEmpty(SourceAccountNumber) && string.IsNullOrEmpty(SourceAccountSortcode))
+            {
+                return srcAccountIdentifier;
+            }
+            
+            srcAccountIdentifier = new AccountIdentifier
             {
                 IBAN = SourceAccountIban,
                 SortCode = SourceAccountSortcode,
@@ -246,7 +253,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// application such as Xero. The InvoiceID needs to be unique for each
     /// account.
     /// </summary>
-    public string InvoiceID { get; set; } = string.Empty;
+    public string? InvoiceID { get; set; }
 
     /// <summary>
     /// An optional list of descriptive tags attached to the payout.
