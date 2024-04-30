@@ -32,6 +32,10 @@ public class ApproveResultModel
 
     public string KeyID { get; set; } = string.Empty;
 
+    public bool VerifiedByApiKey { get; set; }
+    
+    public string AppID { get; set; } = string.Empty;
+    
     public ApproveResultModel()
     { }
 
@@ -54,6 +58,8 @@ public class ApproveResultModel
             ChallengeBase64Url = claims.FirstOrDefault(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.approvehash)?.Value ?? string.Empty;
             Signature = claims.FirstOrDefault(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.approvesignature)?.Value ?? string.Empty;
             KeyID = claims.FirstOrDefault(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.approvekeyid)?.Value ?? string.Empty;
+            VerifiedByApiKey = claims.Any(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.verfied_by_api_key);
+            AppID = claims.FirstOrDefault(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.appid)?.Value ?? string.Empty;
         }
     }
 

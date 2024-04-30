@@ -50,7 +50,7 @@ public class PayoutUpdate
         set
         {
             Destination ??= new Counterparty();
-            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.EUR };
             Destination.Identifier.IBAN = value;
         }
     }
@@ -62,7 +62,7 @@ public class PayoutUpdate
         set
         {
             Destination ??= new Counterparty();
-            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.GBP };
             Destination.Identifier.AccountNumber = value;
         }
     }
@@ -74,7 +74,7 @@ public class PayoutUpdate
         set
         {
             Destination ??= new Counterparty();
-            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.GBP };
             Destination.Identifier.SortCode = value;
         }
     }
@@ -104,7 +104,7 @@ public class PayoutUpdate
         set
         {
             Destination ??= new Counterparty();
-            Destination.Identifier ??= new AccountIdentifier();
+            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.BTC };
             Destination.Identifier.BitcoinAddress = value;
         }
     }

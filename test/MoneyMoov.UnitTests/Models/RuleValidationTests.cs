@@ -25,48 +25,6 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
     public RuleValidationTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     { }
 
-    /// <summary>
-    /// Tests that a sweep rule generates a validation error if the currency is not set.
-    /// </summary>
-    [Fact]
-    public void Rule_No_Identifier_Currency_Validation_Fails()
-    {
-        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
-
-        var rule = new Rule
-        {
-            SweepAction = new SweepAction
-            {
-                Priority = 1,
-                AmountToLeave = 1.00M,
-                MinimumAmountToRunAt = 99.00M,
-                Destinations = new List<SweepDestination>
-                {
-                    new SweepDestination
-                    {
-                        SweepPercentage = 100,
-                        Name = "Jane Doe",
-                        Identifier = new AccountIdentifier
-                        {
-                            IBAN = "IEMOCK123456779"
-                        }
-                    }
-                }
-            }
-        };
-
-        var problem = rule.Validate();
-
-        Assert.NotNull(problem);
-
-        foreach (var err in problem.Errors)
-        {
-            Logger.LogDebug(Newtonsoft.Json.JsonConvert.SerializeObject(err));
-        }
-
-        Assert.NotEmpty(problem.Errors);
-    }
-
     [Theory]
     [InlineData("0 0/15 * * * ?", false)] // Will fail as the new value is less than 60 minutes.
     [InlineData("0 0/10 * * * ?", false)] // Will fail as the new value is less than 60 minutes.
@@ -94,7 +52,7 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
                         Name = "Jane Doe",
                         Identifier = new AccountIdentifier
                         {
-                            Currency = "EUR",
+                            Currency = CurrencyTypeEnum.EUR,
                             IBAN = "IEMOCK123456779"
                         }
                     }

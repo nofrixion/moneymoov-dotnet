@@ -170,12 +170,19 @@ public class Beneficiary : IValidatableObject
     /// <returns>A new Payout object.</returns>
     public Payout ToPayout()
     {
-        return new Payout
+        var payout = new Payout
         {
             ID = Guid.NewGuid(),
             Type = Destination?.Identifier?.Type ?? AccountIdentifierType.Unknown,
             Currency = Currency,
-            Destination = Destination
+            Destination = Destination,
         };
+
+        if (payout.Destination?.Identifier != null)
+        {
+            payout.Destination.Identifier.Currency = Currency;
+        }
+
+        return payout;
     }
 }

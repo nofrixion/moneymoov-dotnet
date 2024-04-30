@@ -44,7 +44,8 @@ public class BeneficairyValidationTests : MoneyMoovUnitTestBase<BeneficairyValid
                 Name = "Test Dest",
                 Identifier = new AccountIdentifier
                 {
-                    IBAN = "GB42MOCK00000070629907"
+                    IBAN = "GB42MOCK00000070629907",
+                    Currency = CurrencyTypeEnum.EUR
                 }
             }
         };
