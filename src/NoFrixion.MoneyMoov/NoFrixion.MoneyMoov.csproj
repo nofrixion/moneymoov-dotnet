@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<AssemblyVersion>1.1.251.0</AssemblyVersion>
-	<FileVersion>1.1.251.0</FileVersion>
+	<AssemblyVersion>1.1.98.0</AssemblyVersion>
+	<FileVersion>1.1.98.0</FileVersion>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	<NoWarn>$(NoWarn);1591</NoWarn>
