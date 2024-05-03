@@ -41,9 +41,29 @@ public class PayoutsValidatorTests
     [InlineData("r12 hsd-2")]
     [InlineData("-sd73/sdf.48&")]
     [InlineData("-sD7 K sdf -")]
-    public void PaymentsValidator_ValidateTheirReference_Success(string theirReference)
+    public void PaymentsValidator_ValidateTheirReference_Success_Modulr(string theirReference)
     {
-        var result = PayoutsValidator.ValidateTheirReference(theirReference, MoneyMoov.AccountIdentifierType.IBAN);
+        var result = PayoutsValidator.ValidateTheirReference(theirReference, MoneyMoov.AccountIdentifierType.IBAN, PaymentProcessorsEnum.Modulr);
+
+        Assert.True(result);
+    }
+
+    /// <summary>
+    /// Tests that a payout property TheirReference is validated successfully.
+    /// </summary>
+    [Theory]
+    [InlineData("refe-12")]
+    [InlineData("?./refe-12")]
+    [InlineData("r12 hsd-2")]
+    [InlineData("s-d73/sdf.4(8) ?:,'++")]
+    [InlineData("s-D7 K sdf -")]
+    [InlineData("Saldo F16 + F20")]
+    [InlineData("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")]
+    public void PaymentsValidator_ValidateTheirReference_Success_Banking_Circle(string theirReference)
+    {
+        var result =
+            PayoutsValidator.ValidateTheirReference(theirReference, MoneyMoov.AccountIdentifierType.IBAN, PaymentProcessorsEnum.BankingCircle) &&
+            PayoutsValidator.ValidateTheirReference(theirReference, MoneyMoov.AccountIdentifierType.IBAN, PaymentProcessorsEnum.BankingCircleAgency);
 
         Assert.True(result);
     }
@@ -60,7 +80,23 @@ public class PayoutsValidatorTests
     [InlineData("Saldo F16 _ F20", AccountIdentifierType.IBAN)]     // Invalid character '_'.
     public void PaymentsValidator_ValidateTheirReference_Fail(string theirReference, AccountIdentifierType identifierType)
     {
-        var result = PayoutsValidator.ValidateTheirReference(theirReference, identifierType);
+        var result = PayoutsValidator.ValidateTheirReference(theirReference, identifierType, PaymentProcessorsEnum.Modulr);
+
+        Assert.False(result);
+    }
+
+
+    /// <summary>
+    /// Tests that an invalid payout TheirReference fails the Banking Circle validation rules.
+    /// </summary>
+    [Theory]
+    [InlineData(" ", AccountIdentifierType.IBAN)]             // No non-whitespace character.
+    [InlineData("-sd6tu89-73.sdf./48 2983", AccountIdentifierType.SCAN)] // Starts with -
+    [InlineData("3-sD7&K.sdf./", AccountIdentifierType.IBAN)]       //Invalid character '&'.
+    [InlineData("Saldo F16 _ F20", AccountIdentifierType.IBAN)]     // Invalid character '_'.
+    public void PaymentsValidator_ValidateTheirReference_Fail_Banking_Circle(string theirReference, AccountIdentifierType identifierType)
+    {
+        var result = PayoutsValidator.ValidateTheirReference(theirReference, identifierType, PaymentProcessorsEnum.BankingCircleAgency);
 
         Assert.False(result);
     }
@@ -172,7 +208,7 @@ public class PayoutsValidatorTests
     }
 
     /// <summary>
-    /// Tests that making a safe TheirReference works as expected.
+    /// Tests that making a safe TheirReference when Modulr is the payment processor works as expected.
     /// </summary>
     [Theory]
     [InlineData(AccountIdentifierType.IBAN, "", "NFXN", ComparisonMethod.StartsWith)]
@@ -180,17 +216,17 @@ public class PayoutsValidatorTests
     [InlineData(AccountIdentifierType.IBAN, "-sD7&K.sdf./", "-sD7&K.sdf./", ComparisonMethod.Equals)] // If valid, gets left alone.
     [InlineData(AccountIdentifierType.IBAN, "-sD7!&K.sdf./", "sD7Ksdf", ComparisonMethod.Equals)] // If invalid, non-ASCII chars get replaced.
     [InlineData(AccountIdentifierType.IBAN, "Acme™ Corporation", "Acme Corporation", ComparisonMethod.Equals)] // Replace unicode.
-    [InlineData(AccountIdentifierType.SCAN, "Too long for SCAN which oly likes short refs", "Too long for SCAN", ComparisonMethod.Equals)]
-    public void PaymentsValidator_Make_Safe_TheirReference(AccountIdentifierType accountType, 
+    [InlineData(AccountIdentifierType.SCAN, "Too long for SCAN which only likes short refs", "Too long for SCAN", ComparisonMethod.Equals)]
+    public void PaymentsValidator_Make_Safe_TheirReference_Modulr(AccountIdentifierType accountType, 
         string requestedTheirReference, 
         string expectedTheirReference,
         ComparisonMethod comparison)
     {
-        var safeTheirRef = PayoutsValidator.MakeSafeTheirReference(accountType, requestedTheirReference);
+        var safeTheirRef = PayoutsValidator.MakeSafeTheirReference(accountType, requestedTheirReference, PaymentProcessorsEnum.Modulr);
 
         _logger.LogDebug($"Safe their ref={safeTheirRef}.");
 
-        Assert.True(PayoutsValidator.ValidateTheirReference(safeTheirRef, accountType));
+        Assert.True(PayoutsValidator.ValidateTheirReference(safeTheirRef, accountType, PaymentProcessorsEnum.Modulr));
 
         if (comparison == ComparisonMethod.Equals)
         {
@@ -236,12 +272,12 @@ public class PayoutsValidatorTests
             "ref-24",
         };
         
-        var theirReferenceIban = PayoutsValidator.GetTheirReferenceFromInvoices(CurrencyTypeEnum.EUR, invoiceReferences);
+        var theirReferenceIban = PayoutsValidator.GetTheirReferenceFromInvoices(CurrencyTypeEnum.EUR, invoiceReferences, PaymentProcessorsEnum.Modulr);
         
         _logger.LogDebug(theirReferenceIban);
         _logger.LogDebug("Their IBAN reference length={Length}", theirReferenceIban.Length);
         
-        var theirReferenceScan = PayoutsValidator.GetTheirReferenceFromInvoices(CurrencyTypeEnum.GBP, invoiceReferences);
+        var theirReferenceScan = PayoutsValidator.GetTheirReferenceFromInvoices(CurrencyTypeEnum.GBP, invoiceReferences, PaymentProcessorsEnum.Modulr);
         
         _logger.LogDebug(theirReferenceScan);
         _logger.LogDebug("Their SCAN reference length={Length}", theirReferenceScan.Length);

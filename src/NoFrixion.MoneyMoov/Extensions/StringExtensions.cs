@@ -159,7 +159,7 @@ public static class StringExtensions
 
     /// <summary>
     /// Takes a format string, e.g. "{Property1} and {Property2}", and attempts to find matching
-    /// items in teh dictionary to replace the placeholder keys with.
+    /// items in the dictionary to replace the placeholder keys with.
     /// </summary>
     /// <param name="template">The template string with the format keys.</param>
     /// <param name="record">A dictionary with values that can be sued to substitute into the string template.</param>

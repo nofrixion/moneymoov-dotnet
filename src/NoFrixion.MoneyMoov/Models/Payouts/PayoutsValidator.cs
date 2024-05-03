@@ -26,21 +26,21 @@ public static class PayoutsValidator
     /// The minimum required length for the Their Reference field. Note that length gets 
     /// calculated after certain non-counted characters have been removed.
     /// </summary>
-    public const int THEIR_REFERENCE_MINIMUM_LENGTH = 6;
+    public const int THEIR_REFERENCE_MINIMUM_MODULR_LENGTH = 6;
 
     /// <summary>
     /// The maximum allowed length for the Their Reference field for sort code
     /// and account number (SCAN) payments . Note that length gets calculated after 
     /// certain non-counted characters have been removed.
     /// </summary>
-    public const int THEIR_REFERENCE_SCAN_MAXIMUM_LENGTH = 17;
+    public const int THEIR_REFERENCE_SCAN_MAXIMUM_MODULR_LENGTH = 17;
 
     /// <summary>
     /// The maximum allowed length for the Their Reference field for International Bank Account Number
     /// (IBAN) payments . Note that length gets calculated after / certain non-counted characters 
     /// have been removed.
     /// </summary>
-    public const int THEIR_REFERENCE_IBAN_MAXIMUM_LENGTH = 139;
+    public const int THEIR_REFERENCE_IBAN_MAXIMUM_MODULR_LENGTH = 139;
 
     /// <summary>
     /// Maximum length of the Your, or External Reference, field.
@@ -64,8 +64,8 @@ public static class PayoutsValidator
     /// <summary>
     /// Validation reqex for the Their, or Reference, field. It  must consist of at least 6 
     /// alphanumeric characters that are not all the same. Optional, uncounted characters include space, 
-    /// hyphen(-), full stop (.), ampersand(&amp;), and forward slash (/). Total of all characters must be less than 
-    /// 18 for scan payment and 140 for an IBAN payment.
+    /// hyphen(-), full stop (.), ampersand(&amp;), and forward slash (/). Total of all characters must be 
+    /// equal to or less than 18 for a SCAN (Faster Payments) payment and 140 for an IBAN (SEPA) payment.
     /// Somewhat misleadingly, the Reference field cannot contain a hyphen, the allowed characters are:
     /// alpha numeric (including unicode), space, hyphen(-), full stop (.), ampersand(&amp;), and forward slash (/). 
     /// </summary>
@@ -73,14 +73,14 @@ public static class PayoutsValidator
     /// [^\W_] is actings as \w with the underscore character included. The upstream supplier does not permit
     /// underscore in the Reference (Theirs) field.
     /// </remarks>
-    public const string THEIR_REFERENCE_REGEX = @"^([^\W_]|[\.\-/&\s]){6,}$";
+    public const string THEIR_REFERENCE_MODULR_REGEX = @"^([^\W_]|[\.\-/&\s]){6,}$";
 
     /// <summary>
     /// Certain characters in the Their Reference field are not counted towards the minimum and
     /// maximum length requirements. This regex indicates the list of allow characters that are NOT
     /// counted.
     /// </summary>
-    public const string THEIR_REFERENCE_NON_COUNTED_CHARS_REGEX = @"[\.\-/&\s]";
+    public const string THEIR_REFERENCE_NON_COUNTED_CHARS_MODULR_REGEX = @"[\.\-/&\s]";
 
     /// <summary>
     /// The External Reference, or Your reference, field is the one that gets set locally on the 
@@ -101,9 +101,29 @@ public static class PayoutsValidator
     public const string FALLBACK_THEIR_REFERENCE = "NFXN {0}";
 
     /// <summary>
+    /// Validation reqex for the YOur and Their, or Reference, field with Banking Cirlce. It must 
+    /// have at least one non space character.  Total of all characters must be 140 or less.
+    /// Banking Circle supported chars see https://docs.bankingcircleconnect.com/docs/initiate-payments:
+    /// a b c d e f g h i j k l m n o p q r s t u v w x y z
+    /// A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+    /// 0 1 2 3 4 5 6 7 8 9
+    /// / - ? : ( ) . , ' +
+    /// In addition the field cannot start with a : or - character and must have one none space char.
+    /// Space
+    /// </summary>
+    public const string REFERENCE_BANKING_CIRCLE_REGEX = @"^(?![\:\-])[a-zA-Z0-9\s\/\-\.\+\(\)\?\:\,']{0,140}$";
+
+    /// <summary>
+    /// The maximum allowed length for the Banking Circle remittance information. Does not seem to differ
+    /// for GBP (SCAN) and EUR (IBAN) payments.
+    /// </summary>
+    public const int REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH = 140;
+
+    /// <summary>
     /// Number of days in the future that a payout can be scheduled for.
     /// </summary>
     public const int PAYOUT_SCHEDULE_DAYS_IN_FUTURE = 60;
+
     public static bool ValidateIBAN(string iban)
     {
         if (string.IsNullOrEmpty(iban))
@@ -153,29 +173,59 @@ public static class PayoutsValidator
         return !string.IsNullOrEmpty(accountName) && accountNameRegex.IsMatch(accountName);
     }
 
-    public static bool ValidateTheirReference(string? theirReference, AccountIdentifierType desinationIdentifierType)
+    public static bool ValidateTheirReference(
+        string? theirReference,
+        AccountIdentifierType desinationIdentifierType,
+        PaymentProcessorsEnum processor)
     {
         if (string.IsNullOrEmpty(theirReference))
         {
             return false;
         }
 
+        return processor switch
+        {
+            PaymentProcessorsEnum.Modulr => ValidateModulrTheirReference(theirReference, desinationIdentifierType),
+            PaymentProcessorsEnum.BankingCircle => ValidateBankingCircleTheirReference(theirReference),
+            PaymentProcessorsEnum.BankingCircleAgency => ValidateBankingCircleTheirReference(theirReference),
+            _ => ValidateModulrTheirReference(theirReference, desinationIdentifierType)
+        };
+    }
+
+    public static bool ValidateModulrTheirReference(
+        string theirReference,
+        AccountIdentifierType desinationIdentifierType)
+    {
         int maxLength = desinationIdentifierType == AccountIdentifierType.IBAN ?
-            THEIR_REFERENCE_IBAN_MAXIMUM_LENGTH : THEIR_REFERENCE_SCAN_MAXIMUM_LENGTH;
+            THEIR_REFERENCE_IBAN_MAXIMUM_MODULR_LENGTH : THEIR_REFERENCE_SCAN_MAXIMUM_MODULR_LENGTH;
 
-        Regex matchRegex = new Regex(THEIR_REFERENCE_REGEX);
+        Regex matchRegex = new Regex(THEIR_REFERENCE_MODULR_REGEX);
 
-        Regex replaceRegex = new Regex(THEIR_REFERENCE_NON_COUNTED_CHARS_REGEX);
+        Regex replaceRegex = new Regex(THEIR_REFERENCE_NON_COUNTED_CHARS_MODULR_REGEX);
         var refClean = replaceRegex.Replace(theirReference, "");
 
-        if (refClean.Length < THEIR_REFERENCE_MINIMUM_LENGTH
-            || refClean.Length > maxLength
+        if (refClean.Length<THEIR_REFERENCE_MINIMUM_MODULR_LENGTH
+            || refClean.Length> maxLength
             || !matchRegex.IsMatch(theirReference))
         {
             return false;
         }
 
         return theirReference.ToCharArray().Distinct().Count() > 1;
+    }
+
+    public static bool ValidateBankingCircleTheirReference(string theirReference)
+    {
+        Regex matchRegex = new Regex(REFERENCE_BANKING_CIRCLE_REGEX);
+
+        if (string.IsNullOrEmpty(theirReference?.Trim())
+                || theirReference.Length > REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH
+                || !matchRegex.IsMatch(theirReference))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public static bool ValidateYourReference(string? yourReference)
@@ -229,7 +279,7 @@ public static class PayoutsValidator
                 new string[] { nameof(payout.Destination.Name) });
         }
 
-        if (payout.Destination != null && 
+        if (payout.Destination != null &&
             !(payout.Type == AccountIdentifierType.IBAN || payout.Type == AccountIdentifierType.SCAN || payout.Type == AccountIdentifierType.BTC))
         {
             yield return new ValidationResult("Only destination types of IBAN, SCAN or BTC are supported.", new string[] { nameof(payout.Type) });
@@ -274,16 +324,31 @@ public static class PayoutsValidator
             foreach (var err in payout.Destination.Identifier.Validate(validationContext))
             {
                 yield return err;
-            } 
+            }
         }
 
-        if (payout.Type != AccountIdentifierType.BTC && !ValidateTheirReference(payout.TheirReference, payout.Type))
+        if (payout.Type != AccountIdentifierType.BTC && !ValidateTheirReference(payout.TheirReference, payout.Type, payout.PaymentProcessor))
         {
-            yield return new ValidationResult("Their reference must consist of at least 6 alphanumeric characters that are not all the same " +
-                "(non alphanumeric characters do not get counted towards this minimum value). " +
-                "The allowed characters are alphanumeric, space, hyphen(-), full stop (.), ampersand (&), and forward slash (/). " +
-                "Total of all characters must be less than 18 for a SCAN payout and less than 140 for an IBAN payout.",
-                new string[] { nameof(payout.TheirReference) });
+            if (payout.PaymentProcessor == PaymentProcessorsEnum.Modulr)
+            {
+                yield return new ValidationResult("Their reference must consist of at least 6 alphanumeric characters that are not all the same " +
+                    "(non alphanumeric characters do not get counted towards this minimum value). " +
+                    "The allowed characters are alphanumeric, space, hyphen(-), full stop (.), ampersand (&), and forward slash (/). " +
+                    "Total of all characters must be less than 18 for a SCAN payout and less than 140 for an IBAN payout.",
+                    new string[] { nameof(payout.TheirReference) });
+            }
+            else if(payout.PaymentProcessor == PaymentProcessorsEnum.BankingCircle || payout.PaymentProcessor == PaymentProcessorsEnum.BankingCircleAgency)
+            {
+                yield return new ValidationResult("Their reference must consist of at least 1 non-blank character. " +
+                    "The allowed characters are alphanumeric, forward slash (/), hyphen (-), question mark (?), colon (:), parentheses, full stop (.), " +
+                    "comma (,), single quote ('), plus (+) and space. The total length must not exceed 140 characters.",
+                    new string[] { nameof(payout.TheirReference) });
+            }
+            else
+            {
+                yield return new ValidationResult($"Payment processor {payout.PaymentProcessor} is not supported for payouts.",
+                   new string[] { nameof(payout.TheirReference) });
+            }
         }
 
         if (!ValidateYourReference(payout.YourReference))
@@ -297,12 +362,12 @@ public static class PayoutsValidator
         {
             yield return new ValidationResult($"ScheduleDate must have a value if Scheduled is true.", new string[] { nameof(payout.ScheduleDate) });
         }
-        
+
         if (payout.Scheduled.GetValueOrDefault() && payout.ScheduleDate <= DateTimeOffset.UtcNow)
         {
             yield return new ValidationResult($"ScheduleDate {payout.ScheduleDate} must be in the future.", new string[] { nameof(payout.ScheduleDate) });
         }
-        
+
         if (payout.Scheduled.GetValueOrDefault() && payout.ScheduleDate > DateTimeOffset.UtcNow.AddDays(PAYOUT_SCHEDULE_DAYS_IN_FUTURE))
         {
             yield return new ValidationResult($"ScheduleDate {payout.ScheduleDate} cannot be more than {PAYOUT_SCHEDULE_DAYS_IN_FUTURE} days in the future.", new string[] { nameof(payout.ScheduleDate) });
@@ -315,8 +380,9 @@ public static class PayoutsValidator
     /// </summary>
     /// <param name="identifierType">The account type the Their Reference field is for.</param>
     /// <param name="theirReference">The desired TheirReference string.</param>
+    /// <param name="paymentProcessor">The payment processor the payout is being submitted for.</param>
     /// <returns>A safe TheirReference value.</returns>
-    public static string MakeSafeTheirReference(AccountIdentifierType identifierType, string theirReference)
+    public static string MakeSafeTheirReference(AccountIdentifierType identifierType, string theirReference, PaymentProcessorsEnum paymentProcessor)
     {
         string fallbackTheirReference = string.Format(FALLBACK_THEIR_REFERENCE, DateTime.Now.ToString("HHmmss"));
 
@@ -325,7 +391,7 @@ public static class PayoutsValidator
             return fallbackTheirReference;
         }
 
-        if (ValidateTheirReference(theirReference, identifierType))
+        if (ValidateTheirReference(theirReference, identifierType, paymentProcessor))
         {
             return theirReference;
         }
@@ -333,34 +399,46 @@ public static class PayoutsValidator
         {
             theirReference = Regex.Replace(theirReference, @"[^a-zA-Z0-9 ]", "");
 
-            int theirRefMaxLength = identifierType == AccountIdentifierType.SCAN ?
-               THEIR_REFERENCE_SCAN_MAXIMUM_LENGTH :
-               THEIR_REFERENCE_IBAN_MAXIMUM_LENGTH;
+            if (paymentProcessor == PaymentProcessorsEnum.BankingCircle || paymentProcessor == PaymentProcessorsEnum.BankingCircleAgency)
+            {
+                theirReference = theirReference.Length > REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH ?
+                    theirReference.Substring(0, REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH) :
+                    theirReference;
+            }
+            else
+            {
+                int theirRefMaxLength = identifierType == AccountIdentifierType.SCAN ?
+                   THEIR_REFERENCE_SCAN_MAXIMUM_MODULR_LENGTH :
+                   THEIR_REFERENCE_IBAN_MAXIMUM_MODULR_LENGTH;
 
-            theirReference = theirReference.Length > theirRefMaxLength ?
-                theirReference.Substring(0, theirRefMaxLength) :
-                theirReference;
+                theirReference = theirReference.Length > theirRefMaxLength ?
+                    theirReference.Substring(0, theirRefMaxLength) :
+                    theirReference;
 
-            theirReference = theirReference.Length < THEIR_REFERENCE_MINIMUM_LENGTH ?
-                theirReference.PadRight(THEIR_REFERENCE_MINIMUM_LENGTH - theirReference.Length, 'X') :
-                theirReference;
+                theirReference = theirReference.Length < THEIR_REFERENCE_MINIMUM_MODULR_LENGTH ?
+                    theirReference.PadRight(THEIR_REFERENCE_MINIMUM_MODULR_LENGTH - theirReference.Length, 'X') :
+                    theirReference;
+            }
 
-            return ValidateTheirReference(theirReference, identifierType) ? theirReference : fallbackTheirReference;
+            return ValidateTheirReference(theirReference, identifierType, paymentProcessor) ? theirReference : fallbackTheirReference;
         }
     }
-    
+
     public static string GetYourReferenceFromInvoices(List<string?> invoiceReferences)
     {
         return GetDelimitedStringInRange(invoiceReferences, YOUR_REFERENCE_MAXIMUM_LENGTH);
     }
-    
-    public static string GetTheirReferenceFromInvoices(CurrencyTypeEnum currency, List<string?> invoiceReferences)
+
+    public static string GetTheirReferenceFromInvoices(CurrencyTypeEnum currency, List<string?> invoiceReferences, PaymentProcessorsEnum paymentProcessor)
     {
-        var maxLength = currency == CurrencyTypeEnum.GBP ? THEIR_REFERENCE_SCAN_MAXIMUM_LENGTH : THEIR_REFERENCE_IBAN_MAXIMUM_LENGTH;
-        
-        return MakeSafeTheirReference(currency == CurrencyTypeEnum.EUR ? AccountIdentifierType.IBAN : AccountIdentifierType.SCAN, GetDelimitedStringInRange(invoiceReferences, maxLength));
+        var maxLength = currency == CurrencyTypeEnum.GBP ? THEIR_REFERENCE_SCAN_MAXIMUM_MODULR_LENGTH : THEIR_REFERENCE_IBAN_MAXIMUM_MODULR_LENGTH;
+
+        return MakeSafeTheirReference(
+            currency == CurrencyTypeEnum.EUR ? AccountIdentifierType.IBAN : AccountIdentifierType.SCAN, 
+            GetDelimitedStringInRange(invoiceReferences, maxLength),
+            paymentProcessor);
     }
-    
+
     /// <summary>
     /// Builds a delimted string from a list of strings, ensuring the total length does not exceed the character limit.
     /// </summary>
@@ -370,33 +448,33 @@ public static class PayoutsValidator
     private static string GetDelimitedStringInRange(List<string?> collection, int characterLimit)
     {
         const string more = " ...";
-        
+
         var sb = new StringBuilder(characterLimit);
         var remaining = collection.Count;
-        
-        foreach(var s in collection)
+
+        foreach (var s in collection)
         {
             if (string.IsNullOrEmpty(s))
             {
                 continue;
             }
-            
+
             if (remaining == collection.Count && s.Length > characterLimit)
             {
                 return s[..(characterLimit - 3)] + "...";
             }
-            
+
             if (sb.Length + 2 + s.Length > characterLimit - more.Length)
             {
                 sb.Append(more);
                 break;
             }
-            
+
             if (sb.Length > 0)
             {
                 sb.Append(" . ");
             }
-            
+
             sb.Append(s);
             remaining--;
         }
