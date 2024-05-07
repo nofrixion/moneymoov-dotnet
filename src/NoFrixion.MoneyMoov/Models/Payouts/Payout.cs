@@ -341,6 +341,11 @@ public class Payout : IValidatableObject, IWebhookPayload
     public Beneficiary? Beneficiary { get; set; }
 
     /// <summary>
+    /// The usptream payment processor for the payout.
+    /// </summary>
+    public PaymentProcessorsEnum PaymentProcessor { get; set; }
+
+    /// <summary>
     /// The activity associated with the payout.
     /// </summary>
     public List<PayoutEvent>? Events { get; set; }
