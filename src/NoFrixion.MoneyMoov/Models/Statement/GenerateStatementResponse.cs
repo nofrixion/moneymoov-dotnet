@@ -19,6 +19,7 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class GenerateStatementResponse
 {
+    public Guid ID { get; set; }
     public StatementGenerationStatusEnum Status { get; set; } = StatementGenerationStatusEnum.Unknown;
     public string StatementUrl { get; set; } = "";
 }
