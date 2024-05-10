@@ -37,5 +37,5 @@ public enum ReportTypesEnum
     /// <summary>
     /// A report for merchant account balances.
     /// </summary>
-    MerchantAccountBalances = 4,
+    MerchantAccountsBalance = 4,
 }
