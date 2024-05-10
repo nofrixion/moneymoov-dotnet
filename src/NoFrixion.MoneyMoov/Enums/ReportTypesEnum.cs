@@ -35,7 +35,7 @@ public enum ReportTypesEnum
     SafeGuardingReconciliation = 3,
 
     /// <summary>
-    /// A report for merchant account balances 
+    /// A report for merchant account balances.
     /// </summary>
-    MerchantAccounts = 4,
+    MerchantAccountsBalance = 4,
 }
