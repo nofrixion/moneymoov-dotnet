@@ -79,6 +79,12 @@ public class Rule : IValidatableObject, IWebhookPayload
     /// </summary>
     public DateTimeOffset LastRunAtTransactionDate { get; set; }
 
+    public User? CreatedBy { get; set; } = null!;
+    
+    public User? AuthorisedBy { get; set; }
+    
+    public PaymentAccount? Account { get; set; } = null!;
+    
     /// <summary>
     /// The approval hash is used when approving the rule and to detect when critical
     /// fields change.
