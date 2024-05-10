@@ -362,4 +362,14 @@ public static class MoneyMoovUrlBuilder
 
         return url;
     }
+
+    public static string StatementsApiUrl(string moneyMoovBaseUrl)
+    {
+        return $"{moneyMoovBaseUrl}/statements";
+    }
+    
+    public static string BusinessHubUrl(string moneyMoovBaseUrl)
+    {
+        return $"{moneyMoovBaseUrl}/signalr/business";
+    } 
 }

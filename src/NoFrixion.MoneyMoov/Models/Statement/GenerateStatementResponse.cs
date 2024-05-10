@@ -13,10 +13,12 @@
 //  Proprietary NoFrixion.
 // -----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Enums;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class GenerateStatementResponse
 {
-    public string Status { get; set; } = "";
+    public StatementGenerationStatusEnum Status { get; set; } = StatementGenerationStatusEnum.Unknown;
     public string StatementUrl { get; set; } = "";
 }

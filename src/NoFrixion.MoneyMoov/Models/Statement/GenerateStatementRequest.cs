@@ -26,26 +26,16 @@ public class GenerateStatementRequest
     /// ID of the account.
     /// </summary>
     public Guid AccountID { get; set; }
-    
+
     /// <summary>
-    /// Month number for the start of the range.
+    /// Minimum transaction date for the statement.
     /// </summary>
-    public short FromMonth { get; set; }
-    
+    public DateTimeOffset FromDate { get; set; }
+
     /// <summary>
-    /// Year for the start of the range.
+    /// Maximum transaction date for the statement.
     /// </summary>
-    public short FromYear { get; set; }
-    
-    /// <summary>
-    /// Month number for the limit of the range.
-    /// </summary>
-    public short ToMonth { get; set; }
-    
-    /// <summary>
-    /// Year for the limit of the range.
-    /// </summary>
-    public short ToYear { get; set; }
+    public DateTimeOffset ToDate { get; set; }
     
     /// <summary>
     /// File format to save the statement as. Defaults to PDF.
