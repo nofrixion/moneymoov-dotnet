@@ -24,4 +24,15 @@ public class ReportResult
     public DateTimeOffset LastCompletedAt { get; set; }
     public int StatementNumber { get; set; }
     public string Contents { get; set; } = string.Empty;
+
+    public string ContentType =>
+        ReportType switch
+        {
+            ReportTypesEnum.SwiftCustomerStatement => "application/mt940",
+            ReportTypesEnum.CustomerActivity => "application/json",
+            ReportTypesEnum.SafeGuardingReconciliation => "application/json",
+            ReportTypesEnum.MerchantAccountsBalance => "text/csv",
+            ReportTypesEnum.MerchantAccountsTransaction => "text/csv",
+            _ => "text/plain"
+        };
 }
