@@ -35,7 +35,12 @@ public enum ReportTypesEnum
     SafeGuardingReconciliation = 3,
 
     /// <summary>
-    /// A report for merchant account balances.
+    /// A report for the balance of all accounts for a merchant.
     /// </summary>
     MerchantAccountsBalance = 4,
+
+    /// <summary>
+    /// A report for the transactions for all accounts for a merchant.
+    /// </summary>
+    MerchantAccountsTransaction = 5,
 }
