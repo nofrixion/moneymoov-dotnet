@@ -33,6 +33,7 @@ public class ReportResult
             ReportTypesEnum.SafeGuardingReconciliation => "application/json",
             ReportTypesEnum.MerchantAccountsBalance => "text/csv",
             ReportTypesEnum.MerchantAccountsTransaction => "text/csv",
+            ReportTypesEnum.VisionBlueTransaction => "text/csv",
             _ => "text/plain"
         };
 }
