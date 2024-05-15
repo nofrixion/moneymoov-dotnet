@@ -58,6 +58,11 @@ public class PaymentRequestAddress : IValidatableObject
         {
             yield return new ValidationResult($"{nameof(AddressLine1)} must be provided.", new string[] { nameof(AddressLine1) });
         }
+
+        if (!string.IsNullOrEmpty(AddressCountryCode) && AddressCountryCode.Length != 2)
+        {
+            yield return new ValidationResult($"{nameof(AddressCountryCode)} must be 2 characters.", new string[] { nameof(AddressCountryCode) });
+        }
     }
 
     /// <summary>
