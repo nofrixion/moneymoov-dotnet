@@ -43,4 +43,9 @@ public enum ReportTypesEnum
     /// A report for the transactions for all accounts for a merchant.
     /// </summary>
     MerchantAccountsTransaction = 5,
+
+    /// <summary>
+    /// Custom report to export transactions for VisionBlue.
+    /// </summary>
+    VisionBlueTransaction = 6
 }
