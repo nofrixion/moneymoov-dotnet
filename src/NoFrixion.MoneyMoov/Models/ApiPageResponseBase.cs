@@ -62,6 +62,17 @@ public class TransactionPageResponse : ApiPageResponseBase<Transaction>
     { }
 }
 
+public class PaymentAccountPageResponse : ApiPageResponseBase<PaymentAccount>
+{
+    public PaymentAccountPageResponse(List<PaymentAccount> content,
+        int pageNumber = 1,
+        int pageSize = 10,
+        int totalPages = default,
+        long totalSize = default)
+        : base(content, pageNumber, pageSize, totalPages, totalSize)
+    { }
+}
+
 public abstract class ApiPageResponseBase<T> : PageResponse<T>
 {
     /// <summary>
