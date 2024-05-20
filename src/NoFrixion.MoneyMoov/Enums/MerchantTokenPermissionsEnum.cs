@@ -20,6 +20,13 @@ namespace NoFrixion.MoneyMoov;
 public enum MerchantTokenPermissionsEnum
 {
     /// <summary>
+    /// Permission to deny all actions. This won't be assigned in practice but when
+    /// checking whether a permission is granted, this can be used to specify that merchant
+    /// tokens are not allowed to perform any actions.
+    /// </summary>
+    Deny = 0,
+
+    /// <summary>
     /// Permission to create a payment request
     /// </summary>
     CreatePaymentRequest = 1,
@@ -97,5 +104,5 @@ public enum MerchantTokenPermissionsEnum
     /// <summary>
     /// Permission to create and submit a payout from a trusted source.
     /// </summary>
-    TrustedSubmitPayout = 32768
+    TrustedSubmitPayout = 32768,
 }
