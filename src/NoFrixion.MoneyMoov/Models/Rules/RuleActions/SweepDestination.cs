@@ -40,6 +40,13 @@ public class SweepDestination : Counterparty, IValidatableObject
     [Range(0, 1000)]
     public int Priority { get; set; }
 
+    /// <summary>
+    /// Optional ID of a Beneficairy to use for the sweep destination. If the Beneficiary ID is set then the 
+    /// Identifier details will be ignored and instead will be set to the details of the Beneficiary at the point
+    /// the rule is executed.
+    /// </summary>
+    public Guid? BeneficiaryID { get; set; }
+
     public override Dictionary<string, string> ToDictionary(string keyPrefix)
     {
         var dict = base.ToDictionary(keyPrefix);
