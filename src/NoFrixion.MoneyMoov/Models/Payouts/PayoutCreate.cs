@@ -163,8 +163,16 @@ public class PayoutCreate
     /// <summary>
     /// Optional. The ID of the beneficiary to use for the payout destination.
     /// </summary>
-    [Obsolete("Please use Destination.BeneficiaryID to set the beneficiary.")]
-    public Guid? BeneficiaryID { get; set; }
+    //[Obsolete("Please use Destination.BeneficiaryID to set the beneficiary.")]
+    public Guid? BeneficiaryID
+    {
+        get => Destination?.BeneficiaryID;
+        set
+        {
+            Destination ??= new CounterpartyCreate();
+            Destination.BeneficiaryID = value;
+        }
+    }
 
     /// <summary>
     /// Places all the payout's properties into a dictionary.
