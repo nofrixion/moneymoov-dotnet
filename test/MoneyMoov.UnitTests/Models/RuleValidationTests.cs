@@ -41,7 +41,6 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
             TriggerCronExpression = cronExpression,
             SweepAction = new SweepAction
             {
-                Priority = 1,
                 AmountToLeave = 1.00M,
                 MinimumAmountToRunAt = 99.00M,
                 Destinations = new List<SweepDestination>

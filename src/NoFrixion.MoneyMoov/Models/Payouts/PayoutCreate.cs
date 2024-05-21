@@ -20,6 +20,9 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class PayoutCreate
 {
+    /// <summary>
+    /// THe ID of the source account for the payout.
+    /// </summary>
     [Required(ErrorMessage = "AccountID is required.")]
     public Guid AccountID { get; set; }
 
@@ -154,12 +157,13 @@ public class PayoutCreate
     /// <summary>
     /// Optional. The ID of the beneficiary identifier to use for the payout destination.
     /// </summary>
-    [Obsolete("Please use BeneficiaryID to set the beneficiary.")]
+    [Obsolete("Please use Destination.BeneficiaryID to set the beneficiary.")]
     public Guid? BeneficiaryIdentifierID { get; set; }
 
     /// <summary>
     /// Optional. The ID of the beneficiary to use for the payout destination.
     /// </summary>
+    [Obsolete("Please use Destination.BeneficiaryID to set the beneficiary.")]
     public Guid? BeneficiaryID { get; set; }
 
     /// <summary>
@@ -179,8 +183,7 @@ public class PayoutCreate
             { nameof(YourReference), YourReference ?? string.Empty },
             { nameof(TheirReference), TheirReference ?? string.Empty },
             { nameof(InvoiceID), InvoiceID ?? string.Empty },
-            { nameof(AllowIncomplete), AllowIncomplete.ToString() },
-            { nameof(BeneficiaryID), BeneficiaryID?.ToString() ?? string.Empty }
+            { nameof(AllowIncomplete), AllowIncomplete.ToString() }
         };
 
         if (Destination != null)
