@@ -72,13 +72,13 @@ public class RuleUpdate
     /// Optional start time for rule executions. If this value is set the rule will not
     /// be triggered until the start time has been reached.
     /// </summary>
-    public DateTimeOffset? StartAt { get; }
+    public DateTimeOffset? StartAt { get; set; }
 
     /// <summary>
     /// Optional end time for rule executions. If this value is set the rule will not
     /// be triggered after the end time has been reached.
     /// </summary>
-    public DateTimeOffset? EndAt { get; }
+    public DateTimeOffset? EndAt { get; set; }
 
     /// <summary>
     /// The sweep action parameters for the rule. Any changes to the sweep rule parameters
