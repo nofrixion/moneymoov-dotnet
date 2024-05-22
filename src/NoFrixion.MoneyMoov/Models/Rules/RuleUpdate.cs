@@ -18,6 +18,11 @@ namespace NoFrixion.MoneyMoov.Models;
 public class RuleUpdate
 {
     /// <summary>
+    /// Account ID the rule is associated with.
+    /// </summary>
+    public Guid? AccountID { get; set; }
+    
+    /// <summary>
     /// A name to succinctly describe the rule.
     /// </summary>
     public string? Name { get; set; }
