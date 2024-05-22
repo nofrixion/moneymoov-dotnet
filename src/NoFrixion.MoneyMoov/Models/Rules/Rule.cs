@@ -36,7 +36,10 @@ public class Rule : IValidatableObject, IWebhookPayload
     public bool IsDisabled { get; set; }
     public RuleStatusEnum Status { get; set; }
     public bool TriggerOnPayIn { get; set; }
+
+    [Obsolete("Payout triggers are no longer supported.")]
     public bool TriggerOnPayOut { get; set; }
+    
     public string TriggerCronExpression { get; set; } = Empty;
     public DateTimeOffset? StartAt { get; set; }
     public DateTimeOffset? EndAt { get; set; }
@@ -114,6 +117,12 @@ public class Rule : IValidatableObject, IWebhookPayload
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
+        if(TriggerOnPayIn && !string.IsNullOrEmpty(TriggerCronExpression))
+        {
+            yield return new ValidationResult($"A CRON expression cannot be set when a payin trigger is set.",
+                new string[] { nameof(TriggerCronExpression) });
+        }
+
         if (!IsNullOrEmpty(TriggerCronExpression))
         {
             if (!CronExpression.IsValidExpression(TriggerCronExpression))

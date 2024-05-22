@@ -60,6 +60,7 @@ public class RuleUpdate
     /// Set to true if the rule execution should be triggered when the account 
     /// makes a pay out (debit).
     /// </summary>
+    [Obsolete("Trigger on payout is no longer supported.")]
     public bool? TriggerOnPayOut { get; set; }
 
     /// <summary>
@@ -106,7 +107,6 @@ public class RuleUpdate
         if (OnExecutionSuccessWebHookUrl != null) dict.Add(nameof(OnExecutionSuccessWebHookUrl), OnExecutionSuccessWebHookUrl);
         if (IsDisabled != null) dict.Add(nameof(IsDisabled), IsDisabled.Value.ToString());
         if (TriggerOnPayIn != null) dict.Add(nameof(TriggerOnPayIn), TriggerOnPayIn.Value.ToString());
-        if (TriggerOnPayOut != null) dict.Add(nameof(TriggerOnPayOut), TriggerOnPayOut.Value.ToString());
         if (TriggerCronExpression != null) dict.Add(nameof(TriggerCronExpression), TriggerCronExpression);
         if (StartAt != null) dict.Add(nameof(StartAt), StartAt.Value.ToString());
         if (EndAt != null) dict.Add(nameof(EndAt), EndAt.Value.ToString());
