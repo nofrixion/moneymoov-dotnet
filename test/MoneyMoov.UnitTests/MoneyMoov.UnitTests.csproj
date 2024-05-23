@@ -26,6 +26,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\moneymoovapi\src\NoFrixion.Biz\NoFrixion.Biz.csproj" />
 		<ProjectReference Include="..\..\src\NoFrixion.MoneyMoov\NoFrixion.MoneyMoov.csproj" />
 	</ItemGroup>
 
