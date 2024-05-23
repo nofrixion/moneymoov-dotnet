@@ -18,6 +18,9 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class PayoutUpdate
 {
+    /// <summary>
+    /// The ID of the source account for the payout.
+    /// </summary>
     public Guid? AccountID { get; set; }
 
     public AccountIdentifierType? Type { get; set; }
@@ -150,13 +153,22 @@ public class PayoutUpdate
     /// <summary>
     /// Optional. The ID of the beneficiary identifier to use for the payout destination.
     /// </summary>
-    [Obsolete("Please use BeneficiaryID to update the beneficiary.")]
+    [Obsolete("Please use Destination.BeneficiaryID to update the beneficiary.")]
     public Guid? BeneficiaryIdentifierID { get; set; }
 
     /// <summary>
     /// Optional. The ID of the beneficiary to use for the payout destination.
     /// </summary>
-    public Guid? BeneficiaryID { get; set; }
+    [Obsolete("Please use Destination.BeneficiaryID to update the beneficiary.")]
+    public Guid? BeneficiaryID
+    {
+        get => Destination?.BeneficiaryID;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.BeneficiaryID = value;
+        }
+    }
 
     /// <summary>
     /// Places all the payout's properties into a dictionary.

@@ -40,6 +40,11 @@ public class SweepDestination : Counterparty, IValidatableObject
     [Range(0, 1000)]
     public int Priority { get; set; }
 
+    /// <summary>
+    /// If set to true, it indicates that the destiation is disabled and should not be used.
+    /// </summary>
+    public bool IsDisabled { get; set; }
+
     public override Dictionary<string, string> ToDictionary(string keyPrefix)
     {
         var dict = base.ToDictionary(keyPrefix);
@@ -91,6 +96,5 @@ public class SweepDestination : Counterparty, IValidatableObject
             yield return new ValidationResult($"The destination identifier currency must be set.",
                 new string[] { nameof(Identifier.Currency) });
         }
-
     }
 }

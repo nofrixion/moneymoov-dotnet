@@ -31,8 +31,10 @@ public class SweepAction : IValidatableObject
 
     private bool _isEmpty = false;
 
+    [Obsolete("No longer required. Rules can only have a single action.")]
     public int Priority { get; set; }
 
+    [Obsolete("No longer required. The only action supported is sweep.")]
     public RuleActionsEnum ActionType { get; } = RuleActionsEnum.Sweep;
 
     public List<SweepDestination> Destinations { get; set; } = new List<SweepDestination>();
@@ -71,8 +73,8 @@ public class SweepAction : IValidatableObject
     {
         var dict = new Dictionary<string, string>
         {
-            { keyPrefix + nameof(Priority), Priority.ToString() },
-            { keyPrefix + nameof(ActionType), ActionType.ToString() },
+            //{ keyPrefix + nameof(Priority), Priority.ToString() },
+            //{ keyPrefix + nameof(ActionType), ActionType.ToString() },
             { keyPrefix + nameof(AmountToLeave), AmountToLeave.ToString() },
             { keyPrefix + nameof(MinimumAmountToRunAt), MinimumAmountToRunAt.ToString() },
             { keyPrefix + nameof(PayoutYourReference), PayoutYourReference ?? string.Empty },
