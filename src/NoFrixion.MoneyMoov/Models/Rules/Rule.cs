@@ -117,6 +117,12 @@ public class Rule : IValidatableObject, IWebhookPayload
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
+        if(!TriggerOnPayIn && string.IsNullOrEmpty(TriggerCronExpression))
+        {
+            yield return new ValidationResult($"A CRON expression must be set when a payin trigger is not set.",
+                               new string[] { nameof(TriggerCronExpression) });
+        }
+
         if(TriggerOnPayIn && !string.IsNullOrEmpty(TriggerCronExpression))
         {
             yield return new ValidationResult($"A CRON expression cannot be set when a payin trigger is set.",
