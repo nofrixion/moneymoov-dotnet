@@ -72,7 +72,7 @@ public class Counterparty
         (!string.IsNullOrEmpty(Identifier.AccountNumber) && !string.IsNullOrEmpty(Identifier.SortCode)) ||  
         !string.IsNullOrEmpty(Identifier.BitcoinAddress));
 
-    private int DestinationsSetCount() =>
+    public int DestinationsSetCount() =>
         (IsAccountIDSet() ? 1 : 0) + (IsBeneficiaryIDSet() ? 1 : 0) + (IsIdentifierSet() ? 1 : 0);
 
     public bool IsSameDestination(Counterparty? other)
@@ -141,12 +141,6 @@ public class Counterparty
         {
             yield return new ValidationResult($"One of the destination options (AccountID, BeneficiaryID or Identifier) must be set for a counterparty.",
                 null);
-        }
-
-        if (DestinationsSetCount() > 1)
-        {
-            yield return new ValidationResult($"Only one of the destination options (AccountID, BeneficiaryID or Identifier) can be set for a counterparty.",
-               null);
         }
 
         if (IsIdentifierSet() && Identifier?.Type == AccountIdentifierType.Unknown)
