@@ -85,12 +85,6 @@ public class SweepDestination : Counterparty, IValidatableObject
                 new string[] { nameof(SweepAmount), nameof(SweepPercentage) });
         }
 
-        if(Identifier== null)
-        {
-            yield return new ValidationResult($"The destination identifier details must be set for a sweep destination.",
-                new string[] { nameof(Identifier) });
-        }
-
         if (Identifier?.Currency == CurrencyTypeEnum.None)
         {
             yield return new ValidationResult($"The destination identifier currency must be set.",

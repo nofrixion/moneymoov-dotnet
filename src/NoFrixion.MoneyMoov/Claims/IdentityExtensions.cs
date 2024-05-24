@@ -244,10 +244,16 @@ public static class IdentityExtensions
 
     public static string WhoAmI(this ClaimsIdentity claimsIdentity)
     {
+        if(claimsIdentity == null)
+        {
+            return "Empty claims identity";
+        }
+
         if (claimsIdentity.IsComplianceOfficer())
         {
             return "Compliance " + claimsIdentity.GetEmailAddress();
         }
+
         if (claimsIdentity.IsOperationsOfficer())
         {
             return "Operations " + claimsIdentity.GetEmailAddress();

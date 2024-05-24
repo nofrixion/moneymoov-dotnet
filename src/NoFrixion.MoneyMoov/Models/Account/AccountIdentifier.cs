@@ -191,6 +191,27 @@ public class AccountIdentifier: IValidatableObject
             ? $"{SortCode[..2]}-{SortCode.Substring(2, 2)}-{SortCode.Substring(4, 2)} {AccountNumber}"
             : "No identifier.";
 
+    public bool IsSameDestination(AccountIdentifier other)
+    {
+        if(other == null)
+        {
+            return false;
+        }
+
+        if (Type != other.Type)
+        {
+            return false;
+        }
+
+        return Type switch
+        {
+            AccountIdentifierType.IBAN => IBAN == other.IBAN,
+            AccountIdentifierType.SCAN => SortCode == other.SortCode && AccountNumber == other.AccountNumber,
+            AccountIdentifierType.BTC => BitcoinAddress == other.BitcoinAddress,
+            _ => false
+        };
+    }
+
     public virtual Dictionary<string, string> ToDictionary(string keyPrefix)
     {
         return new Dictionary<string, string>

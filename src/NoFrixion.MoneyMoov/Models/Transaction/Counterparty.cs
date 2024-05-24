@@ -63,6 +63,43 @@ public class Counterparty
     public string Summary
         => Name + (Identifier != null ? ", " + Identifier.Summary : string.Empty);
 
+    public bool IsAccountIDSet() => AccountID != null && AccountID != Guid.Empty;
+
+    public bool IsBeneficiaryIDSet() => BeneficiaryID != null && BeneficiaryID != Guid.Empty;
+
+    public bool IsIdentifierSet() => Identifier != null && (
+        !string.IsNullOrEmpty(Identifier.IBAN) ||
+        (!string.IsNullOrEmpty(Identifier.AccountNumber) && !string.IsNullOrEmpty(Identifier.SortCode)) ||  
+        !string.IsNullOrEmpty(Identifier.BitcoinAddress));
+
+    private int DestinationsSetCount() =>
+        (IsAccountIDSet() ? 1 : 0) + (IsBeneficiaryIDSet() ? 1 : 0) + (IsIdentifierSet() ? 1 : 0);
+
+    public bool IsSameDestination(Counterparty? other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+
+        if (IsAccountIDSet() && other.IsAccountIDSet())
+        {
+            return AccountID == other.AccountID;
+        }
+
+        if (IsBeneficiaryIDSet() && other.IsBeneficiaryIDSet())
+        {
+            return BeneficiaryID == other.BeneficiaryID;
+        }
+
+        if (IsIdentifierSet() && other.IsIdentifierSet())
+        {
+            return Identifier!.IsSameDestination(other.Identifier);
+        }
+
+        return false;
+    }   
+
     public virtual Dictionary<string, string> ToDictionary(string keyPrefix)
     {
         var dict = new Dictionary<string, string>
@@ -100,16 +137,22 @@ public class Counterparty
 
     public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (AccountID == null && BeneficiaryID == null && Identifier == null)
+        if (DestinationsSetCount() == 0)
         {
-            yield return new ValidationResult($"One of the desintation options (AccountID, BeneficiaryID or Identifier) must be set for a counterparty.",
-                new string[] { nameof(Identifier) });
+            yield return new ValidationResult($"One of the destination options (AccountID, BeneficiaryID or Identifier) must be set for a counterparty.",
+                null);
         }
 
-        if (Identifier != null && Identifier.Type == AccountIdentifierType.Unknown)
+        if (DestinationsSetCount() > 1)
+        {
+            yield return new ValidationResult($"Only one of the destination options (AccountID, BeneficiaryID or Identifier) can be set for a counterparty.",
+               null);
+        }
+
+        if (IsIdentifierSet() && Identifier?.Type == AccountIdentifierType.Unknown)
         {
             yield return new ValidationResult($"The counterparty identifier must have either an IBAN or account number and sort code set.",
-                new string[] { nameof(Identifier) });
+                null);
         }
     }
 
