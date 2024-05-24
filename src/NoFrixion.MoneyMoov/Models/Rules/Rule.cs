@@ -21,6 +21,11 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class Rule : IValidatableObject, IWebhookPayload
 {
+    /// <summary>
+    /// The minimum interval between rule executions in minutes.
+    /// </summary>
+    public const int MINIMUM_CRON_INTERVAL_MINUTES = 1;
+
     public Guid ID { get; set; }
     public Guid AccountID { get; set; }
 
@@ -138,10 +143,9 @@ public class Rule : IValidatableObject, IWebhookPayload
             }
             else
             {
-                const int MIN_CRON_INTERVAL_MINUTES = 60;
-                if (!IsCronExpressionScheduledMoreThanXMinutes(TriggerCronExpression, MIN_CRON_INTERVAL_MINUTES))
+                if (!IsCronExpressionScheduledMoreThanXMinutes(TriggerCronExpression, MINIMUM_CRON_INTERVAL_MINUTES))
                 {
-                    yield return new ValidationResult($"Invalid TriggerCronExpression. The minimum interval between rule executions is {MIN_CRON_INTERVAL_MINUTES} minutes.",
+                    yield return new ValidationResult($"Invalid TriggerCronExpression. The minimum interval between rule executions is {MINIMUM_CRON_INTERVAL_MINUTES} minutes.",
                         new string[] { nameof(TriggerCronExpression) });
                 }
             }
