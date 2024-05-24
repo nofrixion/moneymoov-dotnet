@@ -73,8 +73,6 @@ public class SweepAction : IValidatableObject
     {
         var dict = new Dictionary<string, string>
         {
-            //{ keyPrefix + nameof(Priority), Priority.ToString() },
-            //{ keyPrefix + nameof(ActionType), ActionType.ToString() },
             { keyPrefix + nameof(AmountToLeave), AmountToLeave.ToString() },
             { keyPrefix + nameof(MinimumAmountToRunAt), MinimumAmountToRunAt.ToString() },
             { keyPrefix + nameof(PayoutYourReference), PayoutYourReference ?? string.Empty },
@@ -122,7 +120,14 @@ public class SweepAction : IValidatableObject
         {
             foreach (var err in dest.Validate(validationContext))
             {
-                yield return err;
+                if (err.MemberNames == null || !err.MemberNames.Any())
+                {
+                    yield return new ValidationResult(err.ErrorMessage, new List<string> { nameof(Destinations) });
+                }
+                else
+                {
+                    yield return err;
+                }
             }
         }
     }

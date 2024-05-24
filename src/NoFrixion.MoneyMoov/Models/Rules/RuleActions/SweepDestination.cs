@@ -85,14 +85,6 @@ public class SweepDestination : Counterparty, IValidatableObject
                 new string[] { nameof(SweepAmount), nameof(SweepPercentage) });
         }
 
-        //if((AccountID == null || AccountID == Guid.Empty) && 
-        //    (BeneficiaryID == null || BeneficiaryID == Guid.Empty) &&
-        //    Identifier == null)
-        //{
-        //    yield return new ValidationResult($"The destination was not set. Either the AccountID, BeneficiaryID or Identifier details must be set for a sweep destination.",
-        //        new string[] { nameof(AccountID), nameof(BeneficiaryID), nameof(Identifier) });
-        //}
-
         if (Identifier?.Currency == CurrencyTypeEnum.None)
         {
             yield return new ValidationResult($"The destination identifier currency must be set.",
