@@ -100,13 +100,17 @@ public class Counterparty
 
     public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (AccountID == null && BeneficiaryID == null && Identifier == null)
+        if ((AccountID == null || AccountID == Guid.Empty) && 
+            (BeneficiaryID == null || BeneficiaryID == Guid.Empty) 
+            && Identifier == null)
         {
-            yield return new ValidationResult($"One of the desintation options (AccountID, BeneficiaryID or Identifier) must be set for a counterparty.",
-                new string[] { nameof(Identifier) });
+            yield return new ValidationResult($"One of the destination options (AccountID, BeneficiaryID or Identifier) must be set for a counterparty.",
+                new string[] { nameof(AccountID), nameof(BeneficiaryID), nameof(Identifier) });
         }
 
-        if (Identifier != null && Identifier.Type == AccountIdentifierType.Unknown)
+        if ((AccountID == null || AccountID == Guid.Empty) &&
+            (BeneficiaryID == null || BeneficiaryID == Guid.Empty) &&
+            Identifier != null && Identifier.Type == AccountIdentifierType.Unknown)
         {
             yield return new ValidationResult($"The counterparty identifier must have either an IBAN or account number and sort code set.",
                 new string[] { nameof(Identifier) });
