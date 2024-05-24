@@ -26,8 +26,8 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
     { }
 
     [Theory]
-    [InlineData("0 0/15 * * * ?", false)] // Will fail as the new value is less than 60 minutes.
-    [InlineData("0 0/10 * * * ?", false)] // Will fail as the new value is less than 60 minutes.
+    [InlineData("0/15 * * * * ?", false)] // Will fail as the new value is less than 60 minutes.
+    [InlineData("0/18 * * * * ?", false)] // Will fail as the new value is less than 60 minutes.
     [InlineData("0 0 * ? * *", true)] // Will succeed as the expressions runs every hour.
     [InlineData("0 0 */2 ? * *", true)] //Will succeed as the expressions runs every two hour.
     [InlineData("0 0 0/1 ? * * *", true)] //Will succeed as the expressions runs every hour.
