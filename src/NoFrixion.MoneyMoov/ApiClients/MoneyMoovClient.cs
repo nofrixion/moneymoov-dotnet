@@ -41,6 +41,8 @@ public interface IMoneyMoovClient
     
     IBeneficiaryClient BeneficiaryClient();
 
+    IStatementClient StatementClient();
+
     Uri? GetBaseUrl();
 }
 
@@ -101,6 +103,9 @@ public class MoneyMoovClient : IMoneyMoovClient
 
     public IRuleClient RuleClient()
         => new RuleClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
+
+    public IStatementClient StatementClient()
+        => new StatementClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
 
     public IUserClient UserClient()
         => new UserClient(new RestApiClient(_httpClientFactory, MONEYMOOV_HTTP_CLIENT_NAME));
