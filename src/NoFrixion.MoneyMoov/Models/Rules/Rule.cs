@@ -81,7 +81,9 @@ public class Rule : IValidatableObject, IWebhookPayload
 
     public DateTimeOffset Inserted { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
-    
+
+    public DateTimeOffset? LastExecutedAt { get; set; }
+
     /// <summary>
     /// The most recent transaction date when the rule was last run.
     /// </summary>
