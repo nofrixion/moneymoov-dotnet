@@ -10,6 +10,7 @@
 // 
 // History:
 // 09 Jan 2023  Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
+// 20 May 2024  Aaron Clauson   Added BeneficiaryID.
 //
 // License: 
 // MIT.
@@ -21,7 +22,18 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class Counterparty
 {
+    /// <summary>
+    /// An optional ID of an internal account the counterparty is associated with. If set
+    /// it will take precedence over any other destination details set for the counterparty.
+    /// </summary>
     public Guid? AccountID { get; set; }
+
+    /// <summary>
+    /// Optional ID of a Beneficiary to use for the counterparty destination. If set
+    /// it will take precedence over any other destination details, except for AccountID,
+    /// set for the counterparty.
+    /// </summary>
+    public Guid? BeneficiaryID { get; set; }
 
     /// <summary>
     /// The name of the counterparty. For a person this should be their full name. For a 
@@ -51,11 +63,49 @@ public class Counterparty
     public string Summary
         => Name + (Identifier != null ? ", " + Identifier.Summary : string.Empty);
 
+    public bool IsAccountIDSet() => AccountID != null && AccountID != Guid.Empty;
+
+    public bool IsBeneficiaryIDSet() => BeneficiaryID != null && BeneficiaryID != Guid.Empty;
+
+    public bool IsIdentifierSet() => Identifier != null && (
+        !string.IsNullOrEmpty(Identifier.IBAN) ||
+        (!string.IsNullOrEmpty(Identifier.AccountNumber) && !string.IsNullOrEmpty(Identifier.SortCode)) ||  
+        !string.IsNullOrEmpty(Identifier.BitcoinAddress));
+
+    public int DestinationsSetCount() =>
+        (IsAccountIDSet() ? 1 : 0) + (IsBeneficiaryIDSet() ? 1 : 0) + (IsIdentifierSet() ? 1 : 0);
+
+    public bool IsSameDestination(Counterparty? other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+
+        if (IsAccountIDSet() && other.IsAccountIDSet())
+        {
+            return AccountID == other.AccountID;
+        }
+
+        if (IsBeneficiaryIDSet() && other.IsBeneficiaryIDSet())
+        {
+            return BeneficiaryID == other.BeneficiaryID;
+        }
+
+        if (IsIdentifierSet() && other.IsIdentifierSet())
+        {
+            return Identifier!.IsSameDestination(other.Identifier);
+        }
+
+        return false;
+    }   
+
     public virtual Dictionary<string, string> ToDictionary(string keyPrefix)
     {
         var dict = new Dictionary<string, string>
         {
              { keyPrefix + nameof(AccountID), AccountID != null ? AccountID.Value.ToString() : string.Empty},
+             { keyPrefix + nameof(BeneficiaryID), BeneficiaryID != null ? BeneficiaryID.Value.ToString() : string.Empty},
              { keyPrefix + nameof(Name), Name ?? string.Empty },
              { keyPrefix + nameof(EmailAddress), EmailAddress ?? string.Empty },
              { keyPrefix + nameof(PhoneNumber), PhoneNumber ?? string.Empty },
@@ -77,6 +127,7 @@ public class Counterparty
     {
         string input =
             (AccountID != null && AccountID != Guid.Empty ? AccountID.ToString() : string.Empty) +
+            (BeneficiaryID != null && BeneficiaryID != Guid.Empty ? BeneficiaryID.ToString() : string.Empty) +
             (!string.IsNullOrEmpty(Name) ? Name : string.Empty) +
             (!string.IsNullOrEmpty(EmailAddress) ? EmailAddress : string.Empty) +
             (!string.IsNullOrEmpty(PhoneNumber) ? PhoneNumber : string.Empty) +
@@ -86,16 +137,16 @@ public class Counterparty
 
     public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (Identifier == null)
+        if (DestinationsSetCount() == 0)
         {
-            yield return new ValidationResult($"The identifier must be set with the destination account details for a counterparty.",
-                new string[] { nameof(Identifier) });
+            yield return new ValidationResult($"One of the destination options (AccountID, BeneficiaryID or Identifier) must be set for a counterparty.",
+                null);
         }
 
-        if (Identifier != null && Identifier.Type == AccountIdentifierType.Unknown)
+        if (IsIdentifierSet() && Identifier?.Type == AccountIdentifierType.Unknown)
         {
             yield return new ValidationResult($"The counterparty identifier must have either an IBAN or account number and sort code set.",
-                new string[] { nameof(Identifier) });
+                null);
         }
     }
 

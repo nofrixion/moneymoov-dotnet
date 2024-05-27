@@ -18,7 +18,6 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class AccountIdentifierCreate
 {
-
     /// <summary>
     /// The currency for the account.
     /// </summary>

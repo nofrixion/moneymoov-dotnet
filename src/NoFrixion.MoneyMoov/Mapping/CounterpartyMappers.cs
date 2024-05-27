@@ -26,7 +26,8 @@ public static class CounterpartyMapper
             Name = counterpartyCreate.Name,
             EmailAddress = counterpartyCreate.EmailAddress,
             PhoneNumber = counterpartyCreate.PhoneNumber,
-            Identifier = counterpartyCreate.Identifier?.ToAccountIdentifier(currency)
+            BeneficiaryID = counterpartyCreate.BeneficiaryID,
+            Identifier = counterpartyCreate.Identifier?.ToAccountIdentifier(currency),  
         };
     }
     
@@ -38,6 +39,7 @@ public static class CounterpartyMapper
             Name = counterparty.Name,
             EmailAddress = counterparty.EmailAddress,
             PhoneNumber = counterparty.PhoneNumber,
+            BeneficiaryID = counterparty.BeneficiaryID,
             Identifier = counterparty.Identifier?.ToAccountIdentifierCreate()
         };
     }

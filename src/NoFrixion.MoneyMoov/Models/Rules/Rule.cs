@@ -21,6 +21,11 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class Rule : IValidatableObject, IWebhookPayload
 {
+    /// <summary>
+    /// The minimum interval between rule executions in minutes.
+    /// </summary>
+    public const int MINIMUM_CRON_INTERVAL_MINUTES = 1;
+
     public Guid ID { get; set; }
     public Guid AccountID { get; set; }
 
@@ -36,7 +41,10 @@ public class Rule : IValidatableObject, IWebhookPayload
     public bool IsDisabled { get; set; }
     public RuleStatusEnum Status { get; set; }
     public bool TriggerOnPayIn { get; set; }
+
+    [Obsolete("Payout triggers are no longer supported.")]
     public bool TriggerOnPayOut { get; set; }
+    
     public string TriggerCronExpression { get; set; } = Empty;
     public DateTimeOffset? StartAt { get; set; }
     public DateTimeOffset? EndAt { get; set; }
@@ -73,7 +81,9 @@ public class Rule : IValidatableObject, IWebhookPayload
 
     public DateTimeOffset Inserted { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
-    
+
+    public DateTimeOffset? LastExecutedAt { get; set; }
+
     /// <summary>
     /// The most recent transaction date when the rule was last run.
     /// </summary>
@@ -114,9 +124,15 @@ public class Rule : IValidatableObject, IWebhookPayload
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if ((TriggerOnPayIn || TriggerOnPayOut) && !IsNullOrEmpty(TriggerCronExpression))
+        if(!TriggerOnPayIn && string.IsNullOrEmpty(TriggerCronExpression))
         {
-            yield return new ValidationResult($"A payin and/or payout trigger cannot be set at the same time as a CRON expression trigger.",
+            yield return new ValidationResult($"A CRON expression must be set when a payin trigger is not set.",
+                               new string[] { nameof(TriggerCronExpression) });
+        }
+
+        if(TriggerOnPayIn && !string.IsNullOrEmpty(TriggerCronExpression))
+        {
+            yield return new ValidationResult($"A CRON expression cannot be set when a payin trigger is set.",
                 new string[] { nameof(TriggerCronExpression) });
         }
 
@@ -129,10 +145,9 @@ public class Rule : IValidatableObject, IWebhookPayload
             }
             else
             {
-                const int MIN_CRON_INTERVAL_MINUTES = 60;
-                if (!IsCronExpressionScheduledMoreThanXMinutes(TriggerCronExpression, MIN_CRON_INTERVAL_MINUTES))
+                if (!IsCronExpressionScheduledMoreThanXMinutes(TriggerCronExpression, MINIMUM_CRON_INTERVAL_MINUTES))
                 {
-                    yield return new ValidationResult($"Invalid TriggerCronExpression. The minimum interval between rule executions is {MIN_CRON_INTERVAL_MINUTES} minutes.",
+                    yield return new ValidationResult($"Invalid TriggerCronExpression. The minimum interval between rule executions is {MINIMUM_CRON_INTERVAL_MINUTES} minutes.",
                         new string[] { nameof(TriggerCronExpression) });
                 }
             }

@@ -35,7 +35,17 @@ public enum ReportTypesEnum
     SafeGuardingReconciliation = 3,
 
     /// <summary>
-    /// A report for merchant account balances.
+    /// A report for the balance of all accounts for a merchant.
     /// </summary>
-    MerchantAccountBalances = 4,
+    MerchantAccountsBalance = 4,
+
+    /// <summary>
+    /// A report for the transactions for all accounts for a merchant.
+    /// </summary>
+    MerchantAccountsTransaction = 5,
+
+    /// <summary>
+    /// Custom report to export transactions for VisionBlue.
+    /// </summary>
+    VisionBlueTransaction = 6
 }

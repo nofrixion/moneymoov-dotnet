@@ -41,6 +41,8 @@ public enum MoneyMoovResources
 
     rules,
 
+    statements,
+
     tokens,
 
     transactions,
@@ -237,6 +239,18 @@ public static class MoneyMoovUrlBuilder
     }
 
     /// <summary>
+    /// Available endpoint URLs for the Statements resource.
+    /// </summary>
+    public static class StatementsApi
+    {
+        public static string StatementsUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.statements}";
+
+        public static string StatementsUrl(string moneyMoovBaseUrl, Guid statementID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.statements}/{statementID}";
+    }
+
+    /// <summary>
     /// Available endpoint URLs for the Tokens resource.
     /// </summary>
     public static class TokensApi
@@ -362,4 +376,9 @@ public static class MoneyMoovUrlBuilder
 
         return url;
     }
+
+    public static string BusinessHubUrl(string moneyMoovBaseUrl)
+    {
+        return $"{moneyMoovBaseUrl}/signalr/business";
+    } 
 }

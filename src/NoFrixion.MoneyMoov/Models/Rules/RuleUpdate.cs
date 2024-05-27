@@ -18,6 +18,11 @@ namespace NoFrixion.MoneyMoov.Models;
 public class RuleUpdate
 {
     /// <summary>
+    /// Account ID the rule is associated with.
+    /// </summary>
+    public Guid? AccountID { get; set; }
+    
+    /// <summary>
     /// A name to succinctly describe the rule.
     /// </summary>
     public string? Name { get; set; }
@@ -60,6 +65,7 @@ public class RuleUpdate
     /// Set to true if the rule execution should be triggered when the account 
     /// makes a pay out (debit).
     /// </summary>
+    [Obsolete("Trigger on payout is no longer supported.")]
     public bool? TriggerOnPayOut { get; set; }
 
     /// <summary>
@@ -72,13 +78,13 @@ public class RuleUpdate
     /// Optional start time for rule executions. If this value is set the rule will not
     /// be triggered until the start time has been reached.
     /// </summary>
-    public DateTimeOffset? StartAt { get; }
+    public DateTimeOffset? StartAt { get; set; }
 
     /// <summary>
     /// Optional end time for rule executions. If this value is set the rule will not
     /// be triggered after the end time has been reached.
     /// </summary>
-    public DateTimeOffset? EndAt { get; }
+    public DateTimeOffset? EndAt { get; set; }
 
     /// <summary>
     /// The sweep action parameters for the rule. Any changes to the sweep rule parameters
@@ -106,7 +112,6 @@ public class RuleUpdate
         if (OnExecutionSuccessWebHookUrl != null) dict.Add(nameof(OnExecutionSuccessWebHookUrl), OnExecutionSuccessWebHookUrl);
         if (IsDisabled != null) dict.Add(nameof(IsDisabled), IsDisabled.Value.ToString());
         if (TriggerOnPayIn != null) dict.Add(nameof(TriggerOnPayIn), TriggerOnPayIn.Value.ToString());
-        if (TriggerOnPayOut != null) dict.Add(nameof(TriggerOnPayOut), TriggerOnPayOut.Value.ToString());
         if (TriggerCronExpression != null) dict.Add(nameof(TriggerCronExpression), TriggerCronExpression);
         if (StartAt != null) dict.Add(nameof(StartAt), StartAt.Value.ToString());
         if (EndAt != null) dict.Add(nameof(EndAt), EndAt.Value.ToString());

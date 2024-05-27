@@ -22,6 +22,26 @@ namespace NoFrixion.MoneyMoov;
 public enum RuleEventTypesEnum
 {
     None,
+    
+    /// <summary>
+    /// The rule was created.
+    /// </summary>
+    Created,
+    
+    /// <summary>
+    /// The rule status changed to approved.
+    /// </summary>
+    Approved,
+    
+    /// <summary>
+    /// The rule was edited.
+    /// </summary>
+    Edited,
+    
+    /// <summary>
+    /// The rule was disabled.
+    /// </summary>
+    Disabled,
 
     /// <summary>
     /// The rule was executed successfully.
@@ -33,8 +53,5 @@ public enum RuleEventTypesEnum
     /// </summary>
     ExecutionError,
 
-    /// <summary>
-    /// The rule status changed to approved.
-    /// </summary>
-    Approved,
+    
 }

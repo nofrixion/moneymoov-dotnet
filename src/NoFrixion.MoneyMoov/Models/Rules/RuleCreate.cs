@@ -68,6 +68,7 @@ public class RuleCreate
     /// Set to true if the rule execution should be triggered when the account 
     /// makes a pay out (debit).
     /// </summary>
+    [Obsolete("TriggerOnPayout is not supported.")]
     public bool TriggerOnPayOut { get; set; }
 
     /// <summary>
@@ -116,7 +117,6 @@ public class RuleCreate
             { nameof(OnExecutionSuccessWebHookUrl), OnExecutionSuccessWebHookUrl ?? string.Empty },
             { nameof(IsDisabled), IsDisabled.ToString() },
             { nameof(TriggerOnPayIn), TriggerOnPayIn.ToString() },
-            { nameof(TriggerOnPayOut), TriggerOnPayOut.ToString() },
             { nameof(TriggerCronExpression), TriggerCronExpression ?? string.Empty },
             { nameof(StartAt), StartAt != null ? StartAt.Value.ToString() : string.Empty },
             { nameof(EndAt), EndAt != null ? EndAt.Value.ToString() : string.Empty },

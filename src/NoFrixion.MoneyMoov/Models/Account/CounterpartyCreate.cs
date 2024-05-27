@@ -19,7 +19,16 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class CounterpartyCreate
 {
+    /// <summary>
+    /// If set it indicates that the counterparty is an internal belonging to the 
+    /// same merchant as the source account.
+    /// </summary>
     public Guid? AccountID { get; set; }
+
+    /// <summary>
+    /// If set it indicates that the counterparty is a beneficiary of the merchant.
+    /// </summary>
+    public Guid? BeneficiaryID { get; set; }
 
     /// <summary>
     /// The name of the counterparty. For a person this should be their full name. For a 
@@ -48,6 +57,7 @@ public class CounterpartyCreate
         var dict = new Dictionary<string, string>
         {
              { keyPrefix + nameof(AccountID), AccountID != null ? AccountID.Value.ToString() : string.Empty},
+             { keyPrefix + nameof(BeneficiaryID), BeneficiaryID != null ? BeneficiaryID.Value.ToString() : string.Empty},
              { keyPrefix + nameof(Name), Name ?? string.Empty },
              { keyPrefix + nameof(EmailAddress), EmailAddress ?? string.Empty },
              { keyPrefix + nameof(PhoneNumber), PhoneNumber ?? string.Empty },

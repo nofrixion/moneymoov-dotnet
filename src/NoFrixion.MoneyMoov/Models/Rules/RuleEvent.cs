@@ -31,4 +31,8 @@ public class RuleEvent
     public string? ErrorMessage { get; set; }
 
     public string? RawResponse { get; set; }
+    
+    public bool IsAuthoriseToEnable { get; set; }
+    
+    public User? User { get; set; }
 }
