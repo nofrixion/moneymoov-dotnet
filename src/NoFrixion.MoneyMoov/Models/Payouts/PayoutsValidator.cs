@@ -263,60 +263,65 @@ public static class PayoutsValidator
             yield return new ValidationResult("Destination account required.", new string[] { nameof(payout.Destination) });
         }
 
-        if (payout.Destination != null && payout.Destination?.Identifier == null)
+        if (payout.Destination?.AccountID == null && payout.Destination?.BeneficiaryID == null)
         {
-            yield return new ValidationResult("Destination account identifier required.", new string[] { nameof(payout.Destination.Identifier) });
-        }
+            // Only validate the identifier details if the account or beneficiary ID is not set.
 
-        if (string.IsNullOrEmpty(payout.Destination?.Name))
-        {
-            yield return new ValidationResult("Destination account name required.", new string[] { nameof(payout.Destination.Name) });
-        }
+            if (payout.Destination != null && payout.Destination?.Identifier == null)
+            {
+                yield return new ValidationResult("Destination account identifier required.", new string[] { nameof(payout.Destination.Identifier) });
+            }
 
-        if (payout.Destination?.Name != null && !IsValidAccountName(payout.Destination?.Name ?? string.Empty))
-        {
-            yield return new ValidationResult($"Destination account name is invalid. It can only contain alphanumeric characters plus the ' . - & and space characters.",
-                new string[] { nameof(payout.Destination.Name) });
-        }
+            if (string.IsNullOrEmpty(payout.Destination?.Name))
+            {
+                yield return new ValidationResult("Destination account name required.", new string[] { nameof(payout.Destination.Name) });
+            }
 
-        if (payout.Destination != null &&
-            !(payout.Type == AccountIdentifierType.IBAN || payout.Type == AccountIdentifierType.SCAN || payout.Type == AccountIdentifierType.BTC))
-        {
-            yield return new ValidationResult("Only destination types of IBAN, SCAN or BTC are supported.", new string[] { nameof(payout.Type) });
-        }
+            if (payout.Destination?.Name != null && !IsValidAccountName(payout.Destination?.Name ?? string.Empty))
+            {
+                yield return new ValidationResult($"Destination account name is invalid. It can only contain alphanumeric characters plus the ' . - & and space characters.",
+                    new string[] { nameof(payout.Destination.Name) });
+            }
 
-        if (payout.Type == AccountIdentifierType.IBAN && payout.Destination?.Identifier != null &&
-            string.IsNullOrEmpty(payout.Destination?.Identifier?.IBAN ?? string.Empty))
-        {
-            yield return new ValidationResult("The destination account IBAN must be specified for an IBAN payout type.", new string[] { nameof(payout.Destination.Identifier.IBAN) });
-        }
+            if (payout.Destination != null &&
+                !(payout.Type == AccountIdentifierType.IBAN || payout.Type == AccountIdentifierType.SCAN || payout.Type == AccountIdentifierType.BTC))
+            {
+                yield return new ValidationResult("Only destination types of IBAN, SCAN or BTC are supported.", new string[] { nameof(payout.Type) });
+            }
 
-        if (payout.Type == AccountIdentifierType.IBAN && payout.Destination?.Identifier != null &&
-            !ValidateIBAN(payout.Destination?.Identifier?.IBAN ?? string.Empty))
-        {
-            yield return new ValidationResult("Destination IBAN is invalid, Please enter a valid IBAN.", new string[] { nameof(payout.Destination.Identifier.IBAN) });
-        }
+            if (payout.Type == AccountIdentifierType.IBAN && payout.Destination?.Identifier != null &&
+                string.IsNullOrEmpty(payout.Destination?.Identifier?.IBAN ?? string.Empty))
+            {
+                yield return new ValidationResult("The destination account IBAN must be specified for an IBAN payout type.", new string[] { nameof(payout.Destination.Identifier.IBAN) });
+            }
 
-        if (payout.Type == AccountIdentifierType.IBAN && payout.Currency != CurrencyTypeEnum.EUR)
-        {
-            yield return new ValidationResult($"Currency {payout.Currency} cannot be used with IBAN destinations.", new string[] { nameof(payout.Currency) });
-        }
+            if (payout.Type == AccountIdentifierType.IBAN && payout.Destination?.Identifier != null &&
+                !ValidateIBAN(payout.Destination?.Identifier?.IBAN ?? string.Empty))
+            {
+                yield return new ValidationResult("Destination IBAN is invalid, Please enter a valid IBAN.", new string[] { nameof(payout.Destination.Identifier.IBAN) });
+            }
 
-        if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
-            string.IsNullOrEmpty(payout.Destination?.Identifier?.SortCode))
-        {
-            yield return new ValidationResult("Destination sort code required for a SCAN payout type.", new string[] { nameof(payout.Destination.Identifier.SortCode) });
-        }
+            if (payout.Type == AccountIdentifierType.IBAN && payout.Currency != CurrencyTypeEnum.EUR)
+            {
+                yield return new ValidationResult($"Currency {payout.Currency} cannot be used with IBAN destinations.", new string[] { nameof(payout.Currency) });
+            }
 
-        if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
-            string.IsNullOrEmpty(payout.Destination?.Identifier?.AccountNumber))
-        {
-            yield return new ValidationResult("Destination account number is required for a SCAN payout type.", new string[] { nameof(payout.Destination.Identifier.AccountNumber) });
-        }
+            if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
+                string.IsNullOrEmpty(payout.Destination?.Identifier?.SortCode))
+            {
+                yield return new ValidationResult("Destination sort code required for a SCAN payout type.", new string[] { nameof(payout.Destination.Identifier.SortCode) });
+            }
 
-        if (payout.Type == AccountIdentifierType.SCAN && payout.Currency != CurrencyTypeEnum.GBP)
-        {
-            yield return new ValidationResult($"Currency {payout.Currency} cannot be used with SCAN destinations.", new string[] { nameof(payout.Currency) });
+            if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
+                string.IsNullOrEmpty(payout.Destination?.Identifier?.AccountNumber))
+            {
+                yield return new ValidationResult("Destination account number is required for a SCAN payout type.", new string[] { nameof(payout.Destination.Identifier.AccountNumber) });
+            }
+
+            if (payout.Type == AccountIdentifierType.SCAN && payout.Currency != CurrencyTypeEnum.GBP)
+            {
+                yield return new ValidationResult($"Currency {payout.Currency} cannot be used with SCAN destinations.", new string[] { nameof(payout.Currency) });
+            }
         }
 
         if (payout.Destination?.Identifier != null)
