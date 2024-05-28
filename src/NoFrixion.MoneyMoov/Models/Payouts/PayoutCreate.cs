@@ -175,6 +175,11 @@ public class PayoutCreate
     }
 
     /// <summary>
+    /// The ID of the batch payout this payout is part of.
+    /// </summary>
+    public Guid? BatchPayoutID { get; set; }
+    
+    /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payout's non-collection properties 
