@@ -46,6 +46,8 @@ public class Rule : IValidatableObject, IWebhookPayload
     public bool TriggerOnPayOut { get; set; }
     
     public string TriggerCronExpression { get; set; } = Empty;
+    
+    public string TimeZoneId { get; set; } = Empty;
     public DateTimeOffset? StartAt { get; set; }
     public DateTimeOffset? EndAt { get; set; }
     public SweepAction SweepAction { get; set; } = SweepAction.Empty;

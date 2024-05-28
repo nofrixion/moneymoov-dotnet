@@ -76,6 +76,12 @@ public class RuleCreate
     /// that sets the schedule. The expression uses a CRON format.
     /// </summary>
     public string? TriggerCronExpression { get; set; }
+    
+    /// <summary>
+    /// If the rule should be executed on a recurring schedule this is the timezone
+    /// that the CRON expression should be evaluated in. The default is UTC.
+    /// </summary>
+    public string? TimeZoneId { get; set; }
 
     /// <summary>
     /// Optional start time for rule executions. If this value is set the rule will not
