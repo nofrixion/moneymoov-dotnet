@@ -58,8 +58,7 @@ public static class PayoutsValidator
     /// and it must contain at least one letter or number.
     /// "Beneficiary name can only have alphanumerics plus full stop, hyphen, forward slash or ampersand"
     /// </remarks>
-    //public const string ACCOUNT_NAME_REGEX = @"^([^\p{L}0-9]*?[\p{L}0-9]){1,}['\.\-\/&\s]*";
-    public const string ACCOUNT_NAME_REGEX = @"^['\.\-\/&\s]*?\w+['\.\-\/&\s\w]*$";
+    public const string MODULR_ACCOUNT_NAME_REGEX = @"^['\.\-\/&\s]*?\w+['\.\-\/&\s\w]*$";
 
     /// <summary>
     /// Validation reqex for the Their, or Reference, field. It  must consist of at least 6 
@@ -101,7 +100,7 @@ public static class PayoutsValidator
     public const string FALLBACK_THEIR_REFERENCE = "NFXN {0}";
 
     /// <summary>
-    /// Validation reqex for the YOur and Their, or Reference, field with Banking Cirlce. It must 
+    /// Validation reqex for the Name amd Reference (Your and Their) fields with Banking Cirlce. It must 
     /// have at least one non space character.  Total of all characters must be 140 or less.
     /// Banking Circle supported chars see https://docs.bankingcircleconnect.com/docs/initiate-payments:
     /// a b c d e f g h i j k l m n o p q r s t u v w x y z
@@ -111,7 +110,7 @@ public static class PayoutsValidator
     /// In addition the field cannot start with a : or - character and must have one none space char.
     /// Space
     /// </summary>
-    public const string REFERENCE_BANKING_CIRCLE_REGEX = @"^(?![\:\-])[a-zA-Z0-9\s\/\-\.\+\(\)\?\:\,']{0,140}$";
+    public const string BANKING_CIRCLE_ALLOWED_CHARS_REGEX = @"^(?![\:\-])[a-zA-Z0-9\s\/\-\.\+\(\)\?\:\,']*$";
 
     /// <summary>
     /// The maximum allowed length for the Banking Circle remittance information. Does not seem to differ
@@ -120,9 +119,21 @@ public static class PayoutsValidator
     public const int REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH = 140;
 
     /// <summary>
+    /// The maximum allowed length for the Banking Circle creditor account name.
+    /// </summary>
+    public const int ACCOUNT_NAME_MAXIMUM_BANKING_CIRCLE_LENGTH = 35;
+
+    /// <summary>
     /// Number of days in the future that a payout can be scheduled for.
     /// </summary>
     public const int PAYOUT_SCHEDULE_DAYS_IN_FUTURE = 60;
+
+    /// <summary>
+    /// Validation error message template for Banking Cirlce string fields.
+    /// </summary>
+    public const string BANKING_CIRCLE_STRING_VALIDATION_ERROR_TEMPLATE = "The {0} field must consist of at least 1 non-blank character. " +
+        "The allowed characters are alphanumeric, forward slash (/), hyphen (-), question mark (?), colon (:), parentheses, full stop (.), " +
+        "comma (,), single quote ('), plus (+) and space. The total length must not exceed {1} characters. The first character cannot be ':' or '-'.";
 
     public static bool ValidateIBAN(string iban)
     {
@@ -166,11 +177,20 @@ public static class PayoutsValidator
         return checksum == 1;
     }
 
-    public static bool IsValidAccountName(string accountName)
+    public static bool IsValidAccountName(
+        string accountName, 
+        PaymentProcessorsEnum processor)
     {
-        var accountNameRegex = new Regex(ACCOUNT_NAME_REGEX);
+        if (string.IsNullOrEmpty(accountName))
+        {
+            return false;
+        }
 
-        return !string.IsNullOrEmpty(accountName) && accountNameRegex.IsMatch(accountName);
+        return processor switch
+        {
+            PaymentProcessorsEnum.Modulr => ValidateModulrAccountName(accountName),
+            _ => ValidateBankingCircleStringField(accountName, ACCOUNT_NAME_MAXIMUM_BANKING_CIRCLE_LENGTH)
+        };
     }
 
     public static bool ValidateTheirReference(
@@ -186,10 +206,15 @@ public static class PayoutsValidator
         return processor switch
         {
             PaymentProcessorsEnum.Modulr => ValidateModulrTheirReference(theirReference, desinationIdentifierType),
-            PaymentProcessorsEnum.BankingCircle => ValidateBankingCircleTheirReference(theirReference),
-            PaymentProcessorsEnum.BankingCircleAgency => ValidateBankingCircleTheirReference(theirReference),
-            _ => ValidateModulrTheirReference(theirReference, desinationIdentifierType)
+            _ => ValidateBankingCircleStringField(theirReference, REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH),
         };
+    }
+
+    public static bool ValidateModulrAccountName(string accountName)
+    {
+        var accountNameRegex = new Regex(MODULR_ACCOUNT_NAME_REGEX);
+
+        return !string.IsNullOrEmpty(accountName) && accountNameRegex.IsMatch(accountName);
     }
 
     public static bool ValidateModulrTheirReference(
@@ -214,13 +239,13 @@ public static class PayoutsValidator
         return theirReference.ToCharArray().Distinct().Count() > 1;
     }
 
-    public static bool ValidateBankingCircleTheirReference(string theirReference)
+    public static bool ValidateBankingCircleStringField(string field, int maxAllowedLength)
     {
-        Regex matchRegex = new Regex(REFERENCE_BANKING_CIRCLE_REGEX);
+        Regex matchRegex = new Regex(BANKING_CIRCLE_ALLOWED_CHARS_REGEX);
 
-        if (string.IsNullOrEmpty(theirReference?.Trim())
-                || theirReference.Length > REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH
-                || !matchRegex.IsMatch(theirReference))
+        if (string.IsNullOrEmpty(field?.Trim())
+                || field.Length > maxAllowedLength
+                || !matchRegex.IsMatch(field))
         {
             return false;
         }
@@ -277,10 +302,18 @@ public static class PayoutsValidator
                 yield return new ValidationResult("Destination account name required.", new string[] { nameof(payout.Destination.Name) });
             }
 
-            if (payout.Destination?.Name != null && !IsValidAccountName(payout.Destination?.Name ?? string.Empty))
+            if (payout.Destination?.Name != null && !IsValidAccountName(payout.Destination?.Name ?? string.Empty, payout.PaymentProcessor))
             {
-                yield return new ValidationResult($"Destination account name is invalid. It can only contain alphanumeric characters plus the ' . - & and space characters.",
-                    new string[] { nameof(payout.Destination.Name) });
+                if (payout.PaymentProcessor == PaymentProcessorsEnum.Modulr)
+                {
+                    yield return new ValidationResult($"The Destination Account Name is invalid. It can only contain alphanumeric characters plus the ' . - & and space characters.", new string[] { nameof(payout.Destination.Name) });
+                }
+                else
+                {
+                    yield return new ValidationResult(
+                        string.Format(BANKING_CIRCLE_STRING_VALIDATION_ERROR_TEMPLATE, "Destination Account Name", ACCOUNT_NAME_MAXIMUM_BANKING_CIRCLE_LENGTH),
+                        new string[] { nameof(payout.Destination.Name) });
+                }
             }
 
             if (payout.Destination != null &&
@@ -342,17 +375,11 @@ public static class PayoutsValidator
                     "Total of all characters must be less than 18 for a SCAN payout and less than 140 for an IBAN payout.",
                     new string[] { nameof(payout.TheirReference) });
             }
-            else if(payout.PaymentProcessor == PaymentProcessorsEnum.BankingCircle || payout.PaymentProcessor == PaymentProcessorsEnum.BankingCircleAgency)
-            {
-                yield return new ValidationResult("Their reference must consist of at least 1 non-blank character. " +
-                    "The allowed characters are alphanumeric, forward slash (/), hyphen (-), question mark (?), colon (:), parentheses, full stop (.), " +
-                    "comma (,), single quote ('), plus (+) and space. The total length must not exceed 140 characters.",
-                    new string[] { nameof(payout.TheirReference) });
-            }
             else
             {
-                yield return new ValidationResult($"Payment processor {payout.PaymentProcessor} is not supported for payouts.",
-                   new string[] { nameof(payout.TheirReference) });
+                yield return new ValidationResult(
+                    string.Format(BANKING_CIRCLE_STRING_VALIDATION_ERROR_TEMPLATE, "Their Reference", REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH),
+                    new string[] { nameof(payout.TheirReference) });
             }
         }
 

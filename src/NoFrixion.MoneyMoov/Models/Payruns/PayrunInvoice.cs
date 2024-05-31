@@ -113,7 +113,7 @@ public class PayrunInvoice : IValidatableObject
             yield return new ValidationResult("DestinationSortCode and DestinationAccountNumber can only be set for GBP currency.", new string[] { nameof(DestinationSortCode), nameof(DestinationAccountNumber) });
         }
 
-        if (!PayoutsValidator.IsValidAccountName(DestinationAccountName ?? string.Empty))
+        if (!PayoutsValidator.IsValidAccountName(DestinationAccountName ?? string.Empty, PaymentProcessorsEnum.None))
         {
             yield return new ValidationResult("DestinationAccountName must be a valid account name.", new string[] { nameof(DestinationAccountName) });
         }
