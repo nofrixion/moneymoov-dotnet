@@ -73,9 +73,9 @@ public class RuleSerialisationTests : MoneyMoovUnitTestBase<RuleSerialisationTes
         var rule = Newtonsoft.Json.JsonConvert.DeserializeObject<Rule>(sweepRuleJson);
 
         Assert.NotNull(rule);
-        Assert.NotNull(rule?.SweepAction);
-        Assert.NotNull(rule?.SweepAction.Destinations);
-        Assert.Single(rule?.SweepAction.Destinations);
+        Assert.NotNull(rule.SweepAction);
+        Assert.NotNull(rule.SweepAction.Destinations);
+        Assert.Single(rule.SweepAction.Destinations);
         Assert.Equal(RuleStatusEnum.PendingApproval, rule?.Status);
         Assert.Null(rule?.SweepAction?.PayoutYourReference);
         Assert.Null(rule?.SweepAction?.PayoutTheirReference);
@@ -128,9 +128,9 @@ public class RuleSerialisationTests : MoneyMoovUnitTestBase<RuleSerialisationTes
         var rule = System.Text.Json.JsonSerializer.Deserialize<Rule>(sweepRuleJson, options);
 
         Assert.NotNull(rule);
-        Assert.NotNull(rule?.SweepAction);
-        Assert.NotNull(rule?.SweepAction.Destinations);
-        Assert.Single(rule?.SweepAction.Destinations);
+        Assert.NotNull(rule.SweepAction);
+        Assert.NotNull(rule.SweepAction.Destinations);
+        Assert.Single(rule.SweepAction.Destinations);
         Assert.Equal(RuleStatusEnum.PendingApproval, rule?.Status);
         Assert.Null(rule?.SweepAction?.PayoutYourReference);
         Assert.Null(rule?.SweepAction?.PayoutTheirReference);
@@ -191,9 +191,9 @@ public class RuleSerialisationTests : MoneyMoovUnitTestBase<RuleSerialisationTes
         var rule = System.Text.Json.JsonSerializer.Deserialize<Rule>(sweepRuleJson, options);
 
         Assert.NotNull(rule);
-        Assert.NotNull(rule?.SweepAction);
-        Assert.NotNull(rule?.SweepAction.Destinations);
-        Assert.Single(rule?.SweepAction.Destinations);
+        Assert.NotNull(rule.SweepAction);
+        Assert.NotNull(rule.SweepAction.Destinations);
+        Assert.Single(rule.SweepAction.Destinations);
         Assert.Equal(RuleStatusEnum.PendingApproval, rule?.Status);
         Assert.Equal(yourRefPattern, rule?.SweepAction?.PayoutYourReference);
         Assert.Equal(theirRefPattern, rule?.SweepAction?.PayoutTheirReference);
@@ -306,9 +306,12 @@ public class RuleSerialisationTests : MoneyMoovUnitTestBase<RuleSerialisationTes
             });
 
         Assert.NotNull(rules);
-        Assert.Single(rules?.Content);
+        Assert.NotNull(rules.Content);
+        Assert.NotNull(rules.Content[0]);
+        Assert.Single(rules.Content);
         Assert.Equal("Get_Merchant_Rules_Success", rules?.Content[0].Name);
-        Assert.Single(rules?.Content[0].SweepAction.Destinations);
+        Assert.NotNull(rules?.Content[0].SweepAction);
+        Assert.Single(rules.Content[0].SweepAction.Destinations);
         Assert.Equal("Jane Doe", rules?.Content[0].SweepAction.Destinations[0].Name);
         Assert.Equal(97M, rules?.Content[0].SweepAction.Destinations[0].SweepPercentage);
         Assert.Equal(CurrencyTypeEnum.EUR, rules?.Content[0].SweepAction.Destinations[0]?.Identifier?.Currency);
