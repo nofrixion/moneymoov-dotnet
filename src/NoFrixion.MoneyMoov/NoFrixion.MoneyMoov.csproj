@@ -13,15 +13,15 @@
 
     <ItemGroup>
         <PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
-        <PackageReference Include="CsvHelper" Version="30.0.1" />
+        <PackageReference Include="CsvHelper" Version="32.0.3" />
         <PackageReference Include="IdentityModel" Version="7.0.0" />
-        <PackageReference Include="LanguageExt.Core" Version="4.4.3" />
+        <PackageReference Include="LanguageExt.Core" Version="4.4.8" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.6.0" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.4.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="Quartz" Version="3.6.2" />
+        <PackageReference Include="Quartz" Version="3.9.0" />
     </ItemGroup>
 
 </Project>
