@@ -46,7 +46,7 @@ public class PaymentRequestMetricsTests : MoneyMoovUnitTestBase<PaymentRequestMe
         Assert.Equal(1, metrics?.Unpaid);
         Assert.Equal(4, metrics?.Authorized);
 
-        Assert.Contains(metrics?.TotalAmountsByCurrency[MetricsEnum.All.ToString().ToLower()], x => x.Key == CurrencyTypeEnum.EUR.ToString().ToLower());
+        Assert.Contains(metrics?.TotalAmountsByCurrency[MetricsEnum.All.ToString().ToLower()]!, x => x.Key == CurrencyTypeEnum.EUR.ToString().ToLower());
         Assert.Equal(329.01m, metrics?.TotalAmountsByCurrency[MetricsEnum.All.ToString().ToLower()][CurrencyTypeEnum.EUR.ToString().ToLower()]);
     }
 }
