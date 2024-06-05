@@ -26,8 +26,11 @@ public class PayrunInvoice : IValidatableObject
     
     public string? Name { get; set; }
     
+    [Obsolete("Please use Reference instead.")]
+    public string? InvoiceNumber { get; set; }
+
     [Required]
-    public required string InvoiceNumber { get; set; }
+    public required string Reference { get; set; }
 
     public string? PaymentTerms { get; set; }
     
@@ -61,8 +64,6 @@ public class PayrunInvoice : IValidatableObject
     public decimal? SubTotal { get; set; }
     
     public string? Status { get; set; }
-
-    public string? Reference { get; set; }
 
     [EmailAddress]
     public string? RemittanceEmail { get; set; }
