@@ -92,6 +92,8 @@ public class Beneficiary : IValidatableObject
     
     public DateTimeOffset LastUpdated { get; set; }
     
+    public DateTimeOffset? LastAuthorised { get; set; }
+    
     public User CreatedBy { get; set; }
 
     // Don't serialize the events if there are none.
