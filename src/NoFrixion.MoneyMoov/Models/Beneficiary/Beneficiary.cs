@@ -88,7 +88,11 @@ public class Beneficiary : IValidatableObject
     
     public string Nonce { get; set; }
     
+    public DateTimeOffset Inserted { get; set; }
+    
     public DateTimeOffset LastUpdated { get; set; }
+    
+    public User CreatedBy { get; set; }
 
     // Don't serialize the events if there are none.
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
