@@ -54,9 +54,9 @@ public class Beneficiary : IValidatableObject
     public bool IsEnabled { get; set; }
     
     /// <summary>
-    /// A list of the email addresses of all the users who have usccessfully authorised the latest version of the beneficiary.
+    /// A list of users who have successfully authorised the latest version of the beneficiary.
     /// </summary>
-    [CanBeNull] public List<string> AuthorisedBy { get; set; }
+    [CanBeNull] public List<UserMinimal> AuthorisedBy { get; set; }
 
     /// <summary>
     /// True if the beneficiary can be authorised by the user who loaded it.
