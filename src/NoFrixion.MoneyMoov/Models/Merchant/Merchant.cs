@@ -15,7 +15,7 @@
 // MIT.
 // -----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace NoFrixion.MoneyMoov.Models;
 

@@ -12,9 +12,10 @@
 //  Proprietary NoFrixion.
 // -----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
+using System.Text.Json;
 using NoFrixion.MoneyMoov.Models.Utils;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -131,6 +132,11 @@ public abstract class ApiPageResponseBase<T> : PageResponse<T>
     /// <returns>JSON string presentation of the object</returns>
     public virtual string ToJson()
     {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
+        var options = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            WriteIndented = true
+        };
+        return JsonSerializer.Serialize(this, options);
     }
 }

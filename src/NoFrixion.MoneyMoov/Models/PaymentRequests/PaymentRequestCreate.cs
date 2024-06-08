@@ -13,10 +13,9 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using NoFrixion.MoneyMoov.Attributes;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -42,7 +41,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// The currency of the payment request.
     /// </summary>
     [EnumDataType(typeof(CurrencyTypeEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public CurrencyTypeEnum Currency { get; set; } = CurrencyTypeEnum.EUR;
 
     /// <summary>
@@ -67,7 +66,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// should be supplied as a comma separated list, for example "card, pisp, lightning".
     /// </summary>
     [EnumDataType(typeof(PaymentMethodTypeEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public PaymentMethodTypeEnum PaymentMethodTypes { get; set; } = PaymentMethodTypeEnum.card;
 
     /// <summary>

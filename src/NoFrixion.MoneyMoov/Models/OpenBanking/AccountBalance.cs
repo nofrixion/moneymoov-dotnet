@@ -55,7 +55,5 @@ public partial class AccountBalance
     /// </summary>
     /// <returns>JSON string presentation of the object</returns>
     public virtual string ToJson()
-    {
-        return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-    }
+        => this.ToJsonFormatted();
 }

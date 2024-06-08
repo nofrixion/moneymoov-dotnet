@@ -14,8 +14,7 @@
 // -----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -48,14 +47,14 @@ public class MerchantPayByBankSetting
     /// Currency supported by the bank.
     /// </summary>
     [EnumDataType(typeof(CurrencyTypeEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public CurrencyTypeEnum Currency { get; set; }
 
     /// <summary>
     /// Name of the bank payment processor.
     /// </summary>
     [EnumDataType(typeof(PaymentProcessorsEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public PaymentProcessorsEnum Processor { get; set; }
 
     /// <summary>

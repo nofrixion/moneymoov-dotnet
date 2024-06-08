@@ -22,8 +22,7 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 using NoFrixion.MoneyMoov.Extensions;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -43,7 +42,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// The currency of the request.
     /// </summary>
     [EnumDataType(typeof(CurrencyTypeEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public CurrencyTypeEnum Currency { get; set; } = CurrencyTypeEnum.EUR;
 
     /// <summary>
@@ -62,7 +61,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// should be supplied as a comma separated list, for example "card, pisp, lightning".
     /// </summary>
     [EnumDataType(typeof(PaymentMethodTypeEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public PaymentMethodTypeEnum PaymentMethodTypes { get; set; } = PaymentMethodTypeEnum.card;
 
     /// <summary>
@@ -232,7 +231,6 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     public string? CardStripePaymentIntentSecret { get; set; }
 
     [JsonIgnore]
-    [System.Text.Json.Serialization.JsonIgnore]
     public Merchant? Merchant { get; set; }
 
     public List<PaymentRequestAddress> Addresses { get; set; } = new List<PaymentRequestAddress>();

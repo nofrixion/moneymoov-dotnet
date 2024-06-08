@@ -12,10 +12,9 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -36,7 +35,7 @@ public class TokenAdd : IValidatableObject
     public string Description { get; set; }
 
     [EnumDataType(typeof(MerchantTokenPermissionsEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public MerchantTokenPermissionsEnum Permissions { get; set; } = MerchantTokenPermissionsEnum.CreatePaymentRequest;
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

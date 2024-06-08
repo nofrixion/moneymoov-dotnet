@@ -15,8 +15,7 @@
 // -----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models.Mandates;
 
@@ -40,7 +39,7 @@ public class Mandate
     /// Name of the supplier used to create this mandate.
     /// </summary>
     [EnumDataType(typeof(PaymentProcessorsEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public PaymentProcessorsEnum? SupplierName { get; set; }
     
     /// <summary>
@@ -119,7 +118,7 @@ public class Mandate
     /// Currency of this mandate.
     /// </summary>
     [EnumDataType(typeof(CurrencyTypeEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public CurrencyTypeEnum Currency { get; set; }
     
     /// <summary>
@@ -141,7 +140,7 @@ public class Mandate
     /// General status of this mandate.
     /// </summary>
     [EnumDataType(typeof(MerchantMandateStatusEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public MerchantMandateStatusEnum Status { get; set; }
     
     /// <summary>

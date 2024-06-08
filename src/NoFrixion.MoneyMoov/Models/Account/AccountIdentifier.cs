@@ -14,6 +14,7 @@
 // -----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -24,7 +25,7 @@ public class AccountIdentifier: IValidatableObject
     /// <summary>
     /// The type of the account identifier.
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public AccountIdentifierType Type
     {
         get

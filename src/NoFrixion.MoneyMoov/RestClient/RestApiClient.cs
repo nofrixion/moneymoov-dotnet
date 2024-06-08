@@ -14,8 +14,10 @@
 //-----------------------------------------------------------------------------
 
 using LanguageExt;
+using LanguageExt.Pipes;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace NoFrixion.MoneyMoov;
 
@@ -185,12 +187,8 @@ public class RestApiClient : IRestApiClient, IDisposable
     {
         if (response.IsSuccessStatusCode && response.Content.Headers.ContentLength > 0)
         {
-            var result = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(),
-                new Newtonsoft.Json.JsonSerializerSettings
-                { 
-                    ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace 
-                }
-            );
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<T>(jsonString);
 
             return result != null ?
                 new RestApiResponse<T>(response.StatusCode, requestUri, response.Headers, result) :
@@ -218,26 +216,17 @@ public class RestApiClient : IRestApiClient, IDisposable
     /// <returns>A NoFrixionProblem instance.</returns>
     private NoFrixionProblem DeserialiseProblem(HttpStatusCode responseStatusCode, string responseContent)
     {
-        bool hadDeserialiseError = false;
-
-        var problem = Newtonsoft.Json.JsonConvert.DeserializeObject<NoFrixionProblem>(responseContent,
-            new Newtonsoft.Json.JsonSerializerSettings
-            {
-                ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace,
-                Error = (sender, args) =>
-                {
-                    hadDeserialiseError = true;
-                    args.ErrorContext.Handled = true;
-                }
-            });
-
-        if (problem == null || hadDeserialiseError)
+        try
         {
-            problem = new NoFrixionProblem(responseStatusCode, $"API error response was not in the recognised problem format.");
-            problem.RawError = responseContent;
+            return JsonSerializer.Deserialize<NoFrixionProblem>(responseContent) ?? NoFrixionProblem.Empty;
         }
-        
-        return problem;
+        catch (JsonException)
+        {
+            var problem = new NoFrixionProblem(responseStatusCode, $"API error response was not in the recognised problem format.");
+            problem.RawError = responseContent;
+
+            return problem;
+        }
     }
 
     private async Task<RestApiResponse> ExecAsync(

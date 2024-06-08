@@ -23,6 +23,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Runtime.Serialization;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov;
@@ -378,11 +379,6 @@ public class NoFrixionProblem
 
     public static NoFrixionProblem FromJson(string json)
     {
-       return Newtonsoft.Json.JsonConvert.DeserializeObject<NoFrixionProblem>(json,
-            new Newtonsoft.Json.JsonSerializerSettings
-            {
-                ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace
-            }) 
-            ?? NoFrixionProblem.Empty;
+       return JsonSerializer.Deserialize<NoFrixionProblem>(json) ?? NoFrixionProblem.Empty;
     }
 }

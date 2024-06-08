@@ -14,9 +14,8 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -31,7 +30,7 @@ public class MerchantToken
     public string Description { get; set; }
 
     [EnumDataType(typeof(MerchantTokenPermissionsEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public MerchantTokenPermissionsEnum Permissions { get; set; }
 
     public DateTimeOffset Inserted { get; set; }

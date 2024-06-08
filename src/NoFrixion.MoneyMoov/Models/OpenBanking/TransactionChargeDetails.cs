@@ -20,7 +20,5 @@ public partial class TransactionChargeDetails
     }
 
     public virtual string ToJson()
-    {
-        return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-    }
+        => this.ToJsonFormatted();
 }

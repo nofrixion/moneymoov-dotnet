@@ -14,13 +14,12 @@
 // MIT.
 // -----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov;
 
 [Flags]
-[JsonConverter(typeof(StringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum WebhookResourceTypesEnum
 {
     None = 0,

@@ -13,9 +13,8 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -31,7 +30,7 @@ public class WebhookEventItem
     /// deleted etc.
     /// </summary>
     [EnumDataType(typeof(WebhookActionsEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public WebhookActionsEnum ActionType { get; set; }
 
     /// <summary>
@@ -39,7 +38,7 @@ public class WebhookEventItem
     /// payload, transaction etc.
     /// </summary>
     [EnumDataType(typeof(WebhookResourceTypesEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public WebhookResourceTypesEnum ResourceType { get; set; }
 
     /// <summary>
@@ -59,4 +58,3 @@ public class WebhookEventItem
         Payload = payload;
     }
 }
-
