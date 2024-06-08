@@ -19,7 +19,7 @@
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.4.0" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.6.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Quartz" Version="3.9.0" />
     </ItemGroup>
