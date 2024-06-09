@@ -13,6 +13,7 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using LanguageExt.ClassInstances;
 using Microsoft.Extensions.Logging;
 using NoFrixion.MoneyMoov;
 using NoFrixion.MoneyMoov.IntegrationTests;
@@ -183,13 +184,13 @@ public class MetadataClientTests : MoneyMoovTestBase<MetadataClientTests>
         Assert.True(response.Problem.IsEmpty);
 
         response.Data.Match(
-            Some: x =>
+            Some: echoMessage =>
             {
-                var echoResult = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string,string>>(x.ToString());
-                Assert.NotNull(echoResult["name"]);
-                Assert.NotNull(echoResult["message"]);
+                Assert.NotNull(echoMessage);
+                Assert.NotNull(echoMessage.Name);
+                Assert.NotNull(echoMessage.Message);
 
-                Logger.LogDebug($"Echo Result: name={echoResult["name"]}, message={echoResult["message"]}.");
+                Logger.LogDebug($"Echo Result: name={echoMessage.Name}, message={echoMessage.Message}.");
             },
             None: () => throw new ApplicationException("Should not be here")
         ); 
