@@ -12,9 +12,12 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using System.Text.Json.Serialization;
+
 namespace NoFrixion.MoneyMoov;
 
 [Flags]
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum PaymentMethodTypeEnum
 {
     /// <summary>

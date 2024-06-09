@@ -14,8 +14,11 @@
 //   Proprietary NoFrixion.
 //  -----------------------------------------------------------------------------
 
+using System.Text.Json.Serialization;
+
 namespace NoFrixion.MoneyMoov.Enums;
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum PayrunStatus
 {
     None = 0,

@@ -13,11 +13,14 @@
 // Proprietary NoFrixion.
 //-----------------------------------------------------------------------------
 
+using System.Text.Json.Serialization;
+
 namespace NoFrixion.MoneyMoov;
 
 /// <summary>
 /// Lists the supported address types.
 /// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum AddressTypesEnum
 {
     Unknown = 0,

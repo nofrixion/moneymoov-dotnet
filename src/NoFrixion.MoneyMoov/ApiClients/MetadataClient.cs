@@ -121,7 +121,7 @@ public class MetadataClient : IMetadataClient
     /// <returns>A JSON echo response message.</returns>
     public Task<RestApiResponse<dynamic>> EchoJsonAsync(string name, string message)
     {
-        var content = JsonContent.Create(new { name, message });
+        var content = new { name, message }.ToJsonContent();
         return _apiClient.PostAsync<dynamic>(MoneyMoovUrlBuilder.MetadataApi.EchoUrl(_apiClient.GetBaseUri().ToString()), content);
     }
 }

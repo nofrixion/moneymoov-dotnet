@@ -196,7 +196,7 @@ public class PayoutClient : IPayoutClient
 
         return prob switch
         {
-            var p when p.IsEmpty => _apiClient.PostAsync<BatchPayout>(url, userAccessToken, JsonContent.Create(payoutIDs)),
+            var p when p.IsEmpty => _apiClient.PostAsync<BatchPayout>(url, userAccessToken, payoutIDs.ToJsonContent()),
             _ => Task.FromResult(new RestApiResponse<BatchPayout>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }

@@ -14,11 +14,14 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using System.Text.Json.Serialization;
+
 namespace NoFrixion.MoneyMoov;
 
 /// <summary>
 /// Lists the supported card and PIS processors.
 /// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum PaymentProcessorsEnum
 {
     /// <summary>

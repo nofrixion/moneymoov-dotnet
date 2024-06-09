@@ -14,10 +14,10 @@
 //-----------------------------------------------------------------------------
 
 using LanguageExt;
-using LanguageExt.Pipes;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov;
 
@@ -188,7 +188,7 @@ public class RestApiClient : IRestApiClient, IDisposable
         if (response.IsSuccessStatusCode && response.Content.Headers.ContentLength > 0)
         {
             var jsonString = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<T>(jsonString);
+            var result = jsonString.FromJson<T>();
 
             return result != null ?
                 new RestApiResponse<T>(response.StatusCode, requestUri, response.Headers, result) :
@@ -218,7 +218,7 @@ public class RestApiClient : IRestApiClient, IDisposable
     {
         try
         {
-            return JsonSerializer.Deserialize<NoFrixionProblem>(responseContent) ?? NoFrixionProblem.Empty;
+            return responseContent.FromJson<NoFrixionProblem>() ?? NoFrixionProblem.Empty;
         }
         catch (JsonException)
         {
@@ -231,7 +231,7 @@ public class RestApiClient : IRestApiClient, IDisposable
 
     private async Task<RestApiResponse> ExecAsync(
         HttpRequestMessage req,
-        CancellationToken cancellationToken = default(CancellationToken))
+        CancellationToken cancellationToken = default)
     {
         var response = await HttpClient.SendAsync(req, cancellationToken).ConfigureAwait(false);
         return await ToApiResponse(response, req.RequestUri);
@@ -239,7 +239,7 @@ public class RestApiClient : IRestApiClient, IDisposable
 
     private async Task<RestApiResponse<T>> ExecAsync<T>(
         HttpRequestMessage req,
-        CancellationToken cancellationToken = default(CancellationToken))
+        CancellationToken cancellationToken = default)
     {
         var response = await HttpClient.SendAsync(req, cancellationToken).ConfigureAwait(false);
         return await ToApiResponse<T>(response, req.RequestUri);

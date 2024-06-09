@@ -15,10 +15,11 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
+using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov;
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum JurisdictionEnum
 {
     /// <summary>

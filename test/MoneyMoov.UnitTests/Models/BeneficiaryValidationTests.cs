@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using NoFrixion.MoneyMoov.Models;
 using Xunit;
 using Xunit.Abstractions;
+using System.Text.Json;
 
 namespace NoFrixion.MoneyMoov.UnitTests;
 
@@ -73,7 +74,7 @@ public class BeneficairyValidationTests : MoneyMoovUnitTestBase<BeneficairyValid
 
         foreach (var err in problem.Errors)
         {
-            Logger.LogDebug(Newtonsoft.Json.JsonConvert.SerializeObject(err));
+            Logger.LogDebug(JsonSerializer.Serialize(err));
         }
 
         Assert.NotEmpty(problem.Errors);

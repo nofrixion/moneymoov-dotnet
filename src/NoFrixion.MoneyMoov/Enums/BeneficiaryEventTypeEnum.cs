@@ -14,8 +14,11 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using System.Text.Json.Serialization;
+
 namespace NoFrixion.MoneyMoov.Enums;
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum BeneficiaryEventTypeEnum
 {
     /// <summary>

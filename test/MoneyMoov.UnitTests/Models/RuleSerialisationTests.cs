@@ -33,60 +33,7 @@ public class RuleSerialisationTests : MoneyMoovUnitTestBase<RuleSerialisationTes
     /// Tests that a sweep rule can be deserialised from a JSON representation.
     /// </summary>
     [Fact]
-    public void Deserialise_Newtonsoft_Sweep_Rule_Test()
-    {
-        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
-
-        var sweepRuleJson = @"
-            {
-              ""id"": ""60dd3c00-22bb-4a30-07f6-08daff10193e"",
-              ""accountID"": ""fe37ca97-be54-4a8a-9745-07667adcd9ba"",
-              ""userID"": ""8ce4c97c-ccfe-4776-8903-dae7ed1f7ca6"",
-              ""name"": ""Test Sweep Rule Create"",
-              ""isEnabled"": false,
-              ""status"": ""PendingApproval"",
-              ""triggerOnPayIn"": false,
-              ""triggerOnPayOut"": false,
-              ""sweepAction"": {
-                ""priority"": 1,
-                ""actionType"": ""Sweep"",
-                ""destinations"": [
-                  {
-                    ""sweepPercentage"": 100,
-                    ""sweepAmount"": 0,
-                    ""name"": ""Jane Doe"",
-                    ""identifier"": {
-                      ""type"": ""IBAN"",
-                      ""currency"": ""EUR"",
-                      ""iban"": ""IEMOCK123456779"",
-                      ""summary"": ""IBAN: IEMOCK123456779""
-                    },
-                    ""summary"": ""Jane Doe, IBAN: IEMOCK123456779""
-                  }
-                ],
-                ""amountToLeave"": 1
-              },
-              ""inserted"": ""2023-01-25T20:09:44.1113893+00:00"",
-              ""lastUpdated"": ""2023-01-25T20:09:44.1118082+00:00""
-            }";
-
-        var rule = Newtonsoft.Json.JsonConvert.DeserializeObject<Rule>(sweepRuleJson);
-
-        Assert.NotNull(rule);
-        Assert.NotNull(rule.SweepAction);
-        Assert.NotNull(rule.SweepAction.Destinations);
-        Assert.Single(rule.SweepAction.Destinations);
-        Assert.Equal(RuleStatusEnum.PendingApproval, rule?.Status);
-        Assert.Null(rule?.SweepAction?.PayoutYourReference);
-        Assert.Null(rule?.SweepAction?.PayoutTheirReference);
-        Assert.Null(rule?.SweepAction?.PayoutDescription);
-    }
-
-    /// <summary>
-    /// Tests that a sweep rule can be deserialised from a JSON representation.
-    /// </summary>
-    [Fact]
-    public void Deserialise_SystemJson_Sweep_Rule_Test()
+    public void Deserialise_Json_Sweep_Rule_Test()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 
@@ -188,7 +135,7 @@ public class RuleSerialisationTests : MoneyMoovUnitTestBase<RuleSerialisationTes
 
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         options.Converters.Add(new JsonStringEnumConverter());
-        var rule = System.Text.Json.JsonSerializer.Deserialize<Rule>(sweepRuleJson, options);
+        var rule = JsonSerializer.Deserialize<Rule>(sweepRuleJson, options);
 
         Assert.NotNull(rule);
         Assert.NotNull(rule.SweepAction);
@@ -298,7 +245,7 @@ public class RuleSerialisationTests : MoneyMoovUnitTestBase<RuleSerialisationTes
   ""totalSize"": 1
 }";
 
-        var rules = System.Text.Json.JsonSerializer.Deserialize<RulesPageResponse>(rulesJson, 
+        var rules = JsonSerializer.Deserialize<RulesPageResponse>(rulesJson, 
             new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
@@ -317,6 +264,5 @@ public class RuleSerialisationTests : MoneyMoovUnitTestBase<RuleSerialisationTes
         Assert.Equal(CurrencyTypeEnum.EUR, rules?.Content[0].SweepAction.Destinations[0]?.Identifier?.Currency);
         Assert.Equal("IEMOCK123456779", rules?.Content[0].SweepAction.Destinations[0]?.Identifier?.IBAN);
         Assert.Equal(1.0M, rules?.Content[0].SweepAction.AmountToLeave);
-
     }
 }
