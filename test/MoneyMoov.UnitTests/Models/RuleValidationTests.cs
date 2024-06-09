@@ -17,7 +17,6 @@ using Microsoft.Extensions.Logging;
 using NoFrixion.MoneyMoov.Models;
 using Xunit;
 using Xunit.Abstractions;
-using System.Text.Json;
 
 namespace NoFrixion.MoneyMoov.UnitTests;
 
@@ -64,7 +63,7 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
 
         foreach (var err in problem.Errors)
         {
-            Logger.LogDebug(JsonSerializer.Serialize(err));
+            Logger.LogDebug(err.ToJsonFormatted());
         }
 
         Assert.Equal(problem.Errors.Count == 0, shouldSucceed);

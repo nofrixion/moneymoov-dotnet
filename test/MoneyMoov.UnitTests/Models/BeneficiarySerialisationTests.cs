@@ -16,8 +16,6 @@
 
 using Microsoft.Extensions.Logging;
 using NoFrixion.MoneyMoov.Models;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -56,10 +54,8 @@ public class BeneficiarySerialisationTests : MoneyMoovUnitTestBase<BeneficiarySe
                 }}  
             }";
 
-        var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
-        options.Converters.Add(new JsonStringEnumConverter());
-        var beneficiary = System.Text.Json.JsonSerializer.Deserialize<Beneficiary>(beneficiaryJson, options);
-        
+        var beneficiary = beneficiaryJson.FromJson<Beneficiary>();
+
         Assert.NotNull(beneficiary);
         Assert.NotNull(beneficiary?.Destination);
         Assert.NotNull(beneficiary?.Destination?.Identifier);

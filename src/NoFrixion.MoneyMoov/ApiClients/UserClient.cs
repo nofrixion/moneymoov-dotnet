@@ -59,7 +59,7 @@ public class UserClient : IUserClient
     }
 
     /// <summary>
-    /// Calls the MoneyMoov Merchant get user endpoint create a new user record.
+    /// Calls the MoneyMoov User endpoint create a new user record.
     /// </summary>
     /// <param name="userCreate">The model containing the data about the new user to create.</param>
     /// <returns>If successful, a user object.</returns>

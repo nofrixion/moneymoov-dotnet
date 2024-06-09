@@ -17,8 +17,6 @@
 using Microsoft.Extensions.Logging;
 using NoFrixion.Biz.BizModels.Paging;
 using NoFrixion.MoneyMoov.Models;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -70,9 +68,7 @@ public class RuleSerialisationTests : MoneyMoovUnitTestBase<RuleSerialisationTes
               ""lastUpdated"": ""2023-01-25T20:09:44.1118082+00:00""
             }";
 
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        options.Converters.Add(new JsonStringEnumConverter());
-        var rule = System.Text.Json.JsonSerializer.Deserialize<Rule>(sweepRuleJson, options);
+        var rule = sweepRuleJson.FromJson<Rule>();
 
         Assert.NotNull(rule);
         Assert.NotNull(rule.SweepAction);
@@ -133,9 +129,7 @@ public class RuleSerialisationTests : MoneyMoovUnitTestBase<RuleSerialisationTes
               ""lastUpdated"": ""2023-01-25T20:09:44.1118082+00:00""
             }";
 
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        options.Converters.Add(new JsonStringEnumConverter());
-        var rule = JsonSerializer.Deserialize<Rule>(sweepRuleJson, options);
+        var rule = sweepRuleJson.FromJson<Rule>();
 
         Assert.NotNull(rule);
         Assert.NotNull(rule.SweepAction);
@@ -245,12 +239,7 @@ public class RuleSerialisationTests : MoneyMoovUnitTestBase<RuleSerialisationTes
   ""totalSize"": 1
 }";
 
-        var rules = JsonSerializer.Deserialize<RulesPageResponse>(rulesJson, 
-            new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                Converters = { new JsonStringEnumConverter() }
-            });
+        var rules = rulesJson.FromJson<RulesPageResponse>();
 
         Assert.NotNull(rules);
         Assert.NotNull(rules.Content);
