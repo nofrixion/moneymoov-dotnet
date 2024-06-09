@@ -10,7 +10,7 @@
 // 09 Jun 2024  Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
 //
 // License: 
-// Proprietary NoFrixion.
+// MIT.
 //-----------------------------------------------------------------------------
 
 using System.Text.Json.Serialization;

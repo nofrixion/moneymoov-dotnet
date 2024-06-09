@@ -10,7 +10,7 @@
 // 09 Jun 2024  Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
 //
 // License: 
-// Proprietary NoFrixion.
+// MIT.
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel;
@@ -67,4 +67,3 @@ public class NumericConverter<T> : JsonConverter<T> where T : struct, IConvertib
         writer.WriteStringValue(value.ToString());
     }
 }
-
