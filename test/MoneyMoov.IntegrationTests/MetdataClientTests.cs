@@ -13,7 +13,6 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using LanguageExt.ClassInstances;
 using Microsoft.Extensions.Logging;
 using NoFrixion.MoneyMoov;
 using NoFrixion.MoneyMoov.IntegrationTests;

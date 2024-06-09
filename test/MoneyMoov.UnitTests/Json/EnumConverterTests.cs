@@ -31,6 +31,11 @@ public class EnumConverterTests
         IncomingPaymentProcessed = 1
     }
 
+    private class TestClass
+    {
+        public TestEnum? Instructedamountcurrency { get; set; }
+    }
+
     [Theory]
     [InlineData("\"INT_INTERC\"", TestEnum.INTINTERC)]
     [InlineData("\"INCOMING_PAYMENT_PROCESSED\"", TestEnum.IncomingPaymentProcessed)]
@@ -51,5 +56,31 @@ public class EnumConverterTests
     {
         var json = enumValue.ToJsonFlat();
         Assert.Equal($"\"{expected}\"", json);
+    }
+
+    [Theory]
+    [InlineData("{\"Instructedamountcurrency\":\"\"}", null)]
+    [InlineData("{\"Instructedamountcurrency\":\"INT_INTERC\"}", TestEnum.INTINTERC)]
+    [InlineData("{\"Instructedamountcurrency\":\"INCOMING_PAYMENT_PROCESSED\"}", TestEnum.IncomingPaymentProcessed)]
+    [InlineData("{\"Instructedamountcurrency\":\"Unknown\"}", TestEnum.Unknown)]
+    [InlineData("{\"Instructedamountcurrency\":16}", TestEnum.INTINTERC)]
+    [InlineData("{\"Instructedamountcurrency\":1}", TestEnum.IncomingPaymentProcessed)]
+    public void Deserialise_NullableEnum_Success(string json, TestEnum? expected)
+    {
+        var result = json.FromJson<TestClass>();
+        Assert.NotNull(result);
+        Assert.Equal(expected, result.Instructedamountcurrency);
+    }
+
+    [Theory]
+    [InlineData(null, "{\"instructedamountcurrency\":null}")]
+    [InlineData(TestEnum.INTINTERC, "{\"instructedamountcurrency\":\"INT_INTERC\"}")]
+    [InlineData(TestEnum.IncomingPaymentProcessed, "{\"instructedamountcurrency\":\"INCOMING_PAYMENT_PROCESSED\"}")]
+    [InlineData(TestEnum.Unknown, "{\"instructedamountcurrency\":\"Unknown\"}")]
+    public void Serialise_NullableEnum_Success(TestEnum? enumValue, string expected)
+    {
+        var myClass = new TestClass { Instructedamountcurrency = enumValue };
+        var json = myClass.ToJsonFlat();
+        Assert.Equal(expected, json);
     }
 }
