@@ -15,8 +15,6 @@
 // MIT.
 // -----------------------------------------------------------------------------
 
-using System.Text.Json;
-
 namespace NoFrixion.MoneyMoov.Models;
 
 public class Merchant

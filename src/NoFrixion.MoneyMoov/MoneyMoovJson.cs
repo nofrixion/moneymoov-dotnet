@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename:  MoneyNoovJsonS.cs
+// Filename:  MoneyNoovJson.cs
 //
 // Description: JSON serialiser options for wotking with the MoneyMoov API.
 //
