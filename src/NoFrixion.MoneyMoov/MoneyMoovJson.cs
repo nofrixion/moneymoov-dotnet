@@ -33,7 +33,6 @@ public class MoneyMoovJson
 
             ReferenceHandler = ReferenceHandler.IgnoreCycles,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
             WriteIndented = writeIndented,
             Converters =
             {
