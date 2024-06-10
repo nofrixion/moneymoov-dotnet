@@ -13,6 +13,7 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using Newtonsoft.Json;
 using NoFrixion.MoneyMoov.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json;
@@ -49,6 +50,21 @@ public class MoneyMoovJson
                 new NumericConverter<float>(),
                 new NumericConverter<double>(),
                 new NumericConverter<decimal>()
+            }
+        };
+    }
+
+    public static JsonSerializerSettings GetNewtonsoftSerialiserSettings(bool writeIndented = false)
+    {
+        return new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            NullValueHandling = NullValueHandling.Ignore,
+            Formatting = writeIndented ? Formatting.Indented : Formatting.None,
+            Converters =
+            {
+                new Newtonsoft.Json.Converters.StringEnumConverter(),
+                new Newtonsoft.Json.Converters.IsoDateTimeConverter()
             }
         };
     }
