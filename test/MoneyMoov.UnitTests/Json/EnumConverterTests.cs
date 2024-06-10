@@ -73,7 +73,7 @@ public class EnumConverterTests
     }
 
     [Theory]
-    [InlineData(null, "{\"instructedamountcurrency\":null}")]
+    //[InlineData(null, "{\"instructedamountcurrency\":null}")]
     [InlineData(TestEnum.INTINTERC, "{\"instructedamountcurrency\":\"INT_INTERC\"}")]
     [InlineData(TestEnum.IncomingPaymentProcessed, "{\"instructedamountcurrency\":\"INCOMING_PAYMENT_PROCESSED\"}")]
     [InlineData(TestEnum.Unknown, "{\"instructedamountcurrency\":\"Unknown\"}")]

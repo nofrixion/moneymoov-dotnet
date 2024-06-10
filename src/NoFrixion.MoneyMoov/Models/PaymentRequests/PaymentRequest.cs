@@ -230,7 +230,8 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// </summary>
     public string? CardStripePaymentIntentSecret { get; set; }
 
-    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public Merchant? Merchant { get; set; }
 
     public List<PaymentRequestAddress> Addresses { get; set; } = new List<PaymentRequestAddress>();
@@ -274,7 +275,8 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// Attempts to get the billing address for this payment request.
     /// </summary>
     /// <returns>The billing address or null if it's not set.</returns>
-    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public PaymentRequestAddress? BillingAddress =>
         Addresses?.Where(x => x.AddressType == AddressTypesEnum.Billing).FirstOrDefault();
 

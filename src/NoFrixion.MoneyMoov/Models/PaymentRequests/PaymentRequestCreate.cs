@@ -290,13 +290,16 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     [OptionalEmailAddress]
     public string? CustomerEmailAddress { get; set; }
 
-    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public PaymentProcessorsEnum PaymentProcessor { get; set; }
 
-    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public string? LightningInvoice { get; set; }
 
-    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public DateTimeOffset? LightningInvoiceExpiresAt { get; set; }
     
     [EmailAddressMultiple(ErrorMessage = PaymentRequestConstants.NOTIFICATION_EMAIL_ADDRESSES_ERROR_MESSAGE)]

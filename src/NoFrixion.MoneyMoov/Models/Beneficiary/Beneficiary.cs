@@ -16,8 +16,8 @@
 
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
-using System.Text.Json;
 using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 #nullable disable
 namespace NoFrixion.MoneyMoov.Models;
@@ -98,7 +98,8 @@ public class Beneficiary : IValidatableObject
     public User CreatedBy { get; set; }
 
     // Don't serialize the events if there are none.
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [Newtonsoft.Json.JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public virtual IEnumerable<BeneficiaryEvent> BeneficiaryEvents { get; set; }
 
     public virtual IEnumerable<PaymentAccount> SourceAccounts { get; set; }

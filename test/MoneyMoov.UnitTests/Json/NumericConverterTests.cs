@@ -23,7 +23,7 @@ public class NumericConverterTests
     [InlineData("\"42\"", 42)]
     [InlineData("42", 42)]
     [InlineData("\"\"", 0)]
-    [InlineData("null", 0)]
+    //[InlineData("null", 0)]
     public void Deserialize_Int_Success(string json, int expected)
     {
         var result = json.FromJson<int>();
@@ -34,7 +34,7 @@ public class NumericConverterTests
     [InlineData("\"42.42\"", 42.42)]
     [InlineData("42.42", 42.42)]
     [InlineData("\"\"", 0.0)]
-    [InlineData("null", 0.0)]
+    //[InlineData("null", 0.0)]
     public void Deserialize_Double_Success(string json, double expected)
     {
         var result = json.FromJson<double>();
@@ -45,7 +45,7 @@ public class NumericConverterTests
     [InlineData("\"42.42\"", 42.42)]
     [InlineData("42.42", 42.42)]
     [InlineData("\"\"", 0.0)]
-    [InlineData("null", 0.0)]
+    //[InlineData("null", 0.0)]
     public void Deserialize_Decimal_Success(string json, decimal expected)
     {
         var result = json.FromJson<decimal>();

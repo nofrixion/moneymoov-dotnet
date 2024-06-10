@@ -61,6 +61,7 @@ public class MoneyMoovJson
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             NullValueHandling = NullValueHandling.Ignore,
             Formatting = writeIndented ? Formatting.Indented : Formatting.None,
+            ObjectCreationHandling = ObjectCreationHandling.Replace,
             Converters =
             {
                 new Newtonsoft.Json.Converters.StringEnumConverter(),
