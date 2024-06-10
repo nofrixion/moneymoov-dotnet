@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using NoFrixion.MoneyMoov.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov;
 
@@ -27,10 +28,7 @@ public class MoneyMoovJson
         return new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
-
-            // Set the JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull) attribute on properties to ignore null values.
-            //DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, 
-
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, 
             ReferenceHandler = ReferenceHandler.IgnoreCycles,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             WriteIndented = writeIndented,
@@ -61,10 +59,10 @@ public class MoneyMoovJson
             NullValueHandling = NullValueHandling.Ignore,
             Formatting = writeIndented ? Formatting.Indented : Formatting.None,
             ObjectCreationHandling = ObjectCreationHandling.Replace,
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
             Converters =
             {
-                new Newtonsoft.Json.Converters.StringEnumConverter(),
-                new Newtonsoft.Json.Converters.IsoDateTimeConverter()
+                new Newtonsoft.Json.Converters.StringEnumConverter()
             }
         };
     }
