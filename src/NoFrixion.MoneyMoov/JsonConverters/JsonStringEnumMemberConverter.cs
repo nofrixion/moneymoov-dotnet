@@ -2,7 +2,8 @@
 // Filename: JsonStringEnumMemberConverter.cs
 //
 // Description: Converter for deserialsing strings to enums. Allows both the enum
-// value and the member attribute to be used as the string value.
+// value and the member attribute to be used as the string value. This converter
+// is only required for System.Text.Json as Newtonsoft already supports this.
 //
 // Author(s):
 // Aaron Clauson

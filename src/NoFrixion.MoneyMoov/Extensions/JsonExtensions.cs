@@ -23,23 +23,23 @@ public static class JsonExtensions
 {
     public static string ToJsonFlat<T>(this T obj)
     {
-        return JsonSerializer.Serialize(obj, MoneyMoovJson.GetSerialiserOptions());
+        return JsonSerializer.Serialize(obj, MoneyMoovJson.GetSystemTextSerialiserOptions());
     }
 
     public static string ToJsonFormatted<T>(this T obj)
     {
-        return JsonSerializer.Serialize(obj, MoneyMoovJson.GetSerialiserOptions(true));
+        return JsonSerializer.Serialize(obj, MoneyMoovJson.GetSystemTextSerialiserOptions(true));
     }
 
     public static T? FromJson<T>(this string json)
     {
         Guard.Against.NullOrWhiteSpace(json, nameof(json));
 
-        return JsonSerializer.Deserialize<T>(json, MoneyMoovJson.GetSerialiserOptions());
+        return JsonSerializer.Deserialize<T>(json, MoneyMoovJson.GetSystemTextSerialiserOptions());
     }
 
     public static JsonContent ToJsonContent<T>(this T obj)
     {
-        return JsonContent.Create(obj, options: MoneyMoovJson.GetSerialiserOptions());
+        return JsonContent.Create(obj, options: MoneyMoovJson.GetSystemTextSerialiserOptions());
     }
 }

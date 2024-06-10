@@ -1,7 +1,8 @@
 ﻿//-----------------------------------------------------------------------------
 // Filename: NumericConverter.cs
 //
-// Description: Converter for deserialsing strings numeric values.
+// Description: Converter for deserialsing strings numeric values. This converter
+// is only required for System.Text.Json as Newtonsoft already supports this.
 //
 // Author(s):
 // Aaron Clauson

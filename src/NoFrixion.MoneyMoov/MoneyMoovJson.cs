@@ -21,7 +21,7 @@ namespace NoFrixion.MoneyMoov;
 
 public class MoneyMoovJson
 {
-    public static JsonSerializerOptions GetSerialiserOptions(bool writeIndented = false)
+    public static JsonSerializerOptions GetSystemTextSerialiserOptions(bool writeIndented = false)
     {
         return new JsonSerializerOptions
         {

@@ -1,7 +1,8 @@
 ﻿//-----------------------------------------------------------------------------
 // Filename: BooleanStringConverter.cs
 //
-// Description: Converter for deserialsing strings to booleans.
+// Description: Converter for deserialsing strings to booleans. This converter
+// is only required for System.Text.Json as Newtonsoft already supports this.
 //
 // Author(s):
 // Aaron Clauson

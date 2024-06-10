@@ -292,7 +292,7 @@ public class NoFrixionProblem
     }
 
     public string ToJson() =>
-        System.Text.Json.JsonSerializer.Serialize(this);
+        this.ToJsonFormatted();
 
     /// <summary>
     /// Plain text representation of the problem.
@@ -379,6 +379,6 @@ public class NoFrixionProblem
 
     public static NoFrixionProblem FromJson(string json)
     {
-       return JsonSerializer.Deserialize<NoFrixionProblem>(json) ?? NoFrixionProblem.Empty;
+       return json.FromJson<NoFrixionProblem>() ?? NoFrixionProblem.Empty;
     }
 }

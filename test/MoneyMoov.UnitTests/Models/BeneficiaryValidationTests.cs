@@ -74,7 +74,7 @@ public class BeneficairyValidationTests : MoneyMoovUnitTestBase<BeneficairyValid
 
         foreach (var err in problem.Errors)
         {
-            Logger.LogDebug(JsonSerializer.Serialize(err));
+            Logger.LogDebug(err.ToJsonFormatted());
         }
 
         Assert.NotEmpty(problem.Errors);
