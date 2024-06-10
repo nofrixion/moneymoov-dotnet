@@ -14,9 +14,6 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
 namespace NoFrixion.MoneyMoov.Models;
 
 #nullable disable
@@ -29,8 +26,6 @@ public class MerchantToken
 
     public string Description { get; set; }
 
-    [EnumDataType(typeof(MerchantTokenPermissionsEnum))]
-    [JsonConverter(typeof(JsonStringEnumConverter))]
     public MerchantTokenPermissionsEnum Permissions { get; set; }
 
     public DateTimeOffset Inserted { get; set; }

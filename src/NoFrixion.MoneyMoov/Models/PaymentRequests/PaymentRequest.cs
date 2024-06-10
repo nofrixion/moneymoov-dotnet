@@ -22,7 +22,6 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using NoFrixion.MoneyMoov.Extensions;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -41,8 +40,6 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// <summary>
     /// The currency of the request.
     /// </summary>
-    [EnumDataType(typeof(CurrencyTypeEnum))]
-    [JsonConverter(typeof(JsonStringEnumConverter))]
     public CurrencyTypeEnum Currency { get; set; } = CurrencyTypeEnum.EUR;
 
     /// <summary>
@@ -60,8 +57,6 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// The payment methods that the payment request supports. When setting using form data
     /// should be supplied as a comma separated list, for example "card, pisp, lightning".
     /// </summary>
-    [EnumDataType(typeof(PaymentMethodTypeEnum))]
-    [JsonConverter(typeof(JsonStringEnumConverter))]
     public PaymentMethodTypeEnum PaymentMethodTypes { get; set; } = PaymentMethodTypeEnum.card;
 
     /// <summary>

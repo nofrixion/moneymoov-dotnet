@@ -14,8 +14,6 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
-using System.Text.Json.Serialization;
-
 namespace NoFrixion.MoneyMoov.Models;
 
 #nullable disable
@@ -34,8 +32,6 @@ public class TokenAdd : IValidatableObject
     [Required(ErrorMessage = "Description is required")]
     public string Description { get; set; }
 
-    [EnumDataType(typeof(MerchantTokenPermissionsEnum))]
-    [JsonConverter(typeof(JsonStringEnumConverter))]
     public MerchantTokenPermissionsEnum Permissions { get; set; } = MerchantTokenPermissionsEnum.CreatePaymentRequest;
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

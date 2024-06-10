@@ -13,9 +13,6 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
 namespace NoFrixion.MoneyMoov.Models;
 
 /// <summary>
@@ -46,15 +43,11 @@ public class MerchantPayByBankSetting
     /// <summary>
     /// Currency supported by the bank.
     /// </summary>
-    [EnumDataType(typeof(CurrencyTypeEnum))]
-    [JsonConverter(typeof(JsonStringEnumConverter))]
     public CurrencyTypeEnum Currency { get; set; }
 
     /// <summary>
     /// Name of the bank payment processor.
     /// </summary>
-    [EnumDataType(typeof(PaymentProcessorsEnum))]
-    [JsonConverter(typeof(JsonStringEnumConverter))]
     public PaymentProcessorsEnum Processor { get; set; }
 
     /// <summary>

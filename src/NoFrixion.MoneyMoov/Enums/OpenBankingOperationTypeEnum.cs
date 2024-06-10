@@ -12,12 +12,9 @@
 //  License: MIT
 // -----------------------------------------------------------------------------
 
-using System.Text.Json.Serialization;
-
 namespace NoFrixion.MoneyMoov.Enums;
 
 [Flags]
-[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum OpenBankingOperationTypeEnum
 {
     /// <summary>

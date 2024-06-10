@@ -16,9 +16,6 @@
 
 #nullable disable
 
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
 namespace NoFrixion.MoneyMoov.Models;
 
 public class Transaction : IWebhookPayload
@@ -57,8 +54,6 @@ public class Transaction : IWebhookPayload
     /// <summary>
     /// Currency of transaction.
     /// </summary>
-    [EnumDataType(typeof(CurrencyTypeEnum))]
-    [JsonConverter(typeof(JsonStringEnumConverter))]
     public CurrencyTypeEnum Currency { get; set; }
 
     /// <summary>

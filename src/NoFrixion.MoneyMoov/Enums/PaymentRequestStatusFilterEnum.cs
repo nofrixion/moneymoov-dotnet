@@ -12,11 +12,8 @@
 //  License: MIT
 // -----------------------------------------------------------------------------
 
-using System.Text.Json.Serialization;
-
 namespace NoFrixion.MoneyMoov;
 
-[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum PaymentRequestStatusFilterEnum
 {
     /// <summary>

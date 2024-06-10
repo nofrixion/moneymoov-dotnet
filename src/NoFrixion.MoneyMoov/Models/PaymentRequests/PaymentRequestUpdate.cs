@@ -16,7 +16,6 @@
 
 using NoFrixion.MoneyMoov.Attributes;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -46,8 +45,6 @@ public class PaymentRequestUpdate
     /// The payment methods that the payment request supports. When setting using form data
     /// should be supplied as a comma separated list, for example "card, pisp, lightning".
     /// </summary>
-    [EnumDataType(typeof(PaymentMethodTypeEnum))]
-    [JsonConverter(typeof(JsonStringEnumConverter))]
     public PaymentMethodTypeEnum? PaymentMethodTypes { get; set; }
 
     /// <summary>

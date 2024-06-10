@@ -1,10 +1,8 @@
 
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 
-[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum AccountIdentificationType
 {
     [EnumMember(Value = "SORT_CODE")]
