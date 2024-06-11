@@ -14,15 +14,12 @@
 // -----------------------------------------------------------------------------
 
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace NoFrixion.MoneyMoov;
 
 /// <summary>
 /// The status of payout.
 /// </summary>
-[JsonConverter(typeof(StringEnumConverter))]
 public enum PayoutStatus
 {
     UNKNOWN = 0,

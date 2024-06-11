@@ -14,10 +14,8 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using Newtonsoft.Json.Converters;
 using NoFrixion.MoneyMoov.Attributes;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -47,8 +45,6 @@ public class PaymentRequestUpdate
     /// The payment methods that the payment request supports. When setting using form data
     /// should be supplied as a comma separated list, for example "card, pisp, lightning".
     /// </summary>
-    [EnumDataType(typeof(PaymentMethodTypeEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
     public PaymentMethodTypeEnum? PaymentMethodTypes { get; set; }
 
     /// <summary>

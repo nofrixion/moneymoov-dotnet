@@ -18,7 +18,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NoFrixion.MoneyMoov.Models;
 using System.Net;
-using System.Net.Http.Json;
 
 namespace NoFrixion.MoneyMoov;
 
@@ -32,7 +31,7 @@ public interface IMetadataClient
 
     Task<RestApiResponse<string>> EchoAsync(string name, string message);
 
-    Task<RestApiResponse<dynamic>> EchoJsonAsync(string name, string message);
+    Task<RestApiResponse<EchoMessage>> EchoJsonAsync(string name, string message);
 }
 
 public class MetadataClient : IMetadataClient
@@ -119,9 +118,9 @@ public class MetadataClient : IMetadataClient
     /// Calls the MoneyMoov Metadata get version endpoint with a JSON encoded payload.
     /// </summary>
     /// <returns>A JSON echo response message.</returns>
-    public Task<RestApiResponse<dynamic>> EchoJsonAsync(string name, string message)
+    public Task<RestApiResponse<EchoMessage>> EchoJsonAsync(string name, string message)
     {
-        var content = JsonContent.Create(new { name, message });
-        return _apiClient.PostAsync<dynamic>(MoneyMoovUrlBuilder.MetadataApi.EchoUrl(_apiClient.GetBaseUri().ToString()), content);
+        var content = new { name, message }.ToJsonContent();
+        return _apiClient.PostAsync<EchoMessage>(MoneyMoovUrlBuilder.MetadataApi.EchoUrl(_apiClient.GetBaseUri().ToString()), content);
     }
 }

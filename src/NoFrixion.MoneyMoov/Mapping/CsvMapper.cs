@@ -100,7 +100,7 @@ public static class CsvMapper
                                 {
                                     if (!string.IsNullOrEmpty(formattedValue))
                                     {
-                                        var stringItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(formattedValue);
+                                        var stringItems = formattedValue.FromJson<List<string>>();
                                         property.SetValue(result.Model, stringItems);
                                     }
                                 }

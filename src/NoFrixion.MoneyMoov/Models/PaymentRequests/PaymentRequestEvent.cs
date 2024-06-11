@@ -17,7 +17,7 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -43,12 +43,12 @@ public class PaymentRequestEvent
 
     public string? ErrorMessage { get; set; }
 
-    [JsonIgnore]
     [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public string? RawResponse { get; set; }
 
-    [JsonIgnore]
     [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public string? RawResponseHash { get; set; }
 
     public string? CardRequestID { get; set; }
@@ -100,8 +100,8 @@ public class PaymentRequestEvent
     /// For payment initiation providers that use an OAuth, or other, token to create a session
     /// between submitting and finalising a payment initiation attempt.
     /// </summary>
-    [JsonIgnore]
     [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public string? PispToken { get; set; }
 
     /// <summary>
@@ -138,8 +138,8 @@ public class PaymentRequestEvent
     /// If a reusable card token was generated as part of the event this will hold the ID
     /// of the tokenised card record that can be used with the pay with card token method.
     /// </summary>
-    [JsonIgnore]
     [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public Guid? TokenisedCardID { get; set; }
 
     /// <summary>

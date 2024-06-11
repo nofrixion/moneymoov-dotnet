@@ -30,7 +30,5 @@ public partial class Amount
     }
 
     public virtual string ToJson()
-    {
-        return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-    }
+        => this.ToJsonFormatted();
 }

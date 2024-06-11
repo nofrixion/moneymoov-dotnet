@@ -13,12 +13,8 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
 namespace NoFrixion.MoneyMoov;
 
-[JsonConverter(typeof(StringEnumConverter))]
 public enum RuleEventTypesEnum
 {
     None,

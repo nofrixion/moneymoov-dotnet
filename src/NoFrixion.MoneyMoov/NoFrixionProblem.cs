@@ -146,7 +146,6 @@ public class NoFrixionProblem
     /// <example>
     /// https://tools.ietf.org/html/rfc7231#section-6.5.1
     /// </example>
-    [JsonPropertyName("type")]
     public string Type { get; set; } = ProblemDefaults.Defaults[(int)HttpStatusCode.BadRequest].Type;
 
     /// <summary>
@@ -157,7 +156,6 @@ public class NoFrixionProblem
     /// <example>
     /// Bad Request
     /// </example>
-    [JsonPropertyName("title")]
     public string Title { get; set; } = ProblemDefaults.Defaults[(int)HttpStatusCode.BadRequest].Title;
 
     /// <summary>
@@ -172,7 +170,6 @@ public class NoFrixionProblem
     /// 501 Not Implemented.
     /// etc.
     /// </example>
-    [JsonPropertyName("status")]
     public int Status { get; set; }
 
     /// <summary>
@@ -181,17 +178,14 @@ public class NoFrixionProblem
     /// <example>
     /// Something went wrong with your request and this is a useful explanation of what happened.
     /// </example>
-    [JsonPropertyName("detail")]
     public string Detail { get; set; } = string.Empty;
 
     /// <summary>
     /// A URI reference that identifies the specific occurrence of the problem.It may
     /// or may not yield further information if dereferenced.
     /// </summary>
-    [JsonPropertyName("instance")]
     public string Instance { get; set; } = string.Empty;
 
-    [JsonPropertyName("traceid")]
     public string TraceID { get; set; } = string.Empty;
 
     /// <summary>
@@ -201,7 +195,6 @@ public class NoFrixionProblem
     /// chosen to result in the same serialised JSON as will be returned by ASP.NET 
     /// when the parameter on a controller action fails validation.
     /// </summary>
-    [JsonPropertyName("errors")]
     public Dictionary<string, string[]> Errors { get; set; } = new Dictionary<string, string[]>();
 
     /// <summary>
@@ -209,11 +202,13 @@ public class NoFrixionProblem
     /// take copy of the raw error. Mainly useful for REST API responses from server that return an 
     /// unknown, on non-JSON, format.
     /// </summary>
-    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     [IgnoreDataMember]
     public string RawError { get; set; } = string.Empty;
 
-    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     [IgnoreDataMember]
     public bool IsEmpty => _isEmpty;
 
@@ -291,7 +286,7 @@ public class NoFrixionProblem
     }
 
     public string ToJson() =>
-        System.Text.Json.JsonSerializer.Serialize(this);
+        this.ToJsonFormatted();
 
     /// <summary>
     /// Plain text representation of the problem.
@@ -378,11 +373,6 @@ public class NoFrixionProblem
 
     public static NoFrixionProblem FromJson(string json)
     {
-       return Newtonsoft.Json.JsonConvert.DeserializeObject<NoFrixionProblem>(json,
-            new Newtonsoft.Json.JsonSerializerSettings
-            {
-                ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace
-            }) 
-            ?? NoFrixionProblem.Empty;
+       return json.FromJson<NoFrixionProblem>() ?? NoFrixionProblem.Empty;
     }
 }

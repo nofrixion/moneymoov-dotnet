@@ -24,7 +24,6 @@ public class AccountIdentifier: IValidatableObject
     /// <summary>
     /// The type of the account identifier.
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public AccountIdentifierType Type
     {
         get

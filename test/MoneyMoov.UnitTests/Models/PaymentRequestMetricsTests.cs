@@ -14,7 +14,6 @@
 //-----------------------------------------------------------------------------
 
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using NoFrixion.MoneyMoov.Models;
 using Xunit;
 using Xunit.Abstractions;
@@ -36,7 +35,7 @@ public class PaymentRequestMetricsTests : MoneyMoovUnitTestBase<PaymentRequestMe
 
         string metricsJson = " {\"all\":10,\"unpaid\":1,\"partiallyPaid\":3,\"paid\":2,\"authorized\":4,\"totalAmountsByCurrency\":{\"all\":{\"eur\":329.01000000000},\"paid\":{\"eur\":103.00000000000},\"unpaid\":{\"eur\":100.00000000000},\"partiallyPaid\":{\"eur\":101.00000000000},\"authorized\":{\"eur\":0.01000000000}}}";
 
-        var metrics = JsonConvert.DeserializeObject<PaymentRequestMetrics>(metricsJson);
+        var metrics = metricsJson.FromJson<PaymentRequestMetrics>();
 
         Assert.NotNull(metrics);
 

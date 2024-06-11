@@ -61,9 +61,7 @@ public class RestApiResponse
     }
 
     public string ToJson()
-    {
-        return System.Text.Json.JsonSerializer.Serialize(this);
-    }
+        => this.ToJsonFormatted();
 }
 
 /// <summary>

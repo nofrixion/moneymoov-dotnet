@@ -16,8 +16,6 @@
 
 using Microsoft.Extensions.Logging;
 using NoFrixion.MoneyMoov.Models;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -38,9 +36,7 @@ public class TransactionSerialisationTests : MoneyMoovUnitTestBase<TransactionSe
 
         var tx = new Transaction();
 
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        options.Converters.Add(new JsonStringEnumConverter());
-        var txJson = System.Text.Json.JsonSerializer.Serialize<Transaction>(tx, options);
+        var txJson = tx.ToJsonFlat();
 
         Assert.NotEmpty(txJson);
     }

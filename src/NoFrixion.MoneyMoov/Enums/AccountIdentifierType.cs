@@ -12,15 +12,11 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
 namespace NoFrixion.MoneyMoov;
 
 /// <summary>
 /// Defines the different types of account identifiers that are supported.
 /// </summary>
-[JsonConverter(typeof(StringEnumConverter))]
 public enum AccountIdentifierType
 {
     /// <summary>

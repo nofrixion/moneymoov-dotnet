@@ -13,8 +13,6 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using NoFrixion.MoneyMoov.Attributes;
 using System.ComponentModel.DataAnnotations;
 
@@ -41,8 +39,6 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// <summary>
     /// The currency of the payment request.
     /// </summary>
-    [EnumDataType(typeof(CurrencyTypeEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
     public CurrencyTypeEnum Currency { get; set; } = CurrencyTypeEnum.EUR;
 
     /// <summary>
@@ -66,8 +62,6 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// The payment methods that the payment request supports. When setting using form data
     /// should be supplied as a comma separated list, for example "card, pisp, lightning".
     /// </summary>
-    [EnumDataType(typeof(PaymentMethodTypeEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
     public PaymentMethodTypeEnum PaymentMethodTypes { get; set; } = PaymentMethodTypeEnum.card;
 
     /// <summary>
@@ -291,13 +285,16 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     [OptionalEmailAddress]
     public string? CustomerEmailAddress { get; set; }
 
-    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public PaymentProcessorsEnum PaymentProcessor { get; set; }
 
-    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public string? LightningInvoice { get; set; }
 
-    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public DateTimeOffset? LightningInvoiceExpiresAt { get; set; }
     
     [EmailAddressMultiple(ErrorMessage = PaymentRequestConstants.NOTIFICATION_EMAIL_ADDRESSES_ERROR_MESSAGE)]
