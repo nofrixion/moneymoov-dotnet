@@ -72,7 +72,7 @@ public static class PaymentsConstants
 
     public const string PISP_SETTLED_STATUS = "SETTLED";
 
-    public const string PISP_FAILED_STATUS = "FAILLED";
+    public const string PISP_FAILED_STATUS = "FAILED";
     
     public const string PISP_REFUND_CANCELLED_STATUS = "PAYOUT DELETED";
 
