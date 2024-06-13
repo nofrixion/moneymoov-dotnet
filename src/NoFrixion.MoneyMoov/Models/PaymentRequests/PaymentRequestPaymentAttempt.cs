@@ -23,6 +23,12 @@ namespace NoFrixion.MoneyMoov.Models;
 public class PaymentRequestPaymentAttempt
 {
     /// <summary>
+    /// When calculating if a payment request has expired this is the margin to 
+    /// apply to the expiry date.
+    /// </summary>
+    public const int PAYBYBANK_EXPIRY_MARGIN_SECONDS = 60;
+
+    /// <summary>
     /// For pay by bank attempts this is the ID that gets set on all the events (initiate,
     /// callback, webhook and settlement) for the same attempt. For cards and lightning different
     /// fields are used to group payment request events.

@@ -71,4 +71,24 @@ public static class PaymentRequestPaymentAttemptExtensions
                attempt.RefundAttempts.Where(x => x.IsCardVoid)
                    .Sum(y => y.RefundSettledAmount);
     }
+
+    /// <summary>
+    /// Used to check whether a pay by bank (pisp) attempt has expired after geing authorised.
+    /// The expiry occurs if the funds don't arrive into the destination account within the prescribed
+    /// period (e.g. 2 business days)
+    /// </summary>
+    /// <param name="attempt">The payment attempt to check the pay by bank expiry for.</param>
+    /// <param name="expiresAt">The point the pay by bank attempt should expire At.</param>
+    /// <returns>True if the attempt meets the criteria for expiry. False if not.</returns>
+    public static bool IsPayByBankExpired(this PaymentRequestPaymentAttempt attempt, DateTimeOffset expiresAt)
+    {
+        if(attempt.PaymentMethod != PaymentMethodTypeEnum.pisp)
+        {
+            return false;
+        }
+
+        int secondsToExpiry = expiresAt.Subtract(DateTimeOffset.UtcNow).Seconds;
+
+        return secondsToExpiry < PaymentRequestPaymentAttempt.PAYBYBANK_EXPIRY_MARGIN_SECONDS;
+    }
 }
