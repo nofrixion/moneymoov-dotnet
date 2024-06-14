@@ -91,5 +91,10 @@ public enum PayoutEventTypesEnum
     /// <summary>
     /// The payout has been signed.
     /// </summary>
-    Signed = 14
+    Signed = 14,
+        
+    /// <summary>
+    /// A payout's associated beneficiary was enabled.
+    /// </summary>
+    BeneficiaryEnabled = 15,
 }
