@@ -19,6 +19,12 @@ namespace NoFrixion.MoneyMoov.Extensions;
 
 public static class PaymentRequestPaymentAttemptExtensions
 {
+    /// <summary>
+    /// When calculating if a payment request has expired this is the margin to 
+    /// apply to the expiry date.
+    /// </summary>
+    private const int PAYBYBANK_EXPIRY_MARGIN_SECONDS = 10;
+
     public static PaymentResultEnum GetPaymentAttemptStatus(this PaymentRequestPaymentAttempt attempt)
     {
         var amountReceived = attempt switch
@@ -82,13 +88,13 @@ public static class PaymentRequestPaymentAttemptExtensions
     /// <returns>True if the attempt meets the criteria for expiry. False if not.</returns>
     public static bool IsPayByBankExpired(this PaymentRequestPaymentAttempt attempt, DateTimeOffset expiresAt)
     {
-        if(attempt.PaymentMethod != PaymentMethodTypeEnum.pisp)
+        if(attempt.PaymentMethod != PaymentMethodTypeEnum.pisp || 
+            attempt.Status != PaymentResultEnum.Authorized ||
+            attempt.AuthorisedAt == null)
         {
             return false;
         }
 
-        int secondsToExpiry = expiresAt.Subtract(DateTimeOffset.UtcNow).Seconds;
-
-        return secondsToExpiry < PaymentRequestPaymentAttempt.PAYBYBANK_EXPIRY_MARGIN_SECONDS;
+        return expiresAt < DateTimeOffset.UtcNow.AddSeconds(PAYBYBANK_EXPIRY_MARGIN_SECONDS);
     }
 }
