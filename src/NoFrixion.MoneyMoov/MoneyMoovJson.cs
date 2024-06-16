@@ -23,14 +23,13 @@ namespace NoFrixion.MoneyMoov;
 
 public class MoneyMoovJson
 {
-    public static JsonSerializerOptions GetSystemTextSerialiserOptions(bool writeIndented = false)
+    public static JsonSerializerOptions GetSystemTextSerialiserOptions(bool writeIndented = false, bool usePascalCase = false)
     {
-        return new JsonSerializerOptions
+        var options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, 
             ReferenceHandler = ReferenceHandler.IgnoreCycles,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             WriteIndented = writeIndented,
             Converters =
             {
@@ -49,21 +48,34 @@ public class MoneyMoovJson
                 new NumericConverter<decimal>()
             }
         };
+
+        if(usePascalCase)
+        {
+            options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        }
+
+        return options;
     }
 
-    public static JsonSerializerSettings GetNewtonsoftSerialiserSettings(bool writeIndented = false)
+    public static JsonSerializerSettings GetNewtonsoftSerialiserSettings(bool writeIndented = false, bool usePascalCase = false)
     {
-        return new JsonSerializerSettings
+        var settings = new JsonSerializerSettings
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             NullValueHandling = NullValueHandling.Ignore,
             Formatting = writeIndented ? Formatting.Indented : Formatting.None,
             ObjectCreationHandling = ObjectCreationHandling.Replace,
-            ContractResolver = new CamelCasePropertyNamesContractResolver(),
             Converters =
             {
                 new Newtonsoft.Json.Converters.StringEnumConverter()
             }
         };
+
+        if(usePascalCase == false)
+        {
+            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+        }
+
+        return settings;
     }
 }
