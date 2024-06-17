@@ -63,7 +63,7 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
 
         foreach (var err in problem.Errors)
         {
-            Logger.LogDebug(Newtonsoft.Json.JsonConvert.SerializeObject(err));
+            Logger.LogDebug(err.ToJsonFormatted());
         }
 
         Assert.Equal(problem.Errors.Count == 0, shouldSucceed);

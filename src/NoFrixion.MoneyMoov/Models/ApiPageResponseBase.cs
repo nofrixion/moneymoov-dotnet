@@ -12,7 +12,6 @@
 //  Proprietary NoFrixion.
 // -----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
 using NoFrixion.MoneyMoov.Models.Utils;
 using System.Text;
 
@@ -130,7 +129,5 @@ public abstract class ApiPageResponseBase<T> : PageResponse<T>
     /// </summary>
     /// <returns>JSON string presentation of the object</returns>
     public virtual string ToJson()
-    {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
-    }
+        => this.ToJsonFormatted();
 }

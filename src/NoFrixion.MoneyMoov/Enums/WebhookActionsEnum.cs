@@ -14,12 +14,8 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
 namespace NoFrixion.MoneyMoov;
 
-[JsonConverter(typeof(StringEnumConverter))]
 public enum WebhookActionsEnum
 {
     Created,

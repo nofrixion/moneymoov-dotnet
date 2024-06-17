@@ -16,8 +16,6 @@
 
 using Microsoft.Extensions.Logging;
 using NoFrixion.MoneyMoov.Models;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -27,54 +25,6 @@ public class BeneficiarySerialisationTests : MoneyMoovUnitTestBase<BeneficiarySe
 {
     public BeneficiarySerialisationTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     { }
-
-    /// <summary>
-    /// Tests that a beneficiary can be deserialised from its JSON represnetation
-    /// using Newtonsoft.
-    /// </summary>
-    [Fact]
-    public void Deserialise_Newtonsoft_Beneficiary_Test()
-    {
-        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
-
-        var beneficiaryJson = @"
-            {
-                ""id"":""1e92214c-1650-49c4-760c-08db1746a020"",
-                ""merchantID"":""2186d737-50a1-48b0-a7e7-7f39cb40407e"",
-                ""name"":""Test Beneficiary"",
-                ""yourReference"":""YourRef"",
-                ""theirReference"":""TheirRef"",
-                ""currency"":""EUR"",
-                ""destination"": {
-                    ""name"":""Destination account"",
-                    ""identifier"":{
-                        ""type"":""IBAN"",
-                        ""iban"":""GB33BUKB20201555555555"",
-                        ""summary"":""IBAN: GB33BUKB20201555555555""
-                }}
-            }";
-
-        var beneficiary = Newtonsoft.Json.JsonConvert.DeserializeObject<Beneficiary>(beneficiaryJson);
-
-        //var rule = Newtonsoft.Json.JsonConvert.DeserializeObject<Rule>(sweepRuleJson, settings: new JsonSerializerSettings
-        //{
-        //    ObjectCreationHandling = ObjectCreationHandling.Replace,
-        //});
-
-        //var options = new JsonSerializerOptions();
-        //options.Converters.Add(new JsonStringEnumConverter());
-        //var rule = await response.Content.ReadFromJsonAsync<Rule>(options);
-
-        Assert.NotNull(beneficiary);
-        Assert.NotNull(beneficiary?.Destination);
-        Assert.NotNull(beneficiary?.Destination?.Identifier);
-        Assert.Equal("1e92214c-1650-49c4-760c-08db1746a020", beneficiary?.ID.ToString());
-        Assert.Equal("2186d737-50a1-48b0-a7e7-7f39cb40407e", beneficiary?.MerchantID.ToString());
-        Assert.Equal("Test Beneficiary", beneficiary?.Name);
-        Assert.Equal("Destination account", beneficiary?.Destination?.Name);
-        Assert.Equal(AccountIdentifierType.IBAN, beneficiary?.Destination?.Identifier?.Type);
-        Assert.Equal("GB33BUKB20201555555555", beneficiary?.Destination?.Identifier?.IBAN);
-    }
 
     /// <summary>
     /// Tests that a beneficiary can be deserialised from its JSON represnetation
@@ -104,10 +54,8 @@ public class BeneficiarySerialisationTests : MoneyMoovUnitTestBase<BeneficiarySe
                 }}  
             }";
 
-        var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
-        options.Converters.Add(new JsonStringEnumConverter());
-        var beneficiary = System.Text.Json.JsonSerializer.Deserialize<Beneficiary>(beneficiaryJson, options);
-        
+        var beneficiary = beneficiaryJson.FromJson<Beneficiary>();
+
         Assert.NotNull(beneficiary);
         Assert.NotNull(beneficiary?.Destination);
         Assert.NotNull(beneficiary?.Destination?.Identifier);

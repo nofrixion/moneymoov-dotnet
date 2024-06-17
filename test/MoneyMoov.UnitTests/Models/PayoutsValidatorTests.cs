@@ -111,9 +111,9 @@ public class PayoutsValidatorTests
     [InlineData(".-/& a")]
     [InlineData("TELECOMUNICAÇÕES S.A.")]
     [InlineData("Ç_é")]
-    public void PaymentsValidator_Validate_Account_Name_Success(string accountName)
+    public void PaymentsValidator_Modulr_Validate_Account_Name_Success(string accountName)
     {
-        var result = PayoutsValidator.IsValidAccountName(accountName);
+        var result = PayoutsValidator.IsValidAccountName(accountName, PaymentProcessorsEnum.Modulr);
 
         Assert.True(result);
     }
@@ -128,9 +128,43 @@ public class PayoutsValidatorTests
     [InlineData("1-A-2-c + + dfg")] // Invalid character '+'.
     [InlineData("Big Bucks £")]// Invalid character '£'.
     [InlineData("Big Bucks €")]// Invalid character '€'.
-    public void PaymentsValidator_Validate_Account_Name_Fails(string accountName)
+    public void PaymentsValidator_Modulr_Validate_Account_Name_Fails(string accountName)
     {
-        var result = PayoutsValidator.IsValidAccountName(accountName);
+        var result = PayoutsValidator.IsValidAccountName(accountName, PaymentProcessorsEnum.Modulr);
+
+        Assert.False(result);
+    }
+
+    /// <summary>
+    /// Tests that a payout Account Name is validated successfully.
+    /// </summary>
+    [Theory]
+    [InlineData("A")]
+    [InlineData("1-A")]
+    [InlineData("1-A-2-c")]
+    [InlineData(".-:/ a")]
+    [InlineData("TELECOMUNICAES S.A.")]
+    [InlineData("/:")]
+    public void PaymentsValidator_BankingCircle_Validate_Account_Name_Success(string accountName)
+    {
+        var result = PayoutsValidator.IsValidAccountName(accountName, PaymentProcessorsEnum.BankingCircleAgency);
+
+        Assert.True(result);
+    }
+
+    /// <summary>
+    /// Tests that an invalid payout Account Name fails validation.
+    /// </summary>
+    [Theory]
+    [InlineData(":")] // Invalid initial character, can't be ':' or '-'.
+    [InlineData("--")]// No letter or number.
+    [InlineData(".-/&")] // No letter or number.
+    [InlineData("1-A-2-c + ! + dfg")] // Invalid character '!'.
+    [InlineData("Big Bucks £")]// Invalid character '£'.
+    [InlineData("Big Bucks €")]// Invalid character '€'.
+    public void PaymentsValidator_BankingCircle_Validate_Account_Name_Fails(string accountName)
+    {
+        var result = PayoutsValidator.IsValidAccountName(accountName, PaymentProcessorsEnum.BankingCircleAgency);
 
         Assert.False(result);
     }

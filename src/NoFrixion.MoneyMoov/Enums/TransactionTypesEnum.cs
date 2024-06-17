@@ -14,13 +14,10 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov;
 
-[JsonConverter(typeof(StringEnumConverter))]
 public enum TransactionTypesEnum
 {
     /// <summary>

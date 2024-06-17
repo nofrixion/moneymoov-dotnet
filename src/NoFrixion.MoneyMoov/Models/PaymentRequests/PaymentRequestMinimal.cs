@@ -13,10 +13,6 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
 namespace NoFrixion.MoneyMoov.Models;
 
 public class PaymentRequestMinimal
@@ -37,8 +33,6 @@ public class PaymentRequestMinimal
     /// <summary>
     /// The currency of the request.
     /// </summary>
-    [EnumDataType(typeof(CurrencyTypeEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
     public CurrencyTypeEnum Currency { get; set; } = CurrencyTypeEnum.EUR;
 
     /// <summary>
@@ -55,7 +49,6 @@ public class PaymentRequestMinimal
     /// <summary>
     /// The card processor
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
     public PaymentProcessorsEnum PaymentProcessor { get; set; }
 
     /// <summary>

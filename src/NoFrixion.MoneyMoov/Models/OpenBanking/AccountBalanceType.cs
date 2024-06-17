@@ -1,14 +1,11 @@
 
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace NoFrixion.MoneyMoov.Models.OpenBanking;
 
 /// <summary>
 /// Specifies the type of the stated account balance.
 /// </summary>
-[JsonConverter(typeof(StringEnumConverter))]
 public enum AccountBalanceType
 {
     [EnumMember(Value = "CLOSING_AVAILABLE")]

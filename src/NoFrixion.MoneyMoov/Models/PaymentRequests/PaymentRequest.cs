@@ -22,8 +22,6 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using NoFrixion.MoneyMoov.Extensions;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -42,8 +40,6 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// <summary>
     /// The currency of the request.
     /// </summary>
-    [EnumDataType(typeof(CurrencyTypeEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
     public CurrencyTypeEnum Currency { get; set; } = CurrencyTypeEnum.EUR;
 
     /// <summary>
@@ -61,8 +57,6 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// The payment methods that the payment request supports. When setting using form data
     /// should be supplied as a comma separated list, for example "card, pisp, lightning".
     /// </summary>
-    [EnumDataType(typeof(PaymentMethodTypeEnum))]
-    [JsonConverter(typeof(StringEnumConverter))]
     public PaymentMethodTypeEnum PaymentMethodTypes { get; set; } = PaymentMethodTypeEnum.card;
 
     /// <summary>
@@ -231,8 +225,8 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// </summary>
     public string? CardStripePaymentIntentSecret { get; set; }
 
-    [JsonIgnore]
     [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public Merchant? Merchant { get; set; }
 
     public List<PaymentRequestAddress> Addresses { get; set; } = new List<PaymentRequestAddress>();
@@ -276,7 +270,8 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// Attempts to get the billing address for this payment request.
     /// </summary>
     /// <returns>The billing address or null if it's not set.</returns>
-    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public PaymentRequestAddress? BillingAddress =>
         Addresses?.Where(x => x.AddressType == AddressTypesEnum.Billing).FirstOrDefault();
 

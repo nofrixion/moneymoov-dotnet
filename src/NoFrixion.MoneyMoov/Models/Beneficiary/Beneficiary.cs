@@ -16,6 +16,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 #nullable disable
@@ -54,9 +55,9 @@ public class Beneficiary : IValidatableObject
     public bool IsEnabled { get; set; }
     
     /// <summary>
-    /// A list of the email addresses of all the users who have usccessfully authorised the latest version of the beneficiary.
+    /// A list of users who have successfully authorised the latest version of the beneficiary.
     /// </summary>
-    [CanBeNull] public List<string> AuthorisedBy { get; set; }
+    [CanBeNull] public List<UserMinimal> AuthorisedBy { get; set; }
 
     /// <summary>
     /// True if the beneficiary can be authorised by the user who loaded it.
@@ -88,10 +89,17 @@ public class Beneficiary : IValidatableObject
     
     public string Nonce { get; set; }
     
+    public DateTimeOffset Inserted { get; set; }
+    
     public DateTimeOffset LastUpdated { get; set; }
+    
+    public DateTimeOffset? LastAuthorised { get; set; }
+    
+    public User CreatedBy { get; set; }
 
     // Don't serialize the events if there are none.
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [Newtonsoft.Json.JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public virtual IEnumerable<BeneficiaryEvent> BeneficiaryEvents { get; set; }
 
     public virtual IEnumerable<PaymentAccount> SourceAccounts { get; set; }
