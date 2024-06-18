@@ -28,8 +28,7 @@ public class PayrunInvoice : IValidatableObject
     
     [Obsolete("Please use Reference instead.")]
     public string? InvoiceNumber { get; set; }
-
-    [Required]
+    
     public required string Reference { get; set; }
 
     public string? PaymentTerms { get; set; }
