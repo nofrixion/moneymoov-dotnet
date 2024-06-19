@@ -98,6 +98,11 @@ public class Merchant
     public bool DisplayQrOnHostedPay { get; set; }
 
     /// <summary>
+    /// For internal use only.
+    /// </summary>
+    public string? ModulrCustomerID { get; set; }
+
+    /// <summary>
     /// The role of the identity that loaded the merchant record.
     /// </summary>
     public UserRolesEnum YourRole { get; set; } = UserRolesEnum.NewlyRegistered;

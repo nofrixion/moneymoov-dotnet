@@ -16,8 +16,6 @@
 using LanguageExt;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace NoFrixion.MoneyMoov;
 
@@ -220,7 +218,14 @@ public class RestApiClient : IRestApiClient, IDisposable
         {
             return responseContent.FromJson<NoFrixionProblem>() ?? NoFrixionProblem.Empty;
         }
-        catch (JsonException)
+        catch (System.Text.Json.JsonException)
+        {
+            var problem = new NoFrixionProblem(responseStatusCode, $"API error response was not in the recognised problem format.");
+            problem.RawError = responseContent;
+
+            return problem;
+        }
+        catch (Newtonsoft.Json.JsonException)
         {
             var problem = new NoFrixionProblem(responseStatusCode, $"API error response was not in the recognised problem format.");
             problem.RawError = responseContent;

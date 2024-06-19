@@ -170,7 +170,7 @@ public class NoFrixionProblem
     /// 501 Not Implemented.
     /// etc.
     /// </example>
-    public int Status { get; set; }
+    public int Status { get; set; } = (int)HttpStatusCode.BadRequest;
 
     /// <summary>
     /// A human-readable explanation specific to this occurrence of the problem.
@@ -233,13 +233,13 @@ public class NoFrixionProblem
         Detail = errorDetail;
     }
 
-    public NoFrixionProblem(string errorMessage, int errorCode = 400)
+    public NoFrixionProblem(string errorMessage, int errorCode = (int)HttpStatusCode.BadRequest)
     {
         Detail = errorMessage;
         Status = errorCode;
     }
 
-    public NoFrixionProblem(string errorMessage, ValidationResult validationError, int errorCode = 400)
+    public NoFrixionProblem(string errorMessage, ValidationResult validationError, int errorCode = (int)HttpStatusCode.BadRequest)
     {
         Detail = errorMessage;
         Status= errorCode;
@@ -250,7 +250,7 @@ public class NoFrixionProblem
         }
     }
 
-    public NoFrixionProblem(string errorMessage, IEnumerable<ValidationResult> validationErrors, int errorCode = 400)
+    public NoFrixionProblem(string errorMessage, IEnumerable<ValidationResult> validationErrors, int errorCode = (int)HttpStatusCode.BadRequest)
     {
         Detail = errorMessage;
         Status = errorCode;
