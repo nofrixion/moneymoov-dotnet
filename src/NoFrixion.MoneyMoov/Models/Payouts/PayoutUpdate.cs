@@ -154,7 +154,7 @@ public class PayoutUpdate
     /// Optional. The ID of the beneficiary identifier to use for the payout destination.
     /// </summary>
     [Obsolete("Please use Destination.BeneficiaryID to update the beneficiary.")]
-    public Guid? BeneficiaryIdentifierID { get; set; }
+    public Guid? BeneficiaryIdentifierIDX { get; set; }
 
     /// <summary>
     /// Optional. The ID of the beneficiary to use for the payout destination.
