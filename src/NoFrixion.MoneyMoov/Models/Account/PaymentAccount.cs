@@ -157,4 +157,9 @@ public class PaymentAccount
     /// The date that the external account will expire
     /// </summary>
     public DateTimeOffset? ExpiryDate { get; set; }
+    
+    /// <summary>
+    /// Indicates if the payment account is connected to a Xero bank feed.
+    /// </summary>
+    public bool IsXeroBankFeed { get; set; }
 }
