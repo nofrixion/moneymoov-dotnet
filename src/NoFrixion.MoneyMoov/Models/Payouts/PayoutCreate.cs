@@ -158,7 +158,7 @@ public class PayoutCreate
     /// Optional. The ID of the beneficiary identifier to use for the payout destination.
     /// </summary>
     [Obsolete("Please use Destination.BeneficiaryID to set the beneficiary.")]
-    public Guid? BeneficiaryIdentifierIDX { get; set; }
+    public Guid? BeneficiaryIdentifierID { get; set; }
 
     /// <summary>
     /// Optional. The ID of the beneficiary to use for the payout destination.

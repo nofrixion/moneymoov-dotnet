@@ -20,6 +20,7 @@ using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 #nullable disable
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class Beneficiary : IValidatableObject
@@ -48,8 +49,8 @@ public class Beneficiary : IValidatableObject
     /// <summary>
     /// The ID of the beneficiary identifier.
     /// </summary>
-    [Obsolete("Use Destination.")]
-    public Guid BeneficiaryIdentifierIDX { get; set; }
+    [Obsolete("No longer used.")]
+    public Guid BeneficiaryIdentifierID { get; set; }
     
     public string ApprovalCallbackUrl { get; set; }
 
