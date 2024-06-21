@@ -17,6 +17,7 @@
 using System.ComponentModel.DataAnnotations;
 
 #nullable disable
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class BeneficiaryCreate : IValidatableObject
