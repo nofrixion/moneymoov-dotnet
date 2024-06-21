@@ -334,7 +334,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// If the payout destination is a beneficiary this will be the ID of it's identifier.
     /// </summary>
     [Obsolete("No longer used.")]
-    public Guid? BeneficiaryIdentifierIDX { get; set; }
+    public Guid? BeneficiaryIdentifierID { get; set; }
     
     /// <summary>
     /// If the payout is using a beneficiary for the destination this is the name of the it.
