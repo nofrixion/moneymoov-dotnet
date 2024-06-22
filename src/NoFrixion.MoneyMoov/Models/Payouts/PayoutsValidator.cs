@@ -33,14 +33,14 @@ public static class PayoutsValidator
     /// and account number (SCAN) payments . Note that length gets calculated after 
     /// certain non-counted characters have been removed.
     /// </summary>
-    public const int THEIR_REFERENCE_SCAN_MAXIMUM_MODULR_LENGTH = 17;
+    public const int THEIR_REFERENCE_SCAN_MAXIMUM_MODULR_LENGTH = 18;
 
     /// <summary>
     /// The maximum allowed length for the Their Reference field for International Bank Account Number
     /// (IBAN) payments . Note that length gets calculated after / certain non-counted characters 
     /// have been removed.
     /// </summary>
-    public const int THEIR_REFERENCE_IBAN_MAXIMUM_MODULR_LENGTH = 139;
+    public const int THEIR_REFERENCE_IBAN_MAXIMUM_MODULR_LENGTH = 140;
 
     /// <summary>
     /// Maximum length of the Your, or External Reference, field.
@@ -229,9 +229,15 @@ public static class PayoutsValidator
         Regex replaceRegex = new Regex(THEIR_REFERENCE_NON_COUNTED_CHARS_MODULR_REGEX);
         var refClean = replaceRegex.Replace(theirReference, "");
 
-        if (refClean.Length<THEIR_REFERENCE_MINIMUM_MODULR_LENGTH
-            || refClean.Length> maxLength
+        if (refClean.Length < THEIR_REFERENCE_MINIMUM_MODULR_LENGTH
             || !matchRegex.IsMatch(theirReference))
+        {
+            return false;
+        }
+
+        // It's not particularly clear but it seems the non-counted characters are only for the minimum length
+        // requirement. The maximum length is the total length of the string after irrespective of the characters.
+        if(theirReference.Length > maxLength)
         {
             return false;
         }
@@ -425,7 +431,7 @@ public static class PayoutsValidator
 
         if (ValidateTheirReference(theirReference, identifierType, paymentProcessor))
         {
-            return theirReference;
+            return theirReference.Trim();
         }
         else
         {
@@ -452,7 +458,7 @@ public static class PayoutsValidator
                     theirReference;
             }
 
-            return ValidateTheirReference(theirReference, identifierType, paymentProcessor) ? theirReference : fallbackTheirReference;
+            return ValidateTheirReference(theirReference, identifierType, paymentProcessor) ? theirReference.Trim() : fallbackTheirReference;
         }
     }
 

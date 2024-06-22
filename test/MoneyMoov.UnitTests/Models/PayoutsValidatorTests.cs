@@ -189,7 +189,7 @@ public class PayoutsValidatorTests
     /// </summary>
     [Theory]
     [InlineData("re.e-1-")]             // Invalid char '.'. 
-    [InlineData("-sD7!&K.sdf./")]       //Invalid character '!'.
+    [InlineData("-sD7!&K.sdf./")]       // Invalid character '!'.
     [InlineData("Saldo F16 + F20")]     // Invalid character '+'.
     public void PaymentsValidator_ValidateYourReference_Fail(string yourReference)
     {
@@ -251,6 +251,11 @@ public class PayoutsValidatorTests
     [InlineData(AccountIdentifierType.IBAN, "-sD7!&K.sdf./", "sD7Ksdf", ComparisonMethod.Equals)] // If invalid, non-ASCII chars get replaced.
     [InlineData(AccountIdentifierType.IBAN, "Acme™ Corporation", "Acme Corporation", ComparisonMethod.Equals)] // Replace unicode.
     [InlineData(AccountIdentifierType.SCAN, "Too long for SCAN which only likes short refs", "Too long for SCAN", ComparisonMethod.Equals)]
+    [InlineData(AccountIdentifierType.SCAN, "Just rght for SCAN", "Just rght for SCAN", ComparisonMethod.Equals)]
+    [InlineData(AccountIdentifierType.IBAN,
+        "Just right for IBAN processing making it simple and efficient for all your international banking needs. Ensure accuracy and security always.",
+        "Just right for IBAN processing making it simple and efficient for all your international banking needs. Ensure accuracy and security always.", 
+        ComparisonMethod.Equals)]
     public void PaymentsValidator_Make_Safe_TheirReference_Modulr(AccountIdentifierType accountType, 
         string requestedTheirReference, 
         string expectedTheirReference,
