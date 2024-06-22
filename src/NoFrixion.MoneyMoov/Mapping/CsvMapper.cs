@@ -57,67 +57,77 @@ public static class CsvMapper
             csv.Read();
             csv.ReadHeader();
 
-            while (csv.Read())
+            if (csv.Context.Parser == null)
             {
                 var result = new CsvMapResult<T>();
-                result.CsvRow = csv.Context.Parser.RawRecord;
-
-                var record = csv.GetRecord<dynamic>();
-
-                if (record == null)
+                result.Problem = new NoFrixionProblem("Unable to parse the header row as valid csv.");
+                yield return result;
+            }
+            else
+            {
+                while (csv.Read())
                 {
-                    result.Problem = new NoFrixionProblem("Unable to parse the row as valid csv.");
-                }
-                else
-                {
-                    result.CsvMappedRow = (IDictionary<string, object>)record;
+                    var result = new CsvMapResult<T>();
 
-                    try
+                    result.CsvRow = csv.Context.Parser.RawRecord;
+
+                    var record = csv.GetRecord<dynamic>();
+
+                    if (record == null)
                     {
-                        foreach (var property in typeof(T).GetProperties())
-                        {
-                            if (mapping.ContainsKey(property.Name))
-                            {
-                                string template = mapping[property.Name];
-                                string formattedValue = template.Substitute((IDictionary<string, object>)record);
+                        result.Problem = new NoFrixionProblem("Unable to parse the row as valid csv.");
+                    }
+                    else
+                    {
+                        result.CsvMappedRow = (IDictionary<string, object>)record;
 
-                                if (property.PropertyType == typeof(Guid))
+                        try
+                        {
+                            foreach (var property in typeof(T).GetProperties())
+                            {
+                                if (mapping.ContainsKey(property.Name))
                                 {
-                                    if (Guid.TryParse(formattedValue, out Guid guidValue))
+                                    string template = mapping[property.Name];
+                                    string formattedValue = template.Substitute((IDictionary<string, object>)record);
+
+                                    if (property.PropertyType == typeof(Guid))
                                     {
-                                        property.SetValue(result.Model, guidValue);
+                                        if (Guid.TryParse(formattedValue, out Guid guidValue))
+                                        {
+                                            property.SetValue(result.Model, guidValue);
+                                        }
                                     }
-                                }
-                                else if (property.PropertyType.IsEnum)
-                                {
-                                    if (!string.IsNullOrEmpty(formattedValue))
+                                    else if (property.PropertyType.IsEnum)
                                     {
-                                        var enumValue = Enum.Parse(property.PropertyType, formattedValue, true);
-                                        property.SetValue(result.Model, enumValue);
+                                        if (!string.IsNullOrEmpty(formattedValue))
+                                        {
+                                            var enumValue = Enum.Parse(property.PropertyType, formattedValue, true);
+                                            property.SetValue(result.Model, enumValue);
+                                        }
                                     }
-                                }
-                                else if (property.PropertyType == typeof(List<string>))
-                                {
-                                    if (!string.IsNullOrEmpty(formattedValue))
+                                    else if (property.PropertyType == typeof(List<string>))
                                     {
-                                        var stringItems = formattedValue.FromJson<List<string>>();
-                                        property.SetValue(result.Model, stringItems);
+                                        if (!string.IsNullOrEmpty(formattedValue))
+                                        {
+                                            var stringItems = formattedValue.FromJson<List<string>>();
+                                            property.SetValue(result.Model, stringItems);
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    property.SetValue(result.Model, Convert.ChangeType(formattedValue, property.PropertyType));
+                                    else
+                                    {
+                                        property.SetValue(result.Model, Convert.ChangeType(formattedValue, property.PropertyType));
+                                    }
                                 }
                             }
                         }
+                        catch (Exception excp)
+                        {
+                            result.Problem = new NoFrixionProblem($"Exception mapping csv row to {typeof(T)}. {excp.Message}");
+                        }
                     }
-                    catch (Exception excp)
-                    {
-                        result.Problem = new NoFrixionProblem($"Exception mapping csv row to {typeof(T)}. {excp.Message}");
-                    }
-                }
 
-                yield return result;
+                    yield return result;
+                }
             }
         }
     }
