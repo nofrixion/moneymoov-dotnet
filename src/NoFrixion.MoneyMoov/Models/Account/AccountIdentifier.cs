@@ -21,6 +21,8 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class AccountIdentifier: IValidatableObject
 {
+    public const int SORT_CODE_LENGTH = 6;
+
     /// <summary>
     /// The type of the account identifier.
     /// </summary>
@@ -118,7 +120,7 @@ public class AccountIdentifier: IValidatableObject
         {
             if (!string.IsNullOrEmpty(value))
             {
-                _sortCode = value.Trim().Replace(" ", string.Empty);
+                _sortCode = value.Trim().Replace(" ", string.Empty).Replace("-", string.Empty);
             }
             else
             {
@@ -186,7 +188,7 @@ public class AccountIdentifier: IValidatableObject
         "No identifier.";
 
     public string DisplayScanSummary =>
-        !string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber) && SortCode.Length == 6
+        !string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber) && SortCode.Length == SORT_CODE_LENGTH
             ? $"{SortCode[..2]}-{SortCode.Substring(2, 2)}-{SortCode.Substring(4, 2)} {AccountNumber}"
             : "No identifier.";
 

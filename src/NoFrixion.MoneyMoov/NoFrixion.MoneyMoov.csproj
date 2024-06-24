@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<AssemblyVersion>1.1.284.0</AssemblyVersion>
-	<FileVersion>1.1.284.0</FileVersion>
+	<AssemblyVersion>1.1.103.0</AssemblyVersion>
+	<FileVersion>1.1.103.0</FileVersion>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	<NoWarn>$(NoWarn);1591</NoWarn>
@@ -13,13 +13,13 @@
 
     <ItemGroup>
         <PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
-        <PackageReference Include="CsvHelper" Version="32.0.3" />
+        <PackageReference Include="CsvHelper" Version="33.0.1" />
         <PackageReference Include="IdentityModel" Version="7.0.0" />
         <PackageReference Include="LanguageExt.Core" Version="4.4.8" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.6.0" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.6.2" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Quartz" Version="3.9.0" />
     </ItemGroup>

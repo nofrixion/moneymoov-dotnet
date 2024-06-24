@@ -75,7 +75,7 @@ public class AccountIdentifierCreate
         {
             if (!string.IsNullOrEmpty(value))
             {
-                _sortCode = value.Trim().Replace(" ", string.Empty);
+                _sortCode = value.Trim().Replace(" ", string.Empty).Replace("-", string.Empty);
             }
             else
             {
