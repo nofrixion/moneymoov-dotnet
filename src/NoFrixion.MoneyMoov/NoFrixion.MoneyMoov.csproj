@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<AssemblyVersion>1.1.284.0</AssemblyVersion>
-	<FileVersion>1.1.284.0</FileVersion>
+	<AssemblyVersion>1.1.103.0</AssemblyVersion>
+	<FileVersion>1.1.103.0</FileVersion>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	<NoWarn>$(NoWarn);1591</NoWarn>
