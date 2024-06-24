@@ -4,8 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<AssemblyVersion>1.1.103.0</AssemblyVersion>
-	<FileVersion>1.1.103.0</FileVersion>
+	<AssemblyVersion>0.0.63.0</AssemblyVersion>
+	<FileVersion>0.0.63.0</FileVersion>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	<NoWarn>$(NoWarn);1591</NoWarn>
