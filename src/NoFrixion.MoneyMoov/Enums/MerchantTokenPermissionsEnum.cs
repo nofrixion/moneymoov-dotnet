@@ -105,4 +105,9 @@ public enum MerchantTokenPermissionsEnum
     /// Permission to create and submit a payout from a trusted source.
     /// </summary>
     TrustedSubmitPayout = 32768,
+
+    /// <summary>
+    /// Permission to perfrom open banking account information actions.
+    /// </summary>
+    OpenBankingAccountInformation = 65536
 }
