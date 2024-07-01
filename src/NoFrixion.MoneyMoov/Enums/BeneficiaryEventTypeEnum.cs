@@ -47,4 +47,9 @@ public enum BeneficiaryEventTypeEnum
     /// A beneficiary was enabled.
     /// </summary>
     Enable = 5,
+
+    /// <summary>
+    /// An archive is a soft delete. It removes the beneficiary from the active list.
+    /// </summary>
+    Archive = 6
 }
