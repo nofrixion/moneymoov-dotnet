@@ -22,15 +22,17 @@ public enum PayrunEventTypeEnum
 
     Created = 1,
     
-    Submitted = 2,
+    Authorised = 2,
     
-    Rejected = 3,
+    Submitted = 3,
     
-    Edited = 4,
+    Rejected = 4,
     
-    AuthorisationRequested = 5,
+    Edited = 5,
     
-    Completed = 6,
+    AuthorisationRequested = 6,
     
-    Approved = 7,
+    Completed = 7,
+    
+    Approved = 8,
 }
