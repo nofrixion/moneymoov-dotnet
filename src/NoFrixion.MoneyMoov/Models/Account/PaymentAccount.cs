@@ -16,6 +16,8 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using JetBrains.Annotations;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 #nullable disable
@@ -162,4 +164,15 @@ public class PaymentAccount
     /// Indicates if the payment account is connected to a Xero bank feed.
     /// </summary>
     public bool IsXeroBankFeed { get; set; }
+    
+    /// <summary>
+    /// The last transaction on the account
+    /// </summary>
+    [CanBeNull] public LastTransaction LastTransaction { get; set; }
+    
+    /// <summary>
+    /// The user that created the account
+    /// </summary>
+    [CanBeNull]
+    public User CreatedBy { get; set; }
 }

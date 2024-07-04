@@ -61,5 +61,9 @@ public class BeneficiaryEvent
     /// </summary>
     public string SourceAccountsHash { get; set; }
 
+    public bool IsEnabled { get; set; }
+
+    public bool IsArchived { get; set; }
+
     public User User { get; set; }
 }
