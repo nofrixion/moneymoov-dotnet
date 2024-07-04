@@ -27,6 +27,11 @@ public class Counterparty
     /// it will take precedence over any other destination details set for the counterparty.
     /// </summary>
     public Guid? AccountID { get; set; }
+    
+    /// <summary>
+    /// If the counterparty is an internal account, this is the name of the account.
+    /// </summary>
+    public string? InternalAccountName { get; set; } = string.Empty;
 
     /// <summary>
     /// Optional ID of a Beneficiary to use for the counterparty destination. If set
