@@ -100,4 +100,9 @@ public class Transaction : IWebhookPayload
     /// Balance left on the account after the transaction.
     /// </summary>
     public decimal Balance { get; set; }
+    
+    /// <summary>
+    /// ID of the rule that resulted in the transaction.
+    /// </summary>
+    public Guid? RuleID { get; set; }
 }
