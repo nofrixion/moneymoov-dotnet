@@ -7,5 +7,5 @@ public class XeroConnection
     
     public DateTimeOffset ConnectedAt { get; set; }
     
-    public string XeroTenantName { get; set; }
+    public string TenantName { get; set; }
 }
