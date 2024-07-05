@@ -189,7 +189,11 @@ public static class PayoutsValidator
         return processor switch
         {
             PaymentProcessorsEnum.Modulr => ValidateModulrAccountName(accountName),
-            _ => ValidateBankingCircleStringField(accountName, ACCOUNT_NAME_MAXIMUM_BANKING_CIRCLE_LENGTH)
+            PaymentProcessorsEnum.BankingCircle => ValidateBankingCircleStringField(accountName, ACCOUNT_NAME_MAXIMUM_BANKING_CIRCLE_LENGTH),
+            PaymentProcessorsEnum.BankingCircleAgency => ValidateBankingCircleStringField(accountName, ACCOUNT_NAME_MAXIMUM_BANKING_CIRCLE_LENGTH),
+            // If the payment processor is not known, or has no specific validations, perform all the validations.
+            _ => ValidateModulrAccountName(accountName) &&
+                ValidateBankingCircleStringField(accountName, ACCOUNT_NAME_MAXIMUM_BANKING_CIRCLE_LENGTH)
         };
     }
 
@@ -206,7 +210,11 @@ public static class PayoutsValidator
         return processor switch
         {
             PaymentProcessorsEnum.Modulr => ValidateModulrTheirReference(theirReference, desinationIdentifierType),
-            _ => ValidateBankingCircleStringField(theirReference, REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH),
+            PaymentProcessorsEnum.BankingCircle => ValidateBankingCircleStringField(theirReference, REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH),
+            PaymentProcessorsEnum.BankingCircleAgency => ValidateBankingCircleStringField(theirReference, REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH),
+            // If the payment processor is not known, or has no specific validations, perform all the validations.
+            _ => ValidateModulrTheirReference(theirReference, desinationIdentifierType) &&
+                ValidateBankingCircleStringField(theirReference, REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH),
         };
     }
 
