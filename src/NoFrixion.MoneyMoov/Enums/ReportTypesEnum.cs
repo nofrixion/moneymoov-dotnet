@@ -47,5 +47,10 @@ public enum ReportTypesEnum
     /// <summary>
     /// Custom report to export transactions for VisionBlue.
     /// </summary>
-    VisionBlueTransaction = 6
+    VisionBlueTransaction = 6,
+
+    /// <summary>
+    /// A reconciliation report for safegaurded accounts belonging to a single merchant.
+    /// </summary>
+    MerchantSafeGuardingReconciliation = 7,
 }
