@@ -42,7 +42,7 @@ public static class JsonExtensions
     private static string ToJsonFormattedSystemText<T>(this T obj, bool usePascalCase)
         => System.Text.Json.JsonSerializer.Serialize(obj, MoneyMoovJson.GetSystemTextSerialiserOptions(true, usePascalCase: usePascalCase));
 
-    private static T? FromJsonSystemText<T>(this string json, bool usePascalCase)
+    public static T? FromJsonSystemText<T>(this string json, bool usePascalCase)
     {
         Guard.Against.NullOrWhiteSpace(json, nameof(json));
 

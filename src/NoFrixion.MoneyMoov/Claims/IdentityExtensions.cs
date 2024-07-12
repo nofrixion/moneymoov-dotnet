@@ -285,6 +285,15 @@ public static class IdentityExtensions
             }
         }
     }
+    
+    public static bool HasMerchant(this IIdentity identity, string merchantId)
+    {
+        var merchantClaim = ((ClaimsIdentity)identity)?
+            .FindFirst(claim => claim.Type == NoFrixionClaimsEnum.merchant.ToString() && 
+                                string.Equals(claim.Value, merchantId, StringComparison.CurrentCultureIgnoreCase))?.Value;
+        
+        return merchantClaim != null;
+    }
 }
 
 #nullable enable

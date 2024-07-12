@@ -95,4 +95,6 @@ public enum NoFrixionClaimsEnum
     verfied_by_api_key,
     
     appid,
+    
+    merchant,
 }
