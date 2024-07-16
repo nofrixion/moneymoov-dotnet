@@ -362,6 +362,11 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// </summary>
     public List<PayoutEvent>? Events { get; set; }
     
+    /// <summary>
+    /// Details of the rule that triggered the payout.
+    /// </summary>
+    public RuleMinimal? Rule { get; set; }
+    
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);

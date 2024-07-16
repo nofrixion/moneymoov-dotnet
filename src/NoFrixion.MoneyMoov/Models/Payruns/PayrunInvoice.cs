@@ -70,52 +70,10 @@ public class PayrunInvoice : IValidatableObject
     public IEnumerable<InvoicePayment>? InvoicePayments { get; set; }
     
     public bool IsEnabled { get; set; }
-    
+
+    public NoFrixionProblem Validate()
+        => this.ToPayout().Validate();
+
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        if (TotalAmount <= decimal.Zero)
-        {
-            yield return new ValidationResult("The TotalAmount must be more than 0.", new string[] { nameof(TotalAmount) });
-        }
-
-        if (string.IsNullOrEmpty(DestinationIban) && string.IsNullOrEmpty(DestinationAccountNumber))
-        {
-            yield return new ValidationResult("The DestinationIban or DestinationAccountNumber must be provided.", new string[] { nameof(DestinationIban), nameof(DestinationAccountNumber) });
-        }
-        
-        if (!string.IsNullOrEmpty(DestinationIban) && !string.IsNullOrEmpty(DestinationAccountNumber))
-        {
-            yield return new ValidationResult("The DestinationIban and DestinationAccountNumber cannot both be provided.", new string[] { nameof(DestinationIban), nameof(DestinationAccountNumber) });
-        }
-        
-        if (!string.IsNullOrEmpty(DestinationIban) && !PayoutsValidator.ValidateIBAN(DestinationIban))
-        {
-            yield return new ValidationResult("The DestinationIban must be a valid IBAN.", new string[] { nameof(DestinationIban) });
-        }
-        
-        if (!string.IsNullOrEmpty(DestinationAccountNumber) && string.IsNullOrEmpty(DestinationSortCode))
-        {
-            yield return new ValidationResult("DestinationSortCode must be provided if DestinationAccountNumber is set.", new string[] { nameof(DestinationSortCode) });
-        }
-        
-        if (!string.IsNullOrEmpty(DestinationSortCode) && string.IsNullOrEmpty(DestinationAccountNumber))
-        {
-            yield return new ValidationResult("DestinationAccountNumber must be provided if DestinationSortCode is set.", new string[] { nameof(DestinationSortCode) });
-        }
-        
-        if (!string.IsNullOrEmpty(DestinationIban) && Currency != CurrencyTypeEnum.EUR)
-        {
-            yield return new ValidationResult("DestinationIban can only be set for EUR currency.", new string[] { nameof(DestinationIban) });
-        }
-        
-        if (!string.IsNullOrEmpty(DestinationSortCode) && !string.IsNullOrEmpty(DestinationAccountNumber) && Currency != CurrencyTypeEnum.GBP)
-        {
-            yield return new ValidationResult("DestinationSortCode and DestinationAccountNumber can only be set for GBP currency.", new string[] { nameof(DestinationSortCode), nameof(DestinationAccountNumber) });
-        }
-
-        if (!PayoutsValidator.IsValidAccountName(DestinationAccountName ?? string.Empty, PaymentProcessorsEnum.None))
-        {
-            yield return new ValidationResult("DestinationAccountName must be a valid account name.", new string[] { nameof(DestinationAccountName) });
-        }
-    }
+        => this.ToPayout().Validate(validationContext);
 }
