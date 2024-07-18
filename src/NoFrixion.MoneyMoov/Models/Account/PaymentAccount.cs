@@ -17,6 +17,7 @@
 // -----------------------------------------------------------------------------
 
 using JetBrains.Annotations;
+using NoFrixion.MoneyMoov.Enums;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -164,6 +165,12 @@ public class PaymentAccount
     /// Indicates if the payment account is connected to a Xero bank feed.
     /// </summary>
     public bool IsXeroBankFeed { get; set; }
+    
+    public XeroBankFeedSyncStatusEnum XeroBankFeedSyncStatus { get; set; }
+    
+    public DateTimeOffset? XeroBankFeedLastSyncedAt { get; set; }
+    
+    public DateTimeOffset? XeroBankFeedSyncLastFailedAt { get; set; }
     
     /// <summary>
     /// The last transaction on the account
