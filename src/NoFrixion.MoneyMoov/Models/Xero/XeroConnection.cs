@@ -8,4 +8,9 @@ public class XeroConnection
     public DateTimeOffset ConnectedAt { get; set; }
     
     public string TenantName { get; set; }
+    
+    /// <summary>
+    /// This determines whether the real-time connection with Xero is still valid or not.
+    /// </summary>
+    public bool IsConnectionValid { get; set; }
 }
