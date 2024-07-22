@@ -379,6 +379,12 @@ public static class PayoutsValidator
             }
         }
 
+        //Prevents creating payouts on the same account
+        if (payout.Destination?.AccountID != null && payout.AccountID == payout.Destination.AccountID)
+        {
+            yield return new ValidationResult($"Source account cannot be the same as destination account.", new string[] { nameof(payout.Destination.AccountID) });
+        }
+
         if (payout.Type != AccountIdentifierType.BTC && !ValidateTheirReference(payout.TheirReference, payout.Type, payout.PaymentProcessor))
         {
             if (payout.PaymentProcessor == PaymentProcessorsEnum.Modulr)
