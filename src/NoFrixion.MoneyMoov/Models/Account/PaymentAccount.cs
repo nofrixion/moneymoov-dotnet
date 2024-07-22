@@ -182,4 +182,9 @@ public class PaymentAccount
     /// </summary>
     [CanBeNull]
     public User CreatedBy { get; set; }
+
+    /// <summary>
+    /// The list of rules associated with this account.
+    /// </summary>
+    public List<RuleMinimal> Rules { get; set; } = [];
 }

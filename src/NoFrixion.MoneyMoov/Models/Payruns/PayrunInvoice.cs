@@ -66,6 +66,8 @@ public class PayrunInvoice : IValidatableObject
 
     [EmailAddress]
     public string? RemittanceEmail { get; set; }
+
+    public Guid? XeroInvoiceID { get; set; }
     
     public IEnumerable<InvoicePayment>? InvoicePayments { get; set; }
     
