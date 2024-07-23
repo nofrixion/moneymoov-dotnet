@@ -172,6 +172,19 @@ public class PaymentAccount
     
     public DateTimeOffset? XeroBankFeedSyncLastFailedAt { get; set; }
     
+    public string XeroBankFeedSyncLastFailureReason { get; set; }
+    
+    /// <summary>
+    /// Indicates the number of unsynchronised transactions with Xero
+    /// </summary>
+    public int XeroUnsynchronisedTransactionsCount { get; set; }
+    
+    /// <summary>
+    /// Indicates that the bank feed connection can no longer be found in Xero.
+    /// This can mean that the respective account was archived/deleted in Xero.
+    /// </summary>
+    public bool XeroBankFeedConnectionInactive { get; set; }
+    
     /// <summary>
     /// The last transaction on the account
     /// </summary>
