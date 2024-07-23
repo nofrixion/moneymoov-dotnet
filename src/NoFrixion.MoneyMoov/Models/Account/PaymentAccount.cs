@@ -17,6 +17,7 @@
 // -----------------------------------------------------------------------------
 
 using JetBrains.Annotations;
+using NoFrixion.MoneyMoov.Enums;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -165,6 +166,25 @@ public class PaymentAccount
     /// </summary>
     public bool IsXeroBankFeed { get; set; }
     
+    public XeroBankFeedSyncStatusEnum XeroBankFeedSyncStatus { get; set; }
+    
+    public DateTimeOffset? XeroBankFeedLastSyncedAt { get; set; }
+    
+    public DateTimeOffset? XeroBankFeedSyncLastFailedAt { get; set; }
+    
+    public string XeroBankFeedSyncLastFailureReason { get; set; }
+    
+    /// <summary>
+    /// Indicates the number of unsynchronised transactions with Xero
+    /// </summary>
+    public int XeroUnsynchronisedTransactionsCount { get; set; }
+    
+    /// <summary>
+    /// Indicates that the bank feed connection can no longer be found in Xero.
+    /// This can mean that the respective account was archived/deleted in Xero.
+    /// </summary>
+    public bool XeroBankFeedConnectionInactive { get; set; }
+    
     /// <summary>
     /// The last transaction on the account
     /// </summary>
@@ -175,4 +195,9 @@ public class PaymentAccount
     /// </summary>
     [CanBeNull]
     public User CreatedBy { get; set; }
+
+    /// <summary>
+    /// The list of rules associated with this account.
+    /// </summary>
+    public List<RuleMinimal> Rules { get; set; } = [];
 }
