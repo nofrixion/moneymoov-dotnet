@@ -13,4 +13,6 @@ public class XeroConnection
     /// This determines whether the real-time connection with Xero is still valid or not.
     /// </summary>
     public bool IsConnectionValid { get; set; }
+    
+    public string BankFeedCronScheduleExpression { get; set; }
 }
