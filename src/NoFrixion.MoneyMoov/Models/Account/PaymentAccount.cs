@@ -177,7 +177,7 @@ public class PaymentAccount
     /// <summary>
     /// Indicates the number of unsynchronised transactions with Xero
     /// </summary>
-    public int XeroUnsynchronisedTransactionsCount { get; set; }
+    public int? XeroUnsynchronisedTransactionsCount { get; set; }
     
     /// <summary>
     /// Indicates that the bank feed connection can no longer be found in Xero.
