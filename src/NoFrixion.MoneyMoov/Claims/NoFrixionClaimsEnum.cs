@@ -97,4 +97,6 @@ public enum NoFrixionClaimsEnum
     appid,
     
     merchant,
+    
+    use_standard_user_roles,
 }
