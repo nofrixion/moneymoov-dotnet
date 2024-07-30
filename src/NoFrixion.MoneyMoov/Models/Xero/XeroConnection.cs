@@ -14,5 +14,7 @@ public class XeroConnection
     /// </summary>
     public bool IsConnectionValid { get; set; }
     
+    public string OrganisationShortCode { get; set; }
+    
     public string BankFeedCronScheduleExpression { get; set; }
 }
