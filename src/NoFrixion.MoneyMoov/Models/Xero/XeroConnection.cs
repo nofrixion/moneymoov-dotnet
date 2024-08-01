@@ -16,5 +16,7 @@ public class XeroConnection
     
     public string OrganisationShortCode { get; set; }
     
+    public int BankFeedConnectionsCount { get; set; }
+    
     public string BankFeedCronScheduleExpression { get; set; }
 }
