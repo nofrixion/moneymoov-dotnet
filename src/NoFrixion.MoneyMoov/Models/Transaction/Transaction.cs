@@ -105,4 +105,9 @@ public class Transaction : IWebhookPayload
     /// ID of the rule that resulted in the transaction.
     /// </summary>
     public Guid? RuleID { get; set; }
+
+    /// <summary>
+    /// ID of the payout that resulted in the transaction.
+    /// </summary>
+    public Guid? PayoutID { get; set; }
 }

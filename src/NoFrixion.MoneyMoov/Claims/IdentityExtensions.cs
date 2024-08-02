@@ -78,6 +78,13 @@ public static class IdentityExtensions
                 .FindFirst(x => x.Type == "aud")?.Value == audience);
     }
 
+    public static bool IsUsingStandardUserRoles(this IIdentity identity)
+    {
+        var verifiedClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.use_standard_user_roles)?.Value;
+
+        return bool.TryParse(verifiedClaim, out var verifiedByApiKey) && verifiedByApiKey;
+    }
+    
     public static User GetUser(this IIdentity identity)
     {
         var claimsIdentity = identity as ClaimsIdentity;
