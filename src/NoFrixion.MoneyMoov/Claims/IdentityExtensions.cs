@@ -80,9 +80,16 @@ public static class IdentityExtensions
 
     public static bool IsUsingStandardUserRoles(this IIdentity identity)
     {
-        var verifiedClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.use_standard_user_roles)?.Value;
+        var claim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.use_standard_user_roles)?.Value;
 
-        return bool.TryParse(verifiedClaim, out var verifiedByApiKey) && verifiedByApiKey;
+        return bool.TryParse(claim, out var exists) && exists;
+    }
+    
+    public static bool IsUsingPermissions(this IIdentity identity)
+    {
+        var claim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.use_permissions)?.Value;
+
+        return bool.TryParse(claim, out var exists) && exists;
     }
     
     public static User GetUser(this IIdentity identity)
