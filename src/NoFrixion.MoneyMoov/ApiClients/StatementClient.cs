@@ -15,7 +15,6 @@
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using NoFrixion.MoneyMoov.Models;
 using System.Net;
 using System.Net.Http.Headers;
 
@@ -24,6 +23,8 @@ namespace NoFrixion.MoneyMoov;
 public interface IStatementClient
 {
     Task<RestApiFileResponse> GetStatementAsync(string accessToken, Guid statementID);
+
+    Task<RestApiResponse> ClearStatementsAsync(string accessToken);
 }
 
 public class StatementClient : IStatementClient
@@ -80,5 +81,23 @@ public class StatementClient : IStatementClient
                     new NoFrixionProblem(response.ReasonPhrase ?? "File download failed.", (int)response.StatusCode));
             }
         }
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov Statements endpoint to clear the user's cached statements. This allows them to be re-generated, for example
+    /// if the statement was for the current month and the month has not yet completed.
+    /// </summary>
+    /// <param name="accessToken">The user token deleting the payout.</param>
+    public Task<RestApiResponse> ClearStatementsAsync(string accessToken)
+    {
+        var url = MoneyMoovUrlBuilder.StatementsApi.StatementsUrl(_apiClient.GetBaseUri().ToString());
+
+        var prob = _apiClient.CheckAccessToken(accessToken, nameof(ClearStatementsAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.DeleteAsync(url, accessToken),
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
     }
 }
