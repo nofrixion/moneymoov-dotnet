@@ -114,9 +114,9 @@ public enum MerchantPermissions : ulong
     CanCreateMandates = 8589934592,
     
     // Permissions
-    CanViewPermissions = 17179869184,
-    CanCreatePermissions = 34359738368,
-    CanEditPermissions = 68719476736,
+    CanViewGroups = 17179869184,
+    CanCreateGroups = 34359738368,
+    CanEditGroups = 68719476736,
 }
 
 [Flags]

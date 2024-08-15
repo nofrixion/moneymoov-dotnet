@@ -29,7 +29,7 @@ public class PermissionGroupCreate
     [Required] 
     public required Guid MerchantID { get; set; }
     
-    public List<Guid> Users { get; set; } = [];
+    public List<Guid>? Users { get; set; } = [];
 
     public UserPermissions? UserPermissions { get; set; }
     
