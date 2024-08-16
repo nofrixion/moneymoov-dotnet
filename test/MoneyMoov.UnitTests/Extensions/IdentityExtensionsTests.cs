@@ -8,7 +8,7 @@ namespace NoFrixion.MoneyMoov.UnitTests.Extensions;
 public class IdentityExtensionsTests
 {
     [Fact]
-    public void HasMerchantPermissions_Returns_True_When_Permission_Found_For_Merchant()
+    public void HasMerchantPermission_Returns_True_When_Permission_Found_For_Merchant()
     {
         // Arrange
         var merchantID = Guid.NewGuid();
@@ -22,7 +22,7 @@ public class IdentityExtensionsTests
 
         // Act
 
-        var hasPermissions = identity.HasMerchantPermissions(MerchantPermissions.CanApprovePayruns, merchantID);
+        var hasPermissions = identity.HasMerchantPermission(MerchantPermissions.CanApprovePayruns, merchantID);
 
         // Assert
 
@@ -30,7 +30,7 @@ public class IdentityExtensionsTests
     }
     
     [Fact]
-    public void HasMerchantPermissions_Returns_False_When_Permission_Not_Found_For_Merchant()
+    public void HasMerchantPermission_Returns_False_When_Permission_Not_Found_For_Merchant()
     {
         // Arrange
         var merchantID = Guid.NewGuid();
@@ -44,7 +44,7 @@ public class IdentityExtensionsTests
 
         // Act
 
-        var hasPermissions = identity.HasMerchantPermissions(MerchantPermissions.CanCreateAccounts, merchantID);
+        var hasPermissions = identity.HasMerchantPermission(MerchantPermissions.CanCreateAccounts, merchantID);
 
         // Assert
 

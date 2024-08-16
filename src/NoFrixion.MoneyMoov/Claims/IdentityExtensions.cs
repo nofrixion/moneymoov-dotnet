@@ -306,10 +306,10 @@ public static class IdentityExtensions
     /// Else returns false.
     /// </summary>
     /// <param name="identity">The token identity</param>
-    /// <param name="permissions">The permissions to be searched in claims.</param>
+    /// <param name="permission">The permissions to be searched in claims.</param>
     /// <param name="merchantID">The ID of the merchant to look permissions for.</param>
     /// <returns></returns>
-    public static bool HasMerchantPermissions(this IIdentity identity, MerchantPermissions permissions, Guid merchantID)
+    public static bool HasMerchantPermission(this IIdentity identity, MerchantPermissions permission, Guid merchantID)
     {
         if (identity is not ClaimsIdentity claimsIdentity)
         {
@@ -323,7 +323,7 @@ public static class IdentityExtensions
             return false;
         }
         
-        return Enum.TryParse(claim.Value, out MerchantPermissions claimPermissions) && claimPermissions.HasFlag(permissions);
+        return Enum.TryParse(claim.Value, out MerchantPermissions claimPermissions) && claimPermissions.HasFlag(permission);
     }
 }
 
