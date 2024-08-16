@@ -18,6 +18,7 @@
 
 using System.Security.Claims;
 using System.Security.Principal;
+using NoFrixion.Common.Permissions;
 using NoFrixion.MoneyMoov.Extensions;
 using NoFrixion.MoneyMoov.Models;
 
@@ -298,6 +299,31 @@ public static class IdentityExtensions
                 return "Unknown claims identity";
             }
         }
+    }
+
+    /// <summary>
+    /// Returns true if the identity has the specified permission for the merchant.
+    /// Else returns false.
+    /// </summary>
+    /// <param name="identity">The token identity</param>
+    /// <param name="permissions">The permissions to be searched in claims.</param>
+    /// <param name="merchantID">The ID of the merchant to look permissions for.</param>
+    /// <returns></returns>
+    public static bool HasMerchantPermissions(this IIdentity identity, MerchantPermissions permissions, Guid merchantID)
+    {
+        if (identity is not ClaimsIdentity claimsIdentity)
+        {
+            return false;
+        }
+
+        var claim = claimsIdentity.Claims.FirstOrDefault(x => x.Type == $"{ClaimTypePrefixes.MERCHANT}.{merchantID}");
+        
+        if (claim == null)
+        {
+            return false;
+        }
+        
+        return Enum.TryParse(claim.Value, out MerchantPermissions claimPermissions) && claimPermissions.HasFlag(permissions);
     }
 }
 
