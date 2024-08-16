@@ -73,7 +73,7 @@ public enum MerchantPermissions : ulong
     CanCreatePayruns = 1024,
     CanViewPayruns = 2048,
     CanEditPayruns = 4096,
-    CanAuthorisePayruns = 8192,
+    CanApprovePayruns = 8192,
     CanDeletePayruns = 16384,
     
     // Payouts
