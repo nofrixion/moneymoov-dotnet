@@ -22,30 +22,30 @@ public enum AccountPermissions : ulong
     
     // Payouts
     CanViewPayouts = 1,
-    CanCreatePayouts = 2,
-    CanEditPayouts = 4,
-    CanDeletePayouts = 8,
-    CanAuthorisePayouts = 16,
-    CanRejectPayouts = 32,
-    CanCreateBatchPayouts = 64,
+    CanCreatePayouts = 1L << 1,
+    CanEditPayouts = 1L << 2,
+    CanDeletePayouts = 1L << 3,
+    CanAuthorisePayouts = 1L << 4,
+    CanRejectPayouts = 1L << 5,
+    CanCreateBatchPayouts = 1L << 6,
     
     // Accounts
-    CanViewAccount = 128,
-    CanUpdateAccount = 256,
+    CanViewAccount = 1L << 7,
+    CanUpdateAccount = 1L << 8,
     
     // Rules
-    CanViewRules = 512,
-    CanCreateRules = 1024,
-    CanEditRules = 2048,
-    CanDeleteRules = 4096,
-    CanAuthoriseRules = 8192,
+    CanViewRules = 1L << 9,
+    CanCreateRules = 1L << 10,
+    CanEditRules = 1L << 11,
+    CanDeleteRules = 1L << 12,
+    CanAuthoriseRules = 1L << 13,
     
     // Transactions
-    CanViewTransactions = 16384,
+    CanViewTransactions = 1L << 14,
     
     // Statements
-    CanCreateStatements = 32768,
-    CanViewStatements = 65536,
+    CanCreateStatements = 1L << 15,
+    CanViewStatements = 1L << 16,
 }
 
 [Flags]
@@ -55,68 +55,68 @@ public enum MerchantPermissions : ulong
     
     // Accounts
     CanViewAccounts = 1,
-    CanCreateAccounts = 2,
+    CanCreateAccounts = 1L << 1,
     
     // Beneficiaries
-    CanViewBeneficiaries = 4,
-    CanDeleteBeneficiaries = 8,
-    CanEditBeneficiaries = 16,
-    CanCreateBeneficiaries = 32,
-    CanAuthoriseBeneficiaries = 64,
+    CanViewBeneficiaries = 1L << 2,
+    CanDeleteBeneficiaries = 1L << 3,
+    CanEditBeneficiaries = 1L << 4,
+    CanCreateBeneficiaries = 1L << 5,
+    CanAuthoriseBeneficiaries = 1L << 6,
     
     // Tokens
-    CanViewTokens = 128,
-    CanCreateTokens = 256,
-    CanDeleteTokens = 512,
+    CanViewTokens = 1L << 7,
+    CanCreateTokens = 1L << 8,
+    CanDeleteTokens = 1L << 9,
     
     // Pay runs
-    CanCreatePayruns = 1024,
-    CanViewPayruns = 2048,
-    CanEditPayruns = 4096,
-    CanApprovePayruns = 8192,
-    CanDeletePayruns = 16384,
+    CanCreatePayruns = 1L << 10,
+    CanViewPayruns = 1L << 11,
+    CanEditPayruns = 1L << 12,
+    CanApprovePayruns = 1L << 13,
+    CanDeletePayruns = 1L << 14,
     
     // Payouts
-    CanViewMerchantPayouts = 32768,
+    CanViewMerchantPayouts = 1L << 15,
     
     // User roles
-    CanViewUserRoles = 65536,
-    CanDeleteUserRoles = 131072,
-    CanAssignUserRoles = 262144,
+    CanViewUserRoles = 1L << 16,
+    CanDeleteUserRoles = 1L << 17,
+    CanAssignUserRoles = 1L << 18,
     
     // Users
-    CanViewUsers = 524288,
-    CanViewUserInvites = 1048576,
-    CanEditUsers = 2097152,
+    CanViewUsers = 1L << 19,
+    CanViewUserInvites = 1L << 20,
+    CanEditUsers = 1L << 21,
     
     // Rules
-    CanViewAllRules = 4194304,
+    CanViewAllRules = 1L << 22,
     
     // Webhooks
-    CanViewWebhooks = 8388608,
-    CanCreateWebhooks = 16777216,
-    CanDeleteWebhooks = 33554432,
+    CanViewWebhooks = 1L << 23,
+    CanCreateWebhooks = 1L << 24,
+    CanDeleteWebhooks = 1L << 25,
     
     // Transactions
-    CanViewAllTransactions = 67108864,
+    CanViewAllTransactions = 1L << 26,
     
     // Merchants
-    CanViewMerchant = 134217728,
-    CanUpdateMerchant = 268435456,
+    CanViewMerchant = 1L << 27,
+    CanUpdateMerchant = 1L << 28,
     
     // Payment requests
-    CanCreatePaymentRequests = 536870912,
-    CanViewPaymentRequests = 1073741824,
-    CanUpdatePaymentRequests = 2147483648,
+    CanCreatePaymentRequests = 1L << 29,
+    CanViewPaymentRequests = 1L << 30,
+    CanUpdatePaymentRequests = 1L << 31,
     
     // Mandates
-    CanViewMandates = 4294967296,
-    CanCreateMandates = 8589934592,
+    CanViewMandates = 1L << 32,
+    CanCreateMandates = 1L << 33,
     
     // Permissions
-    CanViewRoles = 17179869184,
-    CanCreateRoles = 34359738368,
-    CanEditRoles = 68719476736,
+    CanViewRoles = 1L << 34,
+    CanCreateRoles = 1L << 35, 
+    CanEditRoles = 1L << 36,  
 }
 
 [Flags]
@@ -126,15 +126,15 @@ public enum UserPermissions : ulong
     
     CanViewMerchants = 1,
     
-    CanViewAllAccounts = 2,
+    CanViewAllAccounts = 1L << 1,
     
-    CanCreateReports = 4,
+    CanCreateReports = 1L << 2,
     
-    CanViewAllAccountsTransactions = 8,
+    CanViewAllAccountsTransactions = 1L << 3,
     
-    CanViewAllBeneficiaries = 16,
+    CanViewAllBeneficiaries = 1L << 4,
     
-    CanViewAllPaymentRequests = 32
+    CanViewAllPaymentRequests = 1L << 5,
 }
 
 public static class ClaimTypePrefixes
