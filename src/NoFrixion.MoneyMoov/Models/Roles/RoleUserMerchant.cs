@@ -27,5 +27,5 @@ public class RoleUserMerchant
 
     public DateTimeOffset LastUpdated { get; set; }
 
-    // public Merchant? Merchant { get; set; }
+    public Merchant? Merchant { get; set; }
 }
