@@ -85,7 +85,6 @@ public class PayoutsValidatorTests
         Assert.False(result);
     }
 
-
     /// <summary>
     /// Tests that an invalid payout TheirReference fails the Banking Circle validation rules.
     /// </summary>
@@ -465,5 +464,61 @@ public class PayoutsValidatorTests
         
         Assert.False(result.IsEmpty);
     }
-    
+
+    /// <summary>
+    /// Tests that the currency resolution check is working as expected.
+    /// </summary>
+    [Theory]
+    [InlineData(CurrencyTypeEnum.EUR, 0.01, true)]
+    [InlineData(CurrencyTypeEnum.EUR, 0.001, false)]
+    [InlineData(CurrencyTypeEnum.EUR, 1.011, false)]
+    [InlineData(CurrencyTypeEnum.GBP, 0.01, true)]
+    [InlineData(CurrencyTypeEnum.GBP, 0.001, false)]
+    [InlineData(CurrencyTypeEnum.GBP, 1.011, false)]
+    [InlineData(CurrencyTypeEnum.BTC, 0.01, true)]
+    [InlineData(CurrencyTypeEnum.BTC, 0.001, true)]
+    [InlineData(CurrencyTypeEnum.BTC, 0.00000001, true)]
+    [InlineData(CurrencyTypeEnum.BTC, 0.000000001, false)]
+    [InlineData(CurrencyTypeEnum.BTC, 1.011, true)]
+    [InlineData(CurrencyTypeEnum.BTC, 1.000000011, false)]
+    public void Payout_Validator_Currency_Resolution(CurrencyTypeEnum currency, decimal amount, bool isValid)
+    {
+        AccountIdentifier identifier = currency switch
+        {
+            CurrencyTypeEnum.BTC => new AccountIdentifier { Currency = currency, BitcoinAddress = "abcdefg" },
+            CurrencyTypeEnum.GBP => new AccountIdentifier { Currency = currency, SortCode = "123456", AccountNumber = "00001234" } ,
+            _ => new AccountIdentifier { Currency = currency, IBAN = "IE78MOCK91012352877713" }
+        };
+
+        var payout = new Payout
+        {
+            ID = Guid.NewGuid(),
+            AccountID = Guid.NewGuid(),
+            Type = identifier.Type,
+            Currency = currency,
+            Amount = amount,
+            YourReference = "your ref",
+            TheirReference = "their ref",
+            Status = PayoutStatus.PENDING_INPUT,
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            Destination =  new Counterparty
+            {
+                Name = "Joe Bloggs",
+                Identifier = identifier
+            }
+        };
+
+        var result = payout.Validate();
+
+        _logger.LogDebug(result.ToTextErrorMessage());
+
+        if(isValid)
+        {
+            Assert.True(result.IsEmpty);
+        }
+        else
+        {
+            Assert.False(result.IsEmpty);
+        }   
+    }
 }

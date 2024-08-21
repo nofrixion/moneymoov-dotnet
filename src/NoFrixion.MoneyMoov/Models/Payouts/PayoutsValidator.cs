@@ -135,6 +135,16 @@ public static class PayoutsValidator
         "The allowed characters are alphanumeric, forward slash (/), hyphen (-), question mark (?), colon (:), parentheses, full stop (.), " +
         "comma (,), single quote ('), plus (+) and space. The total length must not exceed {1} characters. The first character cannot be ':' or '-'.";
 
+    /// <summary>
+    /// Fiat currencies are only allowed to be specified to two decimal places.
+    /// </summary>
+    public const decimal FIAT_CURRENCY_RESOLUTION = 0.01M;
+
+    /// <summary>
+    /// Bitcoin currency is only allowed to be specified to eight decimal places.
+    /// </summary>
+    public const decimal BITCOIN_CURRENCY_RESOLUTION = 0.0000_0001M;
+
     public static bool ValidateIBAN(string iban)
     {
         if (string.IsNullOrEmpty(iban))
@@ -295,6 +305,16 @@ public static class PayoutsValidator
         if (payout.Amount <= decimal.Zero)
         {
             yield return new ValidationResult("The payment amount must be more than 0.", new string[] { nameof(payout.Amount) });
+        }
+
+        if(payout.Currency is CurrencyTypeEnum.EUR or CurrencyTypeEnum.GBP && payout.Amount % FIAT_CURRENCY_RESOLUTION != 0)
+        {
+            yield return new ValidationResult($"The payment amount must only be specified to two decimal places for currency {payout.Currency}.", new string[] { nameof(payout.Amount) });
+        }
+
+        if (payout.Currency is CurrencyTypeEnum.BTC && payout.Amount % BITCOIN_CURRENCY_RESOLUTION != 0)
+        {
+            yield return new ValidationResult($"The payment amount must only be specified to eight decimal places for currency {payout.Currency}.", new string[] { nameof(payout.Amount) });
         }
 
         if (payout.Destination == null)
