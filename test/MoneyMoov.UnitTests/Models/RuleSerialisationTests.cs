@@ -205,7 +205,6 @@ public class RuleSerialisationTests : MoneyMoovUnitTestBase<RuleSerialisationTes
         ""status"": 0,
         ""balance"": 1.21,
         ""submittedPayoutsBalance"": 0,
-        ""pendingPayinsBalance"": 0,
         ""inserted"": ""2024-05-23T12:00:59.2806536+01:00"",
         ""lastUpdated"": ""2024-05-23T12:00:59.2806536+01:00"",
         ""currency"": ""EUR"",
