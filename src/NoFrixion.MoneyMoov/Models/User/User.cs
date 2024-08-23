@@ -38,6 +38,8 @@ public class User
     public bool TwoFactorEnabled { get; set; }
     
     public bool PasskeyAdded { get; set; }
+
+    public UserRolePermissions? Permissions { get; set; }
     
     public bool IsEmpty() => ID == Guid.Empty && EmailAddress == string.Empty;
 }
