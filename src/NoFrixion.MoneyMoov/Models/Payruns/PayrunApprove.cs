@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: PayrunSubmit.cs
+// Filename: PayrunApporve.cs
 // 
 // Description: Represent the model to submit a Payrun 
 // 
@@ -15,7 +15,7 @@
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class PayrunSubmit
+public class PayrunApprove
 {
     public DateTimeOffset? ScheduledDate { get; set; }
 }

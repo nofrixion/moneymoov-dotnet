@@ -20,9 +20,8 @@ public enum PayrunStatus
 {
     None = 0,
     Draft = 1,
-    SubmitInProgress = 2,
+    Queued = 2,
     Submitted = 3,
-    Queued = 4,
     Completed = 5, 
     Rejected = 6,
     AuthorisationPending = 7,
