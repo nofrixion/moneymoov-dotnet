@@ -318,6 +318,11 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     public string? PartialPaymentSteps { get; set; }
 
     /// <summary>
+    /// Optional, if set it indicates that this payment request will be used to top up a payment account for a pay run.
+    /// </summary>
+    public Guid? PayrunID { get; set; }
+
+    /// <summary>
     /// An optional list of tag ids to add to the payment request
     /// </summary>
     public List<Guid>? TagIds { get; set; }
