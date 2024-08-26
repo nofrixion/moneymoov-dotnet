@@ -267,6 +267,12 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     public string? PartialPaymentSteps { get; set; }
 
     /// <summary>
+    /// The ID of a payrun that needs an account top up. 
+    /// Payment request can be used to top up payrun accounts.  
+    /// </summary>
+    public Guid? PayrunID { get; set; }
+
+    /// <summary>
     /// Attempts to get the billing address for this payment request.
     /// </summary>
     /// <returns>The billing address or null if it's not set.</returns>
