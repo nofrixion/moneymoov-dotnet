@@ -49,10 +49,7 @@ public class MoneyMoovJson
             }
         };
 
-        if(usePascalCase)
-        {
-            options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        }
+        options.PropertyNamingPolicy = usePascalCase ? null : JsonNamingPolicy.CamelCase;
 
         return options;
     }
@@ -71,10 +68,15 @@ public class MoneyMoovJson
             }
         };
 
-        if(usePascalCase == false)
+        if (!usePascalCase)
         {
             settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
         }
+        else
+        {
+            settings.ContractResolver = new DefaultContractResolver(); // This preserves PascalCase (default)
+        }
+
 
         return settings;
     }
