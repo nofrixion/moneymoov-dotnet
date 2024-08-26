@@ -15,6 +15,7 @@
 //  -----------------------------------------------------------------------------
 
 using NoFrixion.MoneyMoov.Enums;
+using NoFrixion.MoneyMoov.Extensions;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -49,4 +50,8 @@ public class Payrun
     public List<Payout>? Payouts { get; set; }
     
     public List<PayrunPayment>? Payments { get; set; }
+    
+    public bool CanEdit => Status.CanEdit();
+    
+    public bool CanDelete => Status.CanDelete();
 }
