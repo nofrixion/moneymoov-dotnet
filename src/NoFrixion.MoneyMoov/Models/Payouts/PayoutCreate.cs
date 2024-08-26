@@ -178,7 +178,13 @@ public class PayoutCreate
     /// The ID of the batch payout this payout is part of.
     /// </summary>
     public Guid? BatchPayoutID { get; set; }
-    
+
+    /// <summary>
+    /// Optional, if set it indicates that this payout will be used to top up 
+    /// a payment account for a pay run by an internal transfer.
+    /// </summary>
+    public Guid? TopupPayrunID { get; set; }
+
     /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>

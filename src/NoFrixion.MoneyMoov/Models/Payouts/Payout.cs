@@ -50,6 +50,12 @@ public class Payout : IValidatableObject, IWebhookPayload
     public Guid? ApproverID { get; set; }
 
     /// <summary>
+    /// The ID of a payrun that needs an account top up. 
+    /// Payouts can be used to top up payrun accounts.  
+    /// </summary>
+    public Guid? TopupPayrunID { get; set; }
+
+    /// <summary>
     /// Gets or Sets payout type
     /// </summary>
     public AccountIdentifierType Type { get; set; }
