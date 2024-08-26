@@ -125,6 +125,15 @@ public class NoFrixionNotFoundProblem : NoFrixionProblem
     }
 }
 
+public class NoFrixionConflictProblem : NoFrixionProblem
+{
+    private const int STATUS_CODE = 409;
+
+    public NoFrixionConflictProblem(string errorMessage) : base(errorMessage, STATUS_CODE)
+    {
+    }
+}
+
 public class NoFrixionProblem
 {
     private static NoFrixionProblem _empty = new NoFrixionProblem { _isEmpty = true };
