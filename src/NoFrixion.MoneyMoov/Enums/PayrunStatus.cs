@@ -61,4 +61,10 @@ public enum PayrunStatus
     /// Indicates that the pay run has been authorised and is queued for processing.
     /// </summary>
     Queued = 8,
+    
+    /// <summary>
+    /// Indicates that the pay run approval is in progress and
+    /// payouts are being created for the pay run.
+    /// </summary>
+    Approving = 9,
 }
