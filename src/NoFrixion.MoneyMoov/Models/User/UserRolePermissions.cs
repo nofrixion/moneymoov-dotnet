@@ -19,21 +19,7 @@ public class UserRolePermissions
 {
     public Common.Permissions.UserPermissions UserPermissions { get; set; }
     
-    public List<UserMerchantPermissions> MerchantPermissions { get; set; } = new();
+    public Dictionary<Guid, Common.Permissions.MerchantPermissions> MerchantPermissions { get; set; } = new();
     
-    public List<UserAccountPermissions> AccountPermissions { get; set; } = new();
-}
-
-public class UserMerchantPermissions
-{
-    public Guid MerchantID { get; set; }
-    
-    public Common.Permissions.MerchantPermissions Permissions { get; set; }
-}
-
-public class UserAccountPermissions
-{
-    public Guid AccountID { get; set; }
-    
-    public Common.Permissions.AccountPermissions Permissions { get; set; }
+    public Dictionary<Guid, Common.Permissions.AccountPermissions> AccountPermissions { get; set; } = new();
 }
