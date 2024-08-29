@@ -56,6 +56,7 @@ public enum MerchantPermissions : ulong
     // Accounts
     CanViewAccounts = 1,
     CanCreateAccounts = 1L << 1,
+    CanArchiveAccounts = 1L << 37,
     
     // Beneficiaries
     CanViewBeneficiaries = 1L << 2,
