@@ -20,8 +20,8 @@ namespace NoFrixion.MoneyMoov.Extensions;
 public static class PayrunStatusExtensions
 {
     public static bool CanEdit(this PayrunStatus status) =>
-        status is PayrunStatus.Draft or PayrunStatus.AuthorisationPending or PayrunStatus.Edited or PayrunStatus.Rejected;
+        status is PayrunStatus.Draft or PayrunStatus.AuthorisationPending or PayrunStatus.Rejected;
     
     public static bool CanDelete(this PayrunStatus status) =>
-        status is PayrunStatus.Draft or PayrunStatus.Edited or PayrunStatus.Rejected or PayrunStatus.AuthorisationPending;
+        status is PayrunStatus.Draft or PayrunStatus.Rejected or PayrunStatus.AuthorisationPending;
 }
