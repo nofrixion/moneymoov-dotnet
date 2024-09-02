@@ -53,11 +53,6 @@ public enum PayrunStatus
     PayoutsCreated = 6,
     
     /// <summary>
-    /// Indicates that the pay run was edited.
-    /// </summary>
-    Edited = 7,
-    
-    /// <summary>
     /// Indicates that the pay run has been authorised and is queued for processing.
     /// </summary>
     Queued = 8,
