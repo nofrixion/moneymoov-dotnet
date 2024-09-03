@@ -72,8 +72,8 @@ public enum MerchantPermissions : ulong
     
     // Pay runs
     CanCreatePayruns = 1L << 11,
-    CanViewPayruns = 1L << 11,
-    CanEditPayruns = 1L << 12,
+    CanViewPayruns = 1L << 12,
+    CanEditPayruns = 1L << 13,
     CanApprovePayruns = 1L << 14,
     CanDeletePayruns = 1L << 15,
     
