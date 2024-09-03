@@ -35,11 +35,6 @@ public class RoleUpdate
     public string? Description { get; set; }
 
     /// <summary>
-    /// The roles user permissions
-    /// </summary>
-    public UserPermissions? UserPermissions { get; set; }
-
-    /// <summary>
     /// The roles merchant permissions
     /// </summary>
     public MerchantPermissions? MerchantPermissions { get; set; }
