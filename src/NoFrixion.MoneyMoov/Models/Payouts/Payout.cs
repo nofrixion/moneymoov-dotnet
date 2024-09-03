@@ -381,7 +381,14 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// Details of the rule that triggered the payout.
     /// </summary>
     public RuleMinimal? Rule { get; set; }
-    
+
+    /// <summary>
+    /// Optional field to indicate the payment rail to use for the payout. Currrently only
+    /// supports choosing between SEPA-CT and SEPA-INST for EUR payments. If not set, for a EUR
+    /// payment, the default behaviour is to attempt SEPA-INST and fallback to SEPA-CT if rejected.
+    /// </summary>
+    public PaymentRailEnum PaymentRail { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
