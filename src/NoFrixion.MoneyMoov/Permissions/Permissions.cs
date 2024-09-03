@@ -127,9 +127,7 @@ public enum UserPermissions : ulong
     
     CanCreateReports = 1,
     
-    //CanViewAllBeneficiaries = 1L << 1,
-    
-    CanViewAllPaymentRequests = 1L << 2,
+    CanViewAllPaymentRequests = 1L << 1,
 }
 
 public static class ClaimTypePrefixes
