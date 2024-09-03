@@ -171,6 +171,13 @@ public class PayoutUpdate
     }
 
     /// <summary>
+    /// Optional field to indicate the payment rail to use for the payout. Currrently only
+    /// supports choosing between SEPA-CT and SEPA-INST for EUR payments. If not set, for a EUR
+    /// payment, the default behaviour is to attempt SEPA-INST and fallback to SEPA-CT if rejected.
+    /// </summary>
+    public PaymentRailEnum? PaymentRail { get; set; }
+
+    /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payout's non-collection properties 
@@ -186,6 +193,7 @@ public class PayoutUpdate
         if (YourReference != null) dict.Add(nameof(YourReference), YourReference.ToString());
         if (TheirReference != null) dict.Add(nameof(TheirReference), TheirReference.ToString());
         if (AllowIncomplete != null) dict.Add(nameof(AllowIncomplete), AllowIncomplete.Value.ToString());
+        if (PaymentRail != null) dict.Add(nameof(PaymentRail), PaymentRail.Value.ToString());
 
         if (Destination != null)
         {
