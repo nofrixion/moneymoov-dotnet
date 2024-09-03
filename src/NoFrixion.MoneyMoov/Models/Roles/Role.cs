@@ -27,8 +27,6 @@ public class Role
 
     public Guid MerchantID { get; set; }
 
-    public UserPermissions UserPermissions { get; set; }
-
     public MerchantPermissions MerchantPermissions { get; set; }
 
     public AccountPermissions AccountPermissions { get; set; }
