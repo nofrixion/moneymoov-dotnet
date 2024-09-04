@@ -28,10 +28,7 @@ public class RoleCreate
 
     [Required]
     public Guid MerchantID { get; set; }
-
-    [Required]
-    public UserPermissions UserPermissions { get; set; }
-
+    
     [Required]
     public MerchantPermissions MerchantPermissions { get; set; }
 
