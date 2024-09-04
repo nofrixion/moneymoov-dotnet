@@ -97,30 +97,27 @@ public enum MerchantPermissions : ulong
     CanCreateWebhooks = 1L << 24,
     CanDeleteWebhooks = 1L << 25,
     
-    // Transactions
-    CanViewAllTransactions = 1L << 26,
-    
     // Merchants
-    CanViewMerchant = 1L << 27,
-    CanUpdateMerchant = 1L << 28,
+    CanViewMerchant = 1L << 26,
+    CanUpdateMerchant = 1L << 27,
     
     // Payment requests
-    CanCreatePaymentRequests = 1L << 29,
-    CanViewPaymentRequests = 1L << 30,
-    CanUpdatePaymentRequests = 1L << 31,
+    CanCreatePaymentRequests = 1L << 28,
+    CanViewPaymentRequests = 1L << 29,
+    CanUpdatePaymentRequests = 1L << 30,
     
     // Mandates
-    CanViewMandates = 1L << 32,
-    CanCreateMandates = 1L << 33,
+    CanViewMandates = 1L << 31,
+    CanCreateMandates = 1L << 32,
     
     // Permissions
-    CanViewRoles = 1L << 34,
-    CanCreateRoles = 1L << 35, 
-    CanEditRoles = 1L << 36,  
+    CanViewRoles = 1L << 33,
+    CanCreateRoles = 1L << 34, 
+    CanEditRoles = 1L << 35,  
     
     // Reports
-    CanCreateReports = 1L << 37,
-    CanViewReports = 1L << 38,
+    CanCreateReports = 1L << 36,
+    CanViewReports = 1L << 37,
 }
 
 public static class ClaimTypePrefixes
