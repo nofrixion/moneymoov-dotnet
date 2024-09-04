@@ -54,74 +54,73 @@ public enum MerchantPermissions : ulong
     None = 0,
     
     // Accounts
-    CanViewAccounts = 1,
-    CanCreateAccounts = 1L << 1,
-    CanArchiveAccounts = 1L << 2,
+    CanCreateAccounts = 1,
+    CanArchiveAccounts = 1L << 1,
     
     // Beneficiaries
-    CanViewBeneficiaries = 1L << 3,
-    CanDeleteBeneficiaries = 1L << 4,
-    CanEditBeneficiaries = 1L << 5,
-    CanCreateBeneficiaries = 1L << 6,
-    CanAuthoriseBeneficiaries = 1L << 7,
+    CanViewBeneficiaries = 1L << 2,
+    CanDeleteBeneficiaries = 1L << 3,
+    CanEditBeneficiaries = 1L << 4,
+    CanCreateBeneficiaries = 1L << 5,
+    CanAuthoriseBeneficiaries = 1L << 6,
     
     // Tokens
-    CanViewTokens = 1L << 8,
-    CanCreateTokens = 1L << 9,
-    CanDeleteTokens = 1L << 10,
+    CanViewTokens = 1L << 7,
+    CanCreateTokens = 1L << 8,
+    CanDeleteTokens = 1L << 9,
     
     // Pay runs
-    CanCreatePayruns = 1L << 11,
-    CanViewPayruns = 1L << 12,
-    CanEditPayruns = 1L << 13,
-    CanApprovePayruns = 1L << 14,
-    CanDeletePayruns = 1L << 15,
+    CanCreatePayruns = 1L << 10,
+    CanViewPayruns = 1L << 11,
+    CanEditPayruns = 1L << 12,
+    CanApprovePayruns = 1L << 13,
+    CanDeletePayruns = 1L << 14,
     
     // Payouts
-    CanViewMerchantPayouts = 1L << 16,
+    CanViewMerchantPayouts = 1L << 15,
     
     // User roles
-    CanViewUserRoles = 1L << 17,
-    CanDeleteUserRoles = 1L << 18,
-    CanAssignUserRoles = 1L << 19,
+    CanViewUserRoles = 1L << 16,
+    CanDeleteUserRoles = 1L << 17,
+    CanAssignUserRoles = 1L << 18,
     
     // Users
-    CanViewUsers = 1L << 20,
-    CanViewUserInvites = 1L << 21,
-    CanEditUsers = 1L << 22,
+    CanViewUsers = 1L << 19,
+    CanViewUserInvites = 1L << 20,
+    CanEditUsers = 1L << 21,
     
     // Rules
-    CanViewAllRules = 1L << 23,
+    CanViewAllRules = 1L << 22,
     
     // Webhooks
-    CanViewWebhooks = 1L << 24,
-    CanCreateWebhooks = 1L << 25,
-    CanDeleteWebhooks = 1L << 26,
+    CanViewWebhooks = 1L << 23,
+    CanCreateWebhooks = 1L << 24,
+    CanDeleteWebhooks = 1L << 25,
     
     // Transactions
-    CanViewAllTransactions = 1L << 27,
+    CanViewAllTransactions = 1L << 26,
     
     // Merchants
-    CanViewMerchant = 1L << 28,
-    CanUpdateMerchant = 1L << 29,
+    CanViewMerchant = 1L << 27,
+    CanUpdateMerchant = 1L << 28,
     
     // Payment requests
-    CanCreatePaymentRequests = 1L << 30,
-    CanViewPaymentRequests = 1L << 31,
-    CanUpdatePaymentRequests = 1L << 32,
+    CanCreatePaymentRequests = 1L << 29,
+    CanViewPaymentRequests = 1L << 30,
+    CanUpdatePaymentRequests = 1L << 31,
     
     // Mandates
-    CanViewMandates = 1L << 33,
-    CanCreateMandates = 1L << 34,
+    CanViewMandates = 1L << 32,
+    CanCreateMandates = 1L << 33,
     
     // Permissions
-    CanViewRoles = 1L << 35,
-    CanCreateRoles = 1L << 36, 
-    CanEditRoles = 1L << 37,  
+    CanViewRoles = 1L << 34,
+    CanCreateRoles = 1L << 35, 
+    CanEditRoles = 1L << 36,  
     
     // Reports
-    CanCreateReports = 1L << 38,
-    CanViewReports = 1L << 39,
+    CanCreateReports = 1L << 37,
+    CanViewReports = 1L << 38,
 }
 
 public static class ClaimTypePrefixes
