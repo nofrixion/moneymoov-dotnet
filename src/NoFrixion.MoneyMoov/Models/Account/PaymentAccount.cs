@@ -165,7 +165,13 @@ public class PaymentAccount
     /// <summary>
     /// Indicates if the payment account is connected to a Xero bank feed.
     /// </summary>
+    [Obsolete("Please use the XeroBankFeedConnectionStatus property.")]
     public bool IsXeroBankFeed { get; set; }
+    
+    /// <summary>
+    /// States the status of the Xero bank feed connection, if applicable.
+    /// </summary>
+    public XeroBankFeedConnectionStatusEnum? XeroBankFeedConnectionStatus { get; set; }
     
     public XeroBankFeedSyncStatusEnum XeroBankFeedSyncStatus { get; set; }
     
@@ -184,6 +190,7 @@ public class PaymentAccount
     /// Indicates that the bank feed connection can no longer be found in Xero.
     /// This can mean that the respective account was archived/deleted in Xero.
     /// </summary>
+    [Obsolete("Please use the XeroBankFeedConnectionStatus property.")]
     public bool XeroBankFeedConnectionInactive { get; set; }
     
     /// <summary>
