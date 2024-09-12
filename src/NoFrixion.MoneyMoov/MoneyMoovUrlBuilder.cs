@@ -76,6 +76,15 @@ public static class MoneyMoovUrlBuilder
 
         public static string AccountPayoutsUrl(string moneyMoovBaseUrl, Guid accountID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/{accountID}/{MoneyMoovResources.payouts}";
+        
+        public static string StatementsUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/{MoneyMoovResources.statements}";
+
+        public static string StatementsUrlWithAccountPlaceholder(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/##account##/{MoneyMoovResources.statements}";
+        
+        public static string StatementsUrl(string moneyMoovBaseUrl, Guid accountID, Guid statementID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/{accountID}/{MoneyMoovResources.statements}/{statementID}";
     }
 
     /// <summary>

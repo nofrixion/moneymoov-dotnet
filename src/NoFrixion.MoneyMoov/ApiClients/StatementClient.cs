@@ -50,6 +50,7 @@ public class StatementClient : IStatementClient
     /// <param name="accessToken">A User or Merchant scoped JWT access token.</param>
     /// <param name="statementID">The ID of the report to retrieve the result for.</param>
     /// <returns>If successful, the statement result.</returns>
+    [Obsolete("Use AccountClient.GetStatementAsync instead.")]
     public async Task<RestApiFileResponse> GetStatementAsync(string accessToken, Guid statementID)
     {
         var url = MoneyMoovUrlBuilder.StatementsApi.StatementsUrl(_apiClient.GetBaseUri().ToString(), statementID);
@@ -88,6 +89,7 @@ public class StatementClient : IStatementClient
     /// if the statement was for the current month and the month has not yet completed.
     /// </summary>
     /// <param name="accessToken">The user token deleting the payout.</param>
+    [Obsolete("Use AccountClient.ClearStatementsAsync instead.")]
     public Task<RestApiResponse> ClearStatementsAsync(string accessToken)
     {
         var url = MoneyMoovUrlBuilder.StatementsApi.StatementsUrl(_apiClient.GetBaseUri().ToString());
