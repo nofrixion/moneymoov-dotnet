@@ -50,6 +50,8 @@ public class Payrun
     public List<Payout>? Payouts { get; set; }
     
     public List<PayrunPayment>? Payments { get; set; }
+
+    public bool IsArchived { get; set; }
     
     public bool CanEdit => Status.CanEdit();
     
