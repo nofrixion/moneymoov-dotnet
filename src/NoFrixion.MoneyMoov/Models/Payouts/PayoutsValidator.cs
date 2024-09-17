@@ -145,6 +145,16 @@ public static class PayoutsValidator
     /// </summary>
     public const decimal BITCOIN_CURRENCY_RESOLUTION = 0.0000_0001M;
 
+    /// <summary>
+    /// The required length for a SCAN account number.
+    /// </summary>
+    private const int SCAN_REQUIRED_ACCOUNT_NUMBER_LENGTH = 8;
+    
+    /// <summary>
+    /// The required length for a SCAN sort code.
+    /// </summary>
+    private const int SCAN_REQUIRED_SORT_CODE_LENGTH = 6;
+    
     public static bool ValidateIBAN(string iban)
     {
         if (string.IsNullOrEmpty(iban))
@@ -388,6 +398,18 @@ public static class PayoutsValidator
             if (payout.Type == AccountIdentifierType.SCAN && payout.Currency != CurrencyTypeEnum.GBP)
             {
                 yield return new ValidationResult($"Currency {payout.Currency} cannot be used with SCAN destinations.", new string[] { nameof(payout.Currency) });
+            }
+            
+            if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
+                !string.IsNullOrEmpty(payout.Destination?.Identifier?.AccountNumber) && payout.Destination.Identifier.AccountNumber.Length != SCAN_REQUIRED_ACCOUNT_NUMBER_LENGTH)
+            {
+                yield return new ValidationResult("Destination account number must be eight digits for a SCAN payout type.", new string[] { nameof(payout.Destination.Identifier.AccountNumber) });
+            }
+            
+            if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
+                !string.IsNullOrEmpty(payout.Destination?.Identifier?.SortCode) && payout.Destination.Identifier.SortCode.Length != SCAN_REQUIRED_SORT_CODE_LENGTH)
+            {
+                yield return new ValidationResult("Destination sort code must be six digits for a SCAN payout type.", new string[] { nameof(payout.Destination.Identifier.SortCode) });
             }
         }
 
