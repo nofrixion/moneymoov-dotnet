@@ -370,7 +370,7 @@ public class PayoutsValidatorTests
             Identifier = new AccountIdentifier
             {
                 SortCode = "123456",
-                AccountNumber = "00000070629907",
+                AccountNumber = "70629907",
                 Currency = CurrencyTypeEnum.GBP
             }
         };
@@ -395,6 +395,78 @@ public class PayoutsValidatorTests
         _logger.LogDebug(result.ToTextErrorMessage());
         
         Assert.True(result.IsEmpty);
+    }
+    
+    [Fact]
+    public void PayoutsValidator_Validate_GBP_Destination_Identifier_AccountNumber_Fail()
+    {
+        var destination = new Counterparty
+        {
+            Name = "Joe Bloggs",
+            Identifier = new AccountIdentifier
+            {
+                SortCode = "123456",
+                AccountNumber = "7062990",
+                Currency = CurrencyTypeEnum.GBP
+            }
+        };
+        
+        var payout = new Payout
+        {
+            ID = Guid.NewGuid(),
+            AccountID = Guid.Parse("B2DBB4E1-5F8A-4B07-82A0-EB033E6F3421"),
+            Type = AccountIdentifierType.SCAN,
+            Description = "Xero Invoice fgfg from Demo Company (Global).",
+            Currency = CurrencyTypeEnum.GBP,
+            Amount = 11.00M,
+            YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            TheirReference = "Placeholder",
+            Status = PayoutStatus.PENDING_INPUT,
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            Destination = destination
+        };
+        
+        var result = payout.Validate();
+        
+        _logger.LogDebug(result.ToTextErrorMessage());
+        
+        Assert.False(result.IsEmpty);
+    }
+    
+    [Fact]
+    public void PayoutsValidator_Validate_GBP_Destination_Identifier_SortCode_Fail()
+    {
+        var destination = new Counterparty
+        {
+            Name = "Joe Bloggs",
+            Identifier = new AccountIdentifier
+            {
+                SortCode = "1234567",
+                AccountNumber = "70629907",
+                Currency = CurrencyTypeEnum.GBP
+            }
+        };
+        
+        var payout = new Payout
+        {
+            ID = Guid.NewGuid(),
+            AccountID = Guid.Parse("B2DBB4E1-5F8A-4B07-82A0-EB033E6F3421"),
+            Type = AccountIdentifierType.SCAN,
+            Description = "Xero Invoice fgfg from Demo Company (Global).",
+            Currency = CurrencyTypeEnum.GBP,
+            Amount = 11.00M,
+            YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            TheirReference = "Placeholder",
+            Status = PayoutStatus.PENDING_INPUT,
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            Destination = destination
+        };
+        
+        var result = payout.Validate();
+        
+        _logger.LogDebug(result.ToTextErrorMessage());
+        
+        Assert.False(result.IsEmpty);
     }
     
     [Fact]
