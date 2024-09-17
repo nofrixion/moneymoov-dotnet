@@ -15,6 +15,8 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Enums;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class PaymentAccountCreate
@@ -50,6 +52,17 @@ public class PaymentAccountCreate
     /// For internal use only. Leave empty unless requested otherwise.
     /// </summary>
     public Guid PhysicalAccountID { get; set; }
+    
+    /// <summary>
+    /// If specified the account type will be set to the specified value
+    /// disregarding the merchant default account type.
+    /// </summary>
+    public AccountTypeEnum? AccountType { get; set; }
+    
+    /// <summary>
+    /// If creating a Tribe account type, then this is the tribe account id
+    /// </summary>
+    public string? TribeAccountId { get; set; }
 
     /// <summary>
     /// Places all the payment request's properties into a dictionary.
@@ -64,6 +77,8 @@ public class PaymentAccountCreate
             { nameof(Currency), Currency.ToString() },
             { nameof(AccountName), AccountName ?? string.Empty },
             { nameof(PhysicalAccountID), PhysicalAccountID.ToString() },
+            { nameof(AccountType), AccountType?.ToString() ?? string.Empty },
+            { nameof(TribeAccountId), TribeAccountId ?? string.Empty }
         };
     }
 }
