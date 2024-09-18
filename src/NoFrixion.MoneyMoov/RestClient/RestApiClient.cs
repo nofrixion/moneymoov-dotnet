@@ -61,6 +61,8 @@ public class RestApiClient : IRestApiClient, IDisposable
     private bool _disposed;
 
     public HttpClient HttpClient { get; set; }
+    
+    private readonly bool _dataExpectedOnErrorResponse;
 
     public RestApiClient(string baseUri)
     {
@@ -76,6 +78,12 @@ public class RestApiClient : IRestApiClient, IDisposable
     public RestApiClient(IHttpClientFactory httpClientFactory, string httpClientName)
     {
         HttpClient = httpClientFactory.CreateClient(httpClientName);
+    }
+    
+    public RestApiClient(HttpClient httpClient, bool dataExpectedOnErrorResponse)
+    {
+        HttpClient = httpClient;
+        _dataExpectedOnErrorResponse = dataExpectedOnErrorResponse;
     }
 
     public Uri GetBaseUri()
@@ -200,14 +208,40 @@ public class RestApiClient : IRestApiClient, IDisposable
         }
         else if (response.Content.Headers.ContentLength > 0)
         {
-            string contentStr = await response.Content.ReadAsStringAsync();
+            var contentStr = await response.Content.ReadAsStringAsync();
             var problem = DeserialiseProblem(response.StatusCode, contentStr);
+
+            if (_dataExpectedOnErrorResponse)
+            {
+                var result = TryDeserialiseDataOnErrorResponse<T>(contentStr);
+                
+                if (result != null)
+                {
+                    return new RestApiResponse<T>(response.StatusCode, requestUri, response.Headers, problem, result);
+                }
+            }
             return new RestApiResponse<T>(response.StatusCode, requestUri, response.Headers, problem);
         }
         else
         {
             return new RestApiResponse<T>(response.StatusCode, requestUri, response.Headers, 
                 new NoFrixionProblem(response.StatusCode, "Response content was expected."));
+        }
+    }
+    
+    private T? TryDeserialiseDataOnErrorResponse<T>(string contentStr)
+    {
+        try
+        {
+            return contentStr.FromJson<T>();
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            return default;
+        }
+        catch (Newtonsoft.Json.JsonException)
+        {
+            return default;
         }
     }
 
