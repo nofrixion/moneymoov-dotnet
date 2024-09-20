@@ -235,10 +235,6 @@ public class RestApiClient : IRestApiClient, IDisposable
         {
             return contentStr.FromJson<T>();
         }
-        catch (System.Text.Json.JsonException)
-        {
-            return default;
-        }
         catch (Newtonsoft.Json.JsonException)
         {
             return default;
