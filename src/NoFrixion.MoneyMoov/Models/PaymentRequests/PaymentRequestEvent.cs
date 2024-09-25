@@ -160,6 +160,11 @@ public class PaymentRequestEvent
     public string? DirectDebitPaymentID { get; set; }
 
     /// <summary>
+    /// Reference string issued by the Direct Debit supplier.
+    /// </summary>
+    public string? DirectDebitPaymentReference { get; set; }
+
+    /// <summary>
     /// Gets the amount to display with the correct number of decimal places based on the currency type. 
     /// </summary>
     /// <returns>The decimal amount to display for the payment request's currency.</returns>
