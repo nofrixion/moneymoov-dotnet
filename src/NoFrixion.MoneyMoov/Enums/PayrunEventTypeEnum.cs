@@ -37,4 +37,8 @@ public enum PayrunEventTypeEnum
     TopupInitiated = 8,
 
     FundsArrived = 9,
+    
+    Archived = 10,
+    
+    Unarchived = 11
 }
