@@ -100,6 +100,11 @@ public enum PaymentProcessorsEnum
     /// <summary>
     /// To pay with SEPA Direct Debit, handled by Banking Circle.
     /// </summary>
-    BankingCircleDirectDebit
+    BankingCircleDirectDebit,
+    
+    /// <summary>
+    /// Tribe payments processor.
+    /// </summary>
+    Tribe
 }
 
