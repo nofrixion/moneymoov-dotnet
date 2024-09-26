@@ -29,8 +29,14 @@ public enum PaymentRailEnum
     SEPA_CT,
 
     /// <summary>
-    /// Single Euro Payments Area (SEPA) Instant scheme. Paymnets are processed 24/7 in
+    /// Single Euro Payments Area (SEPA) Instant scheme. Payments are processed 24/7 in
     /// seconds. Not yet supported by all EU institutions.
     /// </summary>
-    SEPA_INST
+    SEPA_INST,
+
+    /// <summary>
+    /// TARGET2 is the real-time gross settlement (RTGS) system for the Euro. Payments are processed 
+    /// in real-time and are used for high-value transfers within the EU.
+    /// </summary>
+    TARGET2
 }
