@@ -205,6 +205,13 @@ public class PaymentAccount
     public User CreatedBy { get; set; }
 
     /// <summary>
+    /// Indicates the default payment rail for this account. Normally it will be left as the
+    /// default value but in some special cases it may be set to indicate payouts from this account
+    /// should be attempted with a specific payment rail.
+    /// </summary>
+    public PaymentRailEnum DefaultPaymentRail { get; set; }
+
+    /// <summary>
     /// The list of rules associated with this account.
     /// </summary>
     public List<RuleMinimal> Rules { get; set; } = [];
