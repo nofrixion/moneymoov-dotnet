@@ -36,11 +36,6 @@ public class PaymentAccount
     public Guid MerchantID { get; set; }
 
     /// <summary>
-    /// Status of the account.
-    /// </summary>
-    public AccountStatus Status { get; set; }
-
-    /// <summary>
     /// Balance of the account.
     /// </summary>
     public decimal Balance { get; set; }
