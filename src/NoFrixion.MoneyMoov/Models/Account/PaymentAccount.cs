@@ -215,4 +215,10 @@ public class PaymentAccount
     /// The list of rules associated with this account.
     /// </summary>
     public List<RuleMinimal> Rules { get; set; } = [];
+
+    /// <summary>
+    /// Indicates whether the account is archived. Archived accounts are not displayed in the UI.
+    /// If an account receives a payment it will be automatically unarchived.
+    /// </summary>
+    public bool IsArchived { get; set; }
 }
