@@ -21,11 +21,16 @@ namespace NoFrixion.MoneyMoov.Models;
 public class PayoutCreate
 {
     /// <summary>
-    /// THe ID of the source account for the payout.
+    /// The ID of the source account for the payout.
     /// </summary>
     [Required(ErrorMessage = "AccountID is required.")]
     public Guid AccountID { get; set; }
 
+    /// <summary>
+    /// The type of account identifier to use for the payout destination.
+    /// </summary>
+    /// <example>IBAN</example>
+    [Required(ErrorMessage = "The type of payout to create is required.")]
     public AccountIdentifierType Type { get; set; }
 
     public string? Description { get; set; }
@@ -144,8 +149,7 @@ public class PayoutCreate
     public DateTimeOffset? ScheduleDate { get; set; }
 
     /// <summary>
-    /// For Bitcoin payouts, when this flag is set the network fee will be deducted from the send amount.
-    /// THis is particularly useful for sweeps where it can be difficult to calculate the exact fee required.
+    /// For Bitcoin payouts, when this flag is set the network fee will be deducted from the send amount. This is particularly useful for sweeps where it can be difficult to calculate the exact fee required.
     /// </summary>
     public bool BitcoinSubtractFeeFromAmount { get; set; }
 
