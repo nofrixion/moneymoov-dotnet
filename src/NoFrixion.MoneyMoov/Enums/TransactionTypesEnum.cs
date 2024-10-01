@@ -84,5 +84,8 @@ public enum TransactionTypesEnum
     /// The transaction type was not recognised.
     /// </summary>
     [Display(Name = "Unknown type")]
-    Unknown = 12
+    Unknown = 12,
+
+    [Display(Name = "TARGET2")]
+    TARGET2 = 13
 }

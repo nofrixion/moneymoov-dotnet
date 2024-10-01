@@ -104,6 +104,13 @@ public class RestApiResponse<T> : RestApiResponse
     public RestApiResponse(HttpStatusCode statusCode, Uri? requestUri, Option<HttpResponseHeaders> headers, NoFrixionProblem problem)
         : base(statusCode, requestUri, headers, problem)
     { }
+
+    public RestApiResponse(HttpStatusCode statusCode, Uri? requestUri, Option<HttpResponseHeaders> headers,
+        NoFrixionProblem problem, T data)
+        : base(statusCode, requestUri, headers, problem)
+    {
+        Data = data;
+    }
  }
 
 /// <summary>

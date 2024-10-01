@@ -36,11 +36,6 @@ public class PaymentAccount
     public Guid MerchantID { get; set; }
 
     /// <summary>
-    /// Status of the account.
-    /// </summary>
-    public AccountStatus Status { get; set; }
-
-    /// <summary>
     /// Balance of the account.
     /// </summary>
     public decimal Balance { get; set; }
@@ -203,6 +198,13 @@ public class PaymentAccount
     /// </summary>
     [CanBeNull]
     public User CreatedBy { get; set; }
+
+    /// <summary>
+    /// Indicates the default payment rail for this account. Normally it will be left as the
+    /// default value but in some special cases it may be set to indicate payouts from this account
+    /// should be attempted with a specific payment rail.
+    /// </summary>
+    public PaymentRailEnum DefaultPaymentRail { get; set; }
 
     /// <summary>
     /// The list of rules associated with this account.
