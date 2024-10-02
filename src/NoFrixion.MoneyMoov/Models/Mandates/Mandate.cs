@@ -92,12 +92,12 @@ public class Mandate
     /// <summary>
     /// Customer's account number in case of GBP account.
     /// </summary>
-    public int? CustomerAccountNumber { get; set; }
+    public string? CustomerAccountNumber { get; set; }
     
     /// <summary>
     /// Customer's sort code in case of GBP account.
     /// </summary>
-    public int? CustomerSortCode { get; set; }
+    public string? CustomerSortCode { get; set; }
     
     /// <summary>
     /// Reference assigned to this mandate.

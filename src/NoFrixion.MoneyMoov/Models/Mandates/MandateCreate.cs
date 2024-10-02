@@ -89,15 +89,15 @@ public class MandateCreate
     /// Account number of the customer's bank account in case of GBP account.
     /// </summary>
     [MaxLength(8)]
-    [RegularExpression("^[a-zA-Z0-9\\-,'. ]+$", ErrorMessage = "Please, provide a valid account number.")]
-    public int? AccountNumber { get; set; }
+    [RegularExpression("^[0-9]*$", ErrorMessage = "Please, provide a valid account number.")]
+    public string? AccountNumber { get; set; }
 
     /// <summary>
     /// Sort code of the customer's bank account in case of GBP account.
     /// </summary>
     [MaxLength(6)]
-    [RegularExpression("^[a-zA-Z0-9\\-,'. ]+$", ErrorMessage = "Please, provide a valid sort code.")]
-    public int? SortCode { get; set; }
+    [RegularExpression("^[0-9]*$", ErrorMessage = "Please, provide a valid sort code.")]
+    public string? SortCode { get; set; }
     
     /// <summary>
     /// Customer's email address.
