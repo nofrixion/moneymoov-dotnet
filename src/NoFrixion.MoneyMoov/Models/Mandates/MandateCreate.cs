@@ -96,7 +96,7 @@ public class MandateCreate
     /// Sort code of the customer's bank account in case of GBP account.
     /// </summary>
     [MaxLength(6)]
-    [RegularExpression("^[0-9]*$", ErrorMessage = "Please, provide a valid sort code.")]
+    [RegularExpression("^[0-9\\-]*$", ErrorMessage = "Please, provide a valid sort code.")]
     public string? SortCode { get; set; }
     
     /// <summary>
