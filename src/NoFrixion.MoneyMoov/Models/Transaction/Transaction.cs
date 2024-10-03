@@ -110,4 +110,9 @@ public class Transaction : IWebhookPayload
     /// ID of the payout that resulted in the transaction.
     /// </summary>
     public Guid? PayoutID { get; set; }
+
+    /// <summary>
+    /// If set it indicates the  payin was to a virtual IBAN.
+    /// </summary>
+    public string VirtualIBAN { get; set; }
 }

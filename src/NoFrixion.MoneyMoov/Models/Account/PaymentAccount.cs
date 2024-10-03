@@ -216,4 +216,12 @@ public class PaymentAccount
     /// If an account receives a payment it will be automatically unarchived.
     /// </summary>
     public bool IsArchived { get; set; }
+
+    /// <summary>
+    /// If non-null it indicates that the account is a virtual account and this ID represents the 
+    /// backing physical account.
+    /// </summary>
+    public Guid? PhysicalAccountID { get; set; }
+
+    public bool IsVirtual => PhysicalAccountID.HasValue;
 }
