@@ -9,7 +9,6 @@
 // 
 // History:
 // 09 Dec 2022  Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
-// 11 Dec 2022  Aaron Clauson   Renamed from PaymentAccountCreate to PaymentAccountCreate.
 // 
 // License:
 // MIT.
@@ -51,7 +50,7 @@ public class PaymentAccountCreate
     /// <summary>
     /// For internal use only. Leave empty unless requested otherwise.
     /// </summary>
-    public Guid PhysicalAccountID { get; set; }
+    public Guid SupplierPhysicalAccountID { get; set; }
     
     /// <summary>
     /// If specified the account type will be set to the specified value
@@ -65,6 +64,13 @@ public class PaymentAccountCreate
     public string? TribeAccountId { get; set; }
 
     /// <summary>
+    /// For EUR accounts this can be set to the ID of another account that will act as the
+    /// backing phyiscal account. The new account will then act as a Virtual account, able to 
+    /// receive funds but the transactions will be recorded aginst the backing physical account.
+    /// </summary>
+    public Guid? PhysicalAccountID { get; set; }
+
+    /// <summary>
     /// Places all the payment request's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payment request's non-collection properties 
@@ -76,9 +82,10 @@ public class PaymentAccountCreate
             { nameof(MerchantID), MerchantID.ToString() },
             { nameof(Currency), Currency.ToString() },
             { nameof(AccountName), AccountName ?? string.Empty },
-            { nameof(PhysicalAccountID), PhysicalAccountID.ToString() },
+            { nameof(SupplierPhysicalAccountID), SupplierPhysicalAccountID.ToString() },
             { nameof(AccountType), AccountType?.ToString() ?? string.Empty },
-            { nameof(TribeAccountId), TribeAccountId ?? string.Empty }
+            { nameof(TribeAccountId), TribeAccountId ?? string.Empty },
+            { nameof(PhysicalAccountID), PhysicalAccountID?.ToString() ?? string.Empty }
         };
     }
 }
