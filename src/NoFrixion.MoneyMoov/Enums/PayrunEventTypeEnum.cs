@@ -40,5 +40,7 @@ public enum PayrunEventTypeEnum
     
     Archived = 10,
     
-    Unarchived = 11
+    Unarchived = 11,
+
+    Cancelled = 12,
 }
