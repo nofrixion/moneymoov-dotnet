@@ -33,6 +33,9 @@ public interface IRestApiClient
 
     Task<RestApiResponse<T>> PostAsync<T>(string path, HttpContent content);
 
+    Task<RestApiResponse<T>> PostAsync<T>(string path, HttpContent content, Dictionary<string, string> headers,
+        MediaTypeWithQualityHeaderValue acceptHeader);
+
     Task<RestApiResponse> PostAsync(string path, string accessToken, HttpContent content);
 
     Task<RestApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content);
@@ -104,6 +107,10 @@ public class RestApiClient : IRestApiClient, IDisposable
     public Task<RestApiResponse<T>> PostAsync<T>(string path, HttpContent content)
         => ExecAsync<T>(BuildRequest(HttpMethod.Post, path, string.Empty, content));
 
+    public Task<RestApiResponse<T>> PostAsync<T>(string path, HttpContent content, Dictionary<string, string> headers,
+        MediaTypeWithQualityHeaderValue acceptHeader)
+        => ExecAsync<T>(BuildRequest(HttpMethod.Post, path, string.Empty, content, null, headers, acceptHeader));
+
     public Task<RestApiResponse> PostAsync(string path, string accessToken, HttpContent content)
         => ExecAsync(BuildRequest(HttpMethod.Post, path, accessToken, content));
 
@@ -151,11 +158,13 @@ public class RestApiClient : IRestApiClient, IDisposable
         string path,
         string accessToken,
         Option<HttpContent> httpContent,
-        string? rowVersion = null)
+        string? rowVersion = null,
+        Dictionary<string, string>? headers = null,
+        MediaTypeWithQualityHeaderValue? acceptHeader = null)
     {
         HttpRequestMessage request = new HttpRequestMessage(method, path);
 
-        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        request.Headers.Accept.Add(acceptHeader ?? new MediaTypeWithQualityHeaderValue("application/json"));
 
         if (!string.IsNullOrEmpty(accessToken))
         {
@@ -165,6 +174,14 @@ public class RestApiClient : IRestApiClient, IDisposable
         if (!string.IsNullOrEmpty(rowVersion))
         {
             request.Headers.TryAddWithoutValidation("If-Match", rowVersion);
+        }
+        
+        if (headers != null)
+        {
+            foreach (var header in headers)
+            {
+                request.Headers.TryAddWithoutValidation(header.Key, header.Value);
+            }
         }
 
         if(httpContent.IsSome)
