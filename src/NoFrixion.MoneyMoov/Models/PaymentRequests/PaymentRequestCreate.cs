@@ -333,6 +333,12 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// </summary>
     public List<string>? Tags { get; set; }
 
+    /// <summary>
+    /// The payment account ID to use to receive Direct Debit payments. This must match one of your
+    /// NoFrixion payment account IDs. This can be left blank to use your default payment account.
+    /// </summary>
+    public Guid? DirectDebitAccountID { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
@@ -406,6 +412,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(Title), Title ?? string.Empty);
         dict.Add(nameof(PartialPaymentSteps), PartialPaymentSteps ?? string.Empty);
         dict.Add(nameof(NotificationEmailAddresses), NotificationEmailAddresses ?? string.Empty);
+        dict.Add(nameof(DirectDebitAccountID), DirectDebitAccountID?.ToString() ?? string.Empty);
 
         if (TagIds?.Count() > 0)
         {

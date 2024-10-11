@@ -233,6 +233,12 @@ public class PaymentRequestUpdate
     /// Date and time of expiration of the lightning invoice.
     /// </summary>
     public DateTimeOffset? LightningInvoiceExpiresAt { get; set; }
+
+    /// <summary>
+    /// The payment account ID to use to receive Direct Debit payments. This must match one of your
+    /// NoFrixion payment account IDs. This can be left blank to use your default payment account.
+    /// </summary>
+    public Guid? DirectDebitAccountID { get; set; }
     
     /// <summary>
     /// Places all the payment request's properties into a dictionary. Useful for testing

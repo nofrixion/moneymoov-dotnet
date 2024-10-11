@@ -341,6 +341,12 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// </summary>
     public DateTimeOffset? LightningInvoiceExpiresAt { get; set; }
 
+    /// <summary>
+    /// The payment account ID to use to receive Direct Debit payments. This must match one of your
+    /// NoFrixion payment account IDs. This can be left blank to use your default payment account.
+    /// </summary>
+    public Guid? DirectDebitAccountID { get; set; }
+
     public string CustomerName =>
         Addresses.Any() ? $"{Addresses.First().FirstName} {Addresses.First().LastName}" : string.Empty;
 
