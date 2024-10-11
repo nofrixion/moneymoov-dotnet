@@ -14,7 +14,9 @@
 //-----------------------------------------------------------------------------
 
 using NoFrixion.MoneyMoov.Attributes;
+using NoFrixion.MoneyMoov.Json;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -63,6 +65,12 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// should be supplied as a comma separated list, for example "card, pisp, lightning".
     /// </summary>
     public PaymentMethodTypeEnum PaymentMethodTypes { get; set; } = PaymentMethodTypeEnum.card;
+
+    /// <summary>
+    /// The payment methods that the payment request supports. When setting using form data
+    /// should be supplied as a comma separated list, for example "card, pisp, lightning".
+    /// </summary>
+    public List<PaymentMethodTypeEnum> PaymentMethodTypes2 { get; set; } = new List<PaymentMethodTypeEnum> { PaymentMethodTypeEnum.card };
 
     /// <summary>
     /// An optional description for the payment request. If set this field will appear
