@@ -62,6 +62,4 @@ public interface IPaymentRequest
     public string? Title { get; set; }
 
     public string? PartialPaymentSteps { get; set; }
-    
-    public Guid? DirectDebitAccountID { get; set; }
 }
