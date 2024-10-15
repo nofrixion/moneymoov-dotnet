@@ -14,6 +14,7 @@
 //-----------------------------------------------------------------------------
 
 using NoFrixion.MoneyMoov.Attributes;
+using NoFrixion.MoneyMoov.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -62,7 +63,13 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// The payment methods that the payment request supports. When setting using form data
     /// should be supplied as a comma separated list, for example "card, pisp, lightning".
     /// </summary>
-    public PaymentMethodTypeEnum PaymentMethodTypes { get; set; } = PaymentMethodTypeEnum.card;
+    [Obsolete("This field has been deprecated. Please use PaymentMethods instead.")]
+    public PaymentMethodTypeEnum PaymentMethodTypes { get; init; } = PaymentMethodTypeEnum.card;
+
+    /// <summary>
+    /// The payment methods that the payment request supports.
+    /// </summary>
+    public List<PaymentMethodTypeEnum> PaymentMethods { get; set; } = new List<PaymentMethodTypeEnum>();
 
     /// <summary>
     /// An optional description for the payment request. If set this field will appear
@@ -376,7 +383,6 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(Currency), Currency.ToString());
         dict.Add(nameof(CustomerID), CustomerID ?? string.Empty);
         dict.Add(nameof(OrderID), OrderID ?? string.Empty);
-        dict.Add(nameof(PaymentMethodTypes), PaymentMethodTypes.ToString());
         dict.Add(nameof(Description), Description ?? string.Empty);
         dict.Add(nameof(BaseOriginUrl), BaseOriginUrl!);
         dict.Add(nameof(CallbackUrl), CallbackUrl!);
@@ -406,6 +412,16 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(Title), Title ?? string.Empty);
         dict.Add(nameof(PartialPaymentSteps), PartialPaymentSteps ?? string.Empty);
         dict.Add(nameof(NotificationEmailAddresses), NotificationEmailAddresses ?? string.Empty);
+
+        if (PaymentMethods?.Count() > 0)
+        {
+            int paymentMethodNumber = 0;
+            foreach (var paymentMethod in PaymentMethods)
+            {
+                dict.Add($"{nameof(PaymentMethods)}[{paymentMethodNumber}]", paymentMethod.ToString());
+                paymentMethodNumber++;
+            }
+        }
 
         if (TagIds?.Count() > 0)
         {

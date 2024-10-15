@@ -378,7 +378,7 @@ public class PaymentRequestResultTests
         var merchantID = Guid.NewGuid();
         var amount = 0.42M;
         var currency = CurrencyTypeEnum.EUR;
-        var paymentMethods = PaymentMethodTypeEnum.card | PaymentMethodTypeEnum.lightning;
+        var paymentMethods = new List<PaymentMethodTypeEnum> { PaymentMethodTypeEnum.card, PaymentMethodTypeEnum.lightning };
         var description = "desc";
         var customerID = "cid";
         var orderID = "oid";
@@ -392,7 +392,7 @@ public class PaymentRequestResultTests
             MerchantID = merchantID,
             Amount = amount,
             Currency = currency,
-            PaymentMethodTypes = paymentMethods,
+            PaymentMethods = paymentMethods,
             Description = description,
             CustomerID = customerID,
             OrderID = orderID,

@@ -57,7 +57,17 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// The payment methods that the payment request supports. When setting using form data
     /// should be supplied as a comma separated list, for example "card, pisp, lightning".
     /// </summary>
-    public PaymentMethodTypeEnum PaymentMethodTypes { get; set; } = PaymentMethodTypeEnum.card;
+    [Obsolete("This field has been deprecated. Please use PaymentMethods instead.")]
+    public PaymentMethodTypeEnum PaymentMethodTypes 
+    { 
+        get => 
+            PaymentMethods.Aggregate(PaymentMethodTypeEnum.None, (current, method) => current | method);
+    }
+
+    /// <summary>
+    /// The payment methods that the payment request supports.
+    /// </summary>
+    public List<PaymentMethodTypeEnum> PaymentMethods { get; set; } = new List<PaymentMethodTypeEnum>();
 
     /// <summary>
     /// An optional description for the payment request. If set this field will appear

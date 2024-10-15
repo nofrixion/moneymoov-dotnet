@@ -104,7 +104,9 @@ Company X,Ms Jane Doe,Jane, Doe,blackhole@nofrixion.com,EUR,5001834,26/07/2023,3
         Assert.Equal(39400M, results[0].Model.Amount);
         Assert.Equal(CurrencyTypeEnum.EUR, results[0].Model.Currency);
         Assert.Equal("5001834", results[0].Model.OrderID);
+#pragma warning disable CS0618 // Type or member is obsolete
         Assert.Equal(PaymentMethodTypeEnum.pisp, results[0].Model.PaymentMethodTypes);
+#pragma warning restore CS0618 // Type or member is obsolete
         Assert.Equal("RANGE ROVER TDV8", results[0].Model.Description);
         Assert.Equal("Jane", results[0].Model.ShippingFirstName);
         Assert.Equal("Doe", results[0].Model.ShippingLastName);
@@ -160,7 +162,9 @@ XXX Volvo, ,Deposit,Vehicle,5002027,10000, Order for car XXX , someone@somemotor
         Assert.Equal(10000M, results[0].Model.Amount);
         Assert.Equal(CurrencyTypeEnum.EUR, results[0].Model.Currency);
         Assert.Equal("5002027", results[0].Model.OrderID);
+#pragma warning disable CS0618 // Type or member is obsolete
         Assert.Equal(PaymentMethodTypeEnum.pisp, results[0].Model.PaymentMethodTypes);
+#pragma warning restore CS0618 // Type or member is obsolete
         Assert.Equal("Order for car XXX", results[0].Model.Description);
         Assert.Equal(string.Empty, results[0].Model.ShippingFirstName);
         Assert.Equal(string.Empty, results[0].Model.ShippingLastName);

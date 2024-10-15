@@ -54,7 +54,7 @@ public class PaymentRequestEmailNotificationTests : MoneyMoovUnitTestBase<Paymen
         {
             ID = Guid.NewGuid(),
             Currency = CurrencyTypeEnum.EUR,
-            PaymentMethodTypes = PaymentMethodTypeEnum.card | PaymentMethodTypeEnum.pisp,
+            PaymentMethods = new List<PaymentMethodTypeEnum> { PaymentMethodTypeEnum.card, PaymentMethodTypeEnum.pisp },
             CustomerEmailAddress = "jane.doe@nofrixion.com",
             Amount = 10001.99M,
             Title = "Super Title",
@@ -117,7 +117,7 @@ public class PaymentRequestEmailNotificationTests : MoneyMoovUnitTestBase<Paymen
         {
             ID = Guid.NewGuid(),
             Currency = CurrencyTypeEnum.EUR,
-            PaymentMethodTypes = PaymentMethodTypeEnum.card | PaymentMethodTypeEnum.pisp,
+            PaymentMethods = new List<PaymentMethodTypeEnum> { PaymentMethodTypeEnum.card, PaymentMethodTypeEnum.pisp },
             CustomerEmailAddress = "jane.doe@nofrixion.com",
             Amount = 10001.99M,
             Title = "Super Title",
