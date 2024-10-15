@@ -410,7 +410,9 @@ public static class PaymentRequestExtensions
                 PaymentMethod = PaymentMethodTypeEnum.directDebit,
                 Currency = createEvent.Currency,
                 AttemptedAmount = createEvent.Amount,
-                PaymentProcessor = createEvent.PaymentProcessorName
+                PaymentProcessor = createEvent.PaymentProcessorName,
+                AuthorisedAt = createEvent.Inserted,
+                AuthorisedAmount = createEvent.Amount
             };
             
             if (attempt.Any(x => 
@@ -418,9 +420,9 @@ public static class PaymentRequestExtensions
             {
                 var paidEvent = attempt.First(x => 
                     x.EventType is PaymentRequestEventTypesEnum.direct_debit_paid);
-
-                paymentAttempt.AuthorisedAt = paidEvent.Inserted;
-                paymentAttempt.AuthorisedAmount = paidEvent.Amount;
+                
+                paymentAttempt.SettledAt = paidEvent.Inserted;
+                paymentAttempt.SettledAmount = paidEvent.Amount;
             }
             else if (attempt.Any(x => 
                          x.EventType is PaymentRequestEventTypesEnum.direct_debit_failed))
