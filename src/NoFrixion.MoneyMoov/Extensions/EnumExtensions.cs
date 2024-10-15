@@ -27,10 +27,23 @@ public static class EnumExtensions
             throw new ArgumentException("The type parameter T must have the Flags attribute.", nameof(flags));
         }
 
-        return Enum.GetValues(typeof(T))
+        // Check if the enum underlying type is ulong
+        var underlyingType = Enum.GetUnderlyingType(typeof(T));
+
+        if (underlyingType == typeof(ulong))
+        {
+            return Enum.GetValues(typeof(T))
                    .Cast<T>()
-                   .Where(value => flags.HasFlag(value) && Convert.ToInt32(value) != 0) // Exclude None or 0
+                   .Where(value => flags.HasFlag(value) && Convert.ToUInt64(value) != 0) // Exclude None or 0
                    .ToList();
+        }
+        else
+        {
+            return Enum.GetValues(typeof(T))
+               .Cast<T>()
+               .Where(value => flags.HasFlag(value) && Convert.ToInt32(value) != 0) // Exclude None or 0
+               .ToList();
+        }
     }
 
     /// <summary>
@@ -43,13 +56,30 @@ public static class EnumExtensions
             throw new ArgumentException("The type parameter T must have the Flags attribute.", nameof(enumValues));
         }
 
-        int result = 0;
+        // Check if the enum underlying type is ulong
+        var underlyingType = Enum.GetUnderlyingType(typeof(T));
 
-        foreach (var value in enumValues)
+        if (underlyingType == typeof(ulong))
         {
-            result |= Convert.ToInt32(value);
-        }
+            ulong result = 0UL;
 
-        return (T)Enum.ToObject(typeof(T), result);
+            foreach (var value in enumValues)
+            {
+                result |= Convert.ToUInt64(value);
+            }
+
+            return (T)Enum.ToObject(typeof(T), result);
+        }
+        else
+        {
+            int result = 0;
+
+            foreach (var value in enumValues)
+            {
+                result |= Convert.ToInt32(value);
+            }
+
+            return (T)Enum.ToObject(typeof(T), result);
+        }
     }
 }
