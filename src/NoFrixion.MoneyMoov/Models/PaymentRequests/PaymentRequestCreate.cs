@@ -64,12 +64,27 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// should be supplied as a comma separated list, for example "card, pisp, lightning".
     /// </summary>
     [Obsolete("This field has been deprecated. Please use PaymentMethods instead.")]
-    public PaymentMethodTypeEnum PaymentMethodTypes { get; init; } = PaymentMethodTypeEnum.card;
+    public PaymentMethodTypeEnum PaymentMethodTypes {
+        get =>
+            PaymentMethods.Any() ? PaymentMethods.ToFlagEnum() : PaymentMethodTypeEnum.None;
+
+        init 
+        {
+            if(value == PaymentMethodTypeEnum.None)
+            {
+                PaymentMethods.Clear();
+            }
+            else
+            {
+                PaymentMethods = value.ToList();
+            }
+        }
+    }
 
     /// <summary>
     /// The payment methods that the payment request supports.
     /// </summary>
-    public List<PaymentMethodTypeEnum> PaymentMethods { get; set; } = new List<PaymentMethodTypeEnum>();
+    public List<PaymentMethodTypeEnum> PaymentMethods { get; set; } = new() { PaymentMethodTypeEnum.card };
 
     /// <summary>
     /// An optional description for the payment request. If set this field will appear

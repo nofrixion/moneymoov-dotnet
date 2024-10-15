@@ -60,8 +60,8 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     [Obsolete("This field has been deprecated. Please use PaymentMethods instead.")]
     public PaymentMethodTypeEnum PaymentMethodTypes 
     { 
-        get => 
-            PaymentMethods.Aggregate(PaymentMethodTypeEnum.None, (current, method) => current | method);
+        get =>
+           PaymentMethods.Any() ? PaymentMethods.ToFlagEnum() : PaymentMethodTypeEnum.None;
     }
 
     /// <summary>

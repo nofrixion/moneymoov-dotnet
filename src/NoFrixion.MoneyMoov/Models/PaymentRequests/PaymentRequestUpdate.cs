@@ -46,7 +46,31 @@ public class PaymentRequestUpdate
     /// should be supplied as a comma separated list, for example "card, pisp, lightning".
     /// </summary>
     [Obsolete("This field has been deprecated. Please use PaymentMethods instead.")]
-    public PaymentMethodTypeEnum? PaymentMethodTypes { get; set; }
+    public PaymentMethodTypeEnum? PaymentMethodTypes
+    {
+        get =>
+            PaymentMethods != null && PaymentMethods.Any() ? PaymentMethods.ToFlagEnum() : PaymentMethodTypeEnum.None;
+
+        init
+        {
+            if (value != null)
+            {
+                if (PaymentMethods == null)
+                {
+                    PaymentMethods = new();
+                }
+
+                if (value == PaymentMethodTypeEnum.None)
+                {
+                    PaymentMethods.Clear();
+                }
+                else
+                {
+                    PaymentMethods = value.Value.ToList();
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// The payment methods that the payment request supports.
