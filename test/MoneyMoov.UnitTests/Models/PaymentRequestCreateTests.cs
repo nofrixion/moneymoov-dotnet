@@ -161,7 +161,7 @@ public class PaymentRequestCreateTests
             Currency = CurrencyTypeEnum.EUR,
             CallbackUrl = "https://localhost/good",
             BaseOriginUrl = "https://localhost",
-            PaymentMethodTypes = PaymentMethodTypeEnum.card | PaymentMethodTypeEnum.lightning
+            PaymentMethods = new() { PaymentMethodTypeEnum.card, PaymentMethodTypeEnum.lightning }
         };
 
         var context = new ValidationContext(this, serviceProvider: null, items: null);
@@ -231,7 +231,7 @@ public class PaymentRequestCreateTests
             Amount = 0.99M,
             Currency = CurrencyTypeEnum.EUR,
             CallbackUrl = "https://localhost/callback",
-            PaymentMethodTypes = PaymentMethodTypeEnum.pisp
+            PaymentMethods = new() { PaymentMethodTypeEnum.pisp }
         };
 
         var validationProb = paymentRequest.Validate();
@@ -251,7 +251,7 @@ public class PaymentRequestCreateTests
             Amount = 1.00M,
             Currency = CurrencyTypeEnum.EUR,
             CallbackUrl = "https://localhost/callback",
-            PaymentMethodTypes = PaymentMethodTypeEnum.pisp
+            PaymentMethods = new() { PaymentMethodTypeEnum.pisp }
         };
 
         var validationProb = paymentRequest.Validate();
@@ -271,7 +271,7 @@ public class PaymentRequestCreateTests
             Amount = 1.99M,
             Currency = CurrencyTypeEnum.GBP,
             CallbackUrl = "https://localhost/callback",
-            PaymentMethodTypes = PaymentMethodTypeEnum.pisp
+            PaymentMethods = new() { PaymentMethodTypeEnum.pisp }
         };
 
         var validationProb = paymentRequest.Validate();
@@ -291,7 +291,7 @@ public class PaymentRequestCreateTests
             Amount = 2.00M,
             Currency = CurrencyTypeEnum.GBP,
             CallbackUrl = "https://localhost/callback",
-            PaymentMethodTypes = PaymentMethodTypeEnum.pisp
+            PaymentMethods = new() { PaymentMethodTypeEnum.pisp }
         };
 
         var validationProb = paymentRequest.Validate();
@@ -312,7 +312,7 @@ public class PaymentRequestCreateTests
             Currency = CurrencyTypeEnum.EUR,
             CallbackUrl = "https://localhost/callback",
             BaseOriginUrl = "https://localhost",
-            PaymentMethodTypes = PaymentMethodTypeEnum.card,
+            PaymentMethods = new() { PaymentMethodTypeEnum.card },
             CardCreateToken = true,
             CardCreateTokenMode = CardTokenCreateModes.ConsentNotRequired,
             CustomerEmailAddress = "qa@nofrixion.com"
@@ -336,7 +336,7 @@ public class PaymentRequestCreateTests
             Currency = CurrencyTypeEnum.GBP,
             CallbackUrl = "https://localhost/callback",
             BaseOriginUrl = "https://localhost",
-            PaymentMethodTypes = PaymentMethodTypeEnum.card,
+            PaymentMethods = new() { PaymentMethodTypeEnum.card },
             CardCreateToken = true
         };
 
@@ -359,7 +359,7 @@ public class PaymentRequestCreateTests
             Currency = CurrencyTypeEnum.EUR,
             CallbackUrl = "https://localhost/callback",
             BaseOriginUrl = "https://localhost",
-            PaymentMethodTypes = PaymentMethodTypeEnum.card,
+            PaymentMethods = new() { PaymentMethodTypeEnum.card },
             CardCreateToken = true,
             CustomerEmailAddress = "qa-nofrixion.com"
         };

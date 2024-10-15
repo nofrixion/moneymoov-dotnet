@@ -26,7 +26,10 @@ public interface IPaymentRequest
 
     public string? OrderID { get; set; }
 
-    public PaymentMethodTypeEnum PaymentMethodTypes { get; set; }
+    [Obsolete("This field has been deprecated. Please use PaymentMethods instead.")]
+    public PaymentMethodTypeEnum PaymentMethodTypes { get; }
+
+    public List<PaymentMethodTypeEnum> PaymentMethods { get; set; }
 
     public string? Description { get; set; }
 
