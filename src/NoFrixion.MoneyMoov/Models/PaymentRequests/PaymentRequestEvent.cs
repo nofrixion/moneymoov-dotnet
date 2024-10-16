@@ -17,7 +17,6 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -44,11 +43,11 @@ public class PaymentRequestEvent
     public string? ErrorMessage { get; set; }
 
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     public string? RawResponse { get; set; }
 
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     public string? RawResponseHash { get; set; }
 
     public string? CardRequestID { get; set; }
@@ -101,7 +100,7 @@ public class PaymentRequestEvent
     /// between submitting and finalising a payment initiation attempt.
     /// </summary>
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     public string? PispToken { get; set; }
 
     /// <summary>
@@ -139,7 +138,7 @@ public class PaymentRequestEvent
     /// of the tokenised card record that can be used with the pay with card token method.
     /// </summary>
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     public Guid? TokenisedCardID { get; set; }
 
     /// <summary>
@@ -163,6 +162,11 @@ public class PaymentRequestEvent
     /// Reference string issued by the Direct Debit supplier.
     /// </summary>
     public string? DirectDebitPaymentReference { get; set; }
+
+    /// <summary>
+    /// The ID of the mandate that was used wehn requesting payment.
+    /// </summary>
+    public Guid? DrirectDebitMandateID { get; set; }
 
     /// <summary>
     /// Gets the amount to display with the correct number of decimal places based on the currency type. 

@@ -119,7 +119,7 @@ public class Mandate
     /// used to do a balance check on the payer's account. We don't currenlty support the AIS workflow.
     /// </summary>
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     public decimal Amount { get; set; }
     
     /// <summary>
