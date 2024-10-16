@@ -10,7 +10,7 @@
 // 15 Oct 2024  Saurav Maiti   Created, Harcourt street, Dublin, Ireland.
 // 
 // License:
-// Proprietary NoFrixion.
+// MIT
 // -----------------------------------------------------------------------------
 
 namespace NoFrixion.MoneyMoov.Models;
