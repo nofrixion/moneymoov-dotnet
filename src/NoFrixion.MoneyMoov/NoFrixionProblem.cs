@@ -212,12 +212,12 @@ public class NoFrixionProblem
     /// unknown, on non-JSON, format.
     /// </summary>
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     [IgnoreDataMember]
     public string RawError { get; set; } = string.Empty;
 
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     [IgnoreDataMember]
     public bool IsEmpty => _isEmpty;
 
