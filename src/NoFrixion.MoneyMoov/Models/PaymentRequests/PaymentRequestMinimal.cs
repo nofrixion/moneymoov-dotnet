@@ -69,7 +69,17 @@ public class PaymentRequestMinimal
     /// The payment methods that the payment request supports. When setting using form data
     /// should be supplied as a comma separated list, for example "card, pisp, lightning, applePay".
     /// </summary>
-    public PaymentMethodTypeEnum PaymentMethods { get; set; }
+    [Obsolete("This field has been deprecated. Please use PaymentMethodsList instead.")]
+    public PaymentMethodTypeEnum PaymentMethods
+    {
+        get =>
+            PaymentMethodsList.Aggregate(PaymentMethodTypeEnum.None, (current, method) => current | method);
+    }
+
+    /// <summary>
+    /// The payment methods that the payment request supports.
+    /// </summary>
+    public List<PaymentMethodTypeEnum> PaymentMethodsList { get; set; } = new List<PaymentMethodTypeEnum>();
 
     /// <summary>
     /// This is the error returned from the bank which is recorded in payment request events.

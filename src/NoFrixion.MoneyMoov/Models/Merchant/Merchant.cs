@@ -101,12 +101,18 @@ public class Merchant
     /// For internal use only.
     /// </summary>
     public string? ModulrCustomerID { get; set; }
-    
+
     /// <summary>
     /// The payment methods that are configured and supported for this merchant.
     /// Returned as a comma-separated list of PaymentMethodTypeEnum values.
     /// </summary>
+    [Obsolete("Please usse SupportedPaymentMethodsList instead.")]
     public PaymentMethodTypeEnum SupportedPaymentMethods { get; set; }
+
+    /// <summary>
+    /// The payment methods that are configured and supported for this merchant.
+    /// </summary>
+    public List<PaymentMethodTypeEnum> SupportedPaymentMethodsList { get; set; } = new List<PaymentMethodTypeEnum>();
 
     /// <summary>
     /// The role of the identity that loaded the merchant record.

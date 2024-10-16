@@ -45,7 +45,37 @@ public class PaymentRequestUpdate
     /// The payment methods that the payment request supports. When setting using form data
     /// should be supplied as a comma separated list, for example "card, pisp, lightning".
     /// </summary>
-    public PaymentMethodTypeEnum? PaymentMethodTypes { get; set; }
+    [Obsolete("This field has been deprecated. Please use PaymentMethods instead.")]
+    public PaymentMethodTypeEnum? PaymentMethodTypes
+    {
+        get =>
+            PaymentMethods != null && PaymentMethods.Any() ? PaymentMethods.ToFlagEnum() : PaymentMethodTypeEnum.None;
+
+        init
+        {
+            if (value != null)
+            {
+                if (PaymentMethods == null)
+                {
+                    PaymentMethods = new();
+                }
+
+                if (value == PaymentMethodTypeEnum.None)
+                {
+                    PaymentMethods.Clear();
+                }
+                else
+                {
+                    PaymentMethods = value.Value.ToList();
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// The payment methods that the payment request supports.
+    /// </summary>
+    public List<PaymentMethodTypeEnum>? PaymentMethods { get; set; }
 
     /// <summary>
     /// An optional description for the payment request. If set this field will appear
@@ -248,7 +278,6 @@ public class PaymentRequestUpdate
         if (Currency != null) dict.Add(nameof(Currency), Currency.Value.ToString());
         if (CustomerID != null) dict.Add(nameof(CustomerID), CustomerID);
         if (OrderID != null) dict.Add(nameof(OrderID), OrderID);
-        if (PaymentMethodTypes != null) dict.Add(nameof(PaymentMethodTypes), PaymentMethodTypes.Value.ToString());
         if (Description != null) dict.Add(nameof(Description), Description);
         if (PispAccountID != null) dict.Add(nameof(PispAccountID), PispAccountID.GetValueOrDefault().ToString());
         if (ShippingFirstName != null) dict.Add(nameof(ShippingFirstName), ShippingFirstName);
@@ -273,6 +302,16 @@ public class PaymentRequestUpdate
         if (NotificationEmailAddresses != null) dict.Add(nameof(NotificationEmailAddresses), NotificationEmailAddresses ?? string.Empty);
         if (Title != null) dict.Add(nameof(Title), Title);
         if (PartialPaymentSteps != null) dict.Add(nameof(PartialPaymentSteps), PartialPaymentSteps);
+
+        if (PaymentMethods?.Count() > 0)
+        {
+            int paymentMethodNumber = 0;
+            foreach (var paymentMethod in PaymentMethods)
+            {
+                dict.Add($"{nameof(PaymentMethods)}[{paymentMethodNumber}]", paymentMethod.ToString());
+                paymentMethodNumber++;
+            }
+        }
 
         return dict;
     }
