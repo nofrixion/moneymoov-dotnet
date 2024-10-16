@@ -102,7 +102,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     
     [Obsolete("Please use Destination.")]
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     public Guid? DestinationAccountID
     {
         get => Destination?.AccountID;
@@ -115,7 +115,7 @@ public class Payout : IValidatableObject, IWebhookPayload
 
     [Obsolete("Please use Destination.")]
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     public string? DestinationIBAN
     {
         get => Destination?.Identifier?.IBAN;
@@ -129,7 +129,7 @@ public class Payout : IValidatableObject, IWebhookPayload
 
     [Obsolete("Please use Destination.")]
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     public string? DestinationAccountNumber
     {
         get => Destination?.Identifier?.AccountNumber;
@@ -143,7 +143,7 @@ public class Payout : IValidatableObject, IWebhookPayload
 
     [Obsolete("Please use Destination.")]
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     public string? DestinationSortCode
     {
         get => Destination?.Identifier?.SortCode;
@@ -157,7 +157,7 @@ public class Payout : IValidatableObject, IWebhookPayload
 
     [Obsolete("Please use Destination.")]
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     public string? DestinationAccountName
     {
         get => Destination?.Name;
@@ -265,7 +265,7 @@ public class Payout : IValidatableObject, IWebhookPayload
 
     [Obsolete("Please use Destination.")]
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     public Counterparty? DestinationAccount
     {
         get => Destination;

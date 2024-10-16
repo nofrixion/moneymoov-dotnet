@@ -124,10 +124,11 @@ public class MandateCreate
     public CurrencyTypeEnum Currency { get; set; }
 
     /// <summary>
-    /// Amount of the mandate.
+    /// This is an optional field that with mandates created via Account Information Services can be
+    /// used to do a balance check on the payer's account. We don't currenlty support the AIS workflow.
     /// </summary>
-    [Required(ErrorMessage = "Please, specify an amount.")]
-    [Range(0.00001, double.MaxValue, ErrorMessage = "Minimum value of 0.00001 is required for Amount")]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
     public decimal Amount { get; set; }
 
     /// <summary>

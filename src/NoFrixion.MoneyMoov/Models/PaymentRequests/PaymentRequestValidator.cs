@@ -30,10 +30,12 @@ public static class PaymentRequestValidator
         IPaymentRequest paymentRequest,
         ValidationContext validationContext)
     {
+#pragma warning disable CS0618 // Type or member is obsolete
         if (paymentRequest.PaymentMethodTypes == PaymentMethodTypeEnum.None)
         {
             yield return new ValidationResult($"At least one payment method type must be specified.", new string[] { nameof(paymentRequest.PaymentMethodTypes) });
         }
+
         if (paymentRequest.PaymentMethodTypes.HasFlag(PaymentMethodTypeEnum.pisp) &&
             paymentRequest.Currency == CurrencyTypeEnum.EUR &&
             !ValidateAmount(paymentRequest.Amount, paymentRequest.PaymentMethodTypes, paymentRequest.Currency))
@@ -66,6 +68,7 @@ public static class PaymentRequestValidator
             yield return new ValidationResult($"The amount can only be set to 0 when the payment methods are set to a single option of card.",
                 new string[] { nameof(paymentRequest.Amount) });
         }
+#pragma warning restore CS0618 // Type or member is obsolete
 
         if (!string.IsNullOrEmpty(paymentRequest.BaseOriginUrl))
         {

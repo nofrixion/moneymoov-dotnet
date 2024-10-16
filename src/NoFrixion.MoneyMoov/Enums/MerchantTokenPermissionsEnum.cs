@@ -34,80 +34,90 @@ public enum MerchantTokenPermissionsEnum
     /// <summary>
     /// Permission to edit a payment request
     /// </summary>
-    EditPaymentRequest = 2,
+    EditPaymentRequest = 1 << 1,
 
     /// <summary>
     /// Permission to delete a payment request
     /// </summary>
-    DeletePaymentRequest = 4,
+    DeletePaymentRequest = 1 << 2,
 
     /// <summary>
     /// Permission to create a rule
     /// </summary>
-    CreateRule = 8,
+    CreateRule = 1 << 3,
 
     /// <summary>
     /// Permission to edit a rule
     /// </summary>
-    EditRule = 16,
+    EditRule = 1 << 4,
 
     /// <summary>
     /// Permission to delete a rule
     /// </summary>
-    DeleteRule = 32,
+    DeleteRule = 1 << 5,
 
     /// <summary>
     /// Permission to create a payout
     /// </summary>
-    CreatePayout = 64,
+    CreatePayout = 1 << 6,
 
     /// <summary>
     /// Permission to edit a payout
     /// </summary>
-    EditPayout = 128,
+    EditPayout = 1 << 7,
 
     /// <summary>
     /// Permission to delete a payout
     /// </summary>
-    DeletePayout = 256,
+    DeletePayout = 1 << 8,
 
     /// <summary>
     /// Permission to create a report.
     /// </summary>
-    CreateReport = 512,
+    CreateReport = 1 << 9,
 
     /// <summary>
     /// Permission to edit, retrieve and initiate a report.
     /// </summary>
-    EditReport = 1024,
+    EditReport = 1 << 10,
 
     /// <summary>
     /// Permission to delete a report.
     /// </summary>
-    DeleteReport = 2048,
+    DeleteReport = 1 << 11,
 
     /// <summary>
     /// Permission to execute and get report results.
     /// </summary>
-    ExecuteReport = 4096,
+    ExecuteReport = 1 << 12,
 
     /// <summary>
     /// Permission to create a new payment account.
     /// </summary>
-    CreatePaymentAccount = 8192,
+    CreatePaymentAccount = 1 << 13,
 
     /// <summary>
     /// Permission to edit details on a payment account.
     /// </summary>
-    EditPaymentAccount = 16384,
+    EditPaymentAccount = 1 << 14,
 
     /// <summary>
     /// Permission to create and submit a payout from a trusted source.
     /// </summary>
-    TrustedSubmitPayout = 32768,
+    TrustedSubmitPayout = 1 << 15,
 
     /// <summary>
-    /// Permission to perfrom open banking account information actions.
+    /// Permission to perform open banking account information actions.
     /// </summary>
-    OpenBankingAccountInformation = 65536
+    OpenBankingAccountInformation = 1 << 16,
+
+    /// <summary>
+    /// Permission to create a direct debit mandate.
+    /// </summary>
+    CreateDirectDebitMandate = 1 << 17,
+
+    /// <summary>
+    /// Permission to submit a direct debit payment attempt.
+    /// </summary>
+    SubmitDirectDebitPayment = 1 << 18
 }

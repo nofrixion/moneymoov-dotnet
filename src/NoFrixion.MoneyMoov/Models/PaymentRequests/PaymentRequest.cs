@@ -57,7 +57,17 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// The payment methods that the payment request supports. When setting using form data
     /// should be supplied as a comma separated list, for example "card, pisp, lightning".
     /// </summary>
-    public PaymentMethodTypeEnum PaymentMethodTypes { get; set; } = PaymentMethodTypeEnum.card;
+    [Obsolete("This field has been deprecated. Please use PaymentMethods instead.")]
+    public PaymentMethodTypeEnum PaymentMethodTypes 
+    { 
+        get =>
+           PaymentMethods.Any() ? PaymentMethods.ToFlagEnum() : PaymentMethodTypeEnum.None;
+    }
+
+    /// <summary>
+    /// The payment methods that the payment request supports.
+    /// </summary>
+    public List<PaymentMethodTypeEnum> PaymentMethods { get; set; } = new List<PaymentMethodTypeEnum>();
 
     /// <summary>
     /// An optional description for the payment request. If set this field will appear
@@ -226,7 +236,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     public string? CardStripePaymentIntentSecret { get; set; }
 
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     public Merchant? Merchant { get; set; }
 
     public List<PaymentRequestAddress> Addresses { get; set; } = new List<PaymentRequestAddress>();
@@ -277,7 +287,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// </summary>
     /// <returns>The billing address or null if it's not set.</returns>
     [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonProperty]
+    [Newtonsoft.Json.JsonIgnore]
     public PaymentRequestAddress? BillingAddress =>
         Addresses?.Where(x => x.AddressType == AddressTypesEnum.Billing).FirstOrDefault();
 
