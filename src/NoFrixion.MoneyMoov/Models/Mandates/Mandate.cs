@@ -113,10 +113,13 @@ public class Mandate
     /// Currency of this mandate.
     /// </summary>
     public CurrencyTypeEnum Currency { get; set; }
-    
+
     /// <summary>
-    /// Amount of this mandate.
+    /// This is an optional field that with mandates created via Account Information Services can be
+    /// used to do a balance check on the payer's account. We don't currenlty support the AIS workflow.
     /// </summary>
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonProperty]
     public decimal Amount { get; set; }
     
     /// <summary>
