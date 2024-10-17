@@ -44,7 +44,7 @@ public class PaymentRequestEvent
 
     //[System.Text.Json.Serialization.JsonIgnore]
     //[Newtonsoft.Json.JsonIgnore]
-    [Obsolete("Please don't use, this filed will be removed imminently.")]
+    [Obsolete("Please don't use this field, it will be removed imminently.")]
     public string? RawResponse { get; set; }
 
     [System.Text.Json.Serialization.JsonIgnore]
