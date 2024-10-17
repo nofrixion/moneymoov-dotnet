@@ -42,8 +42,9 @@ public class PaymentRequestEvent
 
     public string? ErrorMessage { get; set; }
 
-    [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonIgnore]
+    //[System.Text.Json.Serialization.JsonIgnore]
+    //[Newtonsoft.Json.JsonIgnore]
+    [Obsolete("Please don't use, this filed will be removed imminently.")]
     public string? RawResponse { get; set; }
 
     [System.Text.Json.Serialization.JsonIgnore]
@@ -146,7 +147,7 @@ public class PaymentRequestEvent
     /// back to the URL that initiated the attempt in the case of a failure condition.
     /// </summary>
     public string? OriginUrl { get; set; }
-    
+
     /// <summary>
     /// For settlement events (only relevant for non-card payments) this is the payin transaction that
     /// the payment request event was reconciled with.
@@ -167,6 +168,36 @@ public class PaymentRequestEvent
     /// The ID of the mandate that was used wehn requesting payment.
     /// </summary>
     public Guid? DrirectDebitMandateID { get; set; }
+
+    /// <summary>
+    /// For card payment events this field holds the scheme of the payer's card, e.g. Visa, Mastercard, etc.
+    /// </summary>
+    public string? CardScheme { get; set; }
+
+    /// <summary>
+    /// For card payment events this field holds the payer's card expiry year.
+    /// </summary>
+    public int? CardExpiryYear { get; set; }
+
+    /// <summary>
+    /// For card payment events this field holds the payer's card expiry month.
+    /// </summary>
+    public int? CardExpiryMonth { get; set; }
+
+    /// <summary>
+    /// For card payment events this field holds the payer's card last four digits.
+    /// </summary>
+    public string? CardLastFourDigits { get; set; }
+
+    /// <summary>
+    /// For card payment events this field holds the payer's card issuer.
+    /// </summary>
+    public string? CardIssuer { get; set; }
+
+    /// <summary>
+    /// For card payment events this field holds the payer's card issuer country of origin.
+    /// </summary>
+    public string? CardIssuerCountry { get; set; }
 
     /// <summary>
     /// Gets the amount to display with the correct number of decimal places based on the currency type. 
