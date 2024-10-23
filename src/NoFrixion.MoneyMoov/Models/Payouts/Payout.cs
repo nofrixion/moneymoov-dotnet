@@ -389,6 +389,8 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// </summary>
     public PaymentRailEnum PaymentRail { get; set; }
 
+    public string? Nonce { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
@@ -436,10 +438,11 @@ public class Payout : IValidatableObject, IWebhookPayload
                 ID.ToString() +
                 AccountID.ToString() +
                 Currency +
-                Math.Round(Amount, 2).ToString() +
+                Math.Round(Amount, Currency.GetDecimalPlaces()).ToString() +
                 Destination.GetApprovalHash() +
                 Scheduled.GetValueOrDefault().ToString() +
-                ScheduleDate?.ToString("o");
+                ScheduleDate?.ToString("o") +
+                (string.IsNullOrEmpty(Nonce) ? string.Empty : Nonce);
 
             return HashHelper.CreateHash(input);
         }
