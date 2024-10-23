@@ -1,3 +1,18 @@
+//-----------------------------------------------------------------------------
+// Filename: PayrunConstants.cs
+// 
+// Description: Constants for Payrun.
+// 
+// Author(s):
+// Saurav Maiti (saurav@nofrixion.com)
+// 
+// History:
+// 23 Oct 2024  Saurav Maiti   Created, Harcourt St, Dublin, Ireland.
+// 
+// License:
+// MIT
+//-----------------------------------------------------------------------------
+
 namespace NoFrixion.MoneyMoov.Constants;
 
 public static class PayrunConstants
