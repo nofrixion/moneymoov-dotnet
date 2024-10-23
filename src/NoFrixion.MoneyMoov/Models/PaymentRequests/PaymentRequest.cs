@@ -301,7 +301,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// <summary>
     /// Gets the symbol for the payment request currency.
     /// </summary>
-    public string DisplayCurrencySymbol() => PaymentAmount.GetCurrencySymbol(Currency);
+    public string DisplayCurrencySymbol() => Currency.GetCurrencySymbol();
 
     /// <summary>
     /// Gets the amount to display with the correct number of decimal places based on the currency type. 
