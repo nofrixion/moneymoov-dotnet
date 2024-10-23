@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename: CryptoHelper.cs
+// Filename: NonceHelper.cs
 // 
-// Description: Common cryptographic functions.
+// Description: Helper functions for dealing with nonces.
 //
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)
@@ -17,7 +17,7 @@ using System.Security.Cryptography;
 
 namespace NoFrixion.MoneyMoov;
 
-public static class CryptoHelper
+public static class NonceHelper
 {
     public static string GenerateRandomNonce()
     {
