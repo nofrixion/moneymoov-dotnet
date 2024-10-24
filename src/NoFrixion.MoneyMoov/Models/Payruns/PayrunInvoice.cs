@@ -14,6 +14,8 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using NoFrixion.MoneyMoov.Attributes;
+using NoFrixion.MoneyMoov.Constants;
 using NoFrixion.MoneyMoov.Models.Invoices;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -63,8 +65,8 @@ public class PayrunInvoice : IValidatableObject
     public decimal? SubTotal { get; set; }
     
     public string? Status { get; set; }
-
-    [EmailAddress]
+    
+    [EmailAddressMultiple(ErrorMessage = PayrunConstants.REMMITANCE_EMAIL_ADDRESSES_ERROR_MESSAGE)]
     public string? RemittanceEmail { get; set; }
 
     public Guid? XeroInvoiceID { get; set; }
