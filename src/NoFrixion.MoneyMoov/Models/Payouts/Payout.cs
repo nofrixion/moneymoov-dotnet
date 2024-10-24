@@ -390,6 +390,12 @@ public class Payout : IValidatableObject, IWebhookPayload
     public PaymentRailEnum PaymentRail { get; set; }
 
     public string? Nonce { get; set; }
+    
+    /// <summary>
+    /// Collection of payrun invoices associated with the payout.
+    /// Will be empty if the payout is not associated with a payrun.
+    /// </summary>
+    public List<PayrunInvoice>? PayrunInvoices { get; set; }
 
     public NoFrixionProblem Validate()
     {
