@@ -8,6 +8,7 @@
 // 
 // History:
 // 26 Nov 2022  Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
+// 25 OCt 2024  Aaron Clauson   Added HMAC signature authentication overloads.
 //
 // License: 
 // MIT.
@@ -25,11 +26,15 @@ public interface IRestApiClient
 
     Task<RestApiResponse<T>> GetAsync<T>(string path, string accessToken);
 
+    Task<RestApiResponse<T>> GetAsync<T>(string path, Guid appID, string secret, Guid merchantID);
+
     Task<RestApiResponse<T>> PostAsync<T>(string path);
 
     Task<RestApiResponse> PostAsync(string path, HttpContent content);
 
     Task<RestApiResponse> PostAsync(string path, string accessToken);
+
+    Task<RestApiResponse> PostAsync(string path, Guid appID, string secret, Guid merchantID);
 
     Task<RestApiResponse<T>> PostAsync<T>(string path, HttpContent content);
 
@@ -38,21 +43,35 @@ public interface IRestApiClient
 
     Task<RestApiResponse> PostAsync(string path, string accessToken, HttpContent content);
 
+    Task<RestApiResponse> PostAsync(string path, Guid appID, string secret, Guid merchantID, HttpContent content);
+
     Task<RestApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content);
+
+    Task<RestApiResponse<T>> PostAsync<T>(string path, Guid appID, string secret, Guid merchantID, HttpContent content);
 
     Task<RestApiResponse> PutAsync(string path);
 
     Task<RestApiResponse> PutAsync(string path, string accessToken);
 
+    Task<RestApiResponse> PutAsync(string path, Guid appID, string secret, Guid merchantID);
+
     Task<RestApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content);
-    
+
+    Task<RestApiResponse<T>> PutAsync<T>(string path, Guid appID, string secret, Guid merchantID, HttpContent content);
+
     Task<RestApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content, string rowVersion);
+
+    Task<RestApiResponse<T>> PutAsync<T>(string path, Guid appID, string secret, Guid merchantID, HttpContent content, string rowVersion);
 
     Task<RestApiResponse> DeleteAsync(string path);
 
     Task<RestApiResponse> DeleteAsync(string path, string accessToken);
-    
+
+    Task<RestApiResponse> DeleteAsync(string path, Guid appID, string secret, Guid merchantID);
+
     Task<RestApiResponse> DeleteAsync(string path, string accessToken, string rowVersion);
+
+    Task<RestApiResponse> DeleteAsync(string path, Guid appID, string secret, Guid merchantID, string rowVersion);
 
     Uri GetBaseUri();
 
@@ -98,6 +117,9 @@ public class RestApiClient : IRestApiClient, IDisposable
     public Task<RestApiResponse<T>> GetAsync<T>(string path, string accessToken) 
         => ExecAsync<T>(BuildRequest(HttpMethod.Get, path, accessToken, Option<HttpContent>.None));
 
+    public Task<RestApiResponse<T>> GetAsync<T>(string path, Guid appID, string secret, Guid merchantID)
+        => ExecAsync<T>(BuildRequest(HttpMethod.Get, path, appID, secret,merchantID, Option<HttpContent>.None));
+
     public Task<RestApiResponse<T>> PostAsync<T>(string path)
         => ExecAsync<T>(BuildRequest(HttpMethod.Post, path, string.Empty, Option<HttpContent>.None));
 
@@ -114,11 +136,20 @@ public class RestApiClient : IRestApiClient, IDisposable
     public Task<RestApiResponse> PostAsync(string path, string accessToken, HttpContent content)
         => ExecAsync(BuildRequest(HttpMethod.Post, path, accessToken, content));
 
+    public Task<RestApiResponse> PostAsync(string path, Guid appID, string secret, Guid merchantID, HttpContent content)
+        => ExecAsync(BuildRequest(HttpMethod.Post, path, appID, secret, merchantID, content));
+
     public Task<RestApiResponse> PostAsync(string path, string accessToken)
         => ExecAsync(BuildRequest(HttpMethod.Post, path, accessToken, Option<HttpContent>.None));
 
+    public Task<RestApiResponse> PostAsync(string path, Guid appID, string secret, Guid merchantID)
+        => ExecAsync(BuildRequest(HttpMethod.Post, path, appID, secret, merchantID, Option<HttpContent>.None));
+
     public Task<RestApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content) 
         => ExecAsync<T>(BuildRequest(HttpMethod.Post, path, accessToken, content));
+
+    public Task<RestApiResponse<T>> PostAsync<T>(string path, Guid appID, string secret, Guid merchantID, HttpContent content)
+        => ExecAsync<T>(BuildRequest(HttpMethod.Post, path, appID, secret, merchantID, content));
 
     public Task<RestApiResponse> PutAsync(string path)
         => ExecAsync(BuildRequest(HttpMethod.Put, path, string.Empty, Option<HttpContent>.None));
@@ -126,20 +157,35 @@ public class RestApiClient : IRestApiClient, IDisposable
     public Task<RestApiResponse> PutAsync(string path, string accessToken)
         => ExecAsync(BuildRequest(HttpMethod.Put, path, accessToken, Option<HttpContent>.None));
 
+    public Task<RestApiResponse> PutAsync(string path, Guid appID, string secret, Guid merchantID)
+        => ExecAsync(BuildRequest(HttpMethod.Put, path, appID, secret, merchantID, Option<HttpContent>.None));
+
     public Task<RestApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content)
         => ExecAsync<T>(BuildRequest(HttpMethod.Put, path, accessToken, content));
-    
+
+    public Task<RestApiResponse<T>> PutAsync<T>(string path, Guid appID, string secret, Guid merchantID, HttpContent content)
+        => ExecAsync<T>(BuildRequest(HttpMethod.Put, path, appID, secret, merchantID, content));
+
     public Task<RestApiResponse<T>> PutAsync<T>(string path, string accessToken, HttpContent content, string rowVersion)
         => ExecAsync<T>(BuildRequest(HttpMethod.Put, path, accessToken, content, rowVersion));
+
+    public Task<RestApiResponse<T>> PutAsync<T>(string path, Guid appID, string secret, Guid merchantID, HttpContent content, string rowVersion)
+        => ExecAsync<T>(BuildRequest(HttpMethod.Put, path, appID, secret, merchantID, content, rowVersion));
 
     public Task<RestApiResponse> DeleteAsync(string path)
         => ExecAsync(BuildRequest(HttpMethod.Delete, path, string.Empty, Option<HttpContent>.None));
 
     public Task<RestApiResponse> DeleteAsync(string path, string accessToken)
         => ExecAsync(BuildRequest(HttpMethod.Delete, path, accessToken, Option<HttpContent>.None));
-    
+
+    public Task<RestApiResponse> DeleteAsync(string path, Guid appID, string secret, Guid merchantID)
+        => ExecAsync(BuildRequest(HttpMethod.Delete, path, appID, secret, merchantID, Option<HttpContent>.None));
+
     public Task<RestApiResponse> DeleteAsync(string path, string accessToken, string rowVersion)
         => ExecAsync(BuildRequest(HttpMethod.Delete, path, accessToken, Option<HttpContent>.None, rowVersion));
+
+    public Task<RestApiResponse> DeleteAsync(string path, Guid appID, string secret, Guid merchantID, string rowVersion)
+        => ExecAsync(BuildRequest(HttpMethod.Delete, path, appID, secret, merchantID, Option<HttpContent>.None, rowVersion));
 
     public NoFrixionProblem CheckAccessToken(string accessToken, string callerName)
     {
@@ -151,6 +197,52 @@ public class RestApiClient : IRestApiClient, IDisposable
         {
             return NoFrixionProblem.Empty;
         }
+    }
+
+    /// <summary>
+    /// Builds a request that will use a HMAC signature for authetnication.
+    /// </summary>
+    /// <param name="method">The HTTP method for teh request.</param>
+    /// <param name="path">The URL the request will be sent to.</param>
+    /// <param name="appID">The application ID for the HMAC signature.</param>
+    /// <param name="secret">The secret for the HMAC signature.</param>
+    /// <param name="merchantID">The merchant ID for the HMAC signature.</param>
+    /// <param name="httpContent">Optional HTTP content to include with the request.</param>
+    /// <param name="rowVersion">Optional row version header to include with the request.</param>
+    /// <param name="headers">Optional list of HTTP headers to set on the request.</param>
+    /// <param name="acceptHeader">Optional HTTP accept header to set on the request.</param>
+    /// <returns>A HTTP request message object ready to send to an HTTP server.</returns>
+    private HttpRequestMessage BuildRequest(
+        HttpMethod method,
+        string path,
+        Guid appID,
+        string secret,
+        Guid merchantID,
+        Option<HttpContent> httpContent,
+        string? rowVersion = null,
+        Dictionary<string, string>? headers = null,
+        MediaTypeWithQualityHeaderValue? acceptHeader = null)
+    {
+        var signatureHeaders = HmacSignatureAuthHelper.GetAppHeaders(
+            appID.ToString(), 
+            Guid.NewGuid().ToString(), 
+            secret, 
+            DateTime.UtcNow, 
+            merchantID);
+
+        if(headers == null)
+        {
+            headers = signatureHeaders;
+        }
+        else
+        {
+            foreach (var header in signatureHeaders)
+            {
+                headers.Add(header.Key, header.Value);
+            }
+        }
+
+        return BuildRequest(method, path, string.Empty, httpContent, rowVersion, headers, acceptHeader);
     }
 
     private HttpRequestMessage BuildRequest(
