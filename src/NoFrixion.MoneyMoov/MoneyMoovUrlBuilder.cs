@@ -219,6 +219,9 @@ public static class MoneyMoovUrlBuilder
         
         public static string RejectPayoutUrl(string moneyMoovBaseUrl, Guid payoutID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/reject/{payoutID}";
+
+        public static string SendPayoutUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/send";
     }
 
     /// <summary>
