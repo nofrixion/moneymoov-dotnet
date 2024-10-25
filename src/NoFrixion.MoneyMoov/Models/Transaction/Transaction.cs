@@ -115,4 +115,9 @@ public class Transaction : IWebhookPayload
     /// If set it indicates the  payin was to a virtual IBAN.
     /// </summary>
     public string VirtualIBAN { get; set; }
+
+    /// <summary>
+    /// An optional list of descriptive tags attached to the transaction.
+    /// </summary>
+    public List<Tag> Tags { get; set; } = [];
 }
