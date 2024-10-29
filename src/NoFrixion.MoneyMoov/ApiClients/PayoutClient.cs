@@ -9,6 +9,7 @@
 // History:
 // 05 Feb 2023  Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
 // 19 Apr 2023  Aaron Clauson   Added batch payout methods.
+// 25 Oct 2024  Aaron Clauson   Added send payout method with HMAC signature authentication.
 //
 // License: 
 // MIT.
@@ -18,7 +19,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NoFrixion.MoneyMoov.Models;
 using System.Net;
-using System.Net.Http.Json;
 
 namespace NoFrixion.MoneyMoov;
 
@@ -41,6 +41,8 @@ public interface IPayoutClient
     Task<RestApiResponse> SubmitBatchPayoutAsync(string strongUserAccessToken, Guid batchPayoutID);
 
     Task<RestApiResponse> DeletePayoutAsync(string accessToken, Guid payoutID);
+
+    Task<RestApiResponse<Payout>> SendPayoutAsync(Guid appID, string secret, Guid merchantID, PayoutCreate payoutCreate);
 }
 
 public class PayoutClient : IPayoutClient
@@ -229,7 +231,7 @@ public class PayoutClient : IPayoutClient
     /// </summary>
     /// <param name="accessToken">The user, or merchant, access token deleting the payout.</param>
     /// <param name="payoutID"></param>
-    /// <returns></returns>
+    /// <returns>An API response indicating the result of the delete attempt.</returns>
     public Task<RestApiResponse> DeletePayoutAsync(string accessToken, Guid payoutID)
     {
         var url = MoneyMoovUrlBuilder.PayoutsApi.PayoutUrl(_apiClient.GetBaseUri().ToString(), payoutID);
@@ -241,5 +243,21 @@ public class PayoutClient : IPayoutClient
             var p when p.IsEmpty => _apiClient.DeleteAsync(url, accessToken),
             _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
+    }
+
+    /// <summary>
+    /// Calls the Trusted Third Party (TTP) MoneyMoov Payout endpoint to send a payout WITHOUT requiring NoFrixion Strong
+    /// Customer Authentication (SCA). This method relies on the caller to use ther own form of SCA.
+    /// </summary>
+    /// <param name="appID">The TTP application ID.</param>
+    /// <param name="secret">The TTP secret.</param>
+    /// <param name="merchantID">The merchant ID the send payout is being attempted for.</param>
+    /// <param name="payoutCreate">The payout create object with details of the payout to send.</param>
+    /// <returns>An API response indicating the result of the send attempt.</returns>
+    public Task<RestApiResponse<Payout>> SendPayoutAsync(Guid appID, string secret, Guid merchantID, PayoutCreate payoutCreate)
+    {
+        var url = MoneyMoovUrlBuilder.PayoutsApi.SendPayoutUrl(_apiClient.GetBaseUri().ToString());
+
+        return _apiClient.PostAsync<Payout>(url, appID, secret, merchantID, payoutCreate.ToJsonContent());
     }
 }
