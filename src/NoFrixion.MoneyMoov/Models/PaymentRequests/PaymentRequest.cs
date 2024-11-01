@@ -413,6 +413,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
                     PaymentMethodTypeEnum.card => pa.CardAuthorisedAmount,
                     PaymentMethodTypeEnum.pisp => pa.SettledAmount,
                     PaymentMethodTypeEnum.lightning => pa.SettledAmount,
+                    PaymentMethodTypeEnum.directDebit => pa.SettledAmount,
                     _ => 0
                 });
     }
