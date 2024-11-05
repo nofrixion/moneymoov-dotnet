@@ -43,10 +43,4 @@ public class IdentityConfigKeys
     /// The IdentityServer Audience for calls to APIs that require Strong Customer Authentication (SCA).
     /// </summary>
     public const string IDENTITY_SERVER_AUDIENCE_STRONG = "NoFrixionIdentity:AudienceStrong";
-
-    /// <summary>
-    /// The IdentityServer Audience for issuing tokens suitable for use in autonomous applications (machine-only apps,
-    /// e,g, cron jobs).
-    /// </summary>
-    public const string IDENTITY_SERVER_AUDIENCE_MACHINE = "NoFrixionIdentity:AudienceMachine";
 }
