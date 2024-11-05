@@ -56,60 +56,61 @@ public enum MerchantPermissions : ulong
     // Accounts
     CanCreateAccounts = 1,
     CanArchiveAccounts = 1L << 1,
+    CanConnectAccounts = 1L << 2,
     
     // Beneficiaries
-    CanViewBeneficiaries = 1L << 2,
-    CanDeleteBeneficiaries = 1L << 3,
-    CanEditBeneficiaries = 1L << 4,
-    CanCreateBeneficiaries = 1L << 5,
-    CanAuthoriseBeneficiaries = 1L << 6,
+    CanViewBeneficiaries = 1L << 3,
+    CanDeleteBeneficiaries = 1L << 4,
+    CanEditBeneficiaries = 1L << 5,
+    CanCreateBeneficiaries = 1L << 6,
+    CanAuthoriseBeneficiaries = 1L << 7,
     
     // Tokens
-    CanViewTokens = 1L << 7,
-    CanCreateTokens = 1L << 8,
-    CanDeleteTokens = 1L << 9,
+    CanViewTokens = 1L << 8,
+    CanCreateTokens = 1L << 9,
+    CanDeleteTokens = 1L << 10,
     
     // Pay runs
-    CanCreatePayruns = 1L << 10,
-    CanViewPayruns = 1L << 11,
-    CanEditPayruns = 1L << 12,
-    CanApprovePayruns = 1L << 13,
-    CanDeletePayruns = 1L << 14,
+    CanCreatePayruns = 1L << 11,
+    CanViewPayruns = 1L << 12,
+    CanEditPayruns = 1L << 13,
+    CanApprovePayruns = 1L << 14,
+    CanDeletePayruns = 1L << 15,
     
     // User roles
-    CanViewUserRoles = 1L << 15,
-    CanDeleteUserRoles = 1L << 16,
-    CanAssignUserRoles = 1L << 17,
+    CanViewUserRoles = 1L << 16,
+    CanDeleteUserRoles = 1L << 17,
+    CanAssignUserRoles = 1L << 18,
     
     // Users
-    CanViewUsers = 1L << 18,
+    CanViewUsers = 1L << 19,
     
     // Webhooks
-    CanViewWebhooks = 1L << 19,
-    CanCreateWebhooks = 1L << 20,
-    CanDeleteWebhooks = 1L << 21,
+    CanViewWebhooks = 1L << 20,
+    CanCreateWebhooks = 1L << 21,
+    CanDeleteWebhooks = 1L << 22,
     
     // Merchants
-    CanViewMerchant = 1L << 22,
-    CanUpdateMerchant = 1L << 23,
+    CanViewMerchant = 1L << 23,
+    CanUpdateMerchant = 1L << 24,
     
     // Payment requests
-    CanCreatePaymentRequests = 1L << 24,
-    CanViewPaymentRequests = 1L << 25,
-    CanUpdatePaymentRequests = 1L << 26,
+    CanCreatePaymentRequests = 1L << 25,
+    CanViewPaymentRequests = 1L << 26,
+    CanUpdatePaymentRequests = 1L << 27,
     
     // Mandates
-    CanViewMandates = 1L << 27,
-    CanCreateMandates = 1L << 28,
+    CanViewMandates = 1L << 28,
+    CanCreateMandates = 1L << 29,
     
     // Permissions
-    CanViewRoles = 1L << 29,
-    CanCreateRoles = 1L << 30, 
-    CanEditRoles = 1L << 31,  
+    CanViewRoles = 1L << 30,
+    CanCreateRoles = 1L << 31, 
+    CanEditRoles = 1L << 32,  
     
     // Reports
-    CanCreateReports = 1L << 32,
-    CanViewReports = 1L << 33,
+    CanCreateReports = 1L << 33,
+    CanViewReports = 1L << 34,
 }
 
 public static class ClaimTypePrefixes
