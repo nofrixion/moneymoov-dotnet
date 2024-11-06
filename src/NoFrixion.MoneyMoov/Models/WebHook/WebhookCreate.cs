@@ -47,6 +47,11 @@ public class WebhookCreate : IValidatableObject
         {
             yield return new ValidationResult($"The Secret string was too long. The Secret maximum length is {SECRET_MAX_LENGTH} characters.");
         }
+
+        if (Type == WebhookResourceTypesEnum.None)
+        {
+            yield return new ValidationResult("Can not create webhook with type none.");
+        }
     }
 
     public Dictionary<string, string> ToDictionary()
