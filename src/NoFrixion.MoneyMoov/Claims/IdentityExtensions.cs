@@ -60,7 +60,14 @@ public static class IdentityExtensions
 
         return bool.TryParse(verifiedClaim, out var verifiedByApiKey) && verifiedByApiKey;
     }
-    
+
+    public static bool IsVerfiedMerchantToken(this IIdentity identity)
+    {
+        var verifiedClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.verified_merchant_token)?.Value;
+
+        return bool.TryParse(verifiedClaim, out var verifiedMerchantToken) && verifiedMerchantToken;
+    }
+
     public static bool MerchantIdExists(this IIdentity identity)
     {
         return identity != null && ((ClaimsIdentity)identity).Claims.Any(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.merchantid);
@@ -68,7 +75,14 @@ public static class IdentityExtensions
 
     public static string GetTokenId(this IIdentity identity)
     {
-        return ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == NoFrixionClaimsEnum.tokenid.ToString())?.Value;
+        var claimsIdentity = identity as ClaimsIdentity;
+        if(claimsIdentity == null)
+        {
+            return null;
+        }
+
+        return claimsIdentity.FindFirst(x => x.Type == NoFrixionClaimsEnum.tokenid.ToString())?.Value ??
+            claimsIdentity?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.tokenid.ToString())?.Value;
     }
 
     public static bool HasAudience(this IIdentity identity, params string[] audiences)

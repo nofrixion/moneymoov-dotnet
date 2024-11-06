@@ -99,4 +99,9 @@ public enum NoFrixionClaimsEnum
     use_standard_user_roles,
     
     use_permissions,
+
+    /// <summary>
+    /// The token was successfully authenticated by the merchant token middleware.
+    /// </summary>
+    verified_merchant_token
 }

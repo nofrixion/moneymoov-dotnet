@@ -21,32 +21,26 @@ public class IdentityConfigKeys
     /// <summary>
     /// NoFrixion Identity domain
     /// </summary>
-    public const string NOFRIXION_IDENTITY_DOMAIN = "NoFrixion:NoFrixionIdentityDomain";
+    public const string NOFRIXION_IDENTITY_DOMAIN = "NoFrixionIdentity:Domain";
 
     /// <summary>
     /// The NoFrixion Identity Client ID.
     /// </summary>
-    public const string NOFRIXION_IDENTITY_CLIENTID = "NoFrixion:ClientId";
+    public const string NOFRIXION_IDENTITY_CLIENTID = "NoFrixionIdentity:ClientId";
 
     /// <summary>
     /// The NoFrixion Identity Client Secret.
     /// </summary>
-    public const string NOFRIXION_IDENTITY_CLIENTSECRET = "NoFrixion:ClientSecret";
+    public const string NOFRIXION_IDENTITY_CLIENTSECRET = "NoFrixionIdentity:ClientSecret";
 
     /// <summary>
     /// The IdentityServer Audience, which identifies the NoFrixion API that users will be calling,
     /// to grant authorised user access to.
     /// </summary>
-    public const string IDENTITY_SERVER_AUDIENCE = "Auth0:Audience";
+    public const string IDENTITY_SERVER_AUDIENCE = "NoFrixionIdentity:Audience";
     
     /// <summary>
     /// The IdentityServer Audience for calls to APIs that require Strong Customer Authentication (SCA).
     /// </summary>
-    public const string IDENTITY_SERVER_AUDIENCE_STRONG = "Auth0:AudienceStrong";
-
-    /// <summary>
-    /// The IdentityServer Audience for issuing tokens suitable for use in autonomous applications (machine-only apps,
-    /// e,g, cron jobs).
-    /// </summary>
-    public const string IDENTITY_SERVER_AUDIENCE_MACHINE = "Auth0:AudienceMachine";
+    public const string IDENTITY_SERVER_AUDIENCE_STRONG = "NoFrixionIdentity:AudienceStrong";
 }
