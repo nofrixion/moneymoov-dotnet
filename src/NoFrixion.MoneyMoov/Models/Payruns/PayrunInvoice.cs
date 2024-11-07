@@ -22,7 +22,8 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class PayrunInvoice : IValidatableObject
 {
-    const int PAYRUN_INVOICE_PAYMENT_REFERENCE_MAX_LENGTH = 18;
+    public const int PAYRUN_INVOICE_PAYMENT_REFERENCE_MAX_LENGTH = 18;
+    
     public Guid ID { get; set; }
     
     public Guid PayRunID { get; set; }
