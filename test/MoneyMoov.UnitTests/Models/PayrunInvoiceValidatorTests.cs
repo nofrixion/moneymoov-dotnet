@@ -46,7 +46,7 @@ public class PayrunInvoiceValidatorTests
     {
         var payrunInvoice = new PayrunInvoice
         { 
-            Reference = "ref-1", 
+            InvoiceReference = "ref-1", 
             DestinationAccountName = accountName, 
             Currency = CurrencyTypeEnum.EUR, 
             TotalAmount = 11.00M,
@@ -83,7 +83,7 @@ public class PayrunInvoiceValidatorTests
     {
         var payrunInvoice = new PayrunInvoice
         {
-            Reference = "ref-1",
+            InvoiceReference = "ref-1",
             DestinationAccountName = accountName,
             Currency = CurrencyTypeEnum.EUR,
             TotalAmount = 11.00M,
@@ -105,7 +105,7 @@ public class PayrunInvoiceValidatorTests
     {
         var payrunInvoice = new PayrunInvoice
         {
-            Reference = "ref-1",
+            InvoiceReference = "ref-1",
             DestinationAccountName = "Some Biz",
             DestinationIban = "IE83MOCK91012396989925",
             Currency = CurrencyTypeEnum.EUR,
@@ -125,7 +125,7 @@ public class PayrunInvoiceValidatorTests
     {
         var payrunInvoice = new PayrunInvoice
         {
-            Reference = "ref-1",
+            InvoiceReference = "ref-1",
             DestinationAccountName = "Some Biz",
             DestinationIban = "IE36ULSB98501017331006",
             Currency = CurrencyTypeEnum.EUR,
@@ -148,7 +148,7 @@ public class PayrunInvoiceValidatorTests
     {
         var payrunInvoice = new PayrunInvoice
         {
-            Reference = "ref-1",
+            InvoiceReference = "ref-1",
             DestinationAccountName = "Some Biz",
             DestinationSortCode = "123456",
             DestinationAccountNumber = "12345678",
@@ -169,7 +169,7 @@ public class PayrunInvoiceValidatorTests
     {
         var payrunInvoice = new PayrunInvoice
         {
-            Reference = "ref-1",
+            InvoiceReference = "ref-1",
             DestinationAccountName = "Some Biz",
             Currency = CurrencyTypeEnum.EUR,
             TotalAmount = 11.00M
@@ -190,7 +190,7 @@ public class PayrunInvoiceValidatorTests
     {
         var payrunInvoice = new PayrunInvoice
         {
-            Reference = "ref-1",
+            InvoiceReference = "ref-1",
             DestinationAccountName = "Some Biz",
             Currency = CurrencyTypeEnum.GBP,
             TotalAmount = 11.00M
