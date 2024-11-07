@@ -30,7 +30,7 @@ public class PayrunInvoice : IValidatableObject
     
     public string? Name { get; set; }
     
-    [Obsolete("Please use Reference instead.")]
+    [Obsolete("Please use InvoiceReference instead.")]
     public string? InvoiceNumber { get; set; }
     
     [Obsolete("Please use InvoiceReference instead.")]
@@ -96,8 +96,15 @@ public class PayrunInvoice : IValidatableObject
     public string? PaymentReference { get; set; }
 
     public NoFrixionProblem Validate()
-        => this.ToPayout().Validate();
+    {
+        var results = new List<ValidationResult>();
+        var contextInvoice = new ValidationContext(this, serviceProvider: null, items: null);
+        var isValid = Validator.TryValidateObject(this, contextInvoice, results, true);
+        
+        return isValid ? NoFrixionProblem.Empty : new NoFrixionProblem("The PayrunInvoice model has one or more validation errors.", results);
+    }
 
+    
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         => this.ToPayout().Validate(validationContext);
 }
