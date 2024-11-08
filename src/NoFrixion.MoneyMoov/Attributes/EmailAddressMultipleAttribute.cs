@@ -38,7 +38,7 @@ public class EmailAddressMultipleAttribute : DataTypeAttribute
 
         if (string.IsNullOrWhiteSpace(emailAddresses))
         {
-            return false;
+            return true;
         }
 
         var emails = emailAddresses.Split(new[] { ';', ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);

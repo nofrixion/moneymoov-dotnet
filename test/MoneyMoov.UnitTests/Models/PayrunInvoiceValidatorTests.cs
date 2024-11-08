@@ -46,7 +46,7 @@ public class PayrunInvoiceValidatorTests
     {
         var payrunInvoice = new PayrunInvoice
         { 
-            Reference = "ref-1", 
+            InvoiceReference = "ref-1", 
             DestinationAccountName = accountName, 
             Currency = CurrencyTypeEnum.EUR, 
             TotalAmount = 11.00M,
@@ -83,7 +83,7 @@ public class PayrunInvoiceValidatorTests
     {
         var payrunInvoice = new PayrunInvoice
         {
-            Reference = "ref-1",
+            InvoiceReference = "ref-1",
             DestinationAccountName = accountName,
             Currency = CurrencyTypeEnum.EUR,
             TotalAmount = 11.00M,
@@ -105,7 +105,7 @@ public class PayrunInvoiceValidatorTests
     {
         var payrunInvoice = new PayrunInvoice
         {
-            Reference = "ref-1",
+            InvoiceReference = "ref-1",
             DestinationAccountName = "Some Biz",
             DestinationIban = "IE83MOCK91012396989925",
             Currency = CurrencyTypeEnum.EUR,
@@ -125,7 +125,7 @@ public class PayrunInvoiceValidatorTests
     {
         var payrunInvoice = new PayrunInvoice
         {
-            Reference = "ref-1",
+            InvoiceReference = "ref-1",
             DestinationAccountName = "Some Biz",
             DestinationIban = "IE36ULSB98501017331006",
             Currency = CurrencyTypeEnum.EUR,
@@ -148,7 +148,7 @@ public class PayrunInvoiceValidatorTests
     {
         var payrunInvoice = new PayrunInvoice
         {
-            Reference = "ref-1",
+            InvoiceReference = "ref-1",
             DestinationAccountName = "Some Biz",
             DestinationSortCode = "123456",
             DestinationAccountNumber = "12345678",
@@ -169,7 +169,7 @@ public class PayrunInvoiceValidatorTests
     {
         var payrunInvoice = new PayrunInvoice
         {
-            Reference = "ref-1",
+            InvoiceReference = "ref-1",
             DestinationAccountName = "Some Biz",
             Currency = CurrencyTypeEnum.EUR,
             TotalAmount = 11.00M
@@ -190,7 +190,7 @@ public class PayrunInvoiceValidatorTests
     {
         var payrunInvoice = new PayrunInvoice
         {
-            Reference = "ref-1",
+            InvoiceReference = "ref-1",
             DestinationAccountName = "Some Biz",
             Currency = CurrencyTypeEnum.GBP,
             TotalAmount = 11.00M
@@ -201,5 +201,62 @@ public class PayrunInvoiceValidatorTests
         _logger.LogDebug(result.ToJsonFormatted());
 
         Assert.False(result.IsEmpty);
+    }
+    
+    [Fact]
+    public void Invoice_With_PaymentReference_MaxLength_Validates_Success()
+    {
+        var payrunInvoice = new PayrunInvoice
+        {
+            InvoiceReference = "ref-1",
+            DestinationAccountName = "Some Biz",
+            Currency = CurrencyTypeEnum.EUR,
+            TotalAmount = 11.00M,
+            PaymentReference = "12345678901234567890" // More than 18 characters.
+        };
+
+        var result = payrunInvoice.Validate();
+        
+        _logger.LogDebug(result.ToJsonFormatted());
+
+        Assert.False(result.IsEmpty);
+    }
+    
+    [Fact]
+    public void Invoice_With_Empty_InvoiceReference_Returns_Error()
+    {
+        var payrunInvoice = new PayrunInvoice
+        {
+            InvoiceReference = "",
+            DestinationAccountName = "Some Biz",
+            Currency = CurrencyTypeEnum.EUR,
+            DestinationIban = "IE83MOCK91012396989925",
+            TotalAmount = 11.00M
+        };
+
+        var result = payrunInvoice.Validate();
+        
+        _logger.LogDebug(result.ToJsonFormatted());
+
+        Assert.False(result.IsEmpty);
+    }
+    
+    [Fact]
+    public void Invoice_With_Obsolete_Reference_Field_Set_Success()
+    {
+        var payrunInvoice = new PayrunInvoice
+        {
+#pragma warning disable CS0618 // Type or member is obsolete
+            Reference = "ref-1",
+#pragma warning restore CS0618 // Type or member is obsolete
+            DestinationAccountName = "Some Biz",
+            Currency = CurrencyTypeEnum.EUR,
+            DestinationIban = "IE83MOCK91012396989925",
+            TotalAmount = 11.00M
+        };
+
+        var result = payrunInvoice.Validate();
+
+        Assert.True(result.IsEmpty);
     }
 }

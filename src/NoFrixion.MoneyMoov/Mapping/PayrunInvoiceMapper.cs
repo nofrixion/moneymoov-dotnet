@@ -36,12 +36,14 @@ public static class PayrunInvoiceMapper
             Currency = invoice.Currency,
             Type = invoice.Currency == CurrencyTypeEnum.GBP ? AccountIdentifierType.SCAN : AccountIdentifierType.IBAN,
             Amount = invoice.TotalAmount,
-            TheirReference = SAFE_THEIR_REFERENCE,
+            TheirReference = !string.IsNullOrWhiteSpace(invoice.PaymentReference)
+                ? invoice.PaymentReference
+                : SAFE_THEIR_REFERENCE,
             Destination = new Counterparty
             {
                 Name = invoice.DestinationAccountName,
-                Identifier = new AccountIdentifier 
-                { 
+                Identifier = new AccountIdentifier
+                {
                     Currency = invoice.Currency,
                     IBAN = invoice.DestinationIban,
                     SortCode = invoice.DestinationSortCode,
