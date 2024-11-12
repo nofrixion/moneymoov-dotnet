@@ -82,4 +82,32 @@ public static class EnumExtensions
             return (T)Enum.ToObject(typeof(T), result);
         }
     }
+
+    /// <summary>
+    /// This method converts an Enum with the Flags attribute to a list of string
+    /// </summary>
+    public static List<string> ToStringList<T>(this T? flags) where T : struct,Enum
+    {
+        if (!typeof(T).IsDefined(typeof(FlagsAttribute), false))
+        {
+            throw new ArgumentException("The type parameter T must have the Flags attribute.", nameof(flags));
+        }
+
+        var selectedFlags = new List<string>();
+
+        if (flags == null)
+        {
+            return selectedFlags; 
+        }
+
+        foreach (Enum value in Enum.GetValues(typeof(T)))
+        {
+            if (flags.Value.HasFlag(value) && Convert.ToInt32(value) != 0)
+            {
+                selectedFlags.Add(value.ToString());
+            }
+        }
+
+        return selectedFlags;
+    }
 }

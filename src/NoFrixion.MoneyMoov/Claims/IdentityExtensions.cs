@@ -19,6 +19,7 @@
 using System.Security.Claims;
 using System.Security.Principal;
 using NoFrixion.Common.Permissions;
+using NoFrixion.MoneyMoov.Enums;
 using NoFrixion.MoneyMoov.Extensions;
 using NoFrixion.MoneyMoov.Models;
 
@@ -338,6 +339,36 @@ public static class IdentityExtensions
         }
         
         return Enum.TryParse(claim.Value, out MerchantPermissions claimPermissions) && claimPermissions.HasFlag(permission);
+    }
+
+    /// <summary>
+    /// Gets the authentication type from the identity token.
+    /// </summary>
+    /// <param name="identity">The token identity</param>
+    /// <returns>The authentication type.</returns>
+    public static AuthenticationTypesEnum GetAuthenticationType(this IIdentity identity)
+    {
+        var claimsIdentity = identity as ClaimsIdentity;
+
+        if (claimsIdentity == null) 
+        {
+            return AuthenticationTypesEnum.None;
+        }
+        else
+        {
+            var authenticationClaimType = ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.approveamr;
+
+            var authenticationTypeClaimValue = claimsIdentity.Claims.FirstOrDefault(x => x.Type == authenticationClaimType)?.Value;
+
+            if (Enum.TryParse(authenticationTypeClaimValue, out AuthenticationTypesEnum authenticationType))
+            {
+                return authenticationType;
+            }
+            else
+            {
+                return AuthenticationTypesEnum.None;
+            }
+        }
     }
 }
 

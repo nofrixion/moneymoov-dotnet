@@ -346,6 +346,11 @@ public class Payout : IValidatableObject, IWebhookPayload
     public List<string>? AuthorisedBy { get; set; }
 
     /// <summary>
+    /// A list of authentication types allowed to authorise the payout.
+    /// </summary>
+    public List<string>? AuthenticationMethods { get; set; }
+
+    /// <summary>
     /// If the payout destination is a beneficiary this will be the ID of it's identifier.
     /// </summary>
     [Obsolete("No longer used.")]

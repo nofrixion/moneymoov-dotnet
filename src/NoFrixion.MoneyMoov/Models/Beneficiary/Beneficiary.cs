@@ -86,7 +86,12 @@ public class Beneficiary : IValidatableObject
     /// The number of distinct authorisers that have authorised the beneficiary.
     /// </summary>
     public int AuthorisersCompletedCount { get; set; }
-    
+
+    /// <summary>
+    /// A list of authentication types allowed to authorise the payout.
+    /// </summary>
+    [CanBeNull] public List<string> AuthenticationMethods { get; set; }
+
     public string CreatedByEmailAddress { get; set; }
     
     public string Nonce { get; set; }

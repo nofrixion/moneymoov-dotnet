@@ -118,6 +118,11 @@ public class Rule : IValidatableObject, IWebhookPayload
     public bool HasCurrentUserAuthorised { get; set; }
 
     /// <summary>
+    /// A list of authentication types allowed to authorise the payout.
+    /// </summary>
+    public List<string>? AuthenticationMethods { get; set; }
+
+    /// <summary>
     /// The approval hash is used when approving the rule and to detect when critical
     /// fields change.
     /// </summary>
