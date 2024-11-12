@@ -98,6 +98,26 @@ public class Rule : IValidatableObject, IWebhookPayload
     public PaymentAccount? Account { get; set; } = null!;
     
     /// <summary>
+    /// The number of authorisers required for this rule.
+    /// </summary>
+    public int AuthorisersRequiredCount { get; set; }
+
+    /// <summary>
+    /// The number of distinct authorisers that have authorised the rule.
+    /// </summary>
+    public int AuthorisersCompletedCount { get; set; }
+    
+    /// <summary>
+    /// True if the rule can be authorised by the user who loaded it.
+    /// </summary>
+    public bool CanAuthorise { get; set; }
+
+    /// <summary>
+    /// True if the current user has authorised.
+    /// </summary>
+    public bool HasCurrentUserAuthorised { get; set; }
+
+    /// <summary>
     /// The approval hash is used when approving the rule and to detect when critical
     /// fields change.
     /// </summary>
