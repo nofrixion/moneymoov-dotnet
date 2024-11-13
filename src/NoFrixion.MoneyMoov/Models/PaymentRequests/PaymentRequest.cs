@@ -23,6 +23,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using NoFrixion.MoneyMoov.Extensions;
+using LanguageExt;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -375,23 +376,30 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
         return !string.IsNullOrEmpty(SuccessWebHookUrl);
     }
 
-    public Uri GetSuccessWebhookUri()
+    public Either<NoFrixionProblem, Uri> GetSuccessWebhookUri()
     {
-        if (string.IsNullOrEmpty(SuccessWebHookUrl))
+        if (string.IsNullOrWhiteSpace(SuccessWebHookUrl))
         {
             return new Uri(MoneyMoovConstants.WEBHOOK_BLACKHOLE_URI);
         }
         else
         {
-            var successWebHookUri = new UriBuilder(SuccessWebHookUrl);
+            if (Uri.TryCreate(SuccessWebHookUrl, UriKind.Absolute, out Uri? uri))
+            {
+                var successWebHookUri = new UriBuilder(uri);
 
-            string successParams = $"id={ID}&orderid={OrderID ?? string.Empty}";
+                string successParams = $"id={ID}&orderid={OrderID ?? string.Empty}";
 
-            successWebHookUri.Query = string.IsNullOrEmpty(successWebHookUri.Query)
-                                          ? successParams
-                                          : successWebHookUri.Query + "&" + successParams;
+                successWebHookUri.Query = string.IsNullOrEmpty(successWebHookUri.Query)
+                                              ? successParams
+                                              : successWebHookUri.Query + "&" + successParams;
 
-            return successWebHookUri.Uri;
+                return successWebHookUri.Uri;
+            }
+            else
+            {
+                return new NoFrixionProblem($"The success web hook URL {SuccessWebHookUrl} for payment request ID {ID} is not a valid URL.");
+            }
         }
     }
 
