@@ -13,6 +13,7 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -344,6 +345,11 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// A list of the email addresses of all the users who have usccessfully authorised the latest version of the payout.
     /// </summary>
     public List<string>? AuthorisedBy { get; set; }
+
+    /// <summary>
+    /// A list of authentication types allowed to authorise the payout.
+    /// </summary>
+    public List<AuthenticationTypesEnum>? AuthenticationMethods { get; set; }
 
     /// <summary>
     /// If the payout destination is a beneficiary this will be the ID of it's identifier.
