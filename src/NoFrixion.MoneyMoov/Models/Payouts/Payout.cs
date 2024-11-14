@@ -279,21 +279,7 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// application such as Xero. The InvoiceID needs to be unique for each
     /// account.
     /// </summary>
-    [Obsolete("Please use ExternalInvoiceIDs.")]
-    public string? InvoiceID
-    {
-        get => ExternalInvoiceIDs?.FirstOrDefault();
-        init
-        {
-            if (value != null) ExternalInvoiceIDs = [value];
-        }
-    }
-
-    /// <summary>
-    /// This is the list of external invoice IDs that the payout is associated with.
-    /// Example: Xero invoice ID.
-    /// </summary>
-    public List<string>? ExternalInvoiceIDs { get; set; }
+    public string? InvoiceID { get; set; }
 
     /// <summary>
     /// An optional list of descriptive tags attached to the payout.

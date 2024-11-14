@@ -214,7 +214,7 @@ public class PayoutsValidatorTests
             YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             TheirReference = "Placeholder",
             Status = PayoutStatus.PENDING_INPUT,
-            ExternalInvoiceIDs = ["18ead957-e3bc-4b12-b5c6-d12e4bef9d24"],
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             Destination = new Counterparty
             {
                 Name = "Joe Bloggs",
@@ -350,7 +350,7 @@ public class PayoutsValidatorTests
             YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             TheirReference = "Placeholder",
             Status = PayoutStatus.PENDING_INPUT,
-            ExternalInvoiceIDs = ["18ead957-e3bc-4b12-b5c6-d12e4bef9d24"],
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             Destination = destination
         };
         
@@ -386,7 +386,7 @@ public class PayoutsValidatorTests
             YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             TheirReference = "Placeholder",
             Status = PayoutStatus.PENDING_INPUT,
-            ExternalInvoiceIDs = ["18ead957-e3bc-4b12-b5c6-d12e4bef9d24"],
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             Destination = destination
         };
         
@@ -422,7 +422,7 @@ public class PayoutsValidatorTests
             YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             TheirReference = "Placeholder",
             Status = PayoutStatus.PENDING_INPUT,
-            ExternalInvoiceIDs = ["18ead957-e3bc-4b12-b5c6-d12e4bef9d24"],
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             Destination = destination
         };
         
@@ -458,7 +458,7 @@ public class PayoutsValidatorTests
             YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             TheirReference = "Placeholder",
             Status = PayoutStatus.PENDING_INPUT,
-            ExternalInvoiceIDs = ["18ead957-e3bc-4b12-b5c6-d12e4bef9d24"],
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             Destination = destination
         };
         
@@ -492,7 +492,7 @@ public class PayoutsValidatorTests
             YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             TheirReference = "Placeholder",
             Status = PayoutStatus.PENDING_INPUT,
-            ExternalInvoiceIDs = ["18ead957-e3bc-4b12-b5c6-d12e4bef9d24"],
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             Destination = destination
         };
         
@@ -526,7 +526,7 @@ public class PayoutsValidatorTests
             YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             TheirReference = "Placeholder",
             Status = PayoutStatus.PENDING_INPUT,
-            ExternalInvoiceIDs = ["18ead957-e3bc-4b12-b5c6-d12e4bef9d24"],
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             Destination = destination
         };
         
@@ -572,7 +572,7 @@ public class PayoutsValidatorTests
             YourReference = "your ref",
             TheirReference = "their ref",
             Status = PayoutStatus.PENDING_INPUT,
-            ExternalInvoiceIDs = ["18ead957-e3bc-4b12-b5c6-d12e4bef9d24"],
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
             Destination =  new Counterparty
             {
                 Name = "Joe Bloggs",
