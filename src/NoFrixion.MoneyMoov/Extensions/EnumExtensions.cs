@@ -47,6 +47,40 @@ public static class EnumExtensions
     }
 
     /// <summary>
+    /// This method converts an Enum with the Flags attribute to a list of Enums.
+    /// </summary>
+    public static List<T> ToList<T>(this T? flags) where T : struct, Enum
+    {
+        if (!typeof(T).IsDefined(typeof(FlagsAttribute), false))
+        {
+            throw new ArgumentException("The type parameter T must have the Flags attribute.", nameof(flags));
+        }
+
+        if (flags == null)
+        {
+            return [];
+        }
+
+        // Check if the enum underlying type is ulong
+        var underlyingType = Enum.GetUnderlyingType(typeof(T));
+
+        if (underlyingType == typeof(ulong))
+        {
+            return Enum.GetValues(typeof(T))
+                       .Cast<T>()
+                       .Where(value => flags.Value.HasFlag(value) && Convert.ToUInt64(value) != 0) // Exclude None or 0
+                       .ToList();
+        }
+        else
+        {
+            return Enum.GetValues(typeof(T))
+                       .Cast<T>()
+                       .Where(value => flags.Value.HasFlag(value) && Convert.ToInt32(value) != 0) // Exclude None or 0
+                       .ToList();
+        }
+    }
+
+    /// <summary>
     /// This method converts  list of flag enum values to a single flag enum.
     /// </summary>
     public static T ToFlagEnum<T>(this IEnumerable<T> enumValues) where T : Enum
@@ -81,33 +115,5 @@ public static class EnumExtensions
 
             return (T)Enum.ToObject(typeof(T), result);
         }
-    }
-
-    /// <summary>
-    /// This method converts an Enum with the Flags attribute to a list of string
-    /// </summary>
-    public static List<string> ToStringList<T>(this T? flags) where T : struct,Enum
-    {
-        if (!typeof(T).IsDefined(typeof(FlagsAttribute), false))
-        {
-            throw new ArgumentException("The type parameter T must have the Flags attribute.", nameof(flags));
-        }
-
-        var selectedFlags = new List<string>();
-
-        if (flags == null)
-        {
-            return selectedFlags; 
-        }
-
-        foreach (Enum value in Enum.GetValues(typeof(T)))
-        {
-            if (flags.Value.HasFlag(value) && Convert.ToInt32(value) != 0)
-            {
-                selectedFlags.Add(value.ToString());
-            }
-        }
-
-        return selectedFlags;
     }
 }

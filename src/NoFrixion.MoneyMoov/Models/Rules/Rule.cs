@@ -14,6 +14,7 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using NoFrixion.MoneyMoov.Enums;
 using Quartz;
 using static System.String;
 
@@ -122,7 +123,7 @@ public class Rule : IValidatableObject, IWebhookPayload
     /// <summary>
     /// A list of authentication types allowed to authorise the payout.
     /// </summary>
-    public List<string>? AuthenticationMethods { get; set; }
+    public List<AuthenticationTypesEnum>? AuthenticationMethods { get; set; }
 
     /// <summary>
     /// The approval hash is used when approving the rule and to detect when critical

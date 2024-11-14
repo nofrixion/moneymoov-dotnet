@@ -18,6 +18,7 @@ using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+using NoFrixion.MoneyMoov.Enums;
 
 #nullable disable
 
@@ -90,7 +91,7 @@ public class Beneficiary : IValidatableObject
     /// <summary>
     /// A list of authentication types allowed to authorise the payout.
     /// </summary>
-    [CanBeNull] public List<string> AuthenticationMethods { get; set; }
+    [CanBeNull] public List<AuthenticationTypesEnum> AuthenticationMethods { get; set; }
 
     public string CreatedByEmailAddress { get; set; }
     
