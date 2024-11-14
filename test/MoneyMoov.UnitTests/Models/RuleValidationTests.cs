@@ -56,7 +56,8 @@ public class RuleValidationTests : MoneyMoovUnitTestBase<RuleValidationTests>
                         }
                     }
                 }
-            }
+            },
+            Nonce = NonceHelper.GenerateRandomNonce(),
         };
 
         var problem = rule.Validate();

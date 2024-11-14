@@ -117,6 +117,8 @@ public class Rule : IValidatableObject, IWebhookPayload
     /// </summary>
     public bool HasCurrentUserAuthorised { get; set; }
 
+    public required string Nonce { get; set; }
+    
     /// <summary>
     /// A list of authentication types allowed to authorise the payout.
     /// </summary>
@@ -128,7 +130,7 @@ public class Rule : IValidatableObject, IWebhookPayload
     /// </summary>
     public string GetApprovalHash()
     {
-        string input = ID.ToString() + SweepAction.GetDestinationApprovalHash();
+        string input = ID.ToString() + SweepAction.GetDestinationApprovalHash() + Nonce;
         return HashHelper.CreateHash(input);
     }
 
