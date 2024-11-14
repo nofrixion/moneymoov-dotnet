@@ -117,13 +117,15 @@ public class Rule : IValidatableObject, IWebhookPayload
     /// </summary>
     public bool HasCurrentUserAuthorised { get; set; }
 
+    public required string Nonce { get; set; }
+    
     /// <summary>
     /// The approval hash is used when approving the rule and to detect when critical
     /// fields change.
     /// </summary>
     public string GetApprovalHash()
     {
-        string input = ID.ToString() + SweepAction.GetDestinationApprovalHash();
+        string input = ID.ToString() + SweepAction.GetDestinationApprovalHash() + Nonce;
         return HashHelper.CreateHash(input);
     }
 
