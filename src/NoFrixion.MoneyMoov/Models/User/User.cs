@@ -14,6 +14,7 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using NoFrixion.MoneyMoov.Models.Roles;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -40,6 +41,8 @@ public class User
     public bool PasskeyAdded { get; set; }
 
     public UserRolePermissions? Permissions { get; set; }
+    
+    public List<RoleUser> AdvancedRoles { get; set; } = [];
     
     public bool IsEmpty() => ID == Guid.Empty && EmailAddress == string.Empty;
 }
