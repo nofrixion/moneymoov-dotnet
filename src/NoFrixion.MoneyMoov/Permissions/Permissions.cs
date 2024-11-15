@@ -44,8 +44,13 @@ public enum AccountPermissions : ulong
     CanViewTransactions = 1L << 14,
     
     // Statements
+    [Obsolete("Use CanExportData instead.")]
     CanCreateStatements = 1L << 15,
+    
+    [Obsolete("Use CanExportData instead.")]
     CanViewStatements = 1L << 16,
+    
+    CanExportData = 1L << 17,
 }
 
 [Flags]
