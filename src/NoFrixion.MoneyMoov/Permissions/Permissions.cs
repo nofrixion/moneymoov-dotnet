@@ -13,8 +13,6 @@
 //  Proprietary NoFrixion.
 // -----------------------------------------------------------------------------
 
-using System.ComponentModel;
-
 namespace NoFrixion.Common.Permissions;
 
 [Flags]
