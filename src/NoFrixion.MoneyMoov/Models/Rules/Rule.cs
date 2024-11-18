@@ -95,7 +95,9 @@ public class Rule : IValidatableObject, IWebhookPayload
     public User? CreatedBy { get; set; } = null!;
     
     public User? AuthorisedBy { get; set; }
-    
+
+    public DateTimeOffset? AuthorisedAt { get; set; }
+
     public PaymentAccount? Account { get; set; } = null!;
     
     /// <summary>
