@@ -13,16 +13,11 @@
 //  Proprietary NoFrixion.
 // -----------------------------------------------------------------------------
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
 namespace NoFrixion.MoneyMoov.Models;
 
 public class UserRolePermissions
 {
-    [JsonConverter(typeof(StringEnumConverter))]
     public Dictionary<Guid, Common.Permissions.MerchantPermissions> MerchantPermissions { get; set; } = new();
-
-    [JsonConverter(typeof(StringEnumConverter))]
+    
     public Dictionary<Guid, Common.Permissions.AccountPermissions> AccountPermissions { get; set; } = new();
 }
