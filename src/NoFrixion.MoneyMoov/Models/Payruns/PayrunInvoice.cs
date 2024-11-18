@@ -79,7 +79,7 @@ public class PayrunInvoice : IValidatableObject
     
     [EmailAddressMultiple(ErrorMessage = PayrunConstants.REMMITANCE_EMAIL_ADDRESSES_ERROR_MESSAGE)]
     public string? RemittanceEmail { get; set; }
-
+    
     public Guid? XeroInvoiceID { get; set; }
     
     public IEnumerable<InvoicePayment>? InvoicePayments { get; set; }
@@ -94,6 +94,17 @@ public class PayrunInvoice : IValidatableObject
     /// </summary>
     [MaxLength(PAYRUN_INVOICE_PAYMENT_REFERENCE_MAX_LENGTH, ErrorMessage = "PaymentReference cannot be longer than 18 characters.")]
     public string? PaymentReference { get; set; }
+    
+    /// <summary>
+    /// If this invoice was created from an external invoice, this will be the ID of the external invoice.
+    /// </summary>
+    public string? ExternalInvoiceID { get; set; }
+    
+    /// <summary>
+    /// If this invoice was created from an external invoice, this will be the provider of the external invoice.
+    /// E.g., "Xero", "QuickBooks", etc.
+    /// </summary>
+    public string? ExternalInvoiceProvider { get; set; }
 
     public NoFrixionProblem Validate()
     {
