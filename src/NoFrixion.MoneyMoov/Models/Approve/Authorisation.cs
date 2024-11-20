@@ -10,7 +10,7 @@
 // 20 Nov 2024  Pablo Maldonado   Created, Montevideo,  Uruguay.
 // 
 // License:
-// Proprietary NoFrixion.
+// MIT.
 //-----------------------------------------------------------------------------
 
 #nullable disable
