@@ -14,6 +14,7 @@
 // -----------------------------------------------------------------------------
 
 using NoFrixion.MoneyMoov.Enums;
+using NoFrixion.MoneyMoov.Models.Approve;
 using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -342,9 +343,15 @@ public class Payout : IValidatableObject, IWebhookPayload
     public bool HasCurrentUserAuthorised {  get; set; }
 
     /// <summary>
-    /// A list of the email addresses of all the users who have usccessfully authorised the latest version of the payout.
+    /// A list of the email addresses of all the users who have successfully authorised the latest version of the payout.
     /// </summary>
+    [Obsolete("Refer to Authorisations instead.")]
     public List<string>? AuthorisedBy { get; set; }
+
+    /// <summary>
+    /// A list of the users who have successfully authorised the latest version of the payout and when.
+    /// </summary>
+    public List<Authorisation>? Authorisations { get; set; }
 
     /// <summary>
     /// A list of authentication types allowed to authorise the payout.
