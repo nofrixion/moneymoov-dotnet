@@ -32,24 +32,28 @@ public class HttpSignatureHeaders
 
     public HttpSignatureHeaders(IDictionary<string, string> httpRequestHeaders)
     {
-        var nonce = httpRequestHeaders[HmacAuthenticationConstants.NONCE_HEADER_NAME].ToString();
-        var date = DateTime.MinValue;
+        var nonce = httpRequestHeaders.ContainsKey(HmacAuthenticationConstants.NONCE_HEADER_NAME) ?
+            httpRequestHeaders[HmacAuthenticationConstants.NONCE_HEADER_NAME].ToString() : null;
 
-        if (string.IsNullOrEmpty(nonce))
+        if (string.IsNullOrEmpty(nonce) && httpRequestHeaders.ContainsKey(HmacAuthenticationConstants.IDEMPOTENT_HEADER_NAME))
         {
             nonce = httpRequestHeaders[HmacAuthenticationConstants.IDEMPOTENT_HEADER_NAME].ToString();
         }
 
         Nonce = nonce;
 
+        var date = DateTime.MinValue;
+
         // Parse the date from the header. Must be in RFC1123 date format. E.g. Fri, 01 Mar 2019 15:00:00 GMT.
-        if (!DateTime.TryParseExact(httpRequestHeaders[HmacAuthenticationConstants.DATE_HEADER_NAME], "R", CultureInfo.InvariantCulture,
+        if (httpRequestHeaders.ContainsKey(HmacAuthenticationConstants.DATE_HEADER_NAME) &&
+            DateTime.TryParseExact(httpRequestHeaders[HmacAuthenticationConstants.DATE_HEADER_NAME], "R", CultureInfo.InvariantCulture,
                 DateTimeStyles.None, out date))
         {
             Date = date;
         }
 
-        if (AuthenticationHeaderValue.TryParse(httpRequestHeaders[HmacAuthenticationConstants.AUTHORIZATION_HEADER_NAME], out var authorisationHeader))
+        if (httpRequestHeaders.ContainsKey(HmacAuthenticationConstants.AUTHORIZATION_HEADER_NAME) &&
+            AuthenticationHeaderValue.TryParse(httpRequestHeaders[HmacAuthenticationConstants.AUTHORIZATION_HEADER_NAME], out var authorisationHeader))
         {
             if (authorisationHeader.Scheme == HmacAuthenticationConstants.SIGNATURE_SCHEME_NAME)
             {
@@ -75,17 +79,17 @@ public class HttpSignatureHeaders
 
         if(string.IsNullOrWhiteSpace(Nonce))
         {
-            headerProblems.Add(new ValidationResult("Nonce was missing."));
+            headerProblems.Add(new ValidationResult("Nonce was missing.", new [] { nameof(Nonce) }));
         }
 
         if (Date == DateTime.MinValue)
         {
-            headerProblems.Add(new ValidationResult("Date was missing."));
+            headerProblems.Add(new ValidationResult("Date was missing.", new[] { nameof(Date) }));
         }
 
         if (string.IsNullOrWhiteSpace(Signature))
         {
-            headerProblems.Add(new ValidationResult("Signature was missing."));
+            headerProblems.Add(new ValidationResult("Signature was missing.", new[] { nameof(Signature) }));
         }
 
         if (headerProblems.Count > 0)

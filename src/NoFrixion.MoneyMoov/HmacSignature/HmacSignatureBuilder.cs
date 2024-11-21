@@ -1,7 +1,10 @@
 ﻿// -----------------------------------------------------------------------------
-//  Filename: HmacSignatureAuthHelper.cs
+//  Filename: HmacSignatureBuilder.cs
 // 
-//  Description: Used for generating HMAC signatures and verifying them.
+//  Description: Used for generating HMAC signatures and the associated HTTP headers.
+//
+//  Remarks: A future version of the request signature format could potentially
+//  consider https://www.rfc-editor.org/rfc/rfc9421 (note not yet an RFC at the time of writing).
 // 
 //  Author(s):
 //  Donal O'Connor (donal@nofrixion.com)
@@ -20,7 +23,7 @@ using System.Text;
 
 namespace NoFrixion.MoneyMoov;
 
-public static class HmacSignatureAuthHelper
+public static class HmacSignatureBuilder
 {
     /// <summary>
     /// Original HMAC signature format.
@@ -62,7 +65,7 @@ public static class HmacSignatureAuthHelper
     }
     
     /// <summary>
-    /// The original HMAC SHA1 signature used in version 1 webhooks which.
+    /// The original HMAC SHA1 signature used in version 1 webhooks and one specifc supplier.
     /// </summary>
     /// <param name="keyId">The key ID, or webhook entity ID, the signature is being generated for.</param>
     /// <param name="nonce">A pseudo-random nonce.</param>
@@ -90,6 +93,26 @@ public static class HmacSignatureAuthHelper
         return headers;
     }
 
+    public static Dictionary<string, string> GetMerchantTokenHmacHeaders(
+        Guid merchantTokenID,
+        string idempotency,
+        DateTime date, 
+        byte[] secret,
+        int requestSignatureVersion,
+        SharedSecretAlgorithmsEnum hmacAlgorithm)
+    {
+        var signature = GenerateSignature(idempotency, date, secret, requestSignatureVersion, hmacAlgorithm);
+
+        var headers = new Dictionary<string, string>
+        {
+            {HmacAuthenticationConstants.DATE_HEADER_NAME, date.ToString("R")},
+            {HmacAuthenticationConstants.IDEMPOTENT_HEADER_NAME, idempotency},
+            {HmacAuthenticationConstants.NOFRIXION_SIGNATURE_HEADER_NAME, signature},
+            {HmacAuthenticationConstants.AUTHORIZATION_HEADER_NAME, GeneratMerchantTokenSignatureContent(merchantTokenID, signature)},
+        };
+        return headers;
+    }
+
     public static string GenerateSignature(string nonce, DateTime date, string secret, int signatureVersion, SharedSecretAlgorithmsEnum algorithm)
      => GenerateSignature(nonce, date, Encoding.UTF8.GetBytes(secret), signatureVersion, algorithm);
 
@@ -114,7 +137,12 @@ public static class HmacSignatureAuthHelper
     {
         return $"Signature keyId=\"{apiKey}\",headers=\"date x-mod-nonce\",signature=\"{signature}\"";
     }
-    
+
+    private static string GeneratMerchantTokenSignatureContent(Guid merchantTokenID, string signature)
+    {
+        return $"Signature {HmacAuthenticationConstants.TOKEN_ID_PARAMETER_NAME}=\"{merchantTokenID}\",headers=\"date {HmacAuthenticationConstants.IDEMPOTENT_HEADER_NAME}\",signature=\"{signature}\"";
+    }
+
     public static string HashAndEncode(string message, byte[] secret, SharedSecretAlgorithmsEnum algorithm)
     {
         if (algorithm == SharedSecretAlgorithmsEnum.None)

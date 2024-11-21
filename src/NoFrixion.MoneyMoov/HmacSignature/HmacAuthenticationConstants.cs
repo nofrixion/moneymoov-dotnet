@@ -26,4 +26,5 @@ public static class HmacAuthenticationConstants
     public const string NOFRIXION_SIGNATURE_HEADER_NAME = "x-nfx-signature";
     public const string HTTP_RETRY_HEADER_NAME = "x-mod-retry";
     public const string IDEMPOTENT_HEADER_NAME = "idempotency-key";
+    public const string TOKEN_ID_PARAMETER_NAME = "tokenId";
 }

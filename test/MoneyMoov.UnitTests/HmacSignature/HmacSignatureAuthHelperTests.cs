@@ -41,7 +41,7 @@ public class HmacSignatureAuthHelperTests
         var secret = "123456Q3MDc2YjNhNDUzMTk1NzljZmVj";
         var nonce = "abdc0084-9a07-463b-ba8c-f47f2285531b";
 
-        var signatureLegacy = HmacSignatureAuthHelper.GenerateSignature(nonce, date, secret, 0, SharedSecretAlgorithmsEnum.HMAC_SHA1);
+        var signatureLegacy = HmacSignatureBuilder.GenerateSignature(nonce, date, secret, 0, SharedSecretAlgorithmsEnum.HMAC_SHA1);
 
         Assert.Equal(existingSignature, signatureLegacy);
 
@@ -59,7 +59,7 @@ public class HmacSignatureAuthHelperTests
         var secret = "password";
         var nonce = "abdc0084-9a07-463b-ba8c-f47f2285531b";
 
-        var signature = HmacSignatureAuthHelper.GenerateSignature(nonce, date, secret, 1, SharedSecretAlgorithmsEnum.HMAC_SHA256);
+        var signature = HmacSignatureBuilder.GenerateSignature(nonce, date, secret, 1, SharedSecretAlgorithmsEnum.HMAC_SHA256);
 
         Assert.NotNull(signature);
 
@@ -78,7 +78,7 @@ public class HmacSignatureAuthHelperTests
         var secret = "123456Q3MDc2YjNhNDUzMTk1NzljZmVj";
         var nonce = "abdc0084-9a07-463b-ba8c-f47f2285531b";
 
-        var signatureV1 = HmacSignatureAuthHelper.GenerateSignature(nonce, date, secret, 1, SharedSecretAlgorithmsEnum.HMAC_SHA512);
+        var signatureV1 = HmacSignatureBuilder.GenerateSignature(nonce, date, secret, 1, SharedSecretAlgorithmsEnum.HMAC_SHA512);
 
         _logger.LogInformation($"Signature: {signatureV1}");
 
