@@ -25,7 +25,7 @@ public class BatchPayout
     /// the user needs to visit in order to complete a strong authentication check in order to approve 
     /// the batch payouts.
     /// </summary>
-    public string? BatchApproveUrl { get; set; }
+    public string? ApproveUrl { get; set; }
 
     public List<Payout> Payouts { get; set; } = new List<Payout>();
 
