@@ -223,7 +223,7 @@ public class RestApiClient : IRestApiClient, IDisposable
         Dictionary<string, string>? headers = null,
         MediaTypeWithQualityHeaderValue? acceptHeader = null)
     {
-        var signatureHeaders = HmacSignatureAuthHelper.GetAppHeaders(
+        var signatureHeaders = HmacSignatureBuilder.GetAppHeaders(
             appID.ToString(), 
             Guid.NewGuid().ToString(), 
             secret, 
