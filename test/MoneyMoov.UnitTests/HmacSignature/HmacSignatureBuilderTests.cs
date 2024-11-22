@@ -1,7 +1,7 @@
 ﻿// -----------------------------------------------------------------------------
-//  Filename: HmacSignatureAuthHelperTests.cs
+//  Filename: HmacSignatureBuilderTests.cs
 // 
-//  Description: HmacSignatureAuthHelper Tests:
+//  Description: Unit tests for the HMAC signature builder class.
 // 
 //  Author(s):
 //  Donal O'Connor (donal@nofrixion.com)
@@ -20,16 +20,16 @@ using Xunit.Abstractions;
 
 namespace NoFrixion.MoneyMoov.UnitTests;
 
-public class HmacSignatureAuthHelperTests
+public class HmacSignatureBuilderTests
 {
-    private readonly ILogger<HmacSignatureAuthHelperTests> _logger;
+    private readonly ILogger<HmacSignatureBuilderTests> _logger;
     private LoggerFactory _loggerFactory;
 
-    public HmacSignatureAuthHelperTests(ITestOutputHelper testOutputHelper)
+    public HmacSignatureBuilderTests(ITestOutputHelper testOutputHelper)
     {
         _loggerFactory = new LoggerFactory();
         _loggerFactory.AddProvider(new XunitLoggerProvider(testOutputHelper));
-        _logger = _loggerFactory.CreateLogger<HmacSignatureAuthHelperTests>();
+        _logger = _loggerFactory.CreateLogger<HmacSignatureBuilderTests>();
     }
 
     [Fact]
