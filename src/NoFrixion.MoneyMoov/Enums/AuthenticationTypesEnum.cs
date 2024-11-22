@@ -16,6 +16,7 @@
 
 namespace NoFrixion.MoneyMoov.Enums;
 
+[Flags]
 public enum AuthenticationTypesEnum
 {
     None = 0,

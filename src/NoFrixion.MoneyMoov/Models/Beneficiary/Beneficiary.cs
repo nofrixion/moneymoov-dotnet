@@ -18,6 +18,8 @@ using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+using NoFrixion.MoneyMoov.Enums;
+using NoFrixion.MoneyMoov.Models.Approve;
 
 #nullable disable
 
@@ -55,11 +57,17 @@ public class Beneficiary : IValidatableObject
     public string ApprovalCallbackUrl { get; set; }
 
     public bool IsEnabled { get; set; }
-    
+
     /// <summary>
     /// A list of users who have successfully authorised the latest version of the beneficiary.
     /// </summary>
+    [Obsolete("Refer to Authorisations instead.")]
     [CanBeNull] public List<UserMinimal> AuthorisedBy { get; set; }
+
+    /// <summary>
+    /// A list of users who have successfully authorised the latest version of the beneficiary.
+    /// </summary>
+    [CanBeNull] public List<Authorisation> Authorisations { get; set; }
 
     /// <summary>
     /// True if the beneficiary can be authorised by the user who loaded it.
@@ -86,7 +94,12 @@ public class Beneficiary : IValidatableObject
     /// The number of distinct authorisers that have authorised the beneficiary.
     /// </summary>
     public int AuthorisersCompletedCount { get; set; }
-    
+
+    /// <summary>
+    /// A list of authentication types allowed to authorise the payout.
+    /// </summary>
+    [CanBeNull] public List<AuthenticationTypesEnum> AuthenticationMethods { get; set; }
+
     public string CreatedByEmailAddress { get; set; }
     
     public string Nonce { get; set; }

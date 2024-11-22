@@ -32,6 +32,12 @@ public class TokenAdd : IValidatableObject
     [Required(ErrorMessage = "Description is required")]
     public string Description { get; set; }
 
+    /// <summary>
+    /// Optional shared secret algorithm to use for HMAC authentication. If set a shared secret will be 
+    /// returned when the token is intially created but not on any subsequent retrievals.
+    /// </summary>
+    public SharedSecretAlgorithmsEnum HmacAlgorithm { get; set; }
+
     public MerchantTokenPermissionsEnum Permissions { get; set; } = MerchantTokenPermissionsEnum.CreatePaymentRequest;
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

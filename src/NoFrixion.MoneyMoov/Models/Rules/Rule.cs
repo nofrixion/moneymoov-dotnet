@@ -14,6 +14,8 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using NoFrixion.MoneyMoov.Enums;
+using NoFrixion.MoneyMoov.Models.Approve;
 using Quartz;
 using static System.String;
 
@@ -33,7 +35,7 @@ public class Rule : IValidatableObject, IWebhookPayload
     /// The ID of the merchant that owns the account.
     /// </summary>
     public Guid MerchantID { get; set; }
-    
+
     public Guid? UserID { get; set; }
     public Guid? ApproverID { get; set; }
     public string Name { get; set; } = Empty;
@@ -44,9 +46,9 @@ public class Rule : IValidatableObject, IWebhookPayload
 
     [Obsolete("Payout triggers are no longer supported.")]
     public bool TriggerOnPayOut { get; set; }
-    
+
     public string TriggerCronExpression { get; set; } = Empty;
-    
+
     public string TimeZoneId { get; set; } = Empty;
     public DateTimeOffset? StartAt { get; set; }
     public DateTimeOffset? EndAt { get; set; }
@@ -92,11 +94,17 @@ public class Rule : IValidatableObject, IWebhookPayload
     public DateTimeOffset LastRunAtTransactionDate { get; set; }
 
     public User? CreatedBy { get; set; } = null!;
-    
+
+    [Obsolete("Refer to Authorisations instead.")]
     public User? AuthorisedBy { get; set; }
-    
+
+    /// <summary>
+    /// A list of the users who have successfully authorised the latest version of the rule and when.
+    /// </summary>
+    public List<Authorisation>? Authorisations { get; set; }
+
     public PaymentAccount? Account { get; set; } = null!;
-    
+
     /// <summary>
     /// The number of authorisers required for this rule.
     /// </summary>
@@ -106,7 +114,7 @@ public class Rule : IValidatableObject, IWebhookPayload
     /// The number of distinct authorisers that have authorised the rule.
     /// </summary>
     public int AuthorisersCompletedCount { get; set; }
-    
+
     /// <summary>
     /// True if the rule can be authorised by the user who loaded it.
     /// </summary>
@@ -117,13 +125,20 @@ public class Rule : IValidatableObject, IWebhookPayload
     /// </summary>
     public bool HasCurrentUserAuthorised { get; set; }
 
+    public required string Nonce { get; set; }
+
+    /// <summary>
+    /// A list of authentication types allowed to authorise the payout.
+    /// </summary>
+    public List<AuthenticationTypesEnum>? AuthenticationMethods { get; set; }
+
     /// <summary>
     /// The approval hash is used when approving the rule and to detect when critical
     /// fields change.
     /// </summary>
     public string GetApprovalHash()
     {
-        string input = ID.ToString() + SweepAction.GetDestinationApprovalHash();
+        string input = ID.ToString() + SweepAction.GetDestinationApprovalHash() + Nonce;
         return HashHelper.CreateHash(input);
     }
 
@@ -146,13 +161,13 @@ public class Rule : IValidatableObject, IWebhookPayload
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if(!TriggerOnPayIn && string.IsNullOrEmpty(TriggerCronExpression))
+        if (!TriggerOnPayIn && string.IsNullOrEmpty(TriggerCronExpression))
         {
             yield return new ValidationResult($"A CRON expression must be set when a payin trigger is not set.",
                                new string[] { nameof(TriggerCronExpression) });
         }
 
-        if(TriggerOnPayIn && !string.IsNullOrEmpty(TriggerCronExpression))
+        if (TriggerOnPayIn && !string.IsNullOrEmpty(TriggerCronExpression))
         {
             yield return new ValidationResult($"A CRON expression cannot be set when a payin trigger is set.",
                 new string[] { nameof(TriggerCronExpression) });
