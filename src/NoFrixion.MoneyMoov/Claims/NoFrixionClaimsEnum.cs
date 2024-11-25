@@ -101,7 +101,17 @@ public enum NoFrixionClaimsEnum
     use_permissions,
 
     /// <summary>
-    /// The token was successfully authenticated by the merchant token middleware.
+    /// If set indicates the request was authenticated with a JWT bearer token.
     /// </summary>
-    verified_merchant_token
+    merchant_token_bearer,
+
+    /// <summary>
+    /// If set indicates the request was was received from a source address on the merchant token's IP address whitelist.
+    /// </summary>
+    merchant_token_whitelisted_ipaddress,
+
+    /// <summary>
+    /// If set indicates the request was authenticated by a signed (HMAC or public key) merchant token.
+    /// </summary>
+    merchant_token_signed
 }
