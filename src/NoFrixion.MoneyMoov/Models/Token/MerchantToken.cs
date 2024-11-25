@@ -50,7 +50,7 @@ public class MerchantToken
 
     /// <summary>
     /// The base 64 encoded shared secret that is used for request authentication with an HMAC.
-    /// Not this property will ONLY be set when the token is initially created. It is not possible
+    /// Note this property will ONLY be set when the token is initially created. It is not possible
     /// to retrieve the secret afterwards. If it is lost a new token should be created.
     /// </summary>
     public string SharedSecretBase64 { get; set; }
