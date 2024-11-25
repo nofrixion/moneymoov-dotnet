@@ -37,7 +37,7 @@ public class HttpSignatureHeaders
 
         if (string.IsNullOrEmpty(nonce) && httpRequestHeaders.ContainsKey(HmacAuthenticationConstants.IDEMPOTENT_HEADER_NAME))
         {
-            nonce = httpRequestHeaders[HmacAuthenticationConstants.IDEMPOTENT_HEADER_NAME].ToString();
+            nonce = httpRequestHeaders[HmacAuthenticationConstants.IDEMPOTENT_HEADER_NAME]?.Trim();
         }
 
         Nonce = nonce;
@@ -60,9 +60,12 @@ public class HttpSignatureHeaders
                 // Split Authentication signature into a dictionary
                 var authenticationParams = authorisationHeader.Parameter?.Split(',')
                     .Select(p => p.Split('='))
-                    .ToDictionary(keyPair => keyPair[0], keyPair => keyPair[1].Trim('"'));
+                    .ToDictionary(keyPair => keyPair[0].Trim(), keyPair => keyPair[1].Trim('"', ' '), StringComparer.OrdinalIgnoreCase);
 
-                Signature = authenticationParams?[HmacAuthenticationConstants.SIGNATURE_SCHEME_NAME.ToLowerInvariant()];
+                if (authenticationParams?.ContainsKey(HmacAuthenticationConstants.SIGNATURE_SCHEME_NAME) == true)
+                {
+                    Signature = authenticationParams[HmacAuthenticationConstants.SIGNATURE_SCHEME_NAME].Trim();
+                }
             }
         }
     }
