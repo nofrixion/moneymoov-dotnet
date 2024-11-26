@@ -62,11 +62,34 @@ public static class IdentityExtensions
         return bool.TryParse(verifiedClaim, out var verifiedByApiKey) && verifiedByApiKey;
     }
 
-    public static bool IsVerfiedMerchantToken(this IIdentity identity)
+    /// <summary>
+    /// Returns true if the request was authenticated with a merchant JWT bearer token.
+    /// </summary>
+    public static bool IsMerchantTokenBearer(this IIdentity identity)
     {
-        var verifiedClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.verified_merchant_token)?.Value;
+        var verifiedClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.merchant_token_bearer)?.Value;
 
         return bool.TryParse(verifiedClaim, out var verifiedMerchantToken) && verifiedMerchantToken;
+    }
+
+    /// <summary>
+    /// Returns true if a merchant token authenticated request was from a whitelisted source IP address.
+    /// </summary>
+    public static bool IsMerchantTokenIPAddressWhiteLised(this IIdentity identity)
+    {
+        var ipAddressWhitelistClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.merchant_token_whitelisted_ipaddress)?.Value;
+
+        return bool.TryParse(ipAddressWhitelistClaim, out var isRquestIPAddressWhiteListed) && isRquestIPAddressWhiteListed;
+    }
+
+    /// <summary>
+    /// Returns true if a merchant token authenticated request was authenticated with an HMAC or public key signature.
+    /// </summary>
+    public static bool IsMerchantTokenSigned(this IIdentity identity)
+    {
+        var isSignedClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.merchant_token_signed)?.Value;
+
+        return bool.TryParse(isSignedClaim, out var isSigned) && isSigned;
     }
 
     public static bool MerchantIdExists(this IIdentity identity)
