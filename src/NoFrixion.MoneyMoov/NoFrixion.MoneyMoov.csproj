@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -8,7 +8,7 @@
 	<FileVersion>1.8.36.0</FileVersion>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-	<NoWarn>$(NoWarn);1591</NoWarn>
+	<NoWarn>$(NoWarn);1591;NU1902;NU1903;</NoWarn>
   </PropertyGroup>
 
     <ItemGroup>
