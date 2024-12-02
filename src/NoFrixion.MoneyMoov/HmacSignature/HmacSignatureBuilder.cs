@@ -51,7 +51,7 @@ public static class HmacSignatureBuilder
         DateTime date,
         Guid merchantId)
     {
-        var signature = GenerateSignature(idempotencyKey, date, secret, DEFAULT_SIGNATURE_VERSION, SharedSecretAlgorithmsEnum.HMAC_SHA256);
+        var signature = GenerateSignature(idempotencyKey, date, Convert.FromBase64String(secret), DEFAULT_SIGNATURE_VERSION, SharedSecretAlgorithmsEnum.HMAC_SHA256);
 
         var headers = new Dictionary<string, string>
         {
