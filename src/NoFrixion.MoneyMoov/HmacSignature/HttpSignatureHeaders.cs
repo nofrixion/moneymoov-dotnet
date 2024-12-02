@@ -10,9 +10,10 @@
 // 20 Nov 2024  Donal O'Connor   Created, Stillorgan Wood, Dublin, Ireland.
 // 
 // License:
-// Proprietary MIY.
+// MIT.
 //-----------------------------------------------------------------------------
 
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Net.Http.Headers;
@@ -30,8 +31,13 @@ public class HttpSignatureHeaders
     public HttpSignatureHeaders()
     { }
 
-    public HttpSignatureHeaders(IDictionary<string, string> httpRequestHeaders)
+    public HttpSignatureHeaders(HttpRequest request)
     {
+        IDictionary<string, string> httpRequestHeaders = request.Headers.ToDictionary(
+                     header => header.Key,
+                     header => string.Join(", ", header.Value.ToString() ?? string.Empty),
+                     StringComparer.OrdinalIgnoreCase);
+
         var nonce = httpRequestHeaders.ContainsKey(HmacAuthenticationConstants.NONCE_HEADER_NAME) ?
             httpRequestHeaders[HmacAuthenticationConstants.NONCE_HEADER_NAME].ToString() : null;
 
