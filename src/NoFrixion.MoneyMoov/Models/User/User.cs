@@ -42,7 +42,5 @@ public class User
 
     public UserRolePermissions? Permissions { get; set; }
     
-    public List<RoleUser>? UserRoles { get; set; }
-    
     public bool IsEmpty() => ID == Guid.Empty && EmailAddress == string.Empty;
 }
