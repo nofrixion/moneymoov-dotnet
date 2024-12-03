@@ -408,7 +408,13 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// Collection of payrun invoices associated with the payout.
     /// Will be empty if the payout is not associated with a payrun.
     /// </summary>
+    [Obsolete("Please refer to the Documents collection.")]
     public List<PayrunInvoice>? PayrunInvoices { get; set; }
+    
+    /// <summary>
+    /// Documents associated with the payout.
+    /// </summary>
+    public List<PayoutDocument>? Documents { get; set; }
 
     public NoFrixionProblem Validate()
     {
