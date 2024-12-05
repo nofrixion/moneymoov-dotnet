@@ -195,6 +195,12 @@ public class PayoutCreate
     /// payment, the default behaviour is to attempt SEPA-INST and fallback to SEPA-CT if rejected.
     /// </summary>
     public PaymentRailEnum PaymentRail { get; set; }
+    
+    /// <summary>
+    /// List of documents to attach to the payout. Optional.
+    /// Used for identifying or associating documents with the payout.
+    /// </summary>
+    public List<PayoutDocumentCreate>? Documents { get; set; }
 
     /// <summary>
     /// Places all the payout's properties into a dictionary.

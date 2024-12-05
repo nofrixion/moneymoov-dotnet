@@ -10,9 +10,10 @@
 // 20 Nov 2024  Donal O'Connor   Created, Stillorgan Wood, Dublin, Ireland.
 // 
 // License:
-// Proprietary MIY.
+// MIT.
 //-----------------------------------------------------------------------------
 
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Net.Http.Headers;
@@ -30,14 +31,19 @@ public class HttpSignatureHeaders
     public HttpSignatureHeaders()
     { }
 
-    public HttpSignatureHeaders(IDictionary<string, string> httpRequestHeaders)
+    public HttpSignatureHeaders(HttpRequest request)
     {
+        IDictionary<string, string> httpRequestHeaders = request.Headers.ToDictionary(
+                     header => header.Key,
+                     header => string.Join(", ", header.Value.ToString() ?? string.Empty),
+                     StringComparer.OrdinalIgnoreCase);
+
         var nonce = httpRequestHeaders.ContainsKey(HmacAuthenticationConstants.NONCE_HEADER_NAME) ?
             httpRequestHeaders[HmacAuthenticationConstants.NONCE_HEADER_NAME].ToString() : null;
 
         if (string.IsNullOrEmpty(nonce) && httpRequestHeaders.ContainsKey(HmacAuthenticationConstants.IDEMPOTENT_HEADER_NAME))
         {
-            nonce = httpRequestHeaders[HmacAuthenticationConstants.IDEMPOTENT_HEADER_NAME].ToString();
+            nonce = httpRequestHeaders[HmacAuthenticationConstants.IDEMPOTENT_HEADER_NAME]?.Trim();
         }
 
         Nonce = nonce;
@@ -60,9 +66,12 @@ public class HttpSignatureHeaders
                 // Split Authentication signature into a dictionary
                 var authenticationParams = authorisationHeader.Parameter?.Split(',')
                     .Select(p => p.Split('='))
-                    .ToDictionary(keyPair => keyPair[0], keyPair => keyPair[1].Trim('"'));
+                    .ToDictionary(keyPair => keyPair[0].Trim(), keyPair => keyPair[1].Trim('"', ' '), StringComparer.OrdinalIgnoreCase);
 
-                Signature = authenticationParams?[HmacAuthenticationConstants.SIGNATURE_SCHEME_NAME.ToLowerInvariant()];
+                if (authenticationParams?.ContainsKey(HmacAuthenticationConstants.SIGNATURE_SCHEME_NAME) == true)
+                {
+                    Signature = authenticationParams[HmacAuthenticationConstants.SIGNATURE_SCHEME_NAME].Trim();
+                }
             }
         }
     }

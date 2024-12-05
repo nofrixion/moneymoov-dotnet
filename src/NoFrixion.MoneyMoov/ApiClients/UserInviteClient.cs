@@ -32,6 +32,8 @@ public interface IUserInviteClient
     Task<RestApiResponse> ResendUserInviteAsync(Guid userInviteID);
 
     Task<RestApiResponse> ResendUserInviteAsync(string accessToken, Guid userInviteID);
+    
+    Task<RestApiResponse> DeleteUserInviteAsync(string accessToken, Guid inviteID);
 }
 
 public class UserInviteClient : IUserInviteClient
@@ -161,6 +163,24 @@ public class UserInviteClient : IUserInviteClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PutAsync(url, accessToken),
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+    
+    /// <summary>
+    /// Calls the MoneyMoov user invite endpoint to delete a user invite.
+    /// </summary>
+    /// <param name="accessToken">A User scoped JWT access token.</param>
+    /// <param name="inviteID">The ID of the user invite to delete.</param>
+    public Task<RestApiResponse> DeleteUserInviteAsync(string accessToken, Guid inviteID)
+    {
+        var url = MoneyMoovUrlBuilder.UserInvitesApi.UserInviteUrl(_apiClient.GetBaseUri().ToString(), inviteID);
+        
+        var prob = _apiClient.CheckAccessToken(accessToken, nameof(DeleteUserInviteAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.DeleteAsync(url, accessToken),
             _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }

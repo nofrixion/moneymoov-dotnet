@@ -20,6 +20,4 @@ public class RoleUserCreate
     public Guid UserID { get; set; }
     
     public List<Guid>? Accounts { get; set; }
-    
-    public List<Guid>? Merchants { get; set; }
 }

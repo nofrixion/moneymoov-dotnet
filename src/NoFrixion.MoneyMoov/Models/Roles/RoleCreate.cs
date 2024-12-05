@@ -14,11 +14,10 @@
 // -----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using NoFrixion.Common.Permissions;
 
 namespace NoFrixion.MoneyMoov.Models.Roles;
 
-public class RoleCreate
+public class RoleCreate : IValidatableObject
 {
     [Required]
     public string Name { get; set; } = null!;
@@ -30,10 +29,15 @@ public class RoleCreate
     public Guid MerchantID { get; set; }
     
     [Required]
-    public MerchantPermissions MerchantPermissions { get; set; }
+    public List<string> MerchantPermissions { get; set; } = new();
 
     [Required]
-    public AccountPermissions AccountPermissions { get; set; }
+    public List<string> AccountPermissions { get; set; } = new();
     
     public List<RoleUserCreate>? Users { get; set; }
+    
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        return PermissionsValidator.Validate(AccountPermissions, MerchantPermissions, validationContext);
+    }
 }

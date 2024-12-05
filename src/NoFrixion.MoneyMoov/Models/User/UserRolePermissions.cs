@@ -17,7 +17,7 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class UserRolePermissions
 {
-    public Dictionary<Guid, Common.Permissions.MerchantPermissions> MerchantPermissions { get; set; } = new();
+    public Dictionary<Guid, List<string>> MerchantPermissions { get; set; } = new();
     
-    public Dictionary<Guid, Common.Permissions.AccountPermissions> AccountPermissions { get; set; } = new();
+    public Dictionary<Guid, List<string>> AccountPermissions { get; set; } = new();
 }

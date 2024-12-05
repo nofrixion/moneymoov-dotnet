@@ -27,9 +27,9 @@ public class Role
 
     public Guid MerchantID { get; set; }
 
-    public MerchantPermissions MerchantPermissions { get; set; }
+    public List<string> MerchantPermissions { get; set; } = null!;
 
-    public AccountPermissions AccountPermissions { get; set; }
+    public List<string> AccountPermissions { get; set; } = null!;
 
     public DateTimeOffset Inserted { get; set; }
 
