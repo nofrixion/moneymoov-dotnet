@@ -18,7 +18,7 @@ using NoFrixion.Common.Permissions;
 
 namespace NoFrixion.MoneyMoov.Models.Roles;
 
-public class RoleCreate
+public class RoleCreate : IValidatableObject
 {
     [Required]
     public string Name { get; set; } = null!;
@@ -30,10 +30,27 @@ public class RoleCreate
     public Guid MerchantID { get; set; }
     
     [Required]
-    public MerchantPermissions MerchantPermissions { get; set; }
+    public List<string> MerchantPermissions { get; set; } = new();
 
     [Required]
-    public AccountPermissions AccountPermissions { get; set; }
+    public List<string> AccountPermissions { get; set; } = new();
     
     public List<RoleUserCreate>? Users { get; set; }
+    
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (AccountPermissions.Any(p => !Enum.TryParse<AccountPermissions>(p, out _)))
+        {
+            var validAccountPermissions = string.Join(", ", Enum.GetValues(typeof(AccountPermissions)).Cast<AccountPermissions>());
+            
+            yield return new ValidationResult($"Invalid account permission. Valid permissions are {validAccountPermissions}", [nameof(AccountPermissions)]);
+        }
+        
+        if (MerchantPermissions.Any(p => !Enum.TryParse<MerchantPermissions>(p, out _)))
+        {
+            var validMerchantPermissions = string.Join(", ", Enum.GetValues(typeof(MerchantPermissions)).Cast<MerchantPermissions>());
+            
+            yield return new ValidationResult($"Invalid merchant permission. Valid permissions are {validMerchantPermissions}", [nameof(MerchantPermissions)]);
+        }
+    }
 }
