@@ -13,11 +13,11 @@
 //  Proprietary NoFrixion.
 // -----------------------------------------------------------------------------
 
-using NoFrixion.Common.Permissions;
+using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models.Roles;
 
-public class RoleUpdate
+public class RoleUpdate : IValidatableObject
 {
     /// <summary>
     /// The role id
@@ -37,10 +37,15 @@ public class RoleUpdate
     /// <summary>
     /// The roles merchant permissions
     /// </summary>
-    public MerchantPermissions? MerchantPermissions { get; set; }
+    public List<string>? MerchantPermissions { get; set; }
 
     /// <summary>
     /// The roles account permissions
     /// </summary>
-    public AccountPermissions? AccountPermissions { get; set; }
+    public List<string>? AccountPermissions { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        return PermissionsValidator.Validate(AccountPermissions, MerchantPermissions, validationContext);
+    }
 }
