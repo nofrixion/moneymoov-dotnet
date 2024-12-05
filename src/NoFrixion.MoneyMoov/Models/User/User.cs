@@ -42,7 +42,16 @@ public class User
 
     public UserRolePermissions? Permissions { get; set; }
     
-    public List<RoleUser>? UserRoles { get; set; }
+    public List<UserRoleMinimal>? UserRoles { get; set; }
     
     public bool IsEmpty() => ID == Guid.Empty && EmailAddress == string.Empty;
+}
+
+public class UserRoleMinimal
+{
+    public Guid RoleID { get; set; }
+    
+    public string RoleName { get; set; } = string.Empty;
+    
+    public List<Guid>? AccountIDs { get; set; }
 }
