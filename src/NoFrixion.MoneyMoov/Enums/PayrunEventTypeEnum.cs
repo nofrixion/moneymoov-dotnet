@@ -43,4 +43,6 @@ public enum PayrunEventTypeEnum
     Unarchived = 11,
 
     Cancelled = 12,
+
+    Authorised = 13,
 }
