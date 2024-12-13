@@ -351,6 +351,11 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
     /// Date and time of expiration of the lightning invoice.
     /// </summary>
     public DateTimeOffset? LightningInvoiceExpiresAt { get; set; }
+    
+    /// <summary>
+    /// Minimal destination account details, if available.
+    /// </summary>
+    public PaymentAccount? DestinationAccount { get; set; }
 
     public string CustomerName =>
         Addresses.Any() ? $"{Addresses.First().FirstName} {Addresses.First().LastName}" : string.Empty;
