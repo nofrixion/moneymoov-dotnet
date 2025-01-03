@@ -32,9 +32,7 @@ public class MerchantAuthorisationSetting
 
     public int NumberOfAuthorisers { get; set; }
 
-    public bool CreatorCantAuthorise { get; set; }
-
-    public bool EditorCantAuthorise { get; set; }
+    public bool LastEditorCantAuthorise { get; set; }
     
     public AuthorisationType AuthorisationType { get; set; }
     
