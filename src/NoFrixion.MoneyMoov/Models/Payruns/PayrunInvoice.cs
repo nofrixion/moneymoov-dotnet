@@ -52,14 +52,54 @@ public class PayrunInvoice : IValidatableObject
    
     public string Contact { get; set; } = null!;
 
-    [Required]
-    public string? DestinationAccountName { get; set; }
-    
-    public string? DestinationIban { get; set; }
-    
-    public string? DestinationAccountNumber { get; set; }
+    [Obsolete("Please use Destination.")]
+    public string? DestinationAccountName
+    {
+        get => Destination?.Name;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Name = value;
+        }
+    }
 
-    public string? DestinationSortCode { get; set; }
+    [Obsolete("Please use Destination.")]
+    public string? DestinationIban 
+    {
+        get => Destination?.Identifier?.IBAN;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.EUR };
+            Destination.Identifier.IBAN = value;
+        }
+    }
+
+    [Obsolete("Please use Destination.")]
+    public string? DestinationAccountNumber
+    {
+        get => Destination?.Identifier?.AccountNumber;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.GBP };
+            Destination.Identifier.AccountNumber = value;
+        }
+    }
+
+    [Obsolete("Please use Destination.")]
+    public string? DestinationSortCode
+    {
+        get => Destination?.Identifier?.SortCode;
+        set
+        {
+            Destination ??= new Counterparty();
+            Destination.Identifier ??= new AccountIdentifier { Currency = CurrencyTypeEnum.GBP };
+            Destination.Identifier.SortCode = value;
+        }
+    }
+
+    public Counterparty? Destination { get; set; }
 
     [Required]
     public CurrencyTypeEnum Currency { get; set; }
