@@ -21,9 +21,9 @@ namespace NoFrixion.MoneyMoov.Enums;
 public enum AccountSepaInstantStatusEnum
 {
     /// <summary>
-    /// Unknown state.
+    /// Default state.
     /// </summary>
-    Unknown,
+    None,
     
     /// <summary>
     /// Supplier is in the process of enabling SEPA Instant.
