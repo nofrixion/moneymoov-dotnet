@@ -216,4 +216,9 @@ public class PaymentAccount
     /// If an account receives a payment it will be automatically unarchived.
     /// </summary>
     public bool IsArchived { get; set; }
+
+    /// <summary>
+    /// Indicates the status of the SEPA Instant payment rail for this account.
+    /// </summary>
+    public AccountSepaInstantStatusEnum? SupplierSepaInstantStatus { get; set; }    
 }
