@@ -39,17 +39,7 @@ public static class PayrunInvoiceMapper
             TheirReference = !string.IsNullOrWhiteSpace(invoice.PaymentReference)
                 ? invoice.PaymentReference
                 : SAFE_THEIR_REFERENCE,
-            Destination = new Counterparty
-            {
-                Name = invoice.DestinationAccountName,
-                Identifier = new AccountIdentifier
-                {
-                    Currency = invoice.Currency,
-                    IBAN = invoice.DestinationIban,
-                    SortCode = invoice.DestinationSortCode,
-                    AccountNumber = invoice.DestinationAccountNumber
-                },
-            }
+            Destination = invoice.Destination
         };
     }
 }
