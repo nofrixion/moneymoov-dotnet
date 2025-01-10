@@ -169,6 +169,17 @@ public static class PayoutsValidator
             return false;
         }
 
+        var ibanLengths = new Dictionary<string, int> { { "IE", 22 } };
+
+        // Extract country code and validate length
+        if (ibanLengths.TryGetValue(bankAccount[..2], out int expectedLength))
+        {
+            if (bankAccount.Length != expectedLength)
+            {
+                return false;
+            }
+        }
+
         string bank = bankAccount[4..] + bankAccount[..4];
 
         int asciiShift = 55;
