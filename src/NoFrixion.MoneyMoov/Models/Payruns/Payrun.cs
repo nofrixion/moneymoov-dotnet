@@ -20,7 +20,7 @@ using NoFrixion.MoneyMoov.Models.Approve;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class Payrun
+public class Payrun : IWebhookPayload
 {
     public Guid ID { get; set; }
 
