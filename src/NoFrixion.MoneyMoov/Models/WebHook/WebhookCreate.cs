@@ -69,9 +69,14 @@ public class WebhookCreate : IValidatableObject
             yield return new ValidationResult($"The Secret string was too long. The Secret maximum length is {SECRET_MAX_LENGTH} characters.");
         }
 
-        if (ResourceTypes.Contains(WebhookResourceTypesEnum.None))
+        if (ResourceTypes == null || ResourceTypes.Count() == 0)
         {
-            yield return new ValidationResult("Can not create webhook with a resource type of none.");
+            yield return new ValidationResult("Cannot create a webhook with an empty resource type list. Please specify at least one resource type.");
+        }
+
+        if (ResourceTypes?.Contains(WebhookResourceTypesEnum.None) == true)
+        {
+            yield return new ValidationResult("Cannot create a webhook with a resource type of none.");
         }
     }
 
