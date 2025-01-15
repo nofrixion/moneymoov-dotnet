@@ -26,7 +26,17 @@ public class MerchantToken
 
     public string Description { get; set; }
 
-    public MerchantTokenPermissionsEnum Permissions { get; set; }
+    [Obsolete("This field has been deprecated. Please use PermissionTypes instead.")]
+    public MerchantTokenPermissionsEnum Permissions
+    {
+        get =>
+           PermissionTypes.Any() ? PermissionTypes.ToFlagEnum() : MerchantTokenPermissionsEnum.Deny;
+    }
+
+    /// <summary>
+    /// The permissions that the merchant token supports.
+    /// </summary>
+    public List<MerchantTokenPermissionsEnum> PermissionTypes { get; set; } = new List<MerchantTokenPermissionsEnum>();
 
     public DateTimeOffset Inserted { get; set; }
 
