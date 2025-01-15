@@ -27,7 +27,17 @@ public class Webhook
 
     public Guid ID { get; set; }
 
-    public WebhookResourceTypesEnum Type { get; set; }
+    [Obsolete("This field has been deprecated. Please use ResourceTypes instead.")]
+    public WebhookResourceTypesEnum Type
+    {
+        get =>
+          ResourceTypes.Any() ? ResourceTypes.ToFlagEnum() : WebhookResourceTypesEnum.None;
+    }
+
+    /// <summary>
+    /// The resource types that the webhook will be generated for.
+    /// </summary>
+    public List<WebhookResourceTypesEnum> ResourceTypes { get; set; } = new List<WebhookResourceTypesEnum>();
 
     public string? DestinationUrl { get; set; }
 
