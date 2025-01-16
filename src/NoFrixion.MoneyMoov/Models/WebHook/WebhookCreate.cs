@@ -26,8 +26,29 @@ public class WebhookCreate : IValidatableObject
     [Required]
     public Guid MerchantID { get; set; }
 
-    [Required]
-    public WebhookResourceTypesEnum Type { get; set; }
+    [Obsolete("This field has been deprecated. Please use ResourceTypes instead.")]
+    public WebhookResourceTypesEnum Type
+    {
+        get =>
+            ResourceTypes.Any() ? ResourceTypes.ToFlagEnum() : WebhookResourceTypesEnum.None;
+
+        init
+        {
+            if (value == WebhookResourceTypesEnum.None)
+            {
+                ResourceTypes.Clear();
+            }
+            else
+            {
+                ResourceTypes = value.ToList();
+            }
+        }
+    }
+
+    /// <summary>
+    /// The resource types that the webhook should be generated for.
+    /// </summary>
+    public List<WebhookResourceTypesEnum> ResourceTypes { get; set; } = new List<WebhookResourceTypesEnum>();
 
     [Required]
     public string? DestinationUrl { get; set; }
@@ -48,24 +69,40 @@ public class WebhookCreate : IValidatableObject
             yield return new ValidationResult($"The Secret string was too long. The Secret maximum length is {SECRET_MAX_LENGTH} characters.");
         }
 
-        if (Type == WebhookResourceTypesEnum.None)
+        if (ResourceTypes == null || ResourceTypes.Count() == 0)
         {
-            yield return new ValidationResult("Can not create webhook with type none.");
+            yield return new ValidationResult("Cannot create a webhook with an empty resource type list. Please specify at least one resource type.");
+        }
+
+        if (ResourceTypes?.Contains(WebhookResourceTypesEnum.None) == true)
+        {
+            yield return new ValidationResult("Cannot create a webhook with a resource type of none.");
         }
     }
 
     public Dictionary<string, string> ToDictionary()
     {
-        return new Dictionary<string, string>
+        var dict = new Dictionary<string, string>
         {
             { nameof(ID), ID.ToString() },
             { nameof(MerchantID), MerchantID.ToString() },
-            { nameof(Type), Type.ToString() },
             { nameof(DestinationUrl), DestinationUrl ?? string.Empty },
             { nameof(Retry), Retry.ToString() },
             { nameof(Secret), Secret ?? string.Empty },
             { nameof(IsActive), IsActive.ToString() },
             { nameof(EmailAddress), EmailAddress ?? string.Empty }
         };
+
+        if (ResourceTypes?.Count() > 0)
+        {
+            int resourceTypeNumber = 0;
+            foreach (var resourceType in ResourceTypes)
+            {
+                dict.Add($"{nameof(ResourceTypes)}[{resourceTypeNumber}]", resourceType.ToString());
+                resourceTypeNumber++;
+            }
+        }
+
+        return dict;
     }
 }
