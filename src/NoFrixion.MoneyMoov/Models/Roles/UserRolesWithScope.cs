@@ -41,5 +41,5 @@ public class UserRoleWithScope
     /// <summary>
     /// The number of accounts the user has access to in the merchant for the role.
     /// </summary>
-    public int AccountsCount { get; set; }
+    public string Scope { get; set; } = null!;
 }
