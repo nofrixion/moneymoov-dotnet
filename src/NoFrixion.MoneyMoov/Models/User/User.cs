@@ -42,7 +42,7 @@ public class User
 
     public UserRolePermissions? Permissions { get; set; }
     
-    public string RoleNamesFormatted { get; set; } = string.Empty;
-    
+    public List<UserRoleWithScope>? RolesWithScope { get; set; }
+
     public bool IsEmpty() => ID == Guid.Empty && EmailAddress == string.Empty;
 }
