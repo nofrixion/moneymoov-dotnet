@@ -38,7 +38,29 @@ public class TokenAdd : IValidatableObject
     /// </summary>
     public SharedSecretAlgorithmsEnum HmacAlgorithm { get; set; }
 
-    public MerchantTokenPermissionsEnum Permissions { get; set; } = MerchantTokenPermissionsEnum.CreatePaymentRequest;
+    [Obsolete("This field has been deprecated. Please use PermissionTypes instead.")]
+    public MerchantTokenPermissionsEnum Permissions
+    {
+        get =>
+            PermissionTypes.Any() ? PermissionTypes.ToFlagEnum() : MerchantTokenPermissionsEnum.Deny;
+
+        init
+        {
+            if (value == MerchantTokenPermissionsEnum.Deny)
+            {
+                PermissionTypes.Clear();
+            }
+            else
+            {
+                PermissionTypes = value.ToList();
+            }
+        }
+    }
+
+    /// <summary>
+    /// The list of permissions tho grant to the merchant token.
+    /// </summary>
+    public List<MerchantTokenPermissionsEnum> PermissionTypes { get; set; } = new() { MerchantTokenPermissionsEnum.CreatePaymentRequest };
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -82,7 +104,16 @@ public class TokenAdd : IValidatableObject
 
         dict.Add(nameof(MerchantID), MerchantID.ToString());
         dict.Add(nameof(Description), Description.ToString());
-        dict.Add(nameof(Permissions), Permissions.ToString());
+
+        if (PermissionTypes?.Count() > 0)
+        {
+            int permissionTypeNumber = 0;
+            foreach (var permissionType in PermissionTypes)
+            {
+                dict.Add($"{nameof(PermissionTypes)}[{permissionTypeNumber}]", permissionType.ToString());
+                permissionTypeNumber++;
+            }
+        }
 
         return dict;
     }
