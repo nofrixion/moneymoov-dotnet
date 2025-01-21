@@ -42,4 +42,9 @@ public class UserRoleWithScope
     /// The number of accounts the user has access to in the merchant for the role.
     /// </summary>
     public required string Scope { get; set; }
+    
+    /// <summary>
+    /// The date the role was assigned to the user on the merchant.
+    /// </summary>
+    public DateTimeOffset AssignedAt { get; set; }
 }
