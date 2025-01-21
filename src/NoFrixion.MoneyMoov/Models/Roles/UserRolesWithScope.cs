@@ -46,5 +46,5 @@ public class UserRoleWithScope
     /// <summary>
     /// The date the role was assigned to the user on the merchant.
     /// </summary>
-    public DateTimeOffset AssignedAt { get; set; }
+    public required DateTimeOffset AssignedAt { get; set; }
 }
