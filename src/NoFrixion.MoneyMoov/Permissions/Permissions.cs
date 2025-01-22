@@ -103,19 +103,20 @@ public enum MerchantPermissions : ulong
     CanCreatePaymentRequests = 1L << 25,
     CanViewPaymentRequests = 1L << 26,
     CanUpdatePaymentRequests = 1L << 27,
+    CanDeletePaymentRequests = 1L << 28,
     
     // Mandates
-    CanViewMandates = 1L << 28,
-    CanCreateMandates = 1L << 29,
+    CanViewMandates = 1L << 29,
+    CanCreateMandates = 1L << 30,
     
     // Permissions
-    CanViewRoles = 1L << 30,
-    CanCreateRoles = 1L << 31, 
-    CanEditRoles = 1L << 32,  
+    CanViewRoles = 1L << 31,
+    CanCreateRoles = 1L << 32, 
+    CanEditRoles = 1L << 33,  
     
     // Reports
-    CanCreateReports = 1L << 33,
-    CanViewReports = 1L << 34,
+    CanCreateReports = 1L << 34,
+    CanViewReports = 1L << 35,
 }
 
 public static class ClaimTypePrefixes
