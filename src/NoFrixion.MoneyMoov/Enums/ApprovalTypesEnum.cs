@@ -33,5 +33,7 @@ public enum ApproveTypesEnum
     
     Beneficiary = 7,
     
-    Payrun = 8
+    Payrun = 8,
+
+    MerchantToken = 9
 }
