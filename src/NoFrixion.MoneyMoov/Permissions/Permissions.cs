@@ -31,26 +31,27 @@ public enum AccountPermissions : ulong
     
     // Accounts
     CanViewAccount = 1L << 7,
-    CanUpdateAccount = 1L << 8,
+    CanViewAccountForPaymentRequests = 1L << 8,
+    CanUpdateAccount = 1L << 9,
     
     // Rules
-    CanViewRules = 1L << 9,
-    CanCreateRules = 1L << 10,
-    CanEditRules = 1L << 11,
-    CanDeleteRules = 1L << 12,
-    CanAuthoriseRules = 1L << 13,
+    CanViewRules = 1L << 10,
+    CanCreateRules = 1L << 11,
+    CanEditRules = 1L << 12,
+    CanDeleteRules = 1L << 13,
+    CanAuthoriseRules = 1L << 14,
     
     // Transactions
-    CanViewTransactions = 1L << 14,
+    CanViewTransactions = 1L << 15,
     
     // Statements
     [Obsolete("Use CanExportData instead.")]
-    CanCreateStatements = 1L << 15,
+    CanCreateStatements = 1L << 16,
     
     [Obsolete("Use CanExportData instead.")]
-    CanViewStatements = 1L << 16,
+    CanViewStatements = 1L << 17,
     
-    CanExportData = 1L << 17,
+    CanExportData = 1L << 18,
 }
 
 [Flags]
