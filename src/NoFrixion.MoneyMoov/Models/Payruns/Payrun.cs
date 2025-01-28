@@ -83,4 +83,24 @@ public class Payrun : IWebhookPayload
     /// A list of the users who have successfully authorised the latest version of the payrun and when.
     /// </summary>
     public List<Authorisation>? Authorisations { get; set; }
+    
+    public string? Nonce { get; set; }
+    
+    /// <summary>
+    /// Gets a hash of the critical fields for the payrun. This hash is
+    /// used to ensure a payrun's details are not modified between the time the
+    /// approval is given and the time the payrun is actioned.
+    /// </summary>
+    /// <returns>A hash of the payrun's critical fields.</returns>
+    public string GetApprovalHash()
+    {
+        string input =
+            ID.ToString() +
+            MerchantID.ToString() +
+            Name +
+            ScheduleDate?.ToString("o") +
+            (string.IsNullOrEmpty(Nonce) ? string.Empty : Nonce);
+
+        return HashHelper.CreateHash(input);
+    }
 }
