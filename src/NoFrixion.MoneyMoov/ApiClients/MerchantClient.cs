@@ -22,10 +22,13 @@ namespace NoFrixion.MoneyMoov;
 
 public interface IMerchantClient
 {
+    Task<RestApiResponse<MerchantToken>> GetMerchantTokenAsync(string userAccessToken, Guid tokenID);
+    
     Task<RestApiResponse<MerchantTokenPageResponse>> GetMerchantTokensAsync(string userAccessToken, Guid merchantID);
 
     Task<RestApiResponse<MerchantToken>> CreateMerchantTokenAsync(string userAccessToken, TokenAdd token);
 
+    [Obsolete($"Use {nameof(ITokensClient)}.{nameof(ITokensClient.ArchiveTokenAsync)} instead.")]
     Task<RestApiResponse> DeleteMerchantTokenAsync(string userAccessToken, Guid tokenID);
 
     Task<RestApiResponse<IEnumerable<UserRole>>> GetUserRolesAsync(string userAccessToken, Guid merchantID);
@@ -56,6 +59,25 @@ public class MerchantClient : IMerchantClient
     {
         _apiClient = apiClient;
         _logger = logger;
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov Merchant get merchant token endpoint to get a specific merchant token.
+    /// </summary>
+    /// <param name="userAccessToken">A User scoped JWT access token.</param>
+    /// <param name="tokenID">The ID of the token to retrieve.</param>
+    /// <returns>If successful, the merchant token details.</returns>
+    public Task<RestApiResponse<MerchantToken>> GetMerchantTokenAsync(string userAccessToken, Guid tokenID)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantTokenUrl(_apiClient.GetBaseUri().ToString(), tokenID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetMerchantTokenAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<MerchantToken>(url, userAccessToken),
+            _ => Task.FromResult(new RestApiResponse<MerchantToken>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
     }
 
     /// <summary>
@@ -96,13 +118,14 @@ public class MerchantClient : IMerchantClient
             _ => Task.FromResult(new RestApiResponse<MerchantToken>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
-
+    
     /// <summary>
     /// Calls the MoneyMoov Merchant delete merchant tokens endpoint to delete a single access token.
     /// </summary>
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="tokenID">The ID of the token to delete.</param>
     /// <returns>If successful, a list of tokens for the merchant.</returns>
+    [Obsolete($"Use {nameof(TokensClient)}.{nameof(TokensClient.ArchiveTokenAsync)} instead.")]
     public Task<RestApiResponse> DeleteMerchantTokenAsync(string userAccessToken, Guid tokenID)
     {
         var url = MoneyMoovUrlBuilder.TokensApi.TokenUrl(_apiClient.GetBaseUri().ToString(), tokenID);

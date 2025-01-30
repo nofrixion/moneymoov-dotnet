@@ -101,6 +101,9 @@ public static class MoneyMoovUrlBuilder
         public static string AllMerchantsTokensUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.tokens}";
 
+        public static string MerchantTokenUrl(string moneyMoovBaseUrl, Guid tokenID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.tokens}/{tokenID}";
+
         public static string MerchantAccountsUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.accounts}";
 
@@ -272,6 +275,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string TokenUrl(string moneyMoovBaseUrl, Guid tokenID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.tokens}/{tokenID}";
+
+        public static string AuthoriseTokenUrl(string moneyMoovBaseUrl, Guid tokenID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.tokens}/authorise/{tokenID}";
     }
 
     /// <summary>

@@ -21,7 +21,12 @@ namespace NoFrixion.MoneyMoov;
 
 public interface ITokensClient
 {
+    [Obsolete($"Use {nameof(ITokensClient)}.{nameof(DeleteTokenAsync)} instead.")]
     Task<RestApiResponse> DeleteTokenAsync(string accessToken, Guid id);
+    
+    Task<RestApiResponse> ArchiveTokenAsync(string accessToken, Guid id);
+
+    Task<RestApiResponse> AuthoriseTokenAsync(string accessToken, Guid id);
 }
 
 public class TokensClient : ITokensClient
@@ -59,15 +64,40 @@ public class TokensClient : ITokensClient
     /// <param name="accessToken">A User scoped JWT access token.</param>
     /// <param name="id">The ID of the token to delete.</param>
     /// <returns>A moneymoov API response object.</returns>
+    [Obsolete($"Use {nameof(TokensClient)}.{nameof(ArchiveTokenAsync)} instead.")]
     public Task<RestApiResponse> DeleteTokenAsync(string accessToken, Guid id)
+    {
+        return ArchiveTokenAsync(accessToken, id);
+    }
+
+    /// <summary>
+    /// Archives a user or merchant token.
+    /// </summary>
+    /// <param name="accessToken">A User scoped JWT access token.</param>
+    /// <param name="id">The ID of the token to archive.</param>
+    /// <returns>A moneymoov API response object.</returns>
+    public Task<RestApiResponse> ArchiveTokenAsync(string accessToken, Guid id)
     {
         var url = MoneyMoovUrlBuilder.TokensApi.TokenUrl(_apiClient.GetBaseUri().ToString(), id);
 
-        var prob = _apiClient.CheckAccessToken(accessToken, nameof(DeleteTokenAsync));
+        var prob = _apiClient.CheckAccessToken(accessToken, nameof(ArchiveTokenAsync));
 
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.DeleteAsync(url, accessToken),
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    public Task<RestApiResponse> AuthoriseTokenAsync(string accessToken, Guid id)
+    {
+        var url = MoneyMoovUrlBuilder.TokensApi.AuthoriseTokenUrl(_apiClient.GetBaseUri().ToString(), id);
+
+        var prob = _apiClient.CheckAccessToken(accessToken, nameof(AuthoriseTokenAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PostAsync(url, accessToken),
             _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }

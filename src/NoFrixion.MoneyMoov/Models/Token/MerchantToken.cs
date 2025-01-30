@@ -14,6 +14,10 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using JetBrains.Annotations;
+using NoFrixion.MoneyMoov.Enums;
+using NoFrixion.MoneyMoov.Models.Approve;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 #nullable disable
@@ -76,4 +80,55 @@ public class MerchantToken
     /// Optional. If set indicates the merchant token is not valid after the specified expiry date.
     /// </summary>
     public DateTimeOffset? ExpiresAt { get; set; }
+
+    /// <summary>
+    /// A list of users who have successfully authorised the latest version of the beneficiary.
+    /// </summary>
+    [CanBeNull] public List<Authorisation> Authorisations { get; set; }
+
+    /// <summary>
+    /// True if the merchant token can be authorised by the user who loaded it.
+    /// </summary>
+    public bool CanAuthorise { get; set; }
+
+    /// <summary>
+    /// True if the beneficiary was loaded for a user and that user has already authorised the latest version of the beneficiary.
+    /// </summary>
+    public bool HasCurrentUserAuthorised {  get; set; }
+    
+    /// <summary>
+    /// The number of authorisers required for this merchant token. Is determined by business settings
+    /// on the source account and/or merchant.
+    /// </summary>
+    public int AuthorisersRequiredCount { get; set; }
+
+    /// <summary>
+    /// The number of distinct authorisers that have authorised the merchant token.
+    /// </summary>
+    public int AuthorisersCompletedCount { get; set; }
+
+    /// <summary>
+    /// A list of authentication types allowed to authorise the merchant token.
+    /// </summary>
+    public List<AuthenticationTypesEnum> AuthenticationMethods { get; set; }
+    
+    public DateTimeOffset? LastAuthorised { get; set; }
+    
+    /// <summary>
+    /// Gets a hash of the critical fields for the beneficiary. This hash is
+    /// used to ensure a beneficiary's details are not modified between the time the
+    /// authorisation is given and the time the beneficiary is enabled.
+    /// </summary>
+    /// <returns>A hash of the beneficiary's critical fields.</returns>
+    public string GetApprovalHash()
+    {
+        var input =
+            Description +
+            MerchantID +
+            GetPermissionListHash();
+
+        return HashHelper.CreateHash(input);
+    }
+    
+    private string GetPermissionListHash() => string.Join(',', PermissionTypes);
 }
