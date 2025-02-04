@@ -74,7 +74,8 @@ public enum MerchantPermissions : ulong
     // Tokens
     CanViewTokens = 1L << 8,
     CanCreateTokens = 1L << 9,
-    CanDeleteTokens = 1L << 10,
+    CanArchiveTokens = 1L << 10,
+    CanAuthoriseTokens = 1L << 36,
     
     // Pay runs
     CanCreatePayruns = 1L << 11,
