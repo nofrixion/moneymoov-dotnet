@@ -8,6 +8,7 @@
 // 
 // History:
 // 27 May 2023 Aaron Clauson   Created, Stillorgan Wood, Dublin, Ireland.
+// 04 Feb 2025 Aaron Clauson   Added LastUpdated property.
 // 
 // License:
 // MIT.
@@ -22,5 +23,7 @@ public interface IWebhookPayload
     public Guid MerchantID { get; set; }
 
     public DateTimeOffset Inserted { get; set; }
+
+    public DateTimeOffset LastUpdated { get; set; }
 }
 
