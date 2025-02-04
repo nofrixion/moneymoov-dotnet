@@ -204,6 +204,8 @@ public class Payout : IValidatableObject, IWebhookPayload
 
     public DateTimeOffset Inserted { get; set; }
 
+    public DateTimeOffset LastUpdated { get; set; }
+
     /// <summary>
     /// The name of the account the payout is being made from.
     /// </summary>
@@ -415,6 +417,24 @@ public class Payout : IValidatableObject, IWebhookPayload
     /// Documents associated with the payout.
     /// </summary>
     public List<PayoutDocument>? Documents { get; set; }
+
+    /// <summary>
+    /// Indicates whether the payout has been submitted for processing. Once submitted the payout
+    /// amount is reserved until the payout is marked as failed or settled.
+    /// </summary>
+    public bool IsSubmitted { get; set; }
+
+    /// <summary>
+    /// Set to true if a submitted payout subsequently fails. If a payout fails the amount is
+    /// remvoed from the account's reserved balance.
+    /// </summary>
+    public bool IsFailed { get; set; }
+
+    /// <summary>
+    /// Set to true if a payout was successfully processed and the corresponding transaction has been
+    /// recorded on the ledger.
+    /// </summary>
+    public bool IsSettled { get; set; }
 
     public NoFrixionProblem Validate()
     {
