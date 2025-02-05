@@ -59,8 +59,8 @@ public enum WebhookResourceTypesEnum
     Report = 64,
     
     /// <summary>
-    /// Will trigger notifications for tribe load event
+    /// Will trigger notifications for payrun events
     /// </summary>
-    TribeLoad = 128,
+    Payrun = 128,
 }
 

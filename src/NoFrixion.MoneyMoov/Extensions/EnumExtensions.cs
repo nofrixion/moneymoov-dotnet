@@ -81,7 +81,7 @@ public static class EnumExtensions
     }
 
     /// <summary>
-    /// This method converts  list of flag enum values to a single flag enum.
+    /// This method converts a list of flag enum values to a single flag enum.
     /// </summary>
     public static T ToFlagEnum<T>(this IEnumerable<T> enumValues) where T : Enum
     {

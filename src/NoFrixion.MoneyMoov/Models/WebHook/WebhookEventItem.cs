@@ -18,6 +18,11 @@ namespace NoFrixion.MoneyMoov.Models;
 public class WebhookEventItem
 {
     /// <summary>
+    /// Unique identifier for the webhook event.
+    /// </summary>
+    public Guid ID { get; set; }
+
+    /// <summary>
     /// Timestamp the event occurred at.
     /// </summary>
     public DateTimeOffset EventDate { get; set; }
@@ -45,6 +50,7 @@ public class WebhookEventItem
         WebhookResourceTypesEnum resourceType,
         dynamic payload)
     {
+        ID = Guid.NewGuid();
         EventDate = eventDate;
         ActionType = actionType;
         ResourceType = resourceType;

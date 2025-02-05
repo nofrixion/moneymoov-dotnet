@@ -247,7 +247,7 @@ public class PayoutClient : IPayoutClient
 
     /// <summary>
     /// Calls the Trusted Third Party (TTP) MoneyMoov Payout endpoint to send a payout WITHOUT requiring NoFrixion Strong
-    /// Customer Authentication (SCA). This method relies on the caller to use ther own form of SCA.
+    /// Customer Authentication (SCA). This method relies on the caller to use their own form of SCA.
     /// </summary>
     /// <param name="appID">The TTP application ID.</param>
     /// <param name="secret">The TTP secret.</param>

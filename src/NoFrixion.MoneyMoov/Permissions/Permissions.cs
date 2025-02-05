@@ -31,26 +31,27 @@ public enum AccountPermissions : ulong
     
     // Accounts
     CanViewAccount = 1L << 7,
-    CanUpdateAccount = 1L << 8,
+    CanViewAccountForPaymentRequests = 1L << 8,
+    CanUpdateAccount = 1L << 9,
     
     // Rules
-    CanViewRules = 1L << 9,
-    CanCreateRules = 1L << 10,
-    CanEditRules = 1L << 11,
-    CanDeleteRules = 1L << 12,
-    CanAuthoriseRules = 1L << 13,
+    CanViewRules = 1L << 10,
+    CanCreateRules = 1L << 11,
+    CanEditRules = 1L << 12,
+    CanDeleteRules = 1L << 13,
+    CanAuthoriseRules = 1L << 14,
     
     // Transactions
-    CanViewTransactions = 1L << 14,
+    CanViewTransactions = 1L << 15,
     
     // Statements
     [Obsolete("Use CanExportData instead.")]
-    CanCreateStatements = 1L << 15,
+    CanCreateStatements = 1L << 16,
     
     [Obsolete("Use CanExportData instead.")]
-    CanViewStatements = 1L << 16,
+    CanViewStatements = 1L << 17,
     
-    CanExportData = 1L << 17,
+    CanExportData = 1L << 18,
 }
 
 [Flags]
@@ -73,7 +74,8 @@ public enum MerchantPermissions : ulong
     // Tokens
     CanViewTokens = 1L << 8,
     CanCreateTokens = 1L << 9,
-    CanDeleteTokens = 1L << 10,
+    CanArchiveTokens = 1L << 10,
+    CanAuthoriseTokens = 1L << 36,
     
     // Pay runs
     CanCreatePayruns = 1L << 11,
@@ -103,19 +105,20 @@ public enum MerchantPermissions : ulong
     CanCreatePaymentRequests = 1L << 25,
     CanViewPaymentRequests = 1L << 26,
     CanUpdatePaymentRequests = 1L << 27,
+    CanDeletePaymentRequests = 1L << 28,
     
     // Mandates
-    CanViewMandates = 1L << 28,
-    CanCreateMandates = 1L << 29,
+    CanViewMandates = 1L << 29,
+    CanCreateMandates = 1L << 30,
     
     // Permissions
-    CanViewRoles = 1L << 30,
-    CanCreateRoles = 1L << 31, 
-    CanEditRoles = 1L << 32,  
+    CanViewRoles = 1L << 31,
+    CanCreateRoles = 1L << 32, 
+    CanEditRoles = 1L << 33,  
     
     // Reports
-    CanCreateReports = 1L << 33,
-    CanViewReports = 1L << 34,
+    CanCreateReports = 1L << 34,
+    CanViewReports = 1L << 35,
 }
 
 public static class ClaimTypePrefixes

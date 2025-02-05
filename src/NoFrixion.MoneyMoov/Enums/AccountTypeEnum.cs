@@ -29,9 +29,4 @@ public enum AccountTypeEnum
     /// Standard fee accounts. Fees are applied.
     /// </summary>
     StandardFee,
-    
-    /// <summary>
-    /// Account associated with Tribe.
-    /// </summary>
-    Tribe,
 }

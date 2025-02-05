@@ -26,6 +26,11 @@ public enum AccountSepaInstantStatusEnum
     None,
     
     /// <summary>
+    /// Account hasn't been sent to supplier to enable SEPA Instant yet.
+    /// </summary>
+    Pending,
+    
+    /// <summary>
     /// Supplier is in the process of enabling SEPA Instant.
     /// </summary>
     InProgress,
@@ -38,5 +43,10 @@ public enum AccountSepaInstantStatusEnum
     /// <summary>
     /// For some reason SEPA Instant is not enabled for this account.
     /// </summary>
-    Disabled
+    Disabled,
+    
+    /// <summary>
+    /// Supplier failed to enable SEPA Instant for this account.
+    /// </summary>
+    Failed
 }
