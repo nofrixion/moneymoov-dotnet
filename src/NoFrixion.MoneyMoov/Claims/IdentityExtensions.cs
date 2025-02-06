@@ -364,6 +364,23 @@ public static class IdentityExtensions
         return Enum.TryParse(claim.Value, out MerchantPermissions claimPermissions) && claimPermissions.HasFlag(permission);
     }
 
+    public static bool HasAccountPermission(this IIdentity identity, AccountPermissions permission, Guid accountID)
+    {
+        if (identity is not ClaimsIdentity claimsIdentity)
+        {
+            return false;
+        }
+
+        var claim = claimsIdentity.Claims.FirstOrDefault(x => x.Type == $"{ClaimTypePrefixes.ACCOUNT}.{accountID}");
+        
+        if (claim == null)
+        {
+            return false;
+        }
+        
+        return Enum.TryParse(claim.Value, out AccountPermissions claimPermissions) && claimPermissions.HasFlag(permission);
+    }
+    
     /// <summary>
     /// Gets the authentication type from the identity token.
     /// </summary>
