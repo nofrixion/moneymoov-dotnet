@@ -87,5 +87,8 @@ public enum TransactionTypesEnum
     Unknown = 12,
 
     [Display(Name = "TARGET2")]
-    TARGET2 = 13
+    TARGET2 = 13,
+    
+    [Display(Name = "SEPA Direct Debit Rejection / Chargeback")]
+    SEPA_DD_RJCT = 14
 }
