@@ -368,4 +368,30 @@ public static class PaymentRequestEventExtensions
             .Where(x => x.EventType == PaymentRequestEventTypesEnum.card_sale)
             .ToList() : new List<PaymentRequestEvent>();
     }
+    
+    public static void HandleDirectDebitChargeBackEvents(this IGrouping<string?, PaymentRequestEvent> groupedDirectDebitEvent,
+        PaymentRequestPaymentAttempt paymentAttempt)
+    {
+        var directDebitChargeBackEvents =
+            groupedDirectDebitEvent
+                .Where(x => 
+                    x.EventType == PaymentRequestEventTypesEnum.direct_debit_failed &&
+                    x.Amount < 0)
+                .ToList();
+
+        if (!directDebitChargeBackEvents.Any())
+        {
+            return;
+        }
+
+        paymentAttempt.RefundAttempts = directDebitChargeBackEvents
+            .Select(x => new PaymentRequestRefundAttempt()
+            {
+                RefundInitiatedAt = x.Inserted,
+                RefundInitiatedAmount = Math.Abs(x.Amount),
+                RefundSettledAt = x.Inserted,
+                RefundSettledAmount = Math.Abs(x.Amount),
+                IsCardVoid = false
+            }).ToList();
+    }
 }

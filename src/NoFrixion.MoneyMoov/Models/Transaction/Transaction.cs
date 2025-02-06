@@ -72,6 +72,14 @@ public class Transaction : IWebhookPayload
     public DateTimeOffset Inserted { get; set; }
 
     /// <summary>
+    /// Date when the transaction was inserted into the ledger. Note transactions cannot be updated
+    /// this property is provided for webhook payload compatability.
+    /// </summary>
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
+    public DateTimeOffset LastUpdated { get; set; }
+
+    /// <summary>
     /// For a pay in the reference the sending party attached. For a pay out the 
     /// reference that the payer attached for themselves.
     /// </summary>
@@ -120,4 +128,10 @@ public class Transaction : IWebhookPayload
     /// An optional list of descriptive tags attached to the transaction.
     /// </summary>
     public List<Tag> Tags { get; set; } = [];
+
+    /// <summary>
+    /// The sequence number of transaction on a per account basis. This sequence number is guaranteed to be an arithemtic sequence 
+    /// number for all transactions belonging to the same account.
+    /// </summary>
+    public int AccountSequenceNumber { get; set; }
 }

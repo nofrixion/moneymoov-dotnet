@@ -389,7 +389,7 @@ public static class PaymentRequestExtensions
                 PaymentRequestEventTypesEnum.direct_debit_failed or 
                 PaymentRequestEventTypesEnum.direct_debit_paid)
             .OrderBy(x => x.Inserted)
-            .GroupBy(x => x.DirectDebitPaymentID)
+            .GroupBy(x => x.DirectDebitPaymentReference)
             .ToList();
         
         foreach (var attempt in ddAttempts)
@@ -424,14 +424,8 @@ public static class PaymentRequestExtensions
                 paymentAttempt.SettledAt = paidEvent.Inserted;
                 paymentAttempt.SettledAmount = paidEvent.Amount;
             }
-            else if (attempt.Any(x => 
-                         x.EventType is PaymentRequestEventTypesEnum.direct_debit_failed))
-            {
-                var settleFailedEvent = attempt.First(x => 
-                    x.EventType is PaymentRequestEventTypesEnum.direct_debit_failed);
 
-                paymentAttempt.SettleFailedAt = settleFailedEvent.Inserted;
-            }
+            attempt.HandleDirectDebitChargeBackEvents(paymentAttempt);
 
             ddPaymentAttempts.Add(paymentAttempt);
         }
