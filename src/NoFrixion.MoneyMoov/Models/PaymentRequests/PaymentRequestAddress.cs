@@ -14,6 +14,7 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -95,5 +96,46 @@ public class PaymentRequestAddress : IValidatableObject
         dict.Add(nameof(Email), Email ?? string.Empty);
 
         return dict;
+    }
+
+    public string ToDisplayString()
+    {
+        var sb = new StringBuilder();
+        if(!string.IsNullOrWhiteSpace(AddressLine1))
+        {
+            sb.Append(AddressLine1);
+        }
+        
+        if(!string.IsNullOrWhiteSpace(AddressLine2))
+        {
+            sb.Append(", ");
+            sb.Append(AddressLine2);
+        }
+        
+        if(!string.IsNullOrWhiteSpace(AddressCity))
+        {
+            sb.Append(", ");
+            sb.Append(AddressCity);
+        }
+        
+        if(!string.IsNullOrWhiteSpace(AddressCounty))
+        {
+            sb.Append(", ");
+            sb.Append(AddressCounty);
+        }
+        
+        if(!string.IsNullOrWhiteSpace(AddressPostCode))
+        {
+            sb.Append(", ");
+            sb.Append(AddressPostCode);
+        }
+        
+        if(!string.IsNullOrWhiteSpace(AddressCountryCode))
+        {
+            sb.Append(", ");
+            sb.Append(AddressCountryCode);
+        }
+        
+        return sb.ToString();
     }
 }
