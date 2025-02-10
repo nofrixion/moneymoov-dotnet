@@ -18,6 +18,7 @@ namespace NoFrixion.MoneyMoov.Models.Export;
 public class CsvExportResponse
 {
     const string CSV_CONTENT_TYPE = "text/csv";
+    
     public required byte[] Data { get; set; }
     
     public required string FileName { get; set; }
