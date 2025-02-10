@@ -10,7 +10,7 @@
 // 06 Feb 2025  Saurav Maiti   Created, Hamilton gardens, Dublin, Ireland.
 //
 // License: 
-// Proprietary NoFrixion
+// MIT.
 //-----------------------------------------------------------------------------
 
 namespace NoFrixion.MoneyMoov.Models.Export;
