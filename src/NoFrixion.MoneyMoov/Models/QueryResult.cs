@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-//  Filename: GetResourcesResult.cs
+//  Filename: QueryResult.cs
 // 
 //  Description: Represents the result of a Get all query.
 //  It can contain either a JSON response or a CSV export.
@@ -20,35 +20,35 @@ using NoFrixion.MoneyMoov.Models.Export;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public record GetResourcesResult<T> where T : class
+public record QueryResult<T> where T : class
 {
     public ApiPageResponseBase<T>? PagedResourceItems { get; }
     public Option<CsvExportResponse> CsvResult { get; }
     public ContentTypeEnum ContentType { get; }
 
-    private GetResourcesResult(ApiPageResponseBase<T> resources)
+    private QueryResult(ApiPageResponseBase<T> resources)
     {
         PagedResourceItems = resources;
         CsvResult = Option<CsvExportResponse>.None;
         ContentType = ContentTypeEnum.Json;
     }
 
-    private GetResourcesResult(Option<CsvExportResponse> csvResult)
+    private QueryResult(Option<CsvExportResponse> csvResult)
     {
         CsvResult = csvResult;
         ContentType = ContentTypeEnum.Csv;
     }
 
-    public static GetResourcesResult<T> FromJson(ApiPageResponseBase<T> response)
+    public static QueryResult<T> FromJson(ApiPageResponseBase<T> response)
     {
         if (response is null)
             throw new ArgumentNullException(nameof(response));
 
-        return new GetResourcesResult<T>(response);
+        return new QueryResult<T>(response);
     }
 
-    public static GetResourcesResult<T> FromCsv(Option<CsvExportResponse> csvResult)
+    public static QueryResult<T> FromCsv(Option<CsvExportResponse> csvResult)
     {
-        return new GetResourcesResult<T>(csvResult);
+        return new QueryResult<T>(csvResult);
     }
 }
