@@ -97,6 +97,27 @@ public static class CsvMapper
                                             property.SetValue(result.Model, guidValue);
                                         }
                                     }
+                                    else if (property.PropertyType == typeof(int))
+                                    {
+                                        if (int.TryParse(formattedValue, out int intValue))
+                                        {
+                                            property.SetValue(result.Model, intValue);
+                                        }
+                                    }
+                                    else if (property.PropertyType == typeof(decimal))
+                                    {
+                                        if (decimal.TryParse(formattedValue, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal decimalValue))
+                                        {
+                                            property.SetValue(result.Model, decimalValue);
+                                        }
+                                    }
+                                    else if (property.PropertyType == typeof(DateTimeOffset))
+                                    {
+                                        if (DateTimeOffset.TryParse(formattedValue, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out DateTimeOffset dateTimeOffsetValue))
+                                        {
+                                            property.SetValue(result.Model, dateTimeOffsetValue);
+                                        }
+                                    }
                                     else if (property.PropertyType.IsEnum)
                                     {
                                         if (!string.IsNullOrEmpty(formattedValue))
@@ -115,7 +136,7 @@ public static class CsvMapper
                                     }
                                     else
                                     {
-                                        property.SetValue(result.Model, Convert.ChangeType(formattedValue, property.PropertyType));
+                                        property.SetValue(result.Model, Convert.ChangeType(formattedValue, property.PropertyType, CultureInfo.InvariantCulture));
                                     }
                                 }
                             }

@@ -134,4 +134,9 @@ public class Transaction : IWebhookPayload
     /// number for all transactions belonging to the same account.
     /// </summary>
     public int AccountSequenceNumber { get; set; }
+
+    /// <summary>
+    /// For Pay by Bank and Direct Debit transactions this will contain the ID of the payment request.
+    /// </summary>
+    public Guid? PaymentRequestID { get; set; }
 }
