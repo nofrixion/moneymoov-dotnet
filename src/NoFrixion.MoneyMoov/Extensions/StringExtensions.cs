@@ -172,4 +172,9 @@ public static class StringExtensions
             return record.ContainsKey(columnName) ? record[columnName]?.ToString()?.Trim() ?? string.Empty : "{" + columnName + "}";
         });
     }
+    
+    public static string ToSafeCsvString(this string value)
+    {
+        return $"\"{value.Replace("\"", "\"\"")}\"";
+    }
 }
