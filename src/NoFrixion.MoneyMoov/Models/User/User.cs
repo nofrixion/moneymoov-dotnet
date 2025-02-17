@@ -40,7 +40,7 @@ public class User
     
     public bool PasskeyAdded { get; set; }
 
-    public UserRolePermissions? Permissions { get; set; }
+    public UserPermissions? Permissions { get; set; }
     
     public List<UserRoleWithScope>? RolesWithScope { get; set; }
 
