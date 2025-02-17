@@ -17,13 +17,15 @@
 // -----------------------------------------------------------------------------
 
 using JetBrains.Annotations;
+using NoFrixion.Common.Models.ResourceExport;
 using NoFrixion.MoneyMoov.Enums;
+using NoFrixion.MoneyMoov.Extensions;
 
 namespace NoFrixion.MoneyMoov.Models;
 
 #nullable disable
 
-public class PaymentAccount
+public class PaymentAccount: IExportableToCsv
 {
     /// <summary>
     /// Unique id for the account.
@@ -220,5 +222,12 @@ public class PaymentAccount
     /// <summary>
     /// Indicates the status of the SEPA Instant payment rail for this account.
     /// </summary>
-    public AccountSepaInstantStatusEnum? SupplierSepaInstantStatus { get; set; }    
+    public AccountSepaInstantStatusEnum? SupplierSepaInstantStatus { get; set; }
+
+    public string CsvHeader =>
+        "ID,AccountName,AccountSupplierName,IsConnectedAccount,Balance,SubmittedPayoutsBalance,AvailableBalance,Currency,IBAN,SortCode,AccountNumber,Bic,Inserted,LastUpdated,IsDefault,BankName,ExpiryDate,XeroBankFeedConnectionStatus,XeroBankFeedSyncStatus,XeroBankFeedLastSyncedAt,XeroBankFeedSyncLastFailedAt,XeroBankFeedSyncLastFailureReason,XeroUnsynchronisedTransactionsCount,DefaultPaymentRail,IsArchived,SupplierSepaInstantStatus";
+    public string ToCsvRow()
+    {
+        return this.ToCsvRowString();
+    }
 }

@@ -24,10 +24,11 @@
 using System.ComponentModel.DataAnnotations;
 using NoFrixion.MoneyMoov.Extensions;
 using LanguageExt;
+using NoFrixion.Common.Models.ResourceExport;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class PaymentRequest : IPaymentRequest, IWebhookPayload
+public class PaymentRequest : IPaymentRequest, IWebhookPayload, IExportableToCsv
 {
     public Guid ID { get; set; }
 
@@ -467,5 +468,12 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload
                     PaymentMethodTypeEnum.pisp => pa.AuthorisedAmount - pa.SettledAmount,
                     _ => 0
                 });
+    }
+
+    public string CsvHeader =>
+        "ID,MerchantID,Amount,Currency,PaymentMethods,Description,CustomerID,OrderID,Inserted,LastUpdated,PispAccountID,PispAccountName,BaseOriginUrl,CardAuthorizeOnly,CardCreateToken,CardCreateTokenMode,Status,PartialPaymentMethod,CustomerEmailAddress,CardStripePaymentIntentID,CardStripePaymentIntentSecret,NotificationEmailAddresses,PriorityBankID,Title,PartialPaymentSteps,AmountReceived,AmountRefunded,AmountPending,CreatedByUserID,CreatedByUserName,MerchantTokenDescription,TransactionIDs,PayrunID,ShippingAddress,BillingAddress,CustomerName,PaymentProcessor,Tags";
+    public string ToCsvRow()
+    {
+        return this.ToCsvRowString();
     }
 }

@@ -14,6 +14,7 @@
 //   Proprietary NoFrixion.
 //  -----------------------------------------------------------------------------
 
+using System.Globalization;
 using NoFrixion.MoneyMoov.Models;
 
 namespace NoFrixion.MoneyMoov.Extensions;
@@ -431,5 +432,73 @@ public static class PaymentRequestExtensions
         }
 
         return ddPaymentAttempts;
+    }
+
+    public static string ToCsvRowString(this PaymentRequest entity)
+    {
+        if (entity == null)
+        {
+            return string.Empty;
+        }
+        
+        var transactionIDs = entity.Transactions.Count != 0
+            ? string.Join(",", entity.Transactions.Select(t => t.ID))
+            : "";
+
+        var values = new List<string>
+        {
+            entity.ID.ToString(),
+            entity.MerchantID.ToString(),
+            PaymentAmount.GetRoundedAmount(entity.Currency, entity.Amount).ToString(CultureInfo.InvariantCulture),
+            entity.Currency.ToString(),
+            string.Join(",", entity.PaymentMethods.Select(x => x.ToString())),
+            entity.Description ?? "",
+            entity.CustomerID ?? "",
+            entity.OrderID ?? "",
+            entity.Inserted.ToString("o"),
+            entity.LastUpdated.ToString("o"),
+            entity.PispAccountID?.ToString() ?? "",
+            entity.DestinationAccount != null ? entity.DestinationAccount.AccountName : "",
+            entity.BaseOriginUrl ?? "",
+            entity.CardAuthorizeOnly.ToString(),
+            entity.CardCreateToken.ToString(),
+            entity.CardCreateTokenMode.ToString(),
+            entity.Status.ToString(),
+            entity.PartialPaymentMethod.ToString(),
+            entity.CustomerEmailAddress ?? "",
+            entity.CardStripePaymentIntentID ?? "",
+            entity.CardStripePaymentIntentSecret ?? "",
+            entity.NotificationEmailAddresses ?? "",
+            entity.PriorityBankID?.ToString() ?? "",
+            entity.Title ?? "",
+            entity.PartialPaymentSteps ?? "",
+            PaymentAmount.GetRoundedAmount(entity.Currency, entity.AmountReceived)
+                .ToString(CultureInfo.InvariantCulture),
+            PaymentAmount.GetRoundedAmount(entity.Currency, entity.AmountRefunded)
+                .ToString(CultureInfo.InvariantCulture),
+            PaymentAmount.GetRoundedAmount(entity.Currency, entity.AmountPending)
+                .ToString(CultureInfo.InvariantCulture),
+            entity.CreatedByUser != null ? entity.CreatedByUser.ID.ToString() : "",
+            entity.CreatedByUser != null ? $"{entity.CreatedByUser.FirstName} {entity.CreatedByUser.LastName}" : "",
+            entity.MerchantTokenDescription ?? "",
+            transactionIDs,
+            entity.PayrunID.ToString() ?? "",
+            entity.Addresses?.FirstOrDefault(x => x.AddressType == AddressTypesEnum.Shipping)
+                ?.ToDisplayString() ?? "",
+            entity.Addresses?.FirstOrDefault(x => x.AddressType == AddressTypesEnum.Billing)
+                ?.ToDisplayString() ?? "",
+            entity.Addresses?.Count > 0
+                ? $"{entity.Addresses.First().FirstName} {entity.Addresses.First().LastName}"
+                : "",
+            entity.PaymentProcessor.ToString(),
+            entity.Tags != null && entity.Tags.Count != 0
+                ? string.Join(",", entity.Tags.Select(t => t.Name))
+                : ""
+        };
+
+
+        // Quote values to handle commas in the data
+        return string.Join(",", values.Select(x => x.ToSafeCsvString()));
+
     }
 }
