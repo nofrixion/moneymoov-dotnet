@@ -18,7 +18,6 @@ using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
-using NoFrixion.Common.Models.ResourceExport;
 using NoFrixion.MoneyMoov.Enums;
 using NoFrixion.MoneyMoov.Extensions;
 using NoFrixion.MoneyMoov.Models.Approve;
@@ -212,6 +211,7 @@ public class Beneficiary : IValidatableObject, IExportableToCsv
     }
 
     public string CsvHeader => $"ID,MerchantID,Name,Currency,DestinationAccountID,DestinationName,DestinationInternalAccountName,DestinationIban,DestinationAccountNumber,DestinationSortCode,DestinationBic,IsEnabled,AuthorisedBy,AuthorisersRequiredCount,AuthorisersCompletedCount,AuthenticationMethods,CreatedByEmailAddress,Inserted,LastUpdated,CreatedBy";
+    
     public string ToCsvRow()
     {
         return this.ToCsvRowString();

@@ -17,7 +17,6 @@
 // -----------------------------------------------------------------------------
 
 using JetBrains.Annotations;
-using NoFrixion.Common.Models.ResourceExport;
 using NoFrixion.MoneyMoov.Enums;
 using NoFrixion.MoneyMoov.Extensions;
 
@@ -226,6 +225,7 @@ public class PaymentAccount: IExportableToCsv
 
     public string CsvHeader =>
         "ID,AccountName,AccountSupplierName,IsConnectedAccount,Balance,SubmittedPayoutsBalance,AvailableBalance,Currency,IBAN,SortCode,AccountNumber,Bic,Inserted,LastUpdated,IsDefault,BankName,ExpiryDate,XeroBankFeedConnectionStatus,XeroBankFeedSyncStatus,XeroBankFeedLastSyncedAt,XeroBankFeedSyncLastFailedAt,XeroBankFeedSyncLastFailureReason,XeroUnsynchronisedTransactionsCount,DefaultPaymentRail,IsArchived,SupplierSepaInstantStatus";
+    
     public string ToCsvRow()
     {
         return this.ToCsvRowString();
