@@ -434,65 +434,65 @@ public static class PaymentRequestExtensions
         return ddPaymentAttempts;
     }
 
-    public static string ToCsvRowString(this PaymentRequest entity)
+    public static string ToCsvRowString(this PaymentRequest paymentRequest)
     {
-        if (entity == null)
+        if (paymentRequest == null)
         {
             return string.Empty;
         }
         
-        var transactionIDs = entity.Transactions.Count != 0
-            ? string.Join(",", entity.Transactions.Select(t => t.ID))
+        var transactionIDs = paymentRequest.Transactions.Count != 0
+            ? string.Join(",", paymentRequest.Transactions.Select(t => t.ID))
             : "";
 
         var values = new List<string>
         {
-            entity.ID.ToString(),
-            entity.MerchantID.ToString(),
-            PaymentAmount.GetRoundedAmount(entity.Currency, entity.Amount).ToString(CultureInfo.InvariantCulture),
-            entity.Currency.ToString(),
-            string.Join(",", entity.PaymentMethods.Select(x => x.ToString())),
-            entity.Description ?? "",
-            entity.CustomerID ?? "",
-            entity.OrderID ?? "",
-            entity.Inserted.ToString("o"),
-            entity.LastUpdated.ToString("o"),
-            entity.PispAccountID?.ToString() ?? "",
-            entity.DestinationAccount != null ? entity.DestinationAccount.AccountName : "",
-            entity.BaseOriginUrl ?? "",
-            entity.CardAuthorizeOnly.ToString(),
-            entity.CardCreateToken.ToString(),
-            entity.CardCreateTokenMode.ToString(),
-            entity.Status.ToString(),
-            entity.PartialPaymentMethod.ToString(),
-            entity.CustomerEmailAddress ?? "",
-            entity.CardStripePaymentIntentID ?? "",
-            entity.CardStripePaymentIntentSecret ?? "",
-            entity.NotificationEmailAddresses ?? "",
-            entity.PriorityBankID?.ToString() ?? "",
-            entity.Title ?? "",
-            entity.PartialPaymentSteps ?? "",
-            PaymentAmount.GetRoundedAmount(entity.Currency, entity.AmountReceived)
+            paymentRequest.ID.ToString(),
+            paymentRequest.MerchantID.ToString(),
+            PaymentAmount.GetRoundedAmount(paymentRequest.Currency, paymentRequest.Amount).ToString(CultureInfo.InvariantCulture),
+            paymentRequest.Currency.ToString(),
+            string.Join(",", paymentRequest.PaymentMethods.Select(x => x.ToString())),
+            paymentRequest.Description ?? "",
+            paymentRequest.CustomerID ?? "",
+            paymentRequest.OrderID ?? "",
+            paymentRequest.Inserted.ToString("o"),
+            paymentRequest.LastUpdated.ToString("o"),
+            paymentRequest.PispAccountID?.ToString() ?? "",
+            paymentRequest.DestinationAccount != null ? paymentRequest.DestinationAccount.AccountName : "",
+            paymentRequest.BaseOriginUrl ?? "",
+            paymentRequest.CardAuthorizeOnly.ToString(),
+            paymentRequest.CardCreateToken.ToString(),
+            paymentRequest.CardCreateTokenMode.ToString(),
+            paymentRequest.Status.ToString(),
+            paymentRequest.PartialPaymentMethod.ToString(),
+            paymentRequest.CustomerEmailAddress ?? "",
+            paymentRequest.CardStripePaymentIntentID ?? "",
+            paymentRequest.CardStripePaymentIntentSecret ?? "",
+            paymentRequest.NotificationEmailAddresses ?? "",
+            paymentRequest.PriorityBankID?.ToString() ?? "",
+            paymentRequest.Title ?? "",
+            paymentRequest.PartialPaymentSteps ?? "",
+            PaymentAmount.GetRoundedAmount(paymentRequest.Currency, paymentRequest.AmountReceived)
                 .ToString(CultureInfo.InvariantCulture),
-            PaymentAmount.GetRoundedAmount(entity.Currency, entity.AmountRefunded)
+            PaymentAmount.GetRoundedAmount(paymentRequest.Currency, paymentRequest.AmountRefunded)
                 .ToString(CultureInfo.InvariantCulture),
-            PaymentAmount.GetRoundedAmount(entity.Currency, entity.AmountPending)
+            PaymentAmount.GetRoundedAmount(paymentRequest.Currency, paymentRequest.AmountPending)
                 .ToString(CultureInfo.InvariantCulture),
-            entity.CreatedByUser != null ? entity.CreatedByUser.ID.ToString() : "",
-            entity.CreatedByUser != null ? $"{entity.CreatedByUser.FirstName} {entity.CreatedByUser.LastName}" : "",
-            entity.MerchantTokenDescription ?? "",
+            paymentRequest.CreatedByUser != null ? paymentRequest.CreatedByUser.ID.ToString() : "",
+            paymentRequest.CreatedByUser != null ? $"{paymentRequest.CreatedByUser.FirstName} {paymentRequest.CreatedByUser.LastName}" : "",
+            paymentRequest.MerchantTokenDescription ?? "",
             transactionIDs,
-            entity.PayrunID.ToString() ?? "",
-            entity.Addresses?.FirstOrDefault(x => x.AddressType == AddressTypesEnum.Shipping)
+            paymentRequest.PayrunID.ToString() ?? "",
+            paymentRequest.Addresses?.FirstOrDefault(x => x.AddressType == AddressTypesEnum.Shipping)
                 ?.ToDisplayString() ?? "",
-            entity.Addresses?.FirstOrDefault(x => x.AddressType == AddressTypesEnum.Billing)
+            paymentRequest.Addresses?.FirstOrDefault(x => x.AddressType == AddressTypesEnum.Billing)
                 ?.ToDisplayString() ?? "",
-            entity.Addresses?.Count > 0
-                ? $"{entity.Addresses.First().FirstName} {entity.Addresses.First().LastName}"
+            paymentRequest.Addresses?.Count > 0
+                ? $"{paymentRequest.Addresses.First().FirstName} {paymentRequest.Addresses.First().LastName}"
                 : "",
-            entity.PaymentProcessor.ToString(),
-            entity.Tags != null && entity.Tags.Count != 0
-                ? string.Join(",", entity.Tags.Select(t => t.Name))
+            paymentRequest.PaymentProcessor.ToString(),
+            paymentRequest.Tags != null && paymentRequest.Tags.Count != 0
+                ? string.Join(",", paymentRequest.Tags.Select(t => t.Name))
                 : ""
         };
 
