@@ -11,7 +11,7 @@
 //  Dublin, Ireland.
 // 
 //   License:
-//   Proprietary NoFrixion.
+//   MIT.
 //  -----------------------------------------------------------------------------
 
 using System.Globalization;

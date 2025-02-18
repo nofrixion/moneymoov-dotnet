@@ -1,3 +1,19 @@
+//  -----------------------------------------------------------------------------
+//   Filename: PaymentAccountExtensions.cs
+// 
+//   Description: Contains extension methods for the PaymentAccount model
+// 
+//   Author(s):
+//   Saurav Maiti (saurav@nofrixion.com)
+// 
+//   History:
+//   18 Feb 2025  Saurav Maiti  Created, Hamilton gardens,
+//   Dublin, Ireland.
+// 
+//   License:
+//   MIT.
+//  -----------------------------------------------------------------------------
+
 using System.Globalization;
 using NoFrixion.MoneyMoov.Models;
 

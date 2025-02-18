@@ -1,3 +1,19 @@
+//  -----------------------------------------------------------------------------
+//   Filename: BeneficiaryExtensions.cs
+// 
+//   Description: Contains extension methods for the Beneficiary model
+// 
+//   Author(s):
+//   Saurav Maiti (saurav@nofrixion.com)
+// 
+//   History:
+//   18 Feb 2025  Saurav Maiti  Created, Hamilton gardens,
+//   Dublin, Ireland.
+// 
+//   License:
+//   MIT.
+//  -----------------------------------------------------------------------------
+
 using NoFrixion.MoneyMoov.Models;
 
 namespace NoFrixion.MoneyMoov.Extensions;
