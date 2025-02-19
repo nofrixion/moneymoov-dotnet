@@ -14,6 +14,7 @@
 //   MIT.
 //  -----------------------------------------------------------------------------
 
+using System.Globalization;
 using NoFrixion.MoneyMoov.Models;
 
 namespace NoFrixion.MoneyMoov.Extensions;
@@ -34,7 +35,7 @@ public static class PayoutExtensions
             payout.Type.ToString(),
             payout.Description,
             payout.Currency.ToString(),
-            payout.Amount.ToString("F2"),
+            PaymentAmount.GetRoundedAmount(payout.Currency, payout.Amount).ToString(CultureInfo.InvariantCulture),
             payout.YourReference ?? "",
             payout.TheirReference ?? "",
             payout.CanProcess.ToString(),
