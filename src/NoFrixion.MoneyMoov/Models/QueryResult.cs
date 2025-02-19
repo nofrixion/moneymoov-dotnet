@@ -17,16 +17,17 @@
 using LanguageExt;
 using NoFrixion.MoneyMoov.Enums;
 using NoFrixion.MoneyMoov.Models.Export;
+using NoFrixion.MoneyMoov.Models.Utils;
 
 namespace NoFrixion.MoneyMoov.Models;
 
 public record QueryResult<T> where T : class
 {
-    public ApiPageResponseBase<T>? PagedResourceItems { get; }
+    public PageResponse<T>? PagedResourceItems { get; }
     public Option<CsvExportResponse> CsvResult { get; }
     public ContentTypeEnum ContentType { get; }
 
-    private QueryResult(ApiPageResponseBase<T> resources)
+    private QueryResult(PageResponse<T> resources)
     {
         PagedResourceItems = resources;
         CsvResult = Option<CsvExportResponse>.None;
@@ -39,7 +40,7 @@ public record QueryResult<T> where T : class
         ContentType = ContentTypeEnum.Csv;
     }
 
-    public static QueryResult<T> FromJson(ApiPageResponseBase<T> response)
+    public static QueryResult<T> FromJson(PageResponse<T> response)
     {
         if (response is null)
             throw new ArgumentNullException(nameof(response));
