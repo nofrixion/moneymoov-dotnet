@@ -74,11 +74,11 @@ public class PayrunInvoiceValidatorTests
     /// </summary>
     [Theory]
     [InlineData("/")] // No letter or number.
-    [InlineData("--")]// No letter or number.
+    [InlineData("--")] // No letter or number.
     [InlineData(".-/&")] // No letter or number.
     [InlineData("1-A-2-c + + dfg")] // Invalid character '+'.
-    [InlineData("Big Bucks £")]// Invalid character '£'.
-    [InlineData("Big Bucks €")]// Invalid character '€'.
+    [InlineData("Big Bucks £")] // Invalid character '£'.
+    [InlineData("Big Bucks €")] // Invalid character '€'.
     [InlineData(":")] // Invalid initial character, can't be ':' or '-'.
     [InlineData("1-A-2-c + ! + dfg")] // Invalid character '!'.
     [InlineData(".-/& a")] // BC don't support '&' in account name.
@@ -207,14 +207,14 @@ public class PayrunInvoiceValidatorTests
         {
             InvoiceReference = "ref-1",
             Destination =
-            new Counterparty
-            {
-                Name = "Some Biz",
-                Identifier = new AccountIdentifier
+                new Counterparty
                 {
-                    Currency = CurrencyTypeEnum.EUR
-                }
-            },
+                    Name = "Some Biz",
+                    Identifier = new AccountIdentifier
+                    {
+                        Currency = CurrencyTypeEnum.EUR
+                    }
+                },
             Currency = CurrencyTypeEnum.EUR,
             TotalAmount = 11.00M
         };
@@ -326,5 +326,69 @@ public class PayrunInvoiceValidatorTests
         var result = payrunInvoice.Validate();
 
         Assert.True(result.IsEmpty);
+    }
+    
+    [Theory]
+    [InlineData("refe-12")]
+    [InlineData("r12 hsd-2")]
+    [InlineData("Saldo F16")]
+    [InlineData("s-D7 K sdf -")]
+    public void PayrunInvoice_PaymentReferenceValidation_Success(string theirReference)
+    {
+        var payrunInvoice = new PayrunInvoice
+        {
+            InvoiceReference = "ref-1",
+            Currency = CurrencyTypeEnum.EUR,
+            TotalAmount = 11.00M,
+            Destination = new Counterparty
+            {
+                Name = "Some Biz",
+                Identifier = new AccountIdentifier
+                {
+                    IBAN = "IE83MOCK91012396989925",
+                    Currency = CurrencyTypeEnum.EUR
+                }
+            },
+            PaymentReference = theirReference
+        };
+
+        var result = payrunInvoice.Validate();
+
+        Assert.True(result.IsEmpty);
+    }
+    
+    [Theory]
+    [InlineData("-sD7!&K.sdf./", AccountIdentifierType.IBAN)] // Invalid character '!'
+    [InlineData("Saldo F16 + F20", AccountIdentifierType.IBAN)] // Invalid character '+'
+    [InlineData("Saldo F16 _ F20", AccountIdentifierType.IBAN)] // Invalid character '_'
+    [InlineData("dddddddd", AccountIdentifierType.IBAN)] // Only one distinct character
+    [InlineData("-sd6tu89-73.sdf./48 2983", AccountIdentifierType.SCAN)] // Starts with '-'
+    public void PayrunInvoice_PaymentReferenceValidation_Fail(string theirReference,
+        AccountIdentifierType identifierType)
+    {
+        var payrunInvoice = new PayrunInvoice
+        {
+            InvoiceReference = "ref-1",
+            Currency = CurrencyTypeEnum.EUR,
+            TotalAmount = 11.00M,
+            Destination = new Counterparty
+            {
+                Name = "Some Biz",
+                Identifier = new AccountIdentifier
+                {
+                    IBAN = identifierType == AccountIdentifierType.IBAN ? "IE83MOCK91012396989925" : null,
+                    AccountNumber = identifierType == AccountIdentifierType.SCAN ? "12345678" : null,
+                    SortCode = identifierType == AccountIdentifierType.SCAN ? "123456" : null,
+                    Currency = identifierType == AccountIdentifierType.IBAN
+                        ? CurrencyTypeEnum.EUR
+                        : CurrencyTypeEnum.GBP
+                }
+            },
+            PaymentReference = theirReference
+        };
+
+        var result = payrunInvoice.Validate();
+
+        Assert.False(result.IsEmpty);
     }
 }
