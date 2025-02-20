@@ -22,7 +22,6 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class PayrunInvoice : IValidatableObject
 {
-    public const int PAYRUN_INVOICE_PAYMENT_REFERENCE_MAX_LENGTH = 18;
     
     public Guid ID { get; set; }
     
@@ -132,7 +131,6 @@ public class PayrunInvoice : IValidatableObject
     /// the PaymentReference should remain consistent across all invoices.
     /// If the PaymentReference is not set, one will be generated automatically.
     /// </summary>
-    [MaxLength(PAYRUN_INVOICE_PAYMENT_REFERENCE_MAX_LENGTH, ErrorMessage = "PaymentReference cannot be longer than 18 characters.")]
     public string? PaymentReference { get; set; }
     
     /// <summary>
