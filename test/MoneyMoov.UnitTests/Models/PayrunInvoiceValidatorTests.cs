@@ -254,19 +254,59 @@ public class PayrunInvoiceValidatorTests
         Assert.False(result.IsEmpty);
     }
 
-    [Fact]
-    public void Invoice_With_PaymentReference_MaxLength_Validates_Success()
+    [Theory]
+    [InlineData("ref-1234647384758475374658372648574726437567373647546373654736374647264", CurrencyTypeEnum.EUR)]
+    [InlineData("ref-1234647384755", CurrencyTypeEnum.GBP)]
+    public void Invoice_With_PaymentReference_Length_Validation_Success(string theirReference, CurrencyTypeEnum currency)
     {
         var payrunInvoice = new PayrunInvoice
         {
             InvoiceReference = "ref-1",
             Destination = new Counterparty
             {
-                Name = "Some Biz"
+                Name = "Some Biz",
+                Identifier =
+                new AccountIdentifier(){
+                    IBAN = currency == CurrencyTypeEnum.EUR ? "IE83MOCK91012396989925" : null,
+                    AccountNumber = currency == CurrencyTypeEnum.GBP ? "12345678" : null,
+                    SortCode = currency == CurrencyTypeEnum.GBP ? "123456" : null,
+                    Currency = currency,
+                }
             },
-            Currency = CurrencyTypeEnum.EUR,
+            Currency = currency,
             TotalAmount = 11.00M,
-            PaymentReference = "12345678901234567890" // More than 18 characters.
+            PaymentReference = theirReference
+        };
+
+        var result = payrunInvoice.Validate();
+
+        _logger.LogDebug(result.ToJsonFormatted());
+
+        Assert.True(result.IsEmpty);
+    }
+    
+    [Theory]
+    [InlineData("ref-1234647384758475374658372648574726437567373647546373654736374647264sdefgsdfgsdfgadsfgvasfgasfgasdfgasdfgsdfgasdfgsdafgasdfgsdfgasdfgsdfgafgasdfgawsrfgsdfgsdfgsdfg", CurrencyTypeEnum.EUR)] // Too long
+    [InlineData("ref-1234647384755dzfxvxdfbvdsfbgv", CurrencyTypeEnum.GBP)] // Too long
+    public void Invoice_With_PaymentReference_Length_Validation_Failure(string theirReference, CurrencyTypeEnum currency)
+    {
+        var payrunInvoice = new PayrunInvoice
+        {
+            InvoiceReference = "ref-1",
+            Destination = new Counterparty
+            {
+                Name = "Some Biz",
+                Identifier =
+                    new AccountIdentifier(){
+                        IBAN = currency == CurrencyTypeEnum.EUR ? "IE83MOCK91012396989925" : null,
+                        AccountNumber = currency == CurrencyTypeEnum.GBP ? "12345678" : null,
+                        SortCode = currency == CurrencyTypeEnum.GBP ? "123456" : null,
+                        Currency = currency,
+                    }
+            },
+            Currency = currency,
+            TotalAmount = 11.00M,
+            PaymentReference = theirReference
         };
 
         var result = payrunInvoice.Validate();
