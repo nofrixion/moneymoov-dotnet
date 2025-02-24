@@ -173,8 +173,8 @@ public static class StringExtensions
         });
     }
     
-    public static string ToSafeCsvString(this string value)
+    public static string ToSafeCsvString(this string? value)
     {
-        return $"\"{value.Replace("\"", "\"\"")}\"";
+        return string.IsNullOrWhiteSpace(value) ? string.Empty : $"\"{value.Replace("\"", "\"\"")}\"";
     }
 }
