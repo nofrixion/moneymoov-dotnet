@@ -9,6 +9,7 @@
 // History:
 // 26 10 2021  Donal O'Connor   Created, Carmichael House, Dublin, Ireland.
 // 03 Dec 2021  Aaron Clauson   Renamed from Currency to CurrencyTypeEnum.
+// 13 Feb 2025  Aaron Clauson   Added USD.
 // 
 //  License:
 //  MIT.
@@ -34,6 +35,12 @@ public enum CurrencyTypeEnum
     /// </summary>
     [EnumMember(Value = "EUR")]
     EUR = 2,
+
+    /// <summary>
+    /// United States Dollar (Fiat).
+    /// </summary>
+    [EnumMember(Value = "USD")]
+    USD = 3,
 
     // Start non-fiat currencies from 1000 to avoid conflicting with supplier mappings.
 
