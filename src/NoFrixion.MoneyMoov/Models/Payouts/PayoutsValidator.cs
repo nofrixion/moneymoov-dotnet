@@ -389,9 +389,15 @@ public static class PayoutsValidator
                 yield return new ValidationResult("Destination IBAN is invalid, Please enter a valid IBAN.", new string[] { nameof(payout.Destination.Identifier.IBAN) });
             }
 
-            if (payout.Type == AccountIdentifierType.IBAN && payout.Currency != CurrencyTypeEnum.EUR)
+            // Seems IBAN's can be used fro GBP and USD as well as EUR.
+            if (payout.Type == AccountIdentifierType.IBAN &&
+                !(payout.Currency == CurrencyTypeEnum.EUR ||
+                  payout.Currency == CurrencyTypeEnum.GBP ||
+                  payout.Currency == CurrencyTypeEnum.USD))
             {
-                yield return new ValidationResult($"Currency {payout.Currency} cannot be used with IBAN destinations.", new string[] { nameof(payout.Currency) });
+                yield return new ValidationResult(
+                    $"Currency {payout.Currency} cannot be used with IBAN destinations.",
+                    new string[] { nameof(payout.Currency) });
             }
 
             if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
