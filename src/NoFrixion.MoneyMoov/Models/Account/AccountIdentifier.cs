@@ -43,6 +43,19 @@ public class AccountIdentifier: IValidatableObject
                 }
             }
 
+            if (Currency == CurrencyTypeEnum.USD)
+            {
+                //  USD Payments can support both FedWire and IBAN identifiers. Default to FedWire.
+                if (!string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber))
+                {
+                    return AccountIdentifierType.SCAN;
+                }
+                else if (!string.IsNullOrEmpty(IBAN))
+                {
+                    return AccountIdentifierType.IBAN;
+                }
+            }
+
             if (!string.IsNullOrEmpty(IBAN))
             {
                 return AccountIdentifierType.IBAN;
@@ -273,6 +286,7 @@ public class AccountIdentifier: IValidatableObject
                 break;
             }
             case CurrencyTypeEnum.EUR:
+            case CurrencyTypeEnum.USD:
             {
                 if (string.IsNullOrEmpty(IBAN))
                 {
