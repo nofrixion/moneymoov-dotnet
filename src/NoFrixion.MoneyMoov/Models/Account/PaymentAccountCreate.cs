@@ -26,7 +26,7 @@ public class PaymentAccountCreate
     public Guid MerchantID { get; set;}
 
     /// <summary>
-    /// Currency for the account, only EUR, GBP, USD and in sandbox BTC are supported.
+    /// Currency for the account, only EUR, GBP, and in sandbox BTC are supported.
     /// </summary>
     public CurrencyTypeEnum Currency { get; set; } = CurrencyTypeEnum.EUR;
 

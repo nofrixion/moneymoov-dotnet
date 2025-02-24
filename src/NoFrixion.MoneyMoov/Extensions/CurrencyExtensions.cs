@@ -23,7 +23,6 @@ public static class CurrencyExtensions
         CurrencyTypeEnum.BTC => "₿",
         CurrencyTypeEnum.GBP => "£",
         CurrencyTypeEnum.EUR => "€",
-        CurrencyTypeEnum.USD => "$",
         _ => "€"
     };
 
