@@ -30,28 +30,21 @@ public enum AccountPermissions : ulong
     CanCreateBatchPayouts = 1L << 6,
     
     // Accounts
-    CanViewAccount = 1L << 7,
-    CanViewAccountForPaymentRequests = 1L << 8,
-    CanUpdateAccount = 1L << 9,
+    CanViewAccountForPaymentRequests = 1L << 7,
+    CanUpdateAccount = 1L << 8,
     
     // Rules
-    CanViewRules = 1L << 10,
-    CanCreateRules = 1L << 11,
-    CanEditRules = 1L << 12,
-    CanDeleteRules = 1L << 13,
-    CanAuthoriseRules = 1L << 14,
+    CanViewRules = 1L << 9,
+    CanCreateRules = 1L << 10,
+    CanEditRules = 1L << 11,
+    CanDeleteRules = 1L << 12,
+    CanAuthoriseRules = 1L << 13,
     
     // Transactions
-    CanViewTransactions = 1L << 15,
+    CanViewTransactions = 1L << 14,
     
     // Statements
-    [Obsolete("Use CanExportData instead.")]
-    CanCreateStatements = 1L << 16,
-    
-    [Obsolete("Use CanExportData instead.")]
-    CanViewStatements = 1L << 17,
-    
-    CanExportData = 1L << 18,
+    CanExportData = 1L << 15,
 }
 
 [Flags]
