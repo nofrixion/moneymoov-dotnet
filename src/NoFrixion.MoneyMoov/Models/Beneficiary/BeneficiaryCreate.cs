@@ -44,6 +44,7 @@ public class BeneficiaryCreate : IValidatableObject
     [Required(ErrorMessage = "Currency is required.")]
     public CurrencyTypeEnum Currency { get; set; }
 
+    [Required(ErrorMessage = "Destination is required.")]
     public CounterpartyCreate Destination { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
