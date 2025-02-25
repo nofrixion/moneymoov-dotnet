@@ -410,6 +410,18 @@ public static class IdentityExtensions
             }
         }
     }
+    
+    public static bool HasPermissionsForMerchant(this IIdentity identity, Guid merchantID)
+    {
+        if (identity is not ClaimsIdentity claimsIdentity)
+        {
+            return false;
+        }
+
+        var claim = claimsIdentity.Claims.FirstOrDefault(x => x.Type == $"{ClaimTypePrefixes.MERCHANT}.{merchantID}");
+        
+        return claim != null;
+    }
 }
 
 #nullable enable
