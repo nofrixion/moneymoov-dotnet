@@ -547,17 +547,10 @@ public class PayoutsValidatorTests
     [InlineData(CurrencyTypeEnum.GBP, 0.01, true)]
     [InlineData(CurrencyTypeEnum.GBP, 0.001, false)]
     [InlineData(CurrencyTypeEnum.GBP, 1.011, false)]
-    [InlineData(CurrencyTypeEnum.BTC, 0.01, true)]
-    [InlineData(CurrencyTypeEnum.BTC, 0.001, true)]
-    [InlineData(CurrencyTypeEnum.BTC, 0.00000001, true)]
-    [InlineData(CurrencyTypeEnum.BTC, 0.000000001, false)]
-    [InlineData(CurrencyTypeEnum.BTC, 1.011, true)]
-    [InlineData(CurrencyTypeEnum.BTC, 1.000000011, false)]
     public void Payout_Validator_Currency_Resolution(CurrencyTypeEnum currency, decimal amount, bool isValid)
     {
         AccountIdentifier identifier = currency switch
         {
-            CurrencyTypeEnum.BTC => new AccountIdentifier { Currency = currency, BitcoinAddress = "abcdefg" },
             CurrencyTypeEnum.GBP => new AccountIdentifier { Currency = currency, SortCode = "123456", AccountNumber = "00001234" } ,
             _ => new AccountIdentifier { Currency = currency, IBAN = "IE78MOCK91012352877713" }
         };

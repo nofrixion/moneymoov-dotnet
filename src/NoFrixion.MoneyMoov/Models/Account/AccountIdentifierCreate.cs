@@ -108,6 +108,8 @@ public class AccountIdentifierCreate
     /// Bitcoin address destination.
     /// </summary>
     private string _bitcoinAddress;
+
+    [Obsolete]
     public string BitcoinAddress
     {
         get => _bitcoinAddress;
@@ -132,8 +134,7 @@ public class AccountIdentifierCreate
             { keyPrefix + nameof(BIC), BIC ?? string.Empty},
             { keyPrefix + nameof(IBAN), IBAN ?? string.Empty},
             { keyPrefix + nameof(SortCode), SortCode ?? string.Empty},
-            { keyPrefix + nameof(AccountNumber), AccountNumber ?? string.Empty},
-            { keyPrefix + nameof(BitcoinAddress), BitcoinAddress ?? string.Empty}
+            { keyPrefix + nameof(AccountNumber), AccountNumber ?? string.Empty}
         };
     }
 
@@ -141,5 +142,5 @@ public class AccountIdentifierCreate
     /// Summary of the account identifier's most important properties.
     /// </summary>
     public string Summary =>
-        $"IBAN: {IBAN}, BIC: {BIC}, SortCode: {SortCode}, AccountNumber: {AccountNumber}, BitcoinAddress: {BitcoinAddress}";
+        $"IBAN: {IBAN}, BIC: {BIC}, SortCode: {SortCode}, AccountNumber: {AccountNumber}";
 }

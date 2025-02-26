@@ -19,7 +19,7 @@ namespace NoFrixion.MoneyMoov.Models;
 
 #nullable disable
 
-public class AccountIdentifier: IValidatableObject
+public class AccountIdentifier : IValidatableObject
 {
     public const int SORT_CODE_LENGTH = 6;
 
@@ -30,14 +30,14 @@ public class AccountIdentifier: IValidatableObject
     {
         get
         {
-            if(Currency == CurrencyTypeEnum.GBP)
+            if (Currency == CurrencyTypeEnum.GBP)
             {
                 // UK Faster Payments can support both SCAN and IBAN identifiers. Default to SCAN.
                 if (!string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber))
                 {
                     return AccountIdentifierType.SCAN;
                 }
-                else if(!string.IsNullOrEmpty(IBAN))
+                else if (!string.IsNullOrEmpty(IBAN))
                 {
                     return AccountIdentifierType.IBAN;
                 }
@@ -66,10 +66,12 @@ public class AccountIdentifier: IValidatableObject
                 return AccountIdentifierType.SCAN;
             }
 
+#pragma warning disable CS0612 // Type or member is obsolete
             if (!string.IsNullOrEmpty(BitcoinAddress))
             {
                 return AccountIdentifierType.BTC;
             }
+#pragma warning restore CS0612 // Type or member is obsolete
 
             // Return default
             return AccountIdentifierType.Unknown;
@@ -106,7 +108,7 @@ public class AccountIdentifier: IValidatableObject
     /// for IBAN identifiers.
     /// </summary>
     private string _iban;
-    public string IBAN 
+    public string IBAN
     {
         get => _iban;
         set
@@ -166,6 +168,8 @@ public class AccountIdentifier: IValidatableObject
     /// Bitcoin address destination.
     /// </summary>
     private string _bitcoinAddress;
+
+    [Obsolete]
     public string BitcoinAddress
     {
         get => _bitcoinAddress;
@@ -185,20 +189,24 @@ public class AccountIdentifier: IValidatableObject
     /// <summary>
     /// Summary of the account identifier's most important properties.
     /// </summary>
-    public string Summary =>   
+#pragma warning disable CS0612 // Type or member is obsolete
+    public string Summary =>
         Type == AccountIdentifierType.IBAN ? Type.ToString() + ": " + IBAN :
         Type == AccountIdentifierType.SCAN ? Type.ToString() + ": " + DisplayScanSummary :
         Type == AccountIdentifierType.BTC ? Type.ToString() + ": " + BitcoinAddress :
          "No identifier.";
-    
+#pragma warning restore CS0612 // Type or member is obsolete
+
     /// <summary>
     /// Summary of the account identifier's most important properties.
     /// </summary>
-    public string DisplaySummary =>   
+#pragma warning disable CS0612 // Type or member is obsolete
+    public string DisplaySummary =>
         Type == AccountIdentifierType.IBAN ? IBAN :
         Type == AccountIdentifierType.SCAN ? DisplayScanSummary :
         Type == AccountIdentifierType.BTC ? BitcoinAddress :
         "No identifier.";
+#pragma warning restore CS0612 // Type or member is obsolete
 
     public string DisplayScanSummary =>
         !string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber) && SortCode.Length == SORT_CODE_LENGTH
@@ -207,7 +215,7 @@ public class AccountIdentifier: IValidatableObject
 
     public bool IsSameDestination(AccountIdentifier other)
     {
-        if(other == null)
+        if (other == null)
         {
             return false;
         }
@@ -217,6 +225,7 @@ public class AccountIdentifier: IValidatableObject
             return false;
         }
 
+#pragma warning disable CS0612 // Type or member is obsolete
         return Type switch
         {
             AccountIdentifierType.IBAN => IBAN == other.IBAN,
@@ -224,6 +233,7 @@ public class AccountIdentifier: IValidatableObject
             AccountIdentifierType.BTC => BitcoinAddress == other.BitcoinAddress,
             _ => false
         };
+#pragma warning restore CS0612 // Type or member is obsolete
     }
 
     public virtual Dictionary<string, string> ToDictionary(string keyPrefix)
@@ -234,8 +244,7 @@ public class AccountIdentifier: IValidatableObject
             { keyPrefix + nameof(BIC), BIC ?? string.Empty},
             { keyPrefix + nameof(IBAN), IBAN ?? string.Empty},
             { keyPrefix + nameof(SortCode), SortCode ?? string.Empty},
-            { keyPrefix + nameof(AccountNumber), AccountNumber ?? string.Empty},
-            { keyPrefix + nameof(BitcoinAddress), BitcoinAddress ?? string.Empty}
+            { keyPrefix + nameof(AccountNumber), AccountNumber ?? string.Empty}
         };
     }
 
@@ -246,14 +255,13 @@ public class AccountIdentifier: IValidatableObject
             (!string.IsNullOrEmpty(BIC) ? BIC : string.Empty) +
             (!string.IsNullOrEmpty(IBAN) ? IBAN : string.Empty) +
             (!string.IsNullOrEmpty(SortCode) ? SortCode : string.Empty) +
-            (!string.IsNullOrEmpty(AccountNumber) ? AccountNumber : string.Empty) +
-            (!string.IsNullOrEmpty(BitcoinAddress) ? BitcoinAddress : string.Empty);
+            (!string.IsNullOrEmpty(AccountNumber) ? AccountNumber : string.Empty);
         return HashHelper.CreateHash(input);
     }
 
     public override string ToString()
     {
-        return $"Type: {Type}, Currency: {Currency}, BIC: {BIC}, IBAN: {IBAN}, SortCode: {SortCode}, AccountNumber: {AccountNumber}, Bitcoin Address: {BitcoinAddress}, Summary: {Summary}";
+        return $"Type: {Type}, Currency: {Currency}, BIC: {BIC}, IBAN: {IBAN}, SortCode: {SortCode}, AccountNumber: {AccountNumber}, Summary: {Summary}";
     }
 
     public NoFrixionProblem Validate()
@@ -261,12 +269,12 @@ public class AccountIdentifier: IValidatableObject
         var validationResults = new List<ValidationResult>();
         var validationContext = new ValidationContext(this, serviceProvider: null, items: null);
         var isValid = Validator.TryValidateObject(this, validationContext, validationResults, true);
-        
+
         if (!isValid)
         {
             return new NoFrixionProblem($"The {nameof(AccountIdentifier)} had one or more validation errors.", validationResults);
         }
-        
+
         return NoFrixionProblem.Empty;
     }
 
@@ -275,43 +283,38 @@ public class AccountIdentifier: IValidatableObject
         switch (Currency)
         {
             case CurrencyTypeEnum.GBP:
-            {
-                if (string.IsNullOrEmpty(SortCode) || string.IsNullOrEmpty(AccountNumber))
                 {
-                    yield return new ValidationResult(
-                        "Sort code and account number are required for GBP account identifier.",
-                        new[] { nameof(SortCode), nameof(AccountNumber) });
-                }
+                    if (string.IsNullOrEmpty(SortCode) || string.IsNullOrEmpty(AccountNumber))
+                    {
+                        yield return new ValidationResult(
+                            "Sort code and account number are required for GBP account identifier.",
+                            new[] { nameof(SortCode), nameof(AccountNumber) });
+                    }
 
-                break;
-            }
+                    break;
+                }
             case CurrencyTypeEnum.EUR:
             case CurrencyTypeEnum.USD:
-            {
-                if (string.IsNullOrEmpty(IBAN))
                 {
-                    yield return new ValidationResult("IBAN is required for EUR account identifier.",
-                        new[] { nameof(IBAN) });
-                }
+                    if (string.IsNullOrEmpty(IBAN))
+                    {
+                        yield return new ValidationResult("IBAN is required for EUR account identifier.",
+                            new[] { nameof(IBAN) });
+                    }
 
-                break;
-            }
+                    break;
+                }
             case CurrencyTypeEnum.BTC:
-            {
-                if (string.IsNullOrEmpty(BitcoinAddress))
                 {
-                    yield return new ValidationResult("Bitcoin address is required for BTC account identifier.",
-                        new[] { nameof(BitcoinAddress) });
+                    yield return new ValidationResult("Bitcoin addresses are not supported.");
+                    break;
                 }
-
-                break;
-            }
             default:
-            {
-                yield return new ValidationResult("Currency is required for account identifier.",
-                    new[] { nameof(Currency) });
-                break;
-            }
+                {
+                    yield return new ValidationResult("Currency is required for account identifier.",
+                        new[] { nameof(Currency) });
+                    break;
+                }
         }
     }
 }

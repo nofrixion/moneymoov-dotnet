@@ -26,7 +26,6 @@ public static class AccountIdentifierMapper
             IBAN = accountIdentifierCreate.IBAN,
             BIC = accountIdentifierCreate.BIC,
             SortCode = accountIdentifierCreate.SortCode,
-            BitcoinAddress = accountIdentifierCreate.BitcoinAddress,
             Currency = accountIdentifierCreate.Currency ?? currency
         };
     }
@@ -39,7 +38,6 @@ public static class AccountIdentifierMapper
             IBAN = accountIdentifier.IBAN,
             BIC = accountIdentifier.BIC,
             SortCode = accountIdentifier.SortCode,
-            BitcoinAddress = accountIdentifier.BitcoinAddress,
             Currency = accountIdentifier.Currency
         };
     }
