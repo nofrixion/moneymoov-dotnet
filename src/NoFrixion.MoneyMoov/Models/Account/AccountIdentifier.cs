@@ -13,7 +13,6 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using Quartz.Util;
 using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -22,7 +21,7 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class AccountIdentifier : IValidatableObject
 {
-    public const int SORT_CODE_LENGTH = 6;
+    public const int GBP_SORT_CODE_LENGTH = 6;
 
     /// <summary>
     /// The type of the account identifier.
@@ -163,16 +162,15 @@ public class AccountIdentifier : IValidatableObject
     /// <summary>
     /// Summary of the account identifier's most important properties.
     /// </summary>
-#pragma warning disable CS0612 // Type or member is obsolete
     public string DisplaySummary =>
         Type == AccountIdentifierType.IBAN ? IBAN :
         Type == AccountIdentifierType.SCAN ? DisplayScanSummary :
         "No identifier.";
 
     public string DisplayScanSummary =>
-        !string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber) && SortCode.Length == SORT_CODE_LENGTH
+        Currency == CurrencyTypeEnum.GBP && !string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber) && SortCode.Length == GBP_SORT_CODE_LENGTH
             ? $"{SortCode[..2]}-{SortCode.Substring(2, 2)}-{SortCode.Substring(4, 2)} {AccountNumber}"
-            : "No identifier.";
+            : $"{SortCode} {AccountNumber}";
 
     public bool IsSameDestination(AccountIdentifier other)
     {

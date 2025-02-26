@@ -141,9 +141,9 @@ public static class PayoutsValidator
     public const decimal FIAT_CURRENCY_RESOLUTION = 0.01M;
 
     /// <summary>
-    /// The maximum length for a SCAN account number string.
+    /// The required length for a SCAN account number string.
     /// </summary>
-    private const int GBP_SCAN_MAXIMUM_ACCOUNT_NUMBER_LENGTH = 8;
+    private const int GBP_SCAN_REQUIRED_ACCOUNT_NUMBER_LENGTH = 8;
     
     /// <summary>
     /// The required length for a GBP SCAN sort code.
@@ -420,9 +420,9 @@ public static class PayoutsValidator
             
             if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
                 payout.Currency == CurrencyTypeEnum.GBP &&
-                !string.IsNullOrEmpty(payout.Destination?.Identifier?.AccountNumber) && payout.Destination.Identifier.AccountNumber.Length > GBP_SCAN_MAXIMUM_ACCOUNT_NUMBER_LENGTH)
+                !string.IsNullOrEmpty(payout.Destination?.Identifier?.AccountNumber) && payout.Destination.Identifier.AccountNumber.Length != GBP_SCAN_REQUIRED_ACCOUNT_NUMBER_LENGTH)
             {
-                yield return new ValidationResult("Destination account number must be eight digits or less for a GBP SCAN payout type.", [ nameof(payout.Destination.Identifier.AccountNumber) ]);
+                yield return new ValidationResult("Destination account number must be eight digits for a GBP SCAN payout type.", [ nameof(payout.Destination.Identifier.AccountNumber) ]);
             }
             
             if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
