@@ -74,8 +74,7 @@ public class Counterparty
 
     public bool IsIdentifierSet() => Identifier != null && (
         !string.IsNullOrEmpty(Identifier.IBAN) ||
-        (!string.IsNullOrEmpty(Identifier.AccountNumber) && !string.IsNullOrEmpty(Identifier.SortCode)) ||  
-        !string.IsNullOrEmpty(Identifier.BitcoinAddress));
+        (!string.IsNullOrEmpty(Identifier.AccountNumber) && !string.IsNullOrEmpty(Identifier.SortCode)));
 
     public int DestinationsSetCount() =>
         (IsAccountIDSet() ? 1 : 0) + (IsBeneficiaryIDSet() ? 1 : 0) + (IsIdentifierSet() ? 1 : 0);
