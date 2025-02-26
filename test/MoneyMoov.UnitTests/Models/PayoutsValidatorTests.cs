@@ -398,7 +398,7 @@ public class PayoutsValidatorTests
     }
     
     [Fact]
-    public void PayoutsValidator_Validate_GBP_Destination_Identifier_AccountNumber_Fail()
+    public void PayoutsValidator_Validate_GBP_Destination_Identifier_AccountNumber_TooLong_Fail()
     {
         var destination = new Counterparty
         {
@@ -406,7 +406,7 @@ public class PayoutsValidatorTests
             Identifier = new AccountIdentifier
             {
                 SortCode = "123456",
-                AccountNumber = "7062990",
+                AccountNumber = "706299099",
                 Currency = CurrencyTypeEnum.GBP
             }
         };
@@ -547,17 +547,10 @@ public class PayoutsValidatorTests
     [InlineData(CurrencyTypeEnum.GBP, 0.01, true)]
     [InlineData(CurrencyTypeEnum.GBP, 0.001, false)]
     [InlineData(CurrencyTypeEnum.GBP, 1.011, false)]
-    [InlineData(CurrencyTypeEnum.BTC, 0.01, true)]
-    [InlineData(CurrencyTypeEnum.BTC, 0.001, true)]
-    [InlineData(CurrencyTypeEnum.BTC, 0.00000001, true)]
-    [InlineData(CurrencyTypeEnum.BTC, 0.000000001, false)]
-    [InlineData(CurrencyTypeEnum.BTC, 1.011, true)]
-    [InlineData(CurrencyTypeEnum.BTC, 1.000000011, false)]
     public void Payout_Validator_Currency_Resolution(CurrencyTypeEnum currency, decimal amount, bool isValid)
     {
         AccountIdentifier identifier = currency switch
         {
-            CurrencyTypeEnum.BTC => new AccountIdentifier { Currency = currency, BitcoinAddress = "abcdefg" },
             CurrencyTypeEnum.GBP => new AccountIdentifier { Currency = currency, SortCode = "123456", AccountNumber = "00001234" } ,
             _ => new AccountIdentifier { Currency = currency, IBAN = "IE78MOCK91012352877713" }
         };
@@ -592,5 +585,121 @@ public class PayoutsValidatorTests
         {
             Assert.False(result.IsEmpty);
         }   
+    }
+
+    /// <summary>
+    /// Tests that a USD SCAN destination is successfully validated.
+    /// </summary>
+    [Fact]
+    public void PayoutsValidator_Validate_USD_Destination_Identifier_Success()
+    {
+        var destination = new Counterparty
+        {
+            Name = "Joe Bloggs",
+            Identifier = new AccountIdentifier
+            {
+                SortCode = "123456789",
+                AccountNumber = "70629907",
+                Currency = CurrencyTypeEnum.USD
+            }
+        };
+
+        var payout = new Payout
+        {
+            ID = Guid.NewGuid(),
+            AccountID = Guid.Parse("B2DBB4E1-5F8A-4B07-82A0-EB033E6F3421"),
+            Type = AccountIdentifierType.SCAN,
+            Description = "Xero Invoice fgfg from Demo Company (Global).",
+            Currency = CurrencyTypeEnum.USD,
+            Amount = 11.00M,
+            YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            TheirReference = "Placeholder",
+            Status = PayoutStatus.PENDING_INPUT,
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            Destination = destination
+        };
+
+        var result = payout.Validate();
+
+        _logger.LogDebug(result.ToTextErrorMessage());
+
+        Assert.True(result.IsEmpty);
+    }
+
+    /// <summary>
+    /// Tests that a USD IBAN destination is successfully validated.
+    /// </summary>
+    [Fact]
+    public void PayoutsValidator_Validate_USD_IBAN_Destination_Identifier_Success()
+    {
+        var destination = new Counterparty
+        {
+            Name = "Joe Bloggs",
+            Identifier = new AccountIdentifier
+            {
+                IBAN = "IE81MOCK91012332532297",
+                Currency = CurrencyTypeEnum.USD
+            }
+        };
+
+        var payout = new Payout
+        {
+            ID = Guid.NewGuid(),
+            AccountID = Guid.Parse("B2DBB4E1-5F8A-4B07-82A0-EB033E6F3421"),
+            Type = AccountIdentifierType.IBAN,
+            Description = "Xero Invoice fgfg from Demo Company (Global).",
+            Currency = CurrencyTypeEnum.USD,
+            Amount = 11.00M,
+            YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            TheirReference = "Placeholder",
+            Status = PayoutStatus.PENDING_INPUT,
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            Destination = destination
+        };
+
+        var result = payout.Validate();
+
+        _logger.LogDebug(result.ToTextErrorMessage());
+
+        Assert.True(result.IsEmpty);
+    }
+
+    /// <summary>
+    /// Test that a USD destination fails validation if the Sort Coed is not the required 9 digits.
+    /// </summary>
+    [Fact]
+    public void PayoutsValidator_Validate_USD_Destination_Identifier_SortCode_TooShort_Fail()
+    {
+        var destination = new Counterparty
+        {
+            Name = "Joe Bloggs",
+            Identifier = new AccountIdentifier
+            {
+                SortCode = "12345678",
+                AccountNumber = "706299099",
+                Currency = CurrencyTypeEnum.USD
+            }
+        };
+
+        var payout = new Payout
+        {
+            ID = Guid.NewGuid(),
+            AccountID = Guid.Parse("B2DBB4E1-5F8A-4B07-82A0-EB033E6F3421"),
+            Type = AccountIdentifierType.SCAN,
+            Description = "Xero Invoice fgfg from Demo Company (Global).",
+            Currency = CurrencyTypeEnum.USD,
+            Amount = 11.00M,
+            YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            TheirReference = "Placeholder",
+            Status = PayoutStatus.PENDING_INPUT,
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            Destination = destination
+        };
+
+        var result = payout.Validate();
+
+        _logger.LogDebug(result.ToTextErrorMessage());
+
+        Assert.False(result.IsEmpty);
     }
 }

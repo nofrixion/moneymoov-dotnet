@@ -14,6 +14,7 @@
 //   MIT.
 //  -----------------------------------------------------------------------------
 
+using System.Globalization;
 using NoFrixion.MoneyMoov.Models;
 
 namespace NoFrixion.MoneyMoov.Extensions;
@@ -34,7 +35,7 @@ public static class PayoutExtensions
             payout.Type.ToString(),
             payout.Description,
             payout.Currency.ToString(),
-            payout.Amount.ToString("F2"),
+            PaymentAmount.GetRoundedAmount(payout.Currency, payout.Amount).ToString(CultureInfo.InvariantCulture),
             payout.YourReference ?? "",
             payout.TheirReference ?? "",
             payout.CanProcess.ToString(),
@@ -65,7 +66,7 @@ public static class PayoutExtensions
             payout.AuthorisersRequiredCount.ToString(),
             payout.AuthorisersCompletedCount.ToString(),
             payout.Authorisations != null
-                ? string.Join(",", payout.Authorisations.Select(auth => $"{auth.User.FirstName} {auth.User.LastName}"))
+                ? string.Join(",", payout.Authorisations.Where(x=>x.User != null).Select(auth => $"{auth.User.FirstName} {auth.User.LastName}"))
                 : "",
             payout.AuthenticationMethods != null
                 ? string.Join(",", payout.AuthenticationMethods.Select(auth => auth.ToString()))

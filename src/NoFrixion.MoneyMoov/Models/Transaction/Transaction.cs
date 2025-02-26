@@ -16,9 +16,11 @@
 
 #nullable disable
 
+using NoFrixion.MoneyMoov.Extensions;
+
 namespace NoFrixion.MoneyMoov.Models;
 
-public class Transaction : IWebhookPayload
+public class Transaction : IWebhookPayload, IExportableToCsv
 {
     /// <summary>
     /// Unique ID for the transaction.
@@ -139,4 +141,11 @@ public class Transaction : IWebhookPayload
     /// For Pay by Bank and Direct Debit transactions this will contain the ID of the payment request.
     /// </summary>
     public Guid? PaymentRequestID { get; set; }
+
+    public string CsvHeader => "ID,AccountID,AccountName,MerchantID,Type,Amount,Currency,Description,TransactionDate,Inserted,YourReference,TheirReference,Counterparty,Balance,RuleID,PayoutID,VirtualIBAN,Tags,AccountSequenceNumber,PaymentRequestID";
+    
+    public string ToCsvRow()
+    {
+        return this.ToCsvRowString();
+    }
 }

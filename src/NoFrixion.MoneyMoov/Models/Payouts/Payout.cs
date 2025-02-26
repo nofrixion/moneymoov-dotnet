@@ -230,6 +230,7 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// <summary>
     /// The current Bitcoin address of the account the payout is being made from.
     /// </summary>
+    [Obsolete]
     public string? SourceBitcoinAddress { get; set; }
 
     public AccountIdentifier? SourceAccountIdentifier
@@ -240,8 +241,7 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
             
             if (string.IsNullOrWhiteSpace(SourceAccountIban) && 
                 string.IsNullOrWhiteSpace(SourceAccountNumber) && 
-                string.IsNullOrEmpty(SourceAccountSortcode) &&
-                string.IsNullOrWhiteSpace(SourceBitcoinAddress))
+                string.IsNullOrEmpty(SourceAccountSortcode))
             {
                 return srcAccountIdentifier;
             }
@@ -251,7 +251,6 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
                 IBAN = SourceAccountIban,
                 SortCode = SourceAccountSortcode,
                 AccountNumber = SourceAccountNumber,
-                BitcoinAddress = SourceBitcoinAddress,
                 Currency = Currency
             };
             return srcAccountIdentifier;

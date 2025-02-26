@@ -30,28 +30,21 @@ public enum AccountPermissions : ulong
     CanCreateBatchPayouts = 1L << 6,
     
     // Accounts
-    CanViewAccount = 1L << 7,
-    CanViewAccountForPaymentRequests = 1L << 8,
-    CanUpdateAccount = 1L << 9,
+    CanViewAccountForPaymentRequests = 1L << 7,
+    CanUpdateAccount = 1L << 8,
     
     // Rules
-    CanViewRules = 1L << 10,
-    CanCreateRules = 1L << 11,
-    CanEditRules = 1L << 12,
-    CanDeleteRules = 1L << 13,
-    CanAuthoriseRules = 1L << 14,
+    CanViewRules = 1L << 9,
+    CanCreateRules = 1L << 10,
+    CanEditRules = 1L << 11,
+    CanDeleteRules = 1L << 12,
+    CanAuthoriseRules = 1L << 13,
     
     // Transactions
-    CanViewTransactions = 1L << 15,
+    CanViewTransactions = 1L << 14,
     
     // Statements
-    [Obsolete("Use CanExportData instead.")]
-    CanCreateStatements = 1L << 16,
-    
-    [Obsolete("Use CanExportData instead.")]
-    CanViewStatements = 1L << 17,
-    
-    CanExportData = 1L << 18,
+    CanExportData = 1L << 15,
 }
 
 [Flags]
@@ -98,27 +91,26 @@ public enum MerchantPermissions : ulong
     CanDeleteWebhooks = 1L << 22,
     
     // Merchants
-    CanViewMerchant = 1L << 23,
-    CanUpdateMerchant = 1L << 24,
+    CanUpdateMerchant = 1L << 23,
     
     // Payment requests
-    CanCreatePaymentRequests = 1L << 25,
-    CanViewPaymentRequests = 1L << 26,
-    CanUpdatePaymentRequests = 1L << 27,
-    CanDeletePaymentRequests = 1L << 28,
+    CanCreatePaymentRequests = 1L << 24,
+    CanViewPaymentRequests = 1L << 25,
+    CanUpdatePaymentRequests = 1L << 26,
+    CanDeletePaymentRequests = 1L << 27,
     
     // Mandates
-    CanViewMandates = 1L << 29,
-    CanCreateMandates = 1L << 30,
+    CanViewMandates = 1L << 28,
+    CanCreateMandates = 1L << 29,
     
     // Permissions
-    CanViewRoles = 1L << 31,
-    CanCreateRoles = 1L << 32, 
-    CanEditRoles = 1L << 33,  
+    CanViewRoles = 1L << 30,
+    CanCreateRoles = 1L << 31, 
+    CanEditRoles = 1L << 32,  
     
     // Reports
-    CanCreateReports = 1L << 34,
-    CanViewReports = 1L << 35,
+    CanCreateReports = 1L << 33,
+    CanViewReports = 1L << 34,
 }
 
 public static class ClaimTypePrefixes
