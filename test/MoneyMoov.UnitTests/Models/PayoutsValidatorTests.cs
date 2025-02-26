@@ -398,7 +398,7 @@ public class PayoutsValidatorTests
     }
     
     [Fact]
-    public void PayoutsValidator_Validate_GBP_Destination_Identifier_AccountNumber_Fail()
+    public void PayoutsValidator_Validate_GBP_Destination_Identifier_AccountNumber_TooLong_Fail()
     {
         var destination = new Counterparty
         {
@@ -406,7 +406,7 @@ public class PayoutsValidatorTests
             Identifier = new AccountIdentifier
             {
                 SortCode = "123456",
-                AccountNumber = "7062990",
+                AccountNumber = "706299099",
                 Currency = CurrencyTypeEnum.GBP
             }
         };

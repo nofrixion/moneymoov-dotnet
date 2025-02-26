@@ -13,6 +13,7 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using Quartz.Util;
 using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -30,50 +31,15 @@ public class AccountIdentifier : IValidatableObject
     {
         get
         {
-            if (Currency == CurrencyTypeEnum.GBP)
-            {
-                // UK Faster Payments can support both SCAN and IBAN identifiers. Default to SCAN.
-                if (!string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber))
-                {
-                    return AccountIdentifierType.SCAN;
-                }
-                else if (!string.IsNullOrEmpty(IBAN))
-                {
-                    return AccountIdentifierType.IBAN;
-                }
-            }
-
-            if (Currency == CurrencyTypeEnum.USD)
-            {
-                //  USD Payments can support both FedWire and IBAN identifiers. Default to FedWire.
-                if (!string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber))
-                {
-                    return AccountIdentifierType.SCAN;
-                }
-                else if (!string.IsNullOrEmpty(IBAN))
-                {
-                    return AccountIdentifierType.IBAN;
-                }
-            }
-
-            if (!string.IsNullOrEmpty(IBAN))
+            if(!string.IsNullOrWhiteSpace(IBAN))
             {
                 return AccountIdentifierType.IBAN;
             }
-
-            if (!string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber))
+            else if(!string.IsNullOrWhiteSpace(SortCode) && !string.IsNullOrWhiteSpace(AccountNumber))
             {
                 return AccountIdentifierType.SCAN;
             }
 
-#pragma warning disable CS0612 // Type or member is obsolete
-            if (!string.IsNullOrEmpty(BitcoinAddress))
-            {
-                return AccountIdentifierType.BTC;
-            }
-#pragma warning restore CS0612 // Type or member is obsolete
-
-            // Return default
             return AccountIdentifierType.Unknown;
         }
     }
@@ -189,13 +155,10 @@ public class AccountIdentifier : IValidatableObject
     /// <summary>
     /// Summary of the account identifier's most important properties.
     /// </summary>
-#pragma warning disable CS0612 // Type or member is obsolete
     public string Summary =>
         Type == AccountIdentifierType.IBAN ? Type.ToString() + ": " + IBAN :
         Type == AccountIdentifierType.SCAN ? Type.ToString() + ": " + DisplayScanSummary :
-        Type == AccountIdentifierType.BTC ? Type.ToString() + ": " + BitcoinAddress :
          "No identifier.";
-#pragma warning restore CS0612 // Type or member is obsolete
 
     /// <summary>
     /// Summary of the account identifier's most important properties.
@@ -204,9 +167,7 @@ public class AccountIdentifier : IValidatableObject
     public string DisplaySummary =>
         Type == AccountIdentifierType.IBAN ? IBAN :
         Type == AccountIdentifierType.SCAN ? DisplayScanSummary :
-        Type == AccountIdentifierType.BTC ? BitcoinAddress :
         "No identifier.";
-#pragma warning restore CS0612 // Type or member is obsolete
 
     public string DisplayScanSummary =>
         !string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber) && SortCode.Length == SORT_CODE_LENGTH
@@ -225,15 +186,12 @@ public class AccountIdentifier : IValidatableObject
             return false;
         }
 
-#pragma warning disable CS0612 // Type or member is obsolete
         return Type switch
         {
             AccountIdentifierType.IBAN => IBAN == other.IBAN,
             AccountIdentifierType.SCAN => SortCode == other.SortCode && AccountNumber == other.AccountNumber,
-            AccountIdentifierType.BTC => BitcoinAddress == other.BitcoinAddress,
             _ => false
         };
-#pragma warning restore CS0612 // Type or member is obsolete
     }
 
     public virtual Dictionary<string, string> ToDictionary(string keyPrefix)
@@ -282,37 +240,37 @@ public class AccountIdentifier : IValidatableObject
     {
         switch (Currency)
         {
+            // GBP & USD support both IBAN and SCAN.
             case CurrencyTypeEnum.GBP:
+            case CurrencyTypeEnum.USD:
                 {
-                    if (string.IsNullOrEmpty(SortCode) || string.IsNullOrEmpty(AccountNumber))
+                    if (string.IsNullOrWhiteSpace(IBAN) && 
+                        (string.IsNullOrWhiteSpace(SortCode) || string.IsNullOrWhiteSpace(AccountNumber)))
                     {
                         yield return new ValidationResult(
-                            "Sort code and account number are required for GBP account identifier.",
-                            new[] { nameof(SortCode), nameof(AccountNumber) });
+                            $"Either the IBAN or Sort code and account number are required for a {Currency} account identifier.",
+                            [nameof(IBAN), nameof(SortCode), nameof(AccountNumber)]);
                     }
 
                     break;
                 }
+
+            // EUR only supports IBAN.
             case CurrencyTypeEnum.EUR:
-            case CurrencyTypeEnum.USD:
                 {
                     if (string.IsNullOrEmpty(IBAN))
                     {
                         yield return new ValidationResult("IBAN is required for EUR account identifier.",
-                            new[] { nameof(IBAN) });
+                             [nameof(IBAN)]);
                     }
 
                     break;
                 }
-            case CurrencyTypeEnum.BTC:
-                {
-                    yield return new ValidationResult("Bitcoin addresses are not supported.");
-                    break;
-                }
+
             default:
                 {
-                    yield return new ValidationResult("Currency is required for account identifier.",
-                        new[] { nameof(Currency) });
+                    yield return new ValidationResult($"Currency {Currency} was not recognised when validating an account identifier.",
+                        [nameof(Currency)]);
                     break;
                 }
         }

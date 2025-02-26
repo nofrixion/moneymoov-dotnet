@@ -45,7 +45,7 @@ public static class PayoutsValidator
     /// <summary>
     /// Maximum length of the Your, or External Reference, field.
     /// </summary>
-    public const int YOUR_REFERENCE_MAXIMUM_LENGTH = 50;
+    public const int YOUR_REFERENCE_MAXIMUM_LENGTH = 256;
 
     /// <summary>
     /// Validation regex for the destination account name field.
@@ -141,20 +141,24 @@ public static class PayoutsValidator
     public const decimal FIAT_CURRENCY_RESOLUTION = 0.01M;
 
     /// <summary>
-    /// Bitcoin currency is only allowed to be specified to eight decimal places.
+    /// The maximum length for a SCAN account number string.
     /// </summary>
-    public const decimal BITCOIN_CURRENCY_RESOLUTION = 0.0000_0001M;
+    private const int GBP_SCAN_MAXIMUM_ACCOUNT_NUMBER_LENGTH = 8;
+    
+    /// <summary>
+    /// The required length for a GBP SCAN sort code.
+    /// </summary>
+    private const int GBP_SCAN_REQUIRED_SORT_CODE_LENGTH = 6;
 
     /// <summary>
-    /// The required length for a SCAN account number.
+    /// The required length for a USD FedWire sort code.
     /// </summary>
-    private const int SCAN_REQUIRED_ACCOUNT_NUMBER_LENGTH = 8;
-    
-    /// <summary>
-    /// The required length for a SCAN sort code.
-    /// </summary>
-    private const int SCAN_REQUIRED_SORT_CODE_LENGTH = 6;
-    
+    /// <remarks>
+    /// See financialInstitution filed (need to horizontally scroll) on
+    /// https://docs.bankingcircleconnect.com/docs/initiate-correspondent-and-agency-banking-payment
+    /// </remarks>
+    private const int USD_SCAN_REQUIRED_SORT_CODE_LENGTH = 9;
+
     public static bool ValidateIBAN(string iban)
     {
         if (string.IsNullOrEmpty(iban))
@@ -325,22 +329,17 @@ public static class PayoutsValidator
 
         if (payout.Amount <= decimal.Zero)
         {
-            yield return new ValidationResult("The payment amount must be more than 0.", new string[] { nameof(payout.Amount) });
+            yield return new ValidationResult("The payment amount must be more than 0.", [ nameof(payout.Amount) ]);
         }
 
-        if(payout.Currency is CurrencyTypeEnum.EUR or CurrencyTypeEnum.GBP && payout.Amount % FIAT_CURRENCY_RESOLUTION != 0)
+        if(payout.Currency.IsFiat() && payout.Amount % FIAT_CURRENCY_RESOLUTION != 0)
         {
-            yield return new ValidationResult($"The payment amount must only be specified to two decimal places for currency {payout.Currency}.", new string[] { nameof(payout.Amount) });
-        }
-
-        if (payout.Currency is CurrencyTypeEnum.BTC && payout.Amount % BITCOIN_CURRENCY_RESOLUTION != 0)
-        {
-            yield return new ValidationResult($"The payment amount must only be specified to eight decimal places for currency {payout.Currency}.", new string[] { nameof(payout.Amount) });
+            yield return new ValidationResult($"The payment amount must only be specified to two decimal places for currency {payout.Currency}.", [ nameof(payout.Amount) ]);
         }
 
         if (payout.Destination == null)
         {
-            yield return new ValidationResult("Destination account required.", new string[] { nameof(payout.Destination) });
+            yield return new ValidationResult("Destination account required.", [ nameof(payout.Destination) ]);
         }
 
         if (payout.Destination?.AccountID == null && payout.Destination?.BeneficiaryID == null)
@@ -349,84 +348,95 @@ public static class PayoutsValidator
 
             if (payout.Destination != null && payout.Destination?.Identifier == null)
             {
-                yield return new ValidationResult("Destination account identifier required.", new string[] { nameof(payout.Destination.Identifier) });
+                yield return new ValidationResult("Destination account identifier required.", [ nameof(payout.Destination.Identifier) ]);
             }
 
             if (string.IsNullOrEmpty(payout.Destination?.Name))
             {
-                yield return new ValidationResult("Destination account name required.", new string[] { nameof(payout.Destination.Name) });
+                yield return new ValidationResult("Destination account name required.", [ nameof(payout.Destination.Name) ]);
             }
 
             if (payout.Destination?.Name != null && !IsValidAccountName(payout.Destination?.Name ?? string.Empty, payout.PaymentProcessor))
             {
                 if (payout.PaymentProcessor == PaymentProcessorsEnum.Modulr)
                 {
-                    yield return new ValidationResult($"The Destination Account Name is invalid. It can only contain alphanumeric characters plus the ' . - & and space characters.", new string[] { nameof(payout.Destination.Name) });
+                    yield return new ValidationResult($"The Destination Account Name is invalid. It can only contain alphanumeric characters plus the ' . - & and space characters.", [ nameof(payout.Destination.Name) ]);
                 }
                 else
                 {
                     yield return new ValidationResult(
                         string.Format(BANKING_CIRCLE_STRING_VALIDATION_ERROR_TEMPLATE, "Destination Account Name", ACCOUNT_NAME_MAXIMUM_BANKING_CIRCLE_LENGTH),
-                        new string[] { nameof(payout.Destination.Name) });
+                        [ nameof(payout.Destination.Name) ]);
                 }
             }
 
             if (payout.Destination != null &&
-                !(payout.Type == AccountIdentifierType.IBAN || payout.Type == AccountIdentifierType.SCAN || payout.Type == AccountIdentifierType.BTC))
+                !(payout.Type == AccountIdentifierType.IBAN || payout.Type == AccountIdentifierType.SCAN))
             {
-                yield return new ValidationResult("Only destination types of IBAN, SCAN or BTC are supported.", new string[] { nameof(payout.Type) });
+                yield return new ValidationResult("Only destination types of IBAN and SCAN are supported.", [ nameof(payout.Type) ]);
+            }
+
+            if(!string.IsNullOrWhiteSpace(payout.Destination?.Identifier?.IBAN) &&
+                (!string.IsNullOrWhiteSpace(payout.Destination?.Identifier?.SortCode) || !string.IsNullOrWhiteSpace(payout.Destination?.Identifier?.AccountNumber)))
+            {
+                yield return new ValidationResult("Only one of the IBAN or SCAN details can be set, not both.", [nameof(payout.Destination.Identifier.IBAN), nameof(payout.Destination.Identifier.SortCode), nameof(payout.Destination.Identifier.AccountNumber)]);
             }
 
             if (payout.Type == AccountIdentifierType.IBAN && payout.Destination?.Identifier != null &&
-                string.IsNullOrEmpty(payout.Destination?.Identifier?.IBAN ?? string.Empty))
+                string.IsNullOrWhiteSpace(payout.Destination?.Identifier?.IBAN ?? string.Empty))
             {
-                yield return new ValidationResult("The destination account IBAN must be specified for an IBAN payout type.", new string[] { nameof(payout.Destination.Identifier.IBAN) });
+                yield return new ValidationResult("The destination account IBAN must be specified for an IBAN payout type.",[ nameof(payout.Destination.Identifier.IBAN) ]);
             }
 
             if (payout.Type == AccountIdentifierType.IBAN && payout.Destination?.Identifier != null &&
                 !ValidateIBAN(payout.Destination?.Identifier?.IBAN ?? string.Empty))
             {
-                yield return new ValidationResult("Destination IBAN is invalid, Please enter a valid IBAN.", new string[] { nameof(payout.Destination.Identifier.IBAN) });
+                yield return new ValidationResult("Destination IBAN is invalid, Please enter a valid IBAN.", [ nameof(payout.Destination.Identifier.IBAN) ]);
             }
 
-            // Seems IBAN's can be used fro GBP and USD as well as EUR.
-            if (payout.Type == AccountIdentifierType.IBAN &&
-                !(payout.Currency == CurrencyTypeEnum.EUR ||
-                  payout.Currency == CurrencyTypeEnum.GBP ||
-                  payout.Currency == CurrencyTypeEnum.USD))
+            // IBAN's can be used for all Fiat currencies
+            if (payout.Type == AccountIdentifierType.IBAN && payout.Currency.IsFiat() == false)
             {
                 yield return new ValidationResult(
-                    $"Currency {payout.Currency} cannot be used with IBAN destinations.",
-                    new string[] { nameof(payout.Currency) });
+                    $"Currency {payout.Currency} cannot be used with IBAN destinations.", [ nameof(payout.Currency) ]);
             }
 
             if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
                 string.IsNullOrEmpty(payout.Destination?.Identifier?.SortCode))
             {
-                yield return new ValidationResult("Destination sort code required for a SCAN payout type.", new string[] { nameof(payout.Destination.Identifier.SortCode) });
+                yield return new ValidationResult("Destination sort code required for a SCAN payout type.", [ nameof(payout.Destination.Identifier.SortCode) ]);
             }
 
             if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
                 string.IsNullOrEmpty(payout.Destination?.Identifier?.AccountNumber))
             {
-                yield return new ValidationResult("Destination account number is required for a SCAN payout type.", new string[] { nameof(payout.Destination.Identifier.AccountNumber) });
+                yield return new ValidationResult("Destination account number is required for a SCAN payout type.", [ nameof(payout.Destination.Identifier.AccountNumber) ]);
             }
 
-            if (payout.Type == AccountIdentifierType.SCAN && payout.Currency != CurrencyTypeEnum.GBP)
+            if (payout.Type == AccountIdentifierType.SCAN && payout.Currency == CurrencyTypeEnum.EUR)
             {
-                yield return new ValidationResult($"Currency {payout.Currency} cannot be used with SCAN destinations.", new string[] { nameof(payout.Currency) });
+                yield return new ValidationResult($"Currency {payout.Currency} cannot be used with SCAN destinations.", [ nameof(payout.Currency) ]);
             }
             
             if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
-                !string.IsNullOrEmpty(payout.Destination?.Identifier?.AccountNumber) && payout.Destination.Identifier.AccountNumber.Length != SCAN_REQUIRED_ACCOUNT_NUMBER_LENGTH)
+                payout.Currency == CurrencyTypeEnum.GBP &&
+                !string.IsNullOrEmpty(payout.Destination?.Identifier?.AccountNumber) && payout.Destination.Identifier.AccountNumber.Length > GBP_SCAN_MAXIMUM_ACCOUNT_NUMBER_LENGTH)
             {
-                yield return new ValidationResult("Destination account number must be eight digits for a SCAN payout type.", new string[] { nameof(payout.Destination.Identifier.AccountNumber) });
+                yield return new ValidationResult("Destination account number must be eight digits or less for a GBP SCAN payout type.", [ nameof(payout.Destination.Identifier.AccountNumber) ]);
             }
             
             if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
-                !string.IsNullOrEmpty(payout.Destination?.Identifier?.SortCode) && payout.Destination.Identifier.SortCode.Length != SCAN_REQUIRED_SORT_CODE_LENGTH)
+                payout.Currency == CurrencyTypeEnum.GBP && 
+                !string.IsNullOrEmpty(payout.Destination?.Identifier?.SortCode) && payout.Destination.Identifier.SortCode.Length != GBP_SCAN_REQUIRED_SORT_CODE_LENGTH)
             {
-                yield return new ValidationResult("Destination sort code must be six digits for a SCAN payout type.", new string[] { nameof(payout.Destination.Identifier.SortCode) });
+                yield return new ValidationResult("Destination sort code must be six digits for a GBP SCAN payout type.",[ nameof(payout.Destination.Identifier.SortCode) ]);
+            }
+
+            if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
+                payout.Currency == CurrencyTypeEnum.USD &&
+                !string.IsNullOrEmpty(payout.Destination?.Identifier?.SortCode) && payout.Destination.Identifier.SortCode.Length != USD_SCAN_REQUIRED_SORT_CODE_LENGTH)
+            {
+                yield return new ValidationResult("Destination sort code must be nine digits for a USD SCAN payout type.", [nameof(payout.Destination.Identifier.SortCode)]);
             }
         }
 
@@ -438,21 +448,21 @@ public static class PayoutsValidator
             }
         }
 
-        if (payout.Type != AccountIdentifierType.BTC && !ValidateTheirReference(payout.TheirReference, payout.Type, payout.PaymentProcessor))
+        if (!ValidateTheirReference(payout.TheirReference, payout.Type, payout.PaymentProcessor))
         {
             if (payout.PaymentProcessor == PaymentProcessorsEnum.Modulr)
             {
                 yield return new ValidationResult("Their reference must consist of at least 6 alphanumeric characters that are not all the same " +
                     "(non alphanumeric characters do not get counted towards this minimum value). " +
                     "The allowed characters are alphanumeric, space, hyphen(-), full stop (.), ampersand (&), and forward slash (/). " +
-                    "Total of all characters must be less than 18 for a SCAN payout and less than 140 for an IBAN payout.",
-                    new string[] { nameof(payout.TheirReference) });
+                    "Total of all characters must be 18 or less and for a SCAN payout and for an IBAN payout must be 140 or less.",
+                    [ nameof(payout.TheirReference) ]);
             }
             else
             {
                 yield return new ValidationResult(
                     string.Format(BANKING_CIRCLE_STRING_VALIDATION_ERROR_TEMPLATE, "Their Reference", REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH),
-                    new string[] { nameof(payout.TheirReference) });
+                    [ nameof(payout.TheirReference) ]);
             }
         }
 
@@ -460,7 +470,7 @@ public static class PayoutsValidator
         {
             yield return new ValidationResult("Your reference can only contain alphanumeric, space, hyphen(-) and underscore (_) characters. " +
             $"The maximum allowed length of the field is {YOUR_REFERENCE_MAXIMUM_LENGTH} characters.",
-            new string[] { nameof(payout.YourReference) });
+            [ nameof(payout.YourReference) ]);
         }
 
         if (payout is { Scheduled: true, ScheduleDate: null })
