@@ -35,6 +35,8 @@ public class UserInvite
     public string MerchantName { get; set; } = string.Empty;
     public string Message { get; set; } = string.Empty;
     
+    public Guid? UserID { get; set; }
+    
     public User? User { get; set; }
 
     /// <summary>
@@ -46,12 +48,11 @@ public class UserInvite
     {
         get
         {
-            if(User != null)
+            if (UserID != null)
             {
-                return UserInviteStatusEnum.RolePending;
+                return UserInviteStatusEnum.Accepted;
             }
             
-            else
             if ((DateTimeOffset.Now - LastInvited) > new TimeSpan(USER_INVITE_EXPIRATION_HOURS, 0, 0))
             {
                 return UserInviteStatusEnum.Expired;
