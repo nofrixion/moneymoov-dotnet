@@ -65,6 +65,7 @@ public class Payrun : IWebhookPayload
     
     public DateTimeOffset? AuthorisationDate { get; set; }
     
+    
     public bool CanEdit => Status.CanEdit();
     
     public bool CanDelete => Status.CanDelete();
