@@ -32,6 +32,9 @@ public class Payrun : IWebhookPayload
 
     public List<PayrunInvoice>? Invoices { get; set; } = null!;
 
+    [Obsolete("Use TotalEur, TotalGbp or TotalUsd instead.")]
+    public decimal TotalAmount { get; set; }
+    
     public DateTimeOffset Inserted { get; set; }
 
     public DateTimeOffset LastUpdated { get; set; }
