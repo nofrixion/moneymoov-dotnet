@@ -111,6 +111,12 @@ public enum MerchantPermissions : ulong
     // Reports
     CanCreateReports = 1L << 33,
     CanViewReports = 1L << 34,
+    
+    // Xero
+    CanCreateXeroConnection = 1L << 35,
+    CanViewXeroConnection = 1L << 36,
+    CanUpdateXeroConnection = 1L << 37,
+    CanDeleteXeroConnection = 1L << 38,
 }
 
 public static class ClaimTypePrefixes
