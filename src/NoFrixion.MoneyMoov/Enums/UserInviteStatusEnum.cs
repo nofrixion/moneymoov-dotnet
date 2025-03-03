@@ -26,5 +26,10 @@ public enum UserInviteStatusEnum
     /// Registration invite has expired i.e 
     /// 48 hours have passed since the invite was sent.
     /// </summary>
-    Expired = 1
+    Expired = 1,
+    
+    /// <summary>
+    /// User has accepted the invite but the role is pending.
+    /// </summary>
+    Accepted = 2
 }

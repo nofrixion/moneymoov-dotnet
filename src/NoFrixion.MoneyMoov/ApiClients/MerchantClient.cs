@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NoFrixion.MoneyMoov.Models;
 using System.Net;
+using NoFrixion.MoneyMoov.Models.Roles;
 
 namespace NoFrixion.MoneyMoov;
 
@@ -36,6 +37,12 @@ public interface IMerchantClient
     Task<RestApiResponse<IEnumerable<PaymentAccount>>> GetAccountsAsync(string userAccessToken, Guid merchantID);
 
     Task<RestApiResponse<IEnumerable<UserInvite>>> GetUserInvitesAsync(string userAccessToken, Guid merchantID);
+    
+    Task<RestApiResponse<IEnumerable<Role>>> GetRolesAsync(string userAccessToken, Guid merchantID);
+    
+    Task<RestApiResponse<Role>> AddUserToRole(string userAccessToken, RoleUserCreate roleUserCreate, Guid merchantID, Guid roleID);
+    
+    Task<RestApiResponse> DeleteUserFromRole(string userAccessToken, Guid merchantID, Guid roleID, Guid userID);
 }
 
 public class MerchantClient : IMerchantClient
@@ -197,4 +204,45 @@ public class MerchantClient : IMerchantClient
             _ => Task.FromResult(new RestApiResponse<IEnumerable<UserInvite>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
+
+    public Task<RestApiResponse<IEnumerable<Role>>> GetRolesAsync(string userAccessToken, Guid merchantID)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantRolesUrl(_apiClient.GetBaseUri().ToString(), merchantID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetRolesAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<IEnumerable<Role>>(url, userAccessToken),
+            _ => Task.FromResult(new RestApiResponse<IEnumerable<Role>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+    
+    public Task<RestApiResponse<Role>> AddUserToRole(string userAccessToken, RoleUserCreate roleUserCreate, Guid merchantID, Guid roleID)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantRoleUsersUrl(_apiClient.GetBaseUri().ToString(), merchantID, roleID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(AddUserToRole));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PostAsync<Role>(url, userAccessToken, roleUserCreate.ToJsonContent()),
+            _ => Task.FromResult(new RestApiResponse<Role>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+    
+    public Task<RestApiResponse> DeleteUserFromRole(string userAccessToken, Guid merchantID, Guid roleID, Guid userID)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantRoleUsersUrl(_apiClient.GetBaseUri().ToString(), merchantID, roleID, userID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(DeleteUserFromRole));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.DeleteAsync(url, userAccessToken),
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+    
+    
 }

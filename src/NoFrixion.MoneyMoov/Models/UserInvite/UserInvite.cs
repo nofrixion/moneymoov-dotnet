@@ -34,6 +34,10 @@ public class UserInvite
     public DateTimeOffset LastInvited { get; set; }
     public string MerchantName { get; set; } = string.Empty;
     public string Message { get; set; } = string.Empty;
+    
+    public Guid? UserID { get; set; }
+    
+    public User? User { get; set; }
 
     /// <summary>
     /// If true, indicates the invitee's email address corresponds to an existing MoneyMoov user.
@@ -44,6 +48,11 @@ public class UserInvite
     {
         get
         {
+            if (UserID != null)
+            {
+                return UserInviteStatusEnum.Accepted;
+            }
+            
             if ((DateTimeOffset.Now - LastInvited) > new TimeSpan(USER_INVITE_EXPIRATION_HOURS, 0, 0))
             {
                 return UserInviteStatusEnum.Expired;
