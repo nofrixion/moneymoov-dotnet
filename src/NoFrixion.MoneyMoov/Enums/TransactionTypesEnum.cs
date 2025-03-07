@@ -90,5 +90,8 @@ public enum TransactionTypesEnum
     TARGET2 = 13,
     
     [Display(Name = "SEPA Direct Debit Rejection / Chargeback")]
-    SEPA_DD_REJECT = 14
+    SEPA_DD_REJECT = 14,
+
+    [Display(Name = "Cross Border")]
+    CROSS_BORDER = 15
 }
