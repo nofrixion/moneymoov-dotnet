@@ -356,6 +356,11 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload, IExportableToCsv
     /// Minimal destination account details, if available.
     /// </summary>
     public PaymentAccount? DestinationAccount { get; set; }
+    
+    /// <summary>
+    /// Sandbox only. Optional. If set, the simulated Direct Debit settlement will be delayed by the specified number of seconds.
+    /// </summary>
+    public int? SandboxDirectDebitSettleDelayInSeconds { get; set; }
 
     public string CustomerName =>
         Addresses.Any() ? $"{Addresses.First().FirstName} {Addresses.First().LastName}" : string.Empty;
