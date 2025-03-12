@@ -348,7 +348,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// Sandbox only. Optional. If set, the simulated Direct Debit settlement will be delayed by the specified number of seconds.
     /// Must be greater than 0 and less than 600. Otherwise, the default value will be used.
     /// </summary>
-    public int? SandboxDirectDebitSettleDelayInSeconds { get; set; }
+    public int? SandboxSettleDelayInSeconds { get; set; }
 
     /// <summary>
     /// An optional list of tag ids to add to the payment request
