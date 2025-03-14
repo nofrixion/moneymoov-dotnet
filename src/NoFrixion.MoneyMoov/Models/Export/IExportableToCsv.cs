@@ -17,7 +17,7 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public interface IExportableToCsv
 {
-    string CsvHeader { get; }
+    string CsvHeader();
     
     string ToCsvRow();
 }

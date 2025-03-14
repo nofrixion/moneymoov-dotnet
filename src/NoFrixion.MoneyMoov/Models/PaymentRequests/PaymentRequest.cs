@@ -474,7 +474,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload, IExportableToCsv
                 });
     }
 
-    public string CsvHeader =>
+    public string CsvHeader() =>
         "ID,MerchantID,Amount,Currency,PaymentMethods,Description,CustomerID,OrderID,Inserted,LastUpdated,PispAccountID,PispAccountName,BaseOriginUrl,CardAuthorizeOnly,CardCreateToken,CardCreateTokenMode,Status,PartialPaymentMethod,CustomerEmailAddress,CardStripePaymentIntentID,CardStripePaymentIntentSecret,NotificationEmailAddresses,PriorityBankID,Title,PartialPaymentSteps,AmountReceived,AmountRefunded,AmountPending,CreatedByUserID,CreatedByUserName,MerchantTokenDescription,TransactionIDs,PayrunID,ShippingAddress,BillingAddress,CustomerName,PaymentProcessor,Tags";
     
     public string ToCsvRow()
