@@ -62,4 +62,9 @@ public enum PayrunStatus
     /// payouts are being created for the pay run.
     /// </summary>
     Approving = 9,
+    
+    /// <summary>
+    /// Indicates that all submitted payouts are currently being processed.
+    /// </summary>
+    Processing = 10
 }
