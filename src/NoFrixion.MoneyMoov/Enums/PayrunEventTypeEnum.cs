@@ -45,4 +45,6 @@ public enum PayrunEventTypeEnum
     Cancelled = 12,
 
     Authorised = 13,
+    
+    BeganProcessing = 14,
 }
