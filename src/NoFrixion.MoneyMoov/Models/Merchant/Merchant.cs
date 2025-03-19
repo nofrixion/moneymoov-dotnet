@@ -40,7 +40,10 @@ public class Merchant
     /// The registered business name of the merchant.
     /// </summary>
     public string? Name { get; set; }
-    
+
+    [Obsolete("This property has been deprecated.")]
+    public bool Enabled { get; set; }
+
     /// <summary>
     /// The Company ID recorded in the Compliance system.
     /// </summary>
