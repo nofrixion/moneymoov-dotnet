@@ -371,7 +371,7 @@ public static class PayoutsValidator
             }
 
             if (payout.Destination != null &&
-                !(payout.Type == AccountIdentifierType.IBAN || payout.Type == AccountIdentifierType.SCAN))
+                !(payout.Type == AccountIdentifierType.IBAN || payout.Type == AccountIdentifierType.SCAN || payout.Type == AccountIdentifierType.BIC))
             {
                 yield return new ValidationResult("Only destination types of IBAN and SCAN are supported.", [ nameof(payout.Type) ]);
             }
