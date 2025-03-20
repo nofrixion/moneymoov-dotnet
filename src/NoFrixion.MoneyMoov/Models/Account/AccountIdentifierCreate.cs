@@ -85,7 +85,7 @@ public class AccountIdentifierCreate
     }
 
     /// <summary>
-    /// Bank account number. Only applicable for SCAN identifiers.
+    /// Bank account number. Only applicable for SCAN and BIC identifiers.
     /// </summary>
     private string _accountNumber;
     public string AccountNumber

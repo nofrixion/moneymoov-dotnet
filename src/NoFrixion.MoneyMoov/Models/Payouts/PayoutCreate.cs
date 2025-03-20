@@ -151,11 +151,13 @@ public class PayoutCreate
     /// <summary>
     /// For Bitcoin payouts, when this flag is set the network fee will be deducted from the send amount. This is particularly useful for sweeps where it can be difficult to calculate the exact fee required.
     /// </summary>
+    [Obsolete]
     public bool BitcoinSubtractFeeFromAmount { get; set; }
 
     /// <summary>
     /// The Bitcoin fee rate to apply in Satoshis per virtual byte.
     /// </summary>
+    [Obsolete]
     public int BitcoinFeeSatsPerVbyte { get; set; }
     
     /// <summary>

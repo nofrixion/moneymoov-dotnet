@@ -308,13 +308,22 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// For Bitcoin payouts, when this flag is set the network fee will be deducted from the send amount.
     /// THis is particularly useful for sweeps where it can be difficult to calculate the exact fee required.
     /// </summary>
+    [Obsolete]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
     public bool BitcoinSubtractFeeFromAmount { get; set; }
 
     /// <summary>
     /// The Bitcoin fee rate to apply in Satoshis per virtual byte.
     /// </summary>
+    [Obsolete]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
     public int BitcoinFeeSatsPerVbyte { get; set; }
 
+    [Obsolete]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
     public string FormattedBitcoinFee => $"{BitcoinFeeSatsPerVbyte} sats/vbyte" +
         (BitcoinSubtractFeeFromAmount ? " (fee will be subtracted from amount)" : "");
 
