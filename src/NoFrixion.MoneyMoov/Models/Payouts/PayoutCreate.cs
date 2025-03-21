@@ -39,7 +39,7 @@ public class PayoutCreate
     public CurrencyTypeEnum Currency { get; set; }
 
     [Required(ErrorMessage = "Amount is required.")]
-    [Range(0.00001, double.MaxValue,ErrorMessage = "Minimum value of 0.00001 is required for Amount")]
+    [Range(0.00001, double.MaxValue,ErrorMessage = "Minimum value of 0.01 is required for Amount")]
     public decimal Amount { get; set; }
 
     /// <summary>
@@ -151,11 +151,13 @@ public class PayoutCreate
     /// <summary>
     /// For Bitcoin payouts, when this flag is set the network fee will be deducted from the send amount. This is particularly useful for sweeps where it can be difficult to calculate the exact fee required.
     /// </summary>
+    [Obsolete]
     public bool BitcoinSubtractFeeFromAmount { get; set; }
 
     /// <summary>
     /// The Bitcoin fee rate to apply in Satoshis per virtual byte.
     /// </summary>
+    [Obsolete]
     public int BitcoinFeeSatsPerVbyte { get; set; }
     
     /// <summary>

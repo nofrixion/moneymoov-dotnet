@@ -52,9 +52,17 @@ public class Counterparty
     /// </summary>
     public string? EmailAddress { get; set; }
 
-    /// An email address for the counterparty. Optional to set and depending on the payment
+    /// <summary>
+    /// A phone number for the counterparty. Optional to set and depending on the payment
     /// network does not always get set for pay ins.
+    /// </summary>
     public string? PhoneNumber { get; set; }
+
+    /// <summary>
+    /// A country code for the counterparty. Optional to set and depending on the payment
+    /// network does not always get set for pay ins
+    /// </summary>
+    public string? CountryCode { get; set; }
 
     /// <summary>
     /// The counterparty's account identifier. This identifier is what is used to send the payment
@@ -113,6 +121,7 @@ public class Counterparty
              { keyPrefix + nameof(Name), Name ?? string.Empty },
              { keyPrefix + nameof(EmailAddress), EmailAddress ?? string.Empty },
              { keyPrefix + nameof(PhoneNumber), PhoneNumber ?? string.Empty },
+             { keyPrefix + nameof(CountryCode), CountryCode ?? string.Empty },
         };
 
         if(Identifier != null)
@@ -135,6 +144,7 @@ public class Counterparty
             (!string.IsNullOrEmpty(Name) ? Name : string.Empty) +
             (!string.IsNullOrEmpty(EmailAddress) ? EmailAddress : string.Empty) +
             (!string.IsNullOrEmpty(PhoneNumber) ? PhoneNumber : string.Empty) +
+            (!string.IsNullOrEmpty(CountryCode) ? CountryCode : string.Empty) +
             (Identifier != null ? Identifier.GetApprovalHash() : string.Empty);
         return HashHelper.CreateHash(input);
     }

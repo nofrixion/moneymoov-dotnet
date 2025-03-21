@@ -8,6 +8,7 @@
 //  History:
 //  21 10 2021  Donal O'Connor   Created, Carmichael House, Dublin, Ireland.
 //  19 09 2023  Aaron Clauson    Added Bitcoin support.
+//  20 03 2025  Aaron Clauson    Added support for BIC identifier type.
 // 
 //  License:
 //  MIT.
@@ -30,13 +31,17 @@ public class AccountIdentifier : IValidatableObject
     {
         get
         {
-            if(!string.IsNullOrWhiteSpace(IBAN))
+            if (!string.IsNullOrWhiteSpace(IBAN))
             {
                 return AccountIdentifierType.IBAN;
             }
-            else if(!string.IsNullOrWhiteSpace(SortCode) && !string.IsNullOrWhiteSpace(AccountNumber))
+            else if (!string.IsNullOrWhiteSpace(SortCode))
             {
                 return AccountIdentifierType.SCAN;
+            }
+            else if (!string.IsNullOrWhiteSpace(BIC))
+            {
+                return AccountIdentifierType.BIC;
             }
 
             return AccountIdentifierType.Unknown;
@@ -157,6 +162,7 @@ public class AccountIdentifier : IValidatableObject
     public string Summary =>
         Type == AccountIdentifierType.IBAN ? Type.ToString() + ": " + IBAN :
         Type == AccountIdentifierType.SCAN ? Type.ToString() + ": " + DisplayScanSummary :
+        Type == AccountIdentifierType.BIC ? Type.ToString() + ": " + DisplayBicSummary :
          "No identifier.";
 
     /// <summary>
@@ -165,12 +171,15 @@ public class AccountIdentifier : IValidatableObject
     public string DisplaySummary =>
         Type == AccountIdentifierType.IBAN ? IBAN :
         Type == AccountIdentifierType.SCAN ? DisplayScanSummary :
+        Type == AccountIdentifierType.BIC ? DisplayBicSummary :
         "No identifier.";
 
     public string DisplayScanSummary =>
         Currency == CurrencyTypeEnum.GBP && !string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber) && SortCode.Length == GBP_SORT_CODE_LENGTH
             ? $"{SortCode[..2]}-{SortCode.Substring(2, 2)}-{SortCode.Substring(4, 2)} {AccountNumber}"
             : $"{SortCode} {AccountNumber}";
+
+    public string DisplayBicSummary => $"{BIC} {AccountNumber}";
 
     public bool IsSameDestination(AccountIdentifier other)
     {
@@ -188,6 +197,7 @@ public class AccountIdentifier : IValidatableObject
         {
             AccountIdentifierType.IBAN => IBAN == other.IBAN,
             AccountIdentifierType.SCAN => SortCode == other.SortCode && AccountNumber == other.AccountNumber,
+            AccountIdentifierType.BIC => BIC == other.BIC && AccountNumber == other.AccountNumber,
             _ => false
         };
     }
@@ -200,7 +210,8 @@ public class AccountIdentifier : IValidatableObject
             { keyPrefix + nameof(BIC), BIC ?? string.Empty},
             { keyPrefix + nameof(IBAN), IBAN ?? string.Empty},
             { keyPrefix + nameof(SortCode), SortCode ?? string.Empty},
-            { keyPrefix + nameof(AccountNumber), AccountNumber ?? string.Empty}
+            { keyPrefix + nameof(AccountNumber), AccountNumber ?? string.Empty},
+            { keyPrefix + nameof(BIC), BIC ?? string.Empty},
         };
     }
 
@@ -236,30 +247,36 @@ public class AccountIdentifier : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        switch (Currency)
+        switch (Type)
         {
-            // GBP & USD support both IBAN and SCAN.
-            case CurrencyTypeEnum.GBP:
-            case CurrencyTypeEnum.USD:
+            case AccountIdentifierType.IBAN:
+                if (string.IsNullOrWhiteSpace(IBAN))
                 {
-                    if (string.IsNullOrWhiteSpace(IBAN) && 
-                        (string.IsNullOrWhiteSpace(SortCode) || string.IsNullOrWhiteSpace(AccountNumber)))
+                    yield return new ValidationResult(
+                        $"The IBAN value is required for a {AccountIdentifierType.IBAN} identifier.",
+                        [nameof(IBAN)]);
+                }
+                break;
+
+            case AccountIdentifierType.SCAN:
+                {
+                    if (string.IsNullOrWhiteSpace(SortCode) || string.IsNullOrWhiteSpace(AccountNumber))
                     {
                         yield return new ValidationResult(
-                            $"Either the IBAN or Sort code and account number are required for a {Currency} account identifier.",
-                            [nameof(IBAN), nameof(SortCode), nameof(AccountNumber)]);
+                            $"The sort code and account number are required for a {AccountIdentifierType.SCAN} identifier.",
+                            [nameof(SortCode), nameof(AccountNumber)]);
                     }
 
                     break;
                 }
 
-            // EUR only supports IBAN.
-            case CurrencyTypeEnum.EUR:
+            case AccountIdentifierType.BIC:
                 {
-                    if (string.IsNullOrEmpty(IBAN))
+                    if (string.IsNullOrWhiteSpace(BIC) || string.IsNullOrWhiteSpace(AccountNumber))
                     {
-                        yield return new ValidationResult("IBAN is required for EUR account identifier.",
-                             [nameof(IBAN)]);
+                        yield return new ValidationResult(
+                            $"The BIC and account number are required for a {AccountIdentifierType.BIC} identifier.",
+                            [nameof(BIC), nameof(AccountNumber)]);
                     }
 
                     break;
@@ -267,8 +284,8 @@ public class AccountIdentifier : IValidatableObject
 
             default:
                 {
-                    yield return new ValidationResult($"Currency {Currency} was not recognised when validating an account identifier.",
-                        [nameof(Currency)]);
+                    yield return new ValidationResult($"Identifier {Type} was not recognised when validating an account identifier.",
+                        [nameof(Type)]);
                     break;
                 }
         }
