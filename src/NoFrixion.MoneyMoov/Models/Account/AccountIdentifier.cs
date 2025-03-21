@@ -210,8 +210,7 @@ public class AccountIdentifier : IValidatableObject
             { keyPrefix + nameof(BIC), BIC ?? string.Empty},
             { keyPrefix + nameof(IBAN), IBAN ?? string.Empty},
             { keyPrefix + nameof(SortCode), SortCode ?? string.Empty},
-            { keyPrefix + nameof(AccountNumber), AccountNumber ?? string.Empty},
-            { keyPrefix + nameof(BIC), BIC ?? string.Empty},
+            { keyPrefix + nameof(AccountNumber), AccountNumber ?? string.Empty}
         };
     }
 

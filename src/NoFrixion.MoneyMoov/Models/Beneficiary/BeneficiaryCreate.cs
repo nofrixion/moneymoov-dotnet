@@ -27,7 +27,7 @@ public class BeneficiaryCreate : IValidatableObject
     /// <summary>
     /// Gets or Sets the merchant id.
     /// </summary>
-    
+    [Required(ErrorMessage = "MerchantID is required.")]    
     public Guid MerchantID { get; set; }
 
     public List<Guid> SourceAccountIDs { get; set; }
