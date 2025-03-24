@@ -438,13 +438,13 @@ public static class PayoutsValidator
             {
                 yield return new ValidationResult("Destination sort code must be nine digits for a USD SCAN payout type.", [nameof(payout.Destination.Identifier.SortCode)]);
             }
-        }
 
-        if (payout.Destination?.Identifier != null)
-        {
-            foreach (var err in payout.Destination.Identifier.Validate(validationContext))
+            if (payout.Destination?.Identifier != null)
             {
-                yield return err;
+                foreach (var err in payout.Destination.Identifier.Validate(validationContext))
+                {
+                    yield return err;
+                }
             }
         }
 
