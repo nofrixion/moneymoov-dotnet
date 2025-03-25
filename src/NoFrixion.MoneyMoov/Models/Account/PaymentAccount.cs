@@ -223,7 +223,7 @@ public class PaymentAccount: IExportableToCsv
     /// </summary>
     public AccountSepaInstantStatusEnum? SupplierSepaInstantStatus { get; set; }
 
-    public string CsvHeader =>
+    public string CsvHeader() =>
         "ID,AccountName,AccountSupplierName,IsConnectedAccount,Balance,SubmittedPayoutsBalance,AvailableBalance,Currency,IBAN,SortCode,AccountNumber,Bic,Inserted,LastUpdated,IsDefault,BankName,ExpiryDate,XeroBankFeedConnectionStatus,XeroBankFeedSyncStatus,XeroBankFeedLastSyncedAt,XeroBankFeedSyncLastFailedAt,XeroBankFeedSyncLastFailureReason,XeroUnsynchronisedTransactionsCount,DefaultPaymentRail,IsArchived,SupplierSepaInstantStatus";
     
     public string ToCsvRow()

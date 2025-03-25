@@ -16,8 +16,6 @@
 
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
-using System.Text.Json.Serialization;
-using Newtonsoft.Json;
 using NoFrixion.MoneyMoov.Enums;
 using NoFrixion.MoneyMoov.Extensions;
 using NoFrixion.MoneyMoov.Models.Approve;
@@ -52,6 +50,8 @@ public class Beneficiary : IValidatableObject, IExportableToCsv
     /// <summary>
     /// The ID of the beneficiary identifier.
     /// </summary>
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
     [Obsolete("No longer used.")]
     public Guid BeneficiaryIdentifierID { get; set; }
     
@@ -114,8 +114,8 @@ public class Beneficiary : IValidatableObject, IExportableToCsv
     public User CreatedBy { get; set; }
 
     // Don't serialize the events if there are none.
-    [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public virtual IEnumerable<BeneficiaryEvent> BeneficiaryEvents { get; set; }
 
     public virtual IEnumerable<PaymentAccount> SourceAccounts { get; set; }
@@ -210,7 +210,7 @@ public class Beneficiary : IValidatableObject, IExportableToCsv
         return payout;
     }
 
-    public string CsvHeader => $"ID,MerchantID,Name,Currency,DestinationAccountID,DestinationName,DestinationInternalAccountName,DestinationIban,DestinationAccountNumber,DestinationSortCode,DestinationBic,IsEnabled,AuthorisedBy,AuthorisersRequiredCount,AuthorisersCompletedCount,AuthenticationMethods,CreatedByEmailAddress,Inserted,LastUpdated,CreatedBy";
+    public string CsvHeader() => $"ID,MerchantID,Name,Currency,DestinationAccountID,DestinationName,DestinationInternalAccountName,DestinationIban,DestinationAccountNumber,DestinationSortCode,DestinationBic,IsEnabled,AuthorisedBy,AuthorisersRequiredCount,AuthorisersCompletedCount,AuthenticationMethods,CreatedByEmailAddress,Inserted,LastUpdated,CreatedBy";
     
     public string ToCsvRow()
     {

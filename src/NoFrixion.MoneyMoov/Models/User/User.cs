@@ -43,6 +43,14 @@ public class User
     public UserPermissions? Permissions { get; set; }
     
     public List<UserRoleWithScope>? RolesWithScope { get; set; }
+    
+    /// <summary>
+    /// The number of seconds a session for this user should last before expiring.
+    /// This is based on the user's role on the merchant.
+    /// This is used to set the session timeout in the client. If not set the client's default
+    /// session timeout will be used. 
+    /// </summary>
+    public List<ClientSessionTimeout>? ClientSessionTimeouts { get; set; }
 
     public bool IsEmpty() => ID == Guid.Empty && EmailAddress == string.Empty;
 }

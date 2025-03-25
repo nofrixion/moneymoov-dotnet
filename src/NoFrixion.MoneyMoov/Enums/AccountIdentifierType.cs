@@ -42,5 +42,10 @@ public enum AccountIdentifierType
     /// <summary>
     /// Bitcoin address.
     /// </summary>
-    BTC = 4
+    BTC = 4,
+
+    /// <summary>
+    /// Bank Identifier Code. Used for international payments. In addition to the BIC an account number and country code are required.
+    /// </summary>
+    BIC = 5
 }

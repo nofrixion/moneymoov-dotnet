@@ -142,7 +142,7 @@ public class Transaction : IWebhookPayload, IExportableToCsv
     /// </summary>
     public Guid? PaymentRequestID { get; set; }
 
-    public string CsvHeader => "ID,AccountID,AccountName,MerchantID,Type,Amount,Currency,Description,TransactionDate,Inserted,YourReference,TheirReference,Counterparty,Balance,RuleID,PayoutID,VirtualIBAN,Tags,AccountSequenceNumber,PaymentRequestID";
+    public string CsvHeader() => "ID,AccountID,AccountName,MerchantID,Type,Amount,Currency,Description,TransactionDate,Inserted,YourReference,TheirReference,Counterparty,Balance,RuleID,PayoutID,VirtualIBAN,Tags,AccountSequenceNumber,PaymentRequestID";
     
     public string ToCsvRow()
     {

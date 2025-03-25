@@ -308,13 +308,22 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// For Bitcoin payouts, when this flag is set the network fee will be deducted from the send amount.
     /// THis is particularly useful for sweeps where it can be difficult to calculate the exact fee required.
     /// </summary>
+    [Obsolete]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
     public bool BitcoinSubtractFeeFromAmount { get; set; }
 
     /// <summary>
     /// The Bitcoin fee rate to apply in Satoshis per virtual byte.
     /// </summary>
+    [Obsolete]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
     public int BitcoinFeeSatsPerVbyte { get; set; }
 
+    [Obsolete]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
     public string FormattedBitcoinFee => $"{BitcoinFeeSatsPerVbyte} sats/vbyte" +
         (BitcoinSubtractFeeFromAmount ? " (fee will be subtracted from amount)" : "");
 
@@ -493,7 +502,7 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
         }
     }
 
-    public string CsvHeader =>
+    public string CsvHeader() =>
         $"ID,PayrunID,AccountID,MerchantID,CreatedByUserID,ApproverID,TopupPayrunID,Type,Description,Currency,Amount,YourReference,TheirReference,CanProcess,BatchPayoutID,DestinationAccountID,DestinationIBAN,DestinationAccountNumber,DestinationSortCode,DestinationAccountName,MerchantTokenDescription,Status,ExportedByUserID,ExportedByUserRole,AuthoriseUrl,CreatedByUserName,CreatedByEmailAddress,Inserted,LastUpdated,SourceAccountName,SourceAccountIban,SourceAccountNumber,SourceAccountSortcode,SourceAccountAvailableBalance,InvoiceID,Tags,Scheduled,ScheduleDate,AuthorisersRequiredCount,AuthorisersCompletedCount,Authorisations,AuthenticationMethods,BeneficiaryID,PayrunName,PaymentProcessor,RuleID, RuleName,PaymentRail,Nonce,DocumentIDs,IsSubmitted,IsFailed,IsSettled";
     
     public string ToCsvRow()

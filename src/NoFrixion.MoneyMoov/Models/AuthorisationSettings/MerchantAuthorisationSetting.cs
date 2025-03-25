@@ -14,7 +14,6 @@
 // -----------------------------------------------------------------------------
 
 using NoFrixion.MoneyMoov.Enums;
-using NoFrixion.MoneyMoov.Models.Roles;
 
 namespace NoFrixion.MoneyMoov.Models.AuthorisationSettings;
 
@@ -36,7 +35,7 @@ public class MerchantAuthorisationSetting
     
     public AuthorisationType AuthorisationType { get; set; }
     
-    public List<Role> Roles { get; set; } = new();
+    public List<MerchantAuthorisationRoleSetting> RoleSettings { get; set; } = new();
     
     public DateTimeOffset Inserted { get; set; }
 
