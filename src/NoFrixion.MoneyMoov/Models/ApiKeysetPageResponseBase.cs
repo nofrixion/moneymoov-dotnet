@@ -19,27 +19,27 @@ namespace NoFrixion.MoneyMoov.Models;
 
 public class TransactionKeysetPageResponse(
     List<Transaction> content,
-    int lastSequenceNumber,
+    int lastKey,
     bool hasMorePages)
-    : ApiKeysetPageResponseBase<Transaction>(content, lastSequenceNumber, hasMorePages);
+    : ApiKeysetPageResponseBase<Transaction, int>(content, lastKey, hasMorePages);
 
-public abstract class ApiKeysetPageResponseBase<T>
+public abstract class ApiKeysetPageResponseBase<TContentType, TKeyType>
 {
-    public List<T> Content { get; set; }
+    public List<TContentType> Content { get; set; }
 
-    public int LastSequenceNumber { get; set; }
+    public TKeyType LastKey { get; set; }
 
     public bool HasMorePages { get; set; }
     
     protected ApiKeysetPageResponseBase(
-        List<T> content,
-        int lastSequenceNumber,
+        List<TContentType> content,
+        TKeyType lastKey,
         bool hasMorePages)
     {
         Guard.Against.Null(content, nameof(content));
         
         Content = content;
-        LastSequenceNumber = lastSequenceNumber;
+        LastKey = lastKey;
         HasMorePages = hasMorePages;
     }
 }
