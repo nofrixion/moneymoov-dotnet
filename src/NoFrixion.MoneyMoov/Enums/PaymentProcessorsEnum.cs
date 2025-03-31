@@ -43,11 +43,6 @@ public enum PaymentProcessorsEnum
     Stripe,
 
     /// <summary>
-    /// Modulr payment initiation processor. 
-    /// </summary>
-    Modulr,
-
-    /// <summary>
     /// Plaid payment initiation processor. 
     /// </summary>
     Plaid,

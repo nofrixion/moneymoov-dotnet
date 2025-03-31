@@ -36,22 +36,6 @@ public class PaymentRequestResult
     public const string PISP_PLAID_SUCCESS_STATUS = "PaymentStatusExecuted";
 
     /// <summary>
-    /// The status returned from Modulr when a PIS payment is successfully initiated in the sandbox
-    /// environment.
-    /// </summary>
-    public const string PISP_MODULR_SUCCESS_STATUS = "EXECUTED";
-
-    /// <summary>
-    /// With Modulr responses an additional AspspPaymentStatus is returned along with the main Status.
-    /// Both need to be checked. Other than rejected all other statuses indicate the payment attempt
-    /// is in progress.
-    /// </summary>
-    /// <remarks>
-    /// See https://modulr.readme.io/docs/single-immediate-payments-overview#payment-initiation-request-lifecycle
-    /// </remarks>
-    public const string PISP_MODULR_BANK_REJECTED_STATUS = "Rejected";
-
-    /// <summary>
     /// The status returned from Yapily when a PIS payment is successfully initiated.
     /// </summary>
     public const string PISP_YAPILY_COMPLETED_STATUS = "COMPLETED";
@@ -70,11 +54,6 @@ public class PaymentRequestResult
     /// NoFrixion payment initiation authorisation error status.
     /// </summary>
     public const string PISP_NOFRIXION_AUTHORISATION_ERROR = "payment_error";
-
-    /// <summary>
-    /// Modulr payment initiation authorisation error status.
-    /// </summary>
-    public const string PISP_MODULR_AUTHORISATION_ERROR = "CONSENT_REJECTED";
 
     /// <summary>
     /// Status for when a mandate has been successfully created in the Banking Circle Direct Debit API.

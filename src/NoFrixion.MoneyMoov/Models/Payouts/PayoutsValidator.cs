@@ -264,18 +264,13 @@ public static class PayoutsValidator
                 yield return new ValidationResult("Destination account name required.", [ nameof(payout.Destination.Name) ]);
             }
 
-            if (payout.Destination?.Name != null && !IsValidAccountName(payout.Destination?.Name ?? string.Empty, payout.PaymentProcessor))
+            if (payout.Destination?.Name != null &&
+                !IsValidAccountName(payout.Destination?.Name ?? string.Empty, payout.PaymentProcessor))
             {
-                if (payout.PaymentProcessor == PaymentProcessorsEnum.Modulr)
-                {
-                    yield return new ValidationResult($"The Destination Account Name is invalid. It can only contain alphanumeric characters plus the ' . - & and space characters.", [ nameof(payout.Destination.Name) ]);
-                }
-                else
-                {
-                    yield return new ValidationResult(
-                        string.Format(BANKING_CIRCLE_STRING_VALIDATION_ERROR_TEMPLATE, "Destination Account Name", ACCOUNT_NAME_MAXIMUM_BANKING_CIRCLE_LENGTH),
-                        [ nameof(payout.Destination.Name) ]);
-                }
+                yield return new ValidationResult(
+                    string.Format(BANKING_CIRCLE_STRING_VALIDATION_ERROR_TEMPLATE, "Destination Account Name",
+                        ACCOUNT_NAME_MAXIMUM_BANKING_CIRCLE_LENGTH),
+                    [nameof(payout.Destination.Name)]);
             }
 
             if (payout.Destination != null &&
@@ -358,20 +353,10 @@ public static class PayoutsValidator
 
         if (!ValidateTheirReference(payout.TheirReference, payout.Type, payout.PaymentProcessor))
         {
-            if (payout.PaymentProcessor == PaymentProcessorsEnum.Modulr)
-            {
-                yield return new ValidationResult("Their reference must consist of at least 6 alphanumeric characters that are not all the same " +
-                    "(non alphanumeric characters do not get counted towards this minimum value). " +
-                    "The allowed characters are alphanumeric, space, hyphen(-), full stop (.), ampersand (&), and forward slash (/). " +
-                    "Total of all characters must be 18 or less and for a SCAN payout and for an IBAN payout must be 140 or less.",
-                    [ nameof(payout.TheirReference) ]);
-            }
-            else
-            {
-                yield return new ValidationResult(
-                    string.Format(BANKING_CIRCLE_STRING_VALIDATION_ERROR_TEMPLATE, "Their Reference", REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH),
-                    [ nameof(payout.TheirReference) ]);
-            }
+            yield return new ValidationResult(
+                string.Format(BANKING_CIRCLE_STRING_VALIDATION_ERROR_TEMPLATE, "Their Reference",
+                    REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH),
+                [nameof(payout.TheirReference)]);
         }
 
         if (!ValidateYourReference(payout.YourReference))
