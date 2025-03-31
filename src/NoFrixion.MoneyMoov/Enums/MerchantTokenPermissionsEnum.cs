@@ -122,8 +122,17 @@ public enum MerchantTokenPermissionsEnum
     SubmitDirectDebitPayment = 1 << 18,
 
     /// <summary>
-    /// Privileged operation. Permission to view account transactions. Can only be
-    /// enabled by NoFrixion support.
+    /// Privileged operation. Permission to view account transactions.
     /// </summary>
-    ViewTransactions = 1 << 19
+    ViewTransactions = 1 << 19,
+
+    /// <summary>
+    /// Privileged operation. Permission to view payment accounts.
+    /// </summary>
+    ViewPaymentAccount = 1 << 20,
+
+    /// <summary>
+    /// Privileged operation. Permission to view payouts.
+    /// </summary>
+    ViewPayout = 1 << 21,
 }
