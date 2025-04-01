@@ -208,6 +208,11 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     public DateTimeOffset LastUpdated { get; set; }
 
     /// <summary>
+    /// The currency of the source account.
+    /// </summary>
+    public CurrencyTypeEnum SourceAccountCurrency { get; set; }
+
+    /// <summary>
     /// The name of the account the payout is being made from.
     /// </summary>
     public string? SourceAccountName { get; set; }
@@ -226,6 +231,11 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// The sort code of the account the payout is being made from.
     /// </summary>
     public string? SourceAccountSortcode { get; set; }
+
+    /// <summary>
+    /// The BIC of the account the payout is being made from.
+    /// </summary>
+    public string? SourceAccountBic { get; set; }
 
     /// <summary>
     /// The current Bitcoin address of the account the payout is being made from.
@@ -250,8 +260,9 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
             {
                 IBAN = SourceAccountIban,
                 SortCode = SourceAccountSortcode,
+                BIC = SourceAccountBic,
                 AccountNumber = SourceAccountNumber,
-                Currency = Currency
+                Currency = SourceAccountCurrency
             };
             return srcAccountIdentifier;
         }
@@ -265,7 +276,8 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// <summary>
     /// The available balance of the account the payout is being made from.
     /// </summary>
-    public string FormattedSourceAccountAvailableBalance => PaymentAmount.DisplayCurrencyAndAmount(Currency, SourceAccountAvailableBalance ?? decimal.Zero);
+    public string FormattedSourceAccountAvailableBalance => 
+        PaymentAmount.DisplayCurrencyAndAmount(SourceAccountCurrency, SourceAccountAvailableBalance ?? decimal.Zero);
 
     [Obsolete("Please use Destination.")]
     [System.Text.Json.Serialization.JsonIgnore]
