@@ -33,7 +33,6 @@ public class PaymentRequestResult
     /// <summary>
     /// The status returned from Plaid when a PIS payment is successfully initiated.
     /// </summary>
-    [Obsolete("Plaid is no longer used.")]
     public const string PISP_PLAID_SUCCESS_STATUS = "PaymentStatusExecuted";
 
     /// <summary>
