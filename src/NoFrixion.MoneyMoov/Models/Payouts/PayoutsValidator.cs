@@ -34,7 +34,7 @@ public static class PayoutsValidator
     /// and account number (SCAN) payments . Note that length gets calculated after 
     /// certain non-counted characters have been removed.
     /// </summary>
-    [Obsolete("Modulr is no longer used.")]
+    [Obsolete("Modulr is no longer used. Use REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH instead.")]
     public const int THEIR_REFERENCE_SCAN_MAXIMUM_MODULR_LENGTH = 18;
 
     /// <summary>
@@ -42,7 +42,7 @@ public static class PayoutsValidator
     /// (IBAN) payments . Note that length gets calculated after / certain non-counted characters 
     /// have been removed.
     /// </summary>
-    [Obsolete("Modulr is no longer used.")]
+    [Obsolete("Modulr is no longer used. Use REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH instead.")]
     public const int THEIR_REFERENCE_IBAN_MAXIMUM_MODULR_LENGTH = 140;
 
     /// <summary>
@@ -61,7 +61,7 @@ public static class PayoutsValidator
     /// and it must contain at least one letter or number.
     /// "Beneficiary name can only have alphanumerics plus full stop, hyphen, forward slash or ampersand"
     /// </remarks>
-    [Obsolete("Modulr is no longer used.")]
+    [Obsolete("Modulr is no longer used. Use BANKING_CIRCLE_ALLOWED_CHARS_REGEX instead.")]
     public const string MODULR_ACCOUNT_NAME_REGEX = @"^['\.\-\/&\s]*?\w+['\.\-\/&\s\w]*$";
 
     /// <summary>
@@ -76,7 +76,7 @@ public static class PayoutsValidator
     /// [^\W_] is actings as \w with the underscore character included. The upstream supplier does not permit
     /// underscore in the Reference (Theirs) field.
     /// </remarks>
-    [Obsolete("Modulr is no longer used.")]
+    [Obsolete("Modulr is no longer used. Use BANKING_CIRCLE_ALLOWED_CHARS_REGEX instead.")]
     public const string THEIR_REFERENCE_MODULR_REGEX = @"^([^\W_]|[\.\-/&\s]){6,}$";
 
     /// <summary>
