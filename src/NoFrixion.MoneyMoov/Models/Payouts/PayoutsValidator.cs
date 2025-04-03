@@ -23,66 +23,48 @@ namespace NoFrixion.MoneyMoov.Models;
 public static class PayoutsValidator
 {
     /// <summary>
-    /// The minimum required length for the Their Reference field. Note that length gets 
-    /// calculated after certain non-counted characters have been removed.
+    /// This constant is obsolete and is no longer used. It was used to validate the Their Reference field
+    /// for Modulr payments.
     /// </summary>
     [Obsolete("Modulr is no longer used.")]
-    public const int THEIR_REFERENCE_MINIMUM_MODULR_LENGTH = 6;
+    public const int THEIR_REFERENCE_MINIMUM_MODULR_LENGTH = 1;
 
     /// <summary>
-    /// The maximum allowed length for the Their Reference field for sort code
-    /// and account number (SCAN) payments . Note that length gets calculated after 
-    /// certain non-counted characters have been removed.
+    /// This constant is obsolete and is no longer used. It was used to validate the Their Reference field
+    /// for Modulr GBP payments.
     /// </summary>
     [Obsolete("Modulr is no longer used. Use REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH instead.")]
-    public const int THEIR_REFERENCE_SCAN_MAXIMUM_MODULR_LENGTH = 18;
+    public const int THEIR_REFERENCE_SCAN_MAXIMUM_MODULR_LENGTH = REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH;
 
     /// <summary>
-    /// The maximum allowed length for the Their Reference field for International Bank Account Number
-    /// (IBAN) payments . Note that length gets calculated after / certain non-counted characters 
-    /// have been removed.
+    /// This constant is obsolete and is no longer used. It was used to validate the Their Reference field
+    /// for Modulr EUR payments.
     /// </summary>
     [Obsolete("Modulr is no longer used. Use REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH instead.")]
-    public const int THEIR_REFERENCE_IBAN_MAXIMUM_MODULR_LENGTH = 140;
+    public const int THEIR_REFERENCE_IBAN_MAXIMUM_MODULR_LENGTH = REFERENCE_MAXIMUM_BANKING_CIRCLE_LENGTH;
 
     /// <summary>
     /// Maximum length of the Your, or External Reference, field.
     /// </summary>
     public const int YOUR_REFERENCE_MAXIMUM_LENGTH = 256;
-    
-    /// <summary>
-    /// Validation regex for the destination account name field.
-    /// </summary>
-    /// <remarks>
-    /// The original regular expression, from the supplier's swagger file was adjusted to match
-    /// what the original intent seems to have been. The original expression allowed any string
-    /// as long as it had at least one letter or number.
-    /// The intent seems to have been to allow only letters (unicode), numbers and '.-/&amp; and spaces
-    /// and it must contain at least one letter or number.
-    /// "Beneficiary name can only have alphanumerics plus full stop, hyphen, forward slash or ampersand"
-    /// </remarks>
-    [Obsolete("Modulr is no longer used. Use BANKING_CIRCLE_ALLOWED_CHARS_REGEX instead.")]
-    public const string MODULR_ACCOUNT_NAME_REGEX = @"^['\.\-\/&\s]*?\w+['\.\-\/&\s\w]*$";
 
     /// <summary>
-    /// Validation reqex for the Their, or Reference, field. It  must consist of at least 6 
-    /// alphanumeric characters that are not all the same. Optional, uncounted characters include space, 
-    /// hyphen(-), full stop (.), ampersand(&amp;), and forward slash (/). Total of all characters must be 
-    /// equal to or less than 18 for a SCAN (Faster Payments) payment and 140 for an IBAN (SEPA) payment.
-    /// Somewhat misleadingly, the Reference field cannot contain a hyphen, the allowed characters are:
-    /// alpha numeric (including unicode), space, hyphen(-), full stop (.), ampersand(&amp;), and forward slash (/). 
+    /// This constant is obsolete and is no longer used. It was used to validate the account name
+    /// for Modulr.
     /// </summary>
-    /// <remarks>
-    /// [^\W_] is actings as \w with the underscore character included. The upstream supplier does not permit
-    /// underscore in the Reference (Theirs) field.
-    /// </remarks>
     [Obsolete("Modulr is no longer used. Use BANKING_CIRCLE_ALLOWED_CHARS_REGEX instead.")]
-    public const string THEIR_REFERENCE_MODULR_REGEX = @"^([^\W_]|[\.\-/&\s]){6,}$";
+    public const string MODULR_ACCOUNT_NAME_REGEX = BANKING_CIRCLE_ALLOWED_CHARS_REGEX;
 
     /// <summary>
-    /// Certain characters in the Their Reference field are not counted towards the minimum and
-    /// maximum length requirements. This regex indicates the list of allow characters that are NOT
-    /// counted.
+    /// This constant is obsolete and is no longer used. It was used to validate the Their Reference field
+    /// for Modulr payments.
+    /// </summary>
+    [Obsolete("Modulr is no longer used. Use BANKING_CIRCLE_ALLOWED_CHARS_REGEX instead.")]
+    public const string THEIR_REFERENCE_MODULR_REGEX = BANKING_CIRCLE_ALLOWED_CHARS_REGEX;
+
+    /// <summary>
+    /// This constant is obsolete and is no longer used. It was used to validate the Their Reference field
+    /// for Modulr payments.
     /// </summary>
     [Obsolete("Modulr is no longer used.")]
     public const string THEIR_REFERENCE_NON_COUNTED_CHARS_MODULR_REGEX = @"[\.\-/&\s]";
