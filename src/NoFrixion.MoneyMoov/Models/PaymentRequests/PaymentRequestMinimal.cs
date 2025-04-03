@@ -111,7 +111,7 @@ public class PaymentRequestMinimal
     public string? StripeAccountID { get; set; }
 
     /// <summary>
-    /// The country code associated with the transaction.
+    /// The country code associated with the payment.
     /// </summary>
     public string? CountryCode { get; set; }
 
