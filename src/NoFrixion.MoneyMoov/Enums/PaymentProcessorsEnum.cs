@@ -41,10 +41,11 @@ public enum PaymentProcessorsEnum
     /// Stripe card processor.
     /// </summary>
     Stripe,
-
+    
     /// <summary>
     /// Modulr payment initiation processor. 
     /// </summary>
+    [Obsolete("Modulr is no longer used.")]
     Modulr,
 
     /// <summary>

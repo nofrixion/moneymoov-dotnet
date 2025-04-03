@@ -73,19 +73,15 @@ public class PayrunInvoiceValidatorTests
     /// the validation rules for all processor are applied.
     /// </summary>
     [Theory]
-    [InlineData("/")] // No letter or number.
     [InlineData("--")] // No letter or number.
     [InlineData(".-/&")] // No letter or number.
-    [InlineData("1-A-2-c + + dfg")] // Invalid character '+'.
     [InlineData("Big Bucks £")] // Invalid character '£'.
     [InlineData("Big Bucks €")] // Invalid character '€'.
     [InlineData(":")] // Invalid initial character, can't be ':' or '-'.
     [InlineData("1-A-2-c + ! + dfg")] // Invalid character '!'.
     [InlineData(".-/& a")] // BC don't support '&' in account name.
-    [InlineData("/:")] // BC don't support '/' in account name.
     [InlineData("TELECOMUNICAÇÕES S.A.")] // BC don't support unicode.
     [InlineData("Ç_é")] // BC don't support unicode.
-    [InlineData("NFXN: LTD")] // Modulr don't support ':'
     public void Validate_Account_Name_Fails(string accountName)
     {
         var payrunInvoice = new PayrunInvoice
@@ -287,7 +283,7 @@ public class PayrunInvoiceValidatorTests
     
     [Theory]
     [InlineData("ref-1234647384758475374658372648574726437567373647546373654736374647264sdefgsdfgsdfgadsfgvasfgasfgasdfgasdfgsdfgasdfgsdafgasdfgsdfgasdfgsdfgafgasdfgawsrfgsdfgsdfgsdfg", CurrencyTypeEnum.EUR)] // Too long
-    [InlineData("ref-1234647384755dzfxvxdfbvdsfbgv", CurrencyTypeEnum.GBP)] // Too long
+    [InlineData("ref-1234647384758475374658372648574726437567373647546373654736374647264sdefgsdfgsdfgadsfgvasfgasfgasdfgasdfgsdfgasdfgsdafgasdfgsdfgasdfgsdfgafgasdfgawsrfgsdfgsdfgsdfg", CurrencyTypeEnum.GBP)] // Too long
     public void Invoice_With_PaymentReference_Length_Validation_Failure(string theirReference, CurrencyTypeEnum currency)
     {
         var payrunInvoice = new PayrunInvoice
@@ -399,9 +395,6 @@ public class PayrunInvoiceValidatorTests
     
     [Theory]
     [InlineData("-sD7!&K.sdf./", AccountIdentifierType.IBAN)] // Invalid character '!'
-    [InlineData("Saldo F16 + F20", AccountIdentifierType.IBAN)] // Invalid character '+'
-    [InlineData("Saldo F16 _ F20", AccountIdentifierType.IBAN)] // Invalid character '_'
-    [InlineData("dddddddd", AccountIdentifierType.IBAN)] // Only one distinct character
     [InlineData("-sd6tu89-73.sdf./48 2983", AccountIdentifierType.SCAN)] // Starts with '-'
     public void PayrunInvoice_PaymentReferenceValidation_Fail(string theirReference,
         AccountIdentifierType identifierType)

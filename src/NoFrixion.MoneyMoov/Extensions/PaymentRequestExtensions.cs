@@ -191,9 +191,6 @@ public static class PaymentRequestExtensions
                 {
                     var authorisationEvent = pispCallbackOrWebhook switch
                     {
-                        PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.Modulr
-                            && cbk.Status == PaymentRequestResult.PISP_MODULR_SUCCESS_STATUS
-                            && cbk.PispBankStatus != PaymentRequestResult.PISP_MODULR_BANK_REJECTED_STATUS => cbk,
                         PaymentRequestEvent cbk when cbk.PaymentProcessorName == PaymentProcessorsEnum.Nofrixion
                         && (cbk.Status == PayoutStatus.QUEUED.ToString() ||
                             cbk.Status == PayoutStatus.QUEUED_UPSTREAM.ToString() ||
@@ -214,8 +211,7 @@ public static class PaymentRequestExtensions
                         _ => null
                     };
 
-                    if (pispCallbackOrWebhook.Status is PaymentRequestResult.PISP_YAPILY_AUTHORISATION_ERROR 
-                        or PaymentRequestResult.PISP_MODULR_AUTHORISATION_ERROR 
+                    if (pispCallbackOrWebhook.Status is PaymentRequestResult.PISP_YAPILY_AUTHORISATION_ERROR
                         or PaymentRequestResult.PISP_NOFRIXION_AUTHORISATION_ERROR)
                     {
                         paymentAttempt.PispAuthorisationFailedAt = pispCallbackOrWebhook.Inserted;

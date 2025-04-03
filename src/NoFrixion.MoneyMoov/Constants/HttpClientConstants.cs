@@ -19,8 +19,6 @@ namespace NoFrixion.MoneyMoov.Constants;
 
 public static class HttpClientConstants
 {
-    public static string HTTP_MODULR_CLIENT_NAME = "Modulr";
-
     public static string HTTP_SIGNATURE_CLIENT_NAME = "HttpSignatureClient";
 
     public static string HTTP_CHECKOUT_CLIENT_NAME = "CheckoutClient";

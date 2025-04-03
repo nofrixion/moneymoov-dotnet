@@ -979,7 +979,7 @@ public class PaymentRequestResultTests
             Currency = entity.Currency,
             Inserted = DateTime.UtcNow.AddSeconds(2),
             EventType = PaymentRequestEventTypesEnum.pisp_callback,
-            Status = PaymentRequestResult.PISP_MODULR_SUCCESS_STATUS,
+            Status = PaymentRequestResult.PISP_YAPILY_COMPLETED_STATUS,
             PispPaymentInitiationID = "xxx",
             PaymentProcessorName = PaymentProcessorsEnum.Yapily
         };
@@ -1226,53 +1226,6 @@ public class PaymentRequestResultTests
         Assert.Equal(decimal.Zero, result.AmountOutstanding());
         Assert.Equal(entity.Currency, result.Currency);
         Assert.Equal(PaymentResultEnum.FullyPaid, result.Result);
-    }
-
-    /// <summary>
-    /// Tests that if the Modulr event has a bank rejected response it does not result in the 
-    /// status being set to Authorized.
-    /// </summary>
-    [Fact]
-    public void Modulr_Bank_Reject_Not_Authorized_Result()
-    {
-        var entity = GetTestPaymentRequest();
-
-        var modulrInitiateEvent = new PaymentRequestEvent
-        {
-            ID = Guid.NewGuid(),
-            PaymentRequestID = entity.ID,
-            Amount = entity.Amount,
-            Currency = entity.Currency,
-            Inserted = DateTime.UtcNow,
-            EventType = PaymentRequestEventTypesEnum.pisp_initiate,
-            Status = PayoutStatus.PENDING.ToString(),
-            PaymentProcessorName = PaymentProcessorsEnum.Modulr,
-            PispPaymentInitiationID = "xxx"
-        };
-
-        var modulrCallbackEvent = new PaymentRequestEvent
-        {
-            ID = Guid.NewGuid(),
-            PaymentRequestID = entity.ID,
-            Amount = entity.Amount,
-            Currency = entity.Currency,
-            Inserted = DateTime.UtcNow,
-            EventType = PaymentRequestEventTypesEnum.pisp_callback,
-            Status = PaymentRequestResult.PISP_MODULR_SUCCESS_STATUS,
-            PaymentProcessorName = PaymentProcessorsEnum.Modulr,
-            PispPaymentInitiationID = "xxx",
-            PispBankStatus = PaymentRequestResult.PISP_MODULR_BANK_REJECTED_STATUS
-        };
-
-        entity.Events = new List<PaymentRequestEvent> { modulrInitiateEvent, modulrCallbackEvent };
-
-        var result = new PaymentRequestResult(entity);
-
-        Assert.Equal(0, result.Amount);
-        Assert.Equal(0, result.PispAmountAuthorized());
-        Assert.Equal(entity.Amount, result.AmountOutstanding());
-        Assert.Equal(entity.Currency, result.Currency);
-        Assert.Equal(PaymentResultEnum.None, result.Result);
     }
 
     /// <summary>
