@@ -24,7 +24,7 @@ public class PaymentRequestMinimal
     public string? MerchantName { get; set; }
 
     public string? MerchantShortName { get; set; }
-    
+
     /// <summary>
     /// The amount of money to request.
     /// </summary>
@@ -45,7 +45,7 @@ public class PaymentRequestMinimal
     /// on the transaction record for some card processors.
     /// </summary>
     public string? Description { get; set; }
-    
+
     /// <summary>
     /// The card processor
     /// </summary>
@@ -97,26 +97,33 @@ public class PaymentRequestMinimal
     /// The payment attempts for this payment request.
     /// </summary>
     public IEnumerable<PaymentRequestPaymentAttempt>? PaymentAttempts { get; set; }
-    
+
     /// <summary>
     /// The status of the payment request.
     /// </summary>
     public PaymentResultEnum Status { get; set; }
 
     public PartialPaymentMethodsEnum PartialPaymentMethod { get; set; }
-    
+
     /// <summary>
     /// Account ID of connected customers in Stripe
     /// </summary>
     public string? StripeAccountID { get; set; }
 
     /// <summary>
+    /// The country code associated with the payment.
+    /// </summary>
+    public string? CountryCode { get; set; }
+
+    /// <summary>
     /// Lightning invoice ID, if any.
     /// </summary>
+    [Obsolete("This field is deprecated. Lightning payments are no longer supported.")]
     public string? LightningInvoice { get; set; }
 
     /// <summary>
     /// Date and time of expiration of the lightning invoice.
     /// </summary>
+    [Obsolete("This field is deprecated. Lightning payments are no longer supported.")]
     public DateTimeOffset? LightningInvoiceExpiresAt { get; set; }
 }
