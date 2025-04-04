@@ -76,6 +76,7 @@ public static class PayoutsValidator
     /// The upstream supplier currently only support alphanumeric, space, hyphen(-) and underscore (_) characters.
     /// An empty value is also supported.
     /// </summary>
+    [Obsolete("Your reference regex is no longer used. Use BANKING_CIRCLE_ALLOWED_CHARS_REGEX instead.")]
     public const string YOUR_REFERENCE_REGEX = @"^[\w\-\s]*$";
 
     /// <summary>
@@ -274,15 +275,7 @@ public static class PayoutsValidator
             return true;
         }
 
-        Regex matchRegex = new Regex(YOUR_REFERENCE_REGEX);
-
-        if (yourReference.Length > YOUR_REFERENCE_MAXIMUM_LENGTH
-            || !matchRegex.IsMatch(yourReference))
-        {
-            return false;
-        }
-
-        return true;
+        return ValidateBankingCircleStringField(yourReference, YOUR_REFERENCE_MAXIMUM_LENGTH);
     }
 
     public static IEnumerable<ValidationResult> Validate(Payout payout, ValidationContext validationContext)

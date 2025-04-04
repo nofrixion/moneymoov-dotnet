@@ -120,9 +120,9 @@ public class PayoutsValidatorTests
     /// Tests that an invalid payout YourReference fails validation.
     /// </summary>
     [Theory]
-    [InlineData("re.e-1-")]             // Invalid char '.'. 
-    [InlineData("-sD7!&K.sdf./")]       // Invalid character '!'.
-    [InlineData("Saldo F16 + F20")]     // Invalid character '+'.
+    [InlineData(":re.e-1-")]             // Invalid character ':'. 
+    [InlineData("-sD7!&K.sdf.")]        // Invalid character '-'.
+    [InlineData("Saldo F16 + #F20")]     // Invalid character '#'.
     public void PaymentsValidator_ValidateYourReference_Fail(string yourReference)
     {
         var result = PayoutsValidator.ValidateYourReference(yourReference);
