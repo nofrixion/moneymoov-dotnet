@@ -75,7 +75,7 @@ public static class IdentityExtensions
     /// <summary>
     /// Returns true if a merchant token authenticated request was from a whitelisted source IP address.
     /// </summary>
-    public static bool IsMerchantTokenIPAddressWhiteLised(this IIdentity identity)
+    public static bool IsMerchantTokenIPAddressWhiteListed(this IIdentity identity)
     {
         var ipAddressWhitelistClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.merchant_token_whitelisted_ipaddress)?.Value;
 
