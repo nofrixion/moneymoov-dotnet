@@ -29,7 +29,7 @@ public class PaymentRequestTemplate
     
     public CardPaymentCaptureOptions CardPaymentCaptureOptions { get; set; } = null!;
     
-    public List<Field> Fields { get; set; } = null!;
+    public List<PaymentRequestTemplateField> Fields { get; set; } = null!;
 }
 
 public class PaymentMethods : PaymentOptions
@@ -74,7 +74,7 @@ public class CardPaymentCaptureOptions : PaymentOptions
     public bool Automatic { get; set; }
 }
 
-public class Field
+public class PaymentRequestTemplateField
 {
     public required string Name { get; set; }
     
