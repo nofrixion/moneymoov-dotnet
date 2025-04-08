@@ -75,7 +75,7 @@ public static class IdentityExtensions
     /// <summary>
     /// Returns true if a merchant token authenticated request was from a whitelisted source IP address.
     /// </summary>
-    public static bool IsMerchantTokenIPAddressWhiteLised(this IIdentity identity)
+    public static bool IsMerchantTokenIPAddressWhiteListed(this IIdentity identity)
     {
         var ipAddressWhitelistClaim = ((ClaimsIdentity)identity)?.FindFirst(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.merchant_token_whitelisted_ipaddress)?.Value;
 
@@ -330,7 +330,12 @@ public static class IdentityExtensions
             }
             else if (claimsIdentity.Claims.Any(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.merchantid))
             {
-                return claimsIdentity.Claims.First(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.merchantid).Value;
+                var tokenID = claimsIdentity.Claims.First(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.tokenid).Value;
+                var merchantID = claimsIdentity.Claims.First(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.merchantid).Value;
+                var isWhiteListVerified = claimsIdentity.Claims.FirstOrDefault(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.merchant_token_whitelisted_ipaddress)?.Value ?? "False";
+                var isSigned = claimsIdentity.Claims.FirstOrDefault(x => x.Type == ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.merchant_token_signed)?.Value ?? "False";
+
+                return $"Merchant Token: {tokenID}/{merchantID} (whitelisted={isWhiteListVerified}, signed={isSigned})";
             }
             else
             {

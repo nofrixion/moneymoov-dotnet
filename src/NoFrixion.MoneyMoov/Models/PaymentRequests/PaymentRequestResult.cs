@@ -39,6 +39,7 @@ public class PaymentRequestResult
     /// The status returned from Modulr when a PIS payment is successfully initiated in the sandbox
     /// environment.
     /// </summary>
+    [Obsolete("Modulr is no longer used.")]
     public const string PISP_MODULR_SUCCESS_STATUS = "EXECUTED";
 
     /// <summary>
@@ -49,8 +50,9 @@ public class PaymentRequestResult
     /// <remarks>
     /// See https://modulr.readme.io/docs/single-immediate-payments-overview#payment-initiation-request-lifecycle
     /// </remarks>
+    [Obsolete("Modulr is no longer used.")]
     public const string PISP_MODULR_BANK_REJECTED_STATUS = "Rejected";
-
+    
     /// <summary>
     /// The status returned from Yapily when a PIS payment is successfully initiated.
     /// </summary>
@@ -70,10 +72,11 @@ public class PaymentRequestResult
     /// NoFrixion payment initiation authorisation error status.
     /// </summary>
     public const string PISP_NOFRIXION_AUTHORISATION_ERROR = "payment_error";
-
+    
     /// <summary>
     /// Modulr payment initiation authorisation error status.
     /// </summary>
+    [Obsolete("Modulr is no longer used.")]
     public const string PISP_MODULR_AUTHORISATION_ERROR = "CONSENT_REJECTED";
 
     /// <summary>

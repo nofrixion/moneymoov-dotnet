@@ -101,6 +101,7 @@ public class Merchant
     /// <summary>
     /// For internal use only.
     /// </summary>
+    [Obsolete("Modulr is no longer used.")]
     public string? ModulrCustomerID { get; set; }
 
     /// <summary>

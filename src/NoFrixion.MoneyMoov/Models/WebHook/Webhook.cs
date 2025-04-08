@@ -50,6 +50,11 @@ public class Webhook
     public string? EmailAddress { get; set; }
 
     public int Version { get; set; }
+    
+    /// <summary>
+    /// The ID of the merchant that the webhook is for.
+    /// </summary>
+    public Guid MerchantID { get; set; }
 
     public static string GetSignature(string secret, byte[] payloadBytes)
     {

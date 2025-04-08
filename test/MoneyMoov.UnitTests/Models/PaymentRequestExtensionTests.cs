@@ -400,7 +400,6 @@ namespace MoneyMoov.UnitTests.Models
 
         [Theory]
         [InlineData(PaymentRequestResult.PISP_YAPILY_AUTHORISATION_ERROR, PaymentProcessorsEnum.Yapily)]
-        [InlineData(PaymentRequestResult.PISP_MODULR_AUTHORISATION_ERROR, PaymentProcessorsEnum.Modulr)]
         [InlineData(PaymentRequestResult.PISP_NOFRIXION_AUTHORISATION_ERROR, PaymentProcessorsEnum.Nofrixion)]
         public void GetPispPaymentAttempts_Bank_Authorisation_Failure(string status, PaymentProcessorsEnum paymentProcessor)
         {
