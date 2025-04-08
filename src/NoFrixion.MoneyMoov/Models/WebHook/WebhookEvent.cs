@@ -22,6 +22,11 @@ public class WebhookEvent
     /// will use the same ID.
     /// </summary>
     public Guid ID { get; private set; }
+    
+    /// <summary>
+    /// ID of the merchant that the webhook is for.
+    /// </summary>
+    public Guid MerchantID { get; set; }
 
     /// <summary>
     /// Will be true if the webhook was generated in a sandbox environment.
@@ -35,11 +40,13 @@ public class WebhookEvent
 
     public WebhookEvent(
         bool isSandbox,
-        List<WebhookEventItem> items)
+        List<WebhookEventItem> items,
+        Guid merchantID)
     {
         ID = Guid.NewGuid();
         IsSandbox = isSandbox;
         Items = items;
+        MerchantID = merchantID;
     }
 }
 
