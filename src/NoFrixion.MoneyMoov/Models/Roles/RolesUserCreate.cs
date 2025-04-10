@@ -1,9 +1,17 @@
-﻿using JetBrains.Annotations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------------
+//  Filename: RolesUserCreate.cs
+// 
+//  Description: Model for assigning multiple roles to a user.
+// 
+//  Author(s):
+//  Arif Matin (arif@nofrixion.com)
+// 
+//  History:
+//  09 Apr 2025  Arif Matin   Created, Harcourt Street, Dublin, Ireland.
+// 
+//  License:
+//  Proprietary NoFrixion.
+// -----------------------------------------------------------------------------
 
 namespace NoFrixion.MoneyMoov.Models.Roles
 {
