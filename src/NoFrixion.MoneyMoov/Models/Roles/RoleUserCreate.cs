@@ -10,7 +10,7 @@
 //  19 08 2024  Donal O'Connor   Created, Harcourt St, Dublin, Ireland.
 // 
 //  License:
-//  Proprietary NoFrixion.
+//  MIT.
 // -----------------------------------------------------------------------------
 
 namespace NoFrixion.MoneyMoov.Models.Roles;
