@@ -18,6 +18,8 @@ namespace NoFrixion.MoneyMoov.Models.Roles;
 public class RoleUserCreate
 {
     public Guid UserID { get; set; }
-    
+
+    public Guid RoleID { get; set; }
+
     public List<Guid>? Accounts { get; set; }
 }
