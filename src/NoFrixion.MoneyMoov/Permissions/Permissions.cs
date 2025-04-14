@@ -68,55 +68,55 @@ public enum MerchantPermissions : ulong
     CanViewTokens = 1L << 8,
     CanCreateTokens = 1L << 9,
     CanArchiveTokens = 1L << 10,
-    CanAuthoriseTokens = 1L << 36,
+    CanAuthoriseTokens = 1L << 11,
     
     // Pay runs
-    CanCreatePayruns = 1L << 11,
-    CanViewPayruns = 1L << 12,
-    CanEditPayruns = 1L << 13,
-    CanApprovePayruns = 1L << 14,
-    CanDeletePayruns = 1L << 15,
+    CanCreatePayruns = 1L << 12,
+    CanViewPayruns = 1L << 13,
+    CanEditPayruns = 1L << 14,
+    CanApprovePayruns = 1L << 15,
+    CanDeletePayruns = 1L << 16,
     
     // User roles
-    CanViewUserRoles = 1L << 16,
-    CanDeleteUserRoles = 1L << 17,
-    CanAssignUserRoles = 1L << 18,
+    CanViewUserRoles = 1L << 17,
+    CanDeleteUserRoles = 1L << 18,
+    CanAssignUserRoles = 1L << 19,
     
     // Users
-    CanViewUsers = 1L << 19,
+    CanViewUsers = 1L << 20,
     
     // Webhooks
-    CanViewWebhooks = 1L << 20,
-    CanCreateWebhooks = 1L << 21,
-    CanDeleteWebhooks = 1L << 22,
+    CanViewWebhooks = 1L << 21,
+    CanCreateWebhooks = 1L << 22,
+    CanDeleteWebhooks = 1L << 23,
     
     // Merchants
-    CanUpdateMerchant = 1L << 23,
+    CanUpdateMerchant = 1L << 24,
     
     // Payment requests
-    CanCreatePaymentRequests = 1L << 24,
-    CanViewPaymentRequests = 1L << 25,
-    CanUpdatePaymentRequests = 1L << 26,
-    CanDeletePaymentRequests = 1L << 27,
+    CanCreatePaymentRequests = 1L << 25,
+    CanViewPaymentRequests = 1L << 26,
+    CanUpdatePaymentRequests = 1L << 27,
+    CanDeletePaymentRequests = 1L << 28,
     
     // Mandates
-    CanViewMandates = 1L << 28,
-    CanCreateMandates = 1L << 29,
+    CanViewMandates = 1L << 29,
+    CanCreateMandates = 1L << 30,
     
     // Permissions
-    CanViewRoles = 1L << 30,
-    CanCreateRoles = 1L << 31, 
-    CanEditRoles = 1L << 32,  
+    CanViewRoles = 1L << 31,
+    CanCreateRoles = 1L << 32, 
+    CanEditRoles = 1L << 33,  
     
     // Reports
-    CanCreateReports = 1L << 33,
-    CanViewReports = 1L << 34,
+    CanCreateReports = 1L << 34,
+    CanViewReports = 1L << 35,
     
     // Xero
-    CanCreateXeroConnection = 1L << 35,
-    CanViewXeroConnection = 1L << 36,
-    CanUpdateXeroConnection = 1L << 37,
-    CanDeleteXeroConnection = 1L << 38,
+    CanCreateXeroConnection = 1L << 36,
+    CanViewXeroConnection = 1L << 37,
+    CanUpdateXeroConnection = 1L << 38,
+    CanDeleteXeroConnection = 1L << 39,
 }
 
 public static class ClaimTypePrefixes
