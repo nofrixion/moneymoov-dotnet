@@ -1,13 +1,13 @@
 ﻿// -----------------------------------------------------------------------------
-//  Filename: RolesUserCreate.cs
+//  Filename: RolesUserDelete.cs
 // 
-//  Description: Model for assigning multiple roles to a user.
+//  Description: Model for removing multiple roles from a user.
 // 
 //  Author(s):
 //  Arif Matin (arif@nofrixion.com)
 // 
 //  History:
-//  09 Apr 2025  Arif Matin   Created, Harcourt Street, Dublin, Ireland.
+//  11 Apr 2025  Arif Matin   Created, Belvedere road, Dublin, Ireland.
 // 
 //  License:
 //  MIT.
@@ -15,8 +15,8 @@
 
 namespace NoFrixion.MoneyMoov.Models.Roles
 {
-    public class RolesUserCreate
+    public class RolesUserDelete
     {
-        public  List<RoleUserCreate>? RolesUser { get; set; }
+        public List<Guid>? RolesToRemove { get; set; }
     }
 }
