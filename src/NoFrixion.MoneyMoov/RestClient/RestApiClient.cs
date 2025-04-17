@@ -43,6 +43,8 @@ public interface IRestApiClient
 
     Task<RestApiResponse> PostAsync(string path, string accessToken, HttpContent content);
 
+    Task<RestApiResponse<T>> PostAsync<T>(string path, HttpContent content, string secret);
+
     Task<RestApiResponse> PostAsync(string path, Guid appID, string secret, Guid merchantID, HttpContent content);
 
     Task<RestApiResponse<T>> PostAsync<T>(string path, string accessToken, HttpContent content);
@@ -135,6 +137,9 @@ public class RestApiClient : IRestApiClient, IDisposable
 
     public Task<RestApiResponse> PostAsync(string path, string accessToken, HttpContent content)
         => ExecAsync(BuildRequest(HttpMethod.Post, path, accessToken, content));
+    
+    public Task<RestApiResponse<T>> PostAsync<T>(string path, HttpContent content, string secret)
+        => ExecAsync<T>(BuildRequest(HttpMethod.Post, path, content, secret));
 
     public Task<RestApiResponse> PostAsync(string path, Guid appID, string secret, Guid merchantID, HttpContent content)
         => ExecAsync(BuildRequest(HttpMethod.Post, path, appID, secret, merchantID, content));
@@ -282,6 +287,18 @@ public class RestApiClient : IRestApiClient, IDisposable
         }
 
         return request;
+    }
+
+    private HttpRequestMessage BuildRequest(
+        HttpMethod method,
+        string path,
+        Option<HttpContent> httpContent,
+        string secret)
+    {
+        var nonce = Guid.NewGuid().ToString();
+
+        return BuildRequest(method, path, string.Empty, httpContent, null,
+            HmacSignatureBuilder.GetIdentityServerAnonymousRequestHeaders(nonce, secret));
     }
 
     private async Task<RestApiResponse> ToApiResponse(HttpResponseMessage response, Uri? requestUri)

@@ -64,6 +64,23 @@ public static class HmacSignatureBuilder
         return headers;
     }
     
+    public static Dictionary<string, string> GetIdentityServerAnonymousRequestHeaders(
+        string nonce,
+        string secret)
+    {
+        var signature = HashAndEncode(nonce, 
+            Encoding.UTF8.GetBytes(secret), 
+            SharedSecretAlgorithmsEnum.HMAC_SHA256);
+
+        var headers = new Dictionary<string, string>
+        {
+            {HmacAuthenticationConstants.NOFRIXION_SIGNATURE_HEADER_NAME, signature},
+            {HmacAuthenticationConstants.NONCE_HEADER_NAME, nonce}
+        };
+
+        return headers;
+    }
+    
     /// <summary>
     /// The original HMAC SHA1 signature used in version 1 webhooks and one specifc supplier.
     /// </summary>
