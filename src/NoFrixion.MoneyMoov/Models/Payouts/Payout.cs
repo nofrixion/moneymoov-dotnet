@@ -440,6 +440,12 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     public List<PayoutDocument>? Documents { get; set; }
 
     /// <summary>
+    /// Optional field to set who should pay any fees for the payout. Typically only
+    /// used for international payments and ignored for SEPA and Faster Payments.
+    /// </summary>
+    public PayoutChargeBearerEnum ChargeBearer { get; set; }
+
+    /// <summary>
     /// Indicates whether the payout has been submitted for processing. Once submitted the payout
     /// amount is reserved until the payout is marked as failed or settled.
     /// </summary>
