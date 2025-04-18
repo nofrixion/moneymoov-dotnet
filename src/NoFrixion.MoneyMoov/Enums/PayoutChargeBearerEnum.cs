@@ -14,7 +14,7 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
-namespace NoFrixion.MoneyMoov.Enums;
+namespace NoFrixion.MoneyMoov;
 
 /// <summary>
 /// Enum for the different types of charge, or fee, mechanisms that can be used 
@@ -25,7 +25,7 @@ public enum PayoutChargeBearerEnum
     /// <summary>
     /// Was not specified.
     /// </summary>
-    Unknown,
+    Default,
     
     /// <summary>
     /// The payout beneficiary is requested to bear the transactions charges.
