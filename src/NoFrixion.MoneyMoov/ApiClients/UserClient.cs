@@ -22,7 +22,7 @@ namespace NoFrixion.MoneyMoov;
 
 public interface IUserClient
 {
-    Task<RestApiResponse<User>> CreateUserAsync(UserCreate userCreate);
+    Task<RestApiResponse<User>> CreateUserAsync(UserCreate userCreate, string secret);
 
     Task<RestApiResponse<User>> GetAsync(string userAccessToken);
 
@@ -62,11 +62,13 @@ public class UserClient : IUserClient
     /// Calls the MoneyMoov User endpoint create a new user record.
     /// </summary>
     /// <param name="userCreate">The model containing the data about the new user to create.</param>
+    /// <param name="secret">The HMAC secret to sign the request with.</param>
     /// <returns>If successful, a user object.</returns>
-    public Task<RestApiResponse<User>> CreateUserAsync(UserCreate userCreate)
+    public Task<RestApiResponse<User>> CreateUserAsync(UserCreate userCreate, string secret)
     {
         var url = MoneyMoovUrlBuilder.UserApi.UserApiUrl(_apiClient.GetBaseUri().ToString());
-        return _apiClient.PostAsync<User>(url, new FormUrlEncodedContent(userCreate.ToDictionary()));
+
+        return _apiClient.PostAsync<User>(url, new FormUrlEncodedContent(userCreate.ToDictionary()), secret);
     }
 
     /// <summary>
