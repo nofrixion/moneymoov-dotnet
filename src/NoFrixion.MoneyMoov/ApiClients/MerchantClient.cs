@@ -43,6 +43,10 @@ public interface IMerchantClient
     Task<RestApiResponse<Role>> AddUserToRole(string userAccessToken, RoleUserCreate roleUserCreate, Guid merchantID, Guid roleID);
     
     Task<RestApiResponse> DeleteUserFromRole(string userAccessToken, Guid merchantID, Guid roleID, Guid userID);
+
+    Task<RestApiResponse<User>> AssignRolesToUser(string userAccessToken, RolesUserCreate rolesUserCreate, Guid merchantID, Guid userID);
+
+    Task<RestApiResponse> RemoveRolesFromUser(string userAccessToken, RolesUserDelete rolesUserDelete, Guid merchantID, Guid userID);
 }
 
 public class MerchantClient : IMerchantClient
@@ -243,6 +247,45 @@ public class MerchantClient : IMerchantClient
             _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
-    
-    
+
+    /// <summary>
+    /// Calls the MoneyMoov Roles Merchant endpoint to assign existing roles to a user.
+    /// </summary>
+    /// <param name="userAccessToken">A user scoped JWT access token.</param>
+    /// <param name="merchantID">The ID of the merchant.</param>
+    /// <param name="rolesUserCreate">The roles to be added to the user.</param>
+    /// <param name="userID">The ID of the user.</param>
+    /// <returns>If successful, updated user with roles.</returns>
+    public Task<RestApiResponse<User>> AssignRolesToUser(string userAccessToken, RolesUserCreate rolesUserCreate, Guid merchantID, Guid userID)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantRolesUserUrl(_apiClient.GetBaseUri().ToString(), merchantID, userID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(AssignRolesToUser));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PostAsync<User>(url, userAccessToken, rolesUserCreate.ToJsonContent()),
+            _ => Task.FromResult(new RestApiResponse<User>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov Roles Merchant endpoint to remove roles on a user.
+    /// </summary>
+    /// <param name="userAccessToken">A user scoped JWT access token.</param>
+    /// <param name="merchantID">The ID of the merchant.</param>
+    /// <param name="rolesUserDelete">The roles to be removed from the user.</param>
+    /// <param name="userID">The ID of the user.</param>
+    public Task<RestApiResponse> RemoveRolesFromUser(string userAccessToken, RolesUserDelete rolesUserDelete, Guid merchantID, Guid userID)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantRolesUserUrl(_apiClient.GetBaseUri().ToString(), merchantID, userID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(RemoveRolesFromUser));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.DeleteAsync(url, userAccessToken, rolesUserDelete.ToJsonContent()),
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
 }

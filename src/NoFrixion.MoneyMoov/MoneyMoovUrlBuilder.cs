@@ -55,7 +55,9 @@ public enum MoneyMoovResources
 
     webhooks,
     
-    roles
+    roles,
+
+    users,
 }
 
 
@@ -136,10 +138,13 @@ public static class MoneyMoovUrlBuilder
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.roles}";
         
         public static string MerchantRoleUsersUrl(string moneyMoovBaseUrl, Guid merchantID, Guid roleID)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.roles}/{roleID}/users";
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.roles}/{roleID}/{MoneyMoovResources.users}";
         
         public static string MerchantRoleUsersUrl(string moneyMoovBaseUrl, Guid merchantID, Guid roleID, Guid userID)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.roles}/{roleID}/users/{userID}";
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.roles}/{roleID}/{MoneyMoovResources.users}/{userID}";
+
+        public static string MerchantRolesUserUrl(string moneyMoovBaseUrl, Guid merchantID, Guid userID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.users}/{userID}/{MoneyMoovResources.roles}";
     }
 
     /// <summary>

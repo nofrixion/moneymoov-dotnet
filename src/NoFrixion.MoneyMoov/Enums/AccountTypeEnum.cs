@@ -26,7 +26,14 @@ public enum AccountTypeEnum
     Standard,
     
     /// <summary>
-    /// Standard fee accounts. Fees are applied.
+    /// Standard fee accounts. Fees are collected from all accounts and
+    /// sent to a specific IBAN/SCAN.
     /// </summary>
     StandardFee,
+    
+    /// <summary>
+    /// For liquidator customers who have a fee collection account set up.
+    /// Fees are collected from all other accounts and sent to the collection account. 
+    /// </summary>
+    LiquidatorFee,
 }

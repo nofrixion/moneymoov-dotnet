@@ -180,6 +180,12 @@ public class PayoutUpdate
     public PaymentRailEnum? PaymentRail { get; set; }
 
     /// <summary>
+    /// Optional field to set who should pay any fees for the payout. Typically only
+    /// used for international payments and ignored for SEPA and Faster Payments.
+    /// </summary>
+    public PayoutChargeBearerEnum? ChargeBearer { get; set; }
+
+    /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payout's non-collection properties 
@@ -196,6 +202,7 @@ public class PayoutUpdate
         if (TheirReference != null) dict.Add(nameof(TheirReference), TheirReference.ToString());
         if (AllowIncomplete != null) dict.Add(nameof(AllowIncomplete), AllowIncomplete.Value.ToString());
         if (PaymentRail != null) dict.Add(nameof(PaymentRail), PaymentRail.Value.ToString());
+        if (ChargeBearer != null) dict.Add(nameof(ChargeBearer), ChargeBearer.Value.ToString());
 
         if (Destination != null)
         {

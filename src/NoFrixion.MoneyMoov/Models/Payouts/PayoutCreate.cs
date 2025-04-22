@@ -205,6 +205,12 @@ public class PayoutCreate
     public List<PayoutDocumentCreate>? Documents { get; set; }
 
     /// <summary>
+    /// Optional field to set who should pay any fees for the payout. Typically only
+    /// used for international payments and ignored for SEPA and Faster Payments.
+    /// </summary>
+    public PayoutChargeBearerEnum ChargeBearer { get; set; }
+
+    /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payout's non-collection properties 
@@ -222,7 +228,8 @@ public class PayoutCreate
             { nameof(TheirReference), TheirReference ?? string.Empty },
             { nameof(InvoiceID), InvoiceID ?? string.Empty },
             { nameof(AllowIncomplete), AllowIncomplete.ToString() },
-            { nameof(PaymentRail), PaymentRail.ToString() }
+            { nameof(PaymentRail), PaymentRail.ToString() },
+            { nameof(ChargeBearer), ChargeBearer.ToString() }
         };
 
         if (Destination != null)
