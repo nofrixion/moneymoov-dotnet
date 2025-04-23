@@ -75,6 +75,8 @@ public interface IRestApiClient
 
     Task<RestApiResponse> DeleteAsync(string path, Guid appID, string secret, Guid merchantID, string rowVersion);
 
+    Task<RestApiResponse> DeleteAsync(string path, string accessToken, HttpContent content);
+
     Uri GetBaseUri();
 
     NoFrixionProblem CheckAccessToken(string accessToken, string callerName);
@@ -191,6 +193,9 @@ public class RestApiClient : IRestApiClient, IDisposable
 
     public Task<RestApiResponse> DeleteAsync(string path, Guid appID, string secret, Guid merchantID, string rowVersion)
         => ExecAsync(BuildRequest(HttpMethod.Delete, path, appID, secret, merchantID, Option<HttpContent>.None, rowVersion));
+
+    public Task<RestApiResponse> DeleteAsync(string path, string accessToken, HttpContent content)
+        => ExecAsync(BuildRequest(HttpMethod.Delete, path, accessToken, Option<HttpContent>.Some(content)));
 
     public NoFrixionProblem CheckAccessToken(string accessToken, string callerName)
     {
