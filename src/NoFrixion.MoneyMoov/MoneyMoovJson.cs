@@ -77,7 +77,6 @@ public class MoneyMoovJson
             settings.ContractResolver = new DefaultContractResolver(); // This preserves PascalCase (default)
         }
 
-
         return settings;
     }
 }

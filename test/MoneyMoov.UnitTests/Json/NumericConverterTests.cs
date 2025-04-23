@@ -13,12 +13,24 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using Microsoft.Extensions.Logging;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace NoFrixion.MoneyMoov.UnitTests.Json;
 
 public class NumericConverterTests
 {
+    private readonly ILogger<NumericConverterTests> _logger;
+    private LoggerFactory _loggerFactory;
+
+    public NumericConverterTests(ITestOutputHelper testOutputHelper)
+    {
+        _loggerFactory = new LoggerFactory();
+        _loggerFactory.AddProvider(new XunitLoggerProvider(testOutputHelper));
+        _logger = _loggerFactory.CreateLogger<NumericConverterTests>();
+    }
+
     [Theory]
     [InlineData("\"42\"", 42)]
     [InlineData("42", 42)]
@@ -67,9 +79,13 @@ public class NumericConverterTests
     [Theory]
     [InlineData(42.42, "42.42")]
     [InlineData(0.0, "0.0")]
+    [InlineData(1, "1.0")]
     public void Serialize_Decimal_Success(decimal value, string expected)
     {
         var json = value.ToJsonFlat();
+
+        _logger.LogDebug("{method} result: {result}", nameof(Serialize_Decimal_Success), json);
+
         Assert.Equal(expected, json);
     }
 
