@@ -13,7 +13,6 @@
 // Proprietary NoFrixion.
 //-----------------------------------------------------------------------------
 
-using System;
 using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
 

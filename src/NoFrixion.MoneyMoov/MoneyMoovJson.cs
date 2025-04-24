@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------------
-// Filename:  MoneyNoovJson.cs
+// Filename: MoneyNoovJson.cs
 //
 // Description: JSON serialiser options for wotking with the MoneyMoov API.
 //
@@ -64,7 +64,8 @@ public class MoneyMoovJson
             ObjectCreationHandling = ObjectCreationHandling.Replace,
             Converters =
             {
-                new Newtonsoft.Json.Converters.StringEnumConverter()
+                new Newtonsoft.Json.Converters.StringEnumConverter(),
+                new DecimalConverter()
             }
         };
 
@@ -76,7 +77,6 @@ public class MoneyMoovJson
         {
             settings.ContractResolver = new DefaultContractResolver(); // This preserves PascalCase (default)
         }
-
 
         return settings;
     }

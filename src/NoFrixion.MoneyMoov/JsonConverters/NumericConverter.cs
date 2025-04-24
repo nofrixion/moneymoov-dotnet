@@ -15,6 +15,7 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -66,16 +67,38 @@ public class NumericConverter<T> : JsonConverter<T> where T : struct, IConvertib
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
         if (typeof(T) == typeof(int))
+        {
             writer.WriteNumberValue(Convert.ToInt32(value));
+        }
         else if (typeof(T) == typeof(long))
+        {
             writer.WriteNumberValue(Convert.ToInt64(value));
+        }
         else if (typeof(T) == typeof(float))
+        {
             writer.WriteNumberValue(Convert.ToSingle(value));
+        }
         else if (typeof(T) == typeof(double))
+        {
             writer.WriteNumberValue(Convert.ToDouble(value));
+        }
         else if (typeof(T) == typeof(decimal))
-            writer.WriteNumberValue(Convert.ToDecimal(value));
+        {
+            // Always serialise decimals with at least two decimal places.
+            decimal decimalValue = Convert.ToDecimal(value);
+
+            if (decimalValue != Math.Round(decimalValue, 2))
+            { 
+                writer.WriteNumberValue(decimalValue);
+            }
+            else
+            {
+                writer.WriteRawValue(decimalValue.ToString("0.00", CultureInfo.InvariantCulture));
+            }
+        }
         else
+        {
             writer.WriteStringValue(value.ToString());
+        }
     }
 }
