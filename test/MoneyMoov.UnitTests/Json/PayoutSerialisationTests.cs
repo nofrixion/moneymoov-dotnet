@@ -69,6 +69,29 @@ public class PayoutSerialisationTests : MoneyMoovUnitTestBase<PayoutSerialisatio
 
         Logger.LogDebug($"json: {json}");
 
-        Assert.Contains("42.00", json); // Check that the amount is serialised with two decimal places.
+        Assert.Contains("\"amount\":42.00", json); // Check that the amount is serialised with two decimal places.
+    }
+
+    /// <summary>
+    /// Tests a payout serialisation with Newtonsoft, which is what's used for API responses.
+    /// </summary>
+    [Fact]
+    public void Serialize_Payout_Newtonsoft_Success()
+    {
+        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
+
+        var payout = new Payout
+        {
+            Amount = 42m,
+            Currency = CurrencyTypeEnum.EUR,
+            TheirReference = "123 456",
+            Status = PayoutStatus.PROCESSED
+        };
+
+        var json = payout.ToJsonFlat();
+
+        Logger.LogDebug($"json: {json}");
+
+        Assert.Contains("\"amount\":42.00", json); // Check that the amount is serialised with two decimal places.
     }
 }

@@ -78,8 +78,9 @@ public class NumericConverterTests
 
     [Theory]
     [InlineData(42.42, "42.42")]
-    [InlineData(0.0, "0.0")]
-    [InlineData(1, "1.0")]
+    [InlineData(0.0, "0.00")]
+    [InlineData(1, "1.00")]
+    [InlineData(1.234, "1.234")]
     public void Serialize_Decimal_Success(decimal value, string expected)
     {
         var json = value.ToJsonFlat();
@@ -100,7 +101,7 @@ public class NumericConverterTests
     public void Deserialize_Empty_Decimal_Exception()
     {
         string json = "\"\"";
-        Assert.Throws<Newtonsoft.Json.JsonSerializationException>(() => json.FromJson<decimal>());
+        Assert.Throws<System.FormatException>(() => json.FromJson<decimal>());
     }
 
     [Fact]
