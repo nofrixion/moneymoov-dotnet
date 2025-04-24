@@ -28,7 +28,32 @@ public class PayoutSerialisationTests : MoneyMoovUnitTestBase<PayoutSerialisatio
     { }
 
     [Fact]
-    public async Task Serialize_Payout_Success()
+    public void Serialize_Payout_Success()
+    {
+        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
+
+        var payout = new Payout
+        {
+            Amount = 42.42m,
+            Currency = CurrencyTypeEnum.EUR,
+            TheirReference = "123 456",
+            Status = PayoutStatus.PROCESSED,
+            SourceAccountCurrency = CurrencyTypeEnum.EUR,
+            SourceAccountAvailableBalance = 13.13m,
+        };
+
+        var json = payout.ToJsonFormatted();
+
+        Logger.LogDebug($"json: {json}");
+
+        Assert.Contains("\"amount\": 42.42,", json);
+        Assert.Contains("\"amountMinorUnits\": 4242,", json);
+        Assert.Contains("\"sourceAccountAvailableBalance\": 13.13,", json);
+        Assert.Contains("\"sourceAccountAvailableBalanceMinorUnits\": 1313,", json);
+    }
+
+    [Fact]
+    public async Task Serialize_Payout_Content_Success()
     {
         Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
 

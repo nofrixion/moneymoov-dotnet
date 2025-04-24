@@ -42,9 +42,19 @@ public class PaymentAccount: IExportableToCsv
     public decimal Balance { get; set; }
 
     /// <summary>
+    /// Balance of the account expressed in the currency’s minor units (e.g. cents, pence).
+    /// </summary>
+    public long BalanceMinorUnits => Balance.ToAmountMinorUnits(Currency);
+
+    /// <summary>
     /// Total of the payouts that have been submitted for processing.
     /// </summary>
     public decimal SubmittedPayoutsBalance { get; set; }
+
+    /// <summary>
+    /// The balance of the submitted payouts expressed in the currency’s minor units (e.g. cents, pence).
+    /// </summary>
+    public long SubmittedPayoutsBalanceMinorUnits => SubmittedPayoutsBalance.ToAmountMinorUnits(Currency);
 
     /// <summary>
     /// Total of the payins that are in a pending/review state.
@@ -126,6 +136,11 @@ public class PaymentAccount: IExportableToCsv
     /// The current available balance of the account. Calculated by subtracting any submitted payments from the current balance.
     /// </summary>
     public decimal AvailableBalance => Balance - SubmittedPayoutsBalance;
+
+    /// <summary>
+    /// The available balance expressed in the currency’s minor units (e.g. cents, pence).
+    /// </summary>
+    public long AvailableBalanceMinorUnits => AvailableBalance.ToAmountMinorUnits(Currency);
 
     /// <summary>
     /// The payment account supplier name. A payment account can be supplied by multiple payment processors. 
