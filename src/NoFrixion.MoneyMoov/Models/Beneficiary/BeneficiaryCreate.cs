@@ -126,6 +126,7 @@ public class BeneficiaryCreate : IValidatableObject
             {
                 CurrencyTypeEnum.EUR => AccountIdentifierType.IBAN,
                 CurrencyTypeEnum.GBP => AccountIdentifierType.SCAN,
+                CurrencyTypeEnum.USD => AccountIdentifierType.IBAN,
                 CurrencyTypeEnum.BTC => AccountIdentifierType.BTC,
                 _ => AccountIdentifierType.Unknown
             },
