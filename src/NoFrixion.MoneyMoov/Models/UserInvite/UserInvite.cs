@@ -43,6 +43,12 @@ public class UserInvite
     /// If true, indicates the invitee's email address corresponds to an existing MoneyMoov user.
     /// </summary>
     public bool IsInviteeRegistered { get; set; }
+    
+    /// <summary>
+    /// The role ID to automatically assign to the merchant’s very first user.
+    /// Typically set by the compliance team when the first user is invited to a new merchant.
+    /// </summary>
+    public Guid? InitialRoleID { get; set; }
 
     public UserInviteStatusEnum Status
     {

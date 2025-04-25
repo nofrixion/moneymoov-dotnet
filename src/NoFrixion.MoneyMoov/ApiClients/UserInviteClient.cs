@@ -26,8 +26,13 @@ public interface IUserInviteClient
 
     Task<RestApiResponse<UserInvite>> GetUserInviteAsync(string accessToken, Guid userInviteID);
 
-    Task<RestApiResponse<UserInvite>> SendInviteAsync(string userAccessToken, Guid merchantID, string inviteeEmailAddress, string inviteRegistrationUrl,
-        bool sendInviteEmail, string inviteeFirstName, string inviteeLastName);
+    Task<RestApiResponse<UserInvite>> SendInviteAsync(string userAccessToken, Guid merchantID,
+        string inviteeEmailAddress,
+        string inviteRegistrationUrl,
+        bool sendInviteEmail,
+        string inviteeFirstName,
+        string inviteeLastName,
+        Guid? onboardingRoleID = null);
 
     Task<RestApiResponse> ResendUserInviteAsync(Guid userInviteID);
 
@@ -109,12 +114,14 @@ public class UserInviteClient : IUserInviteClient
     /// <param name="sendInviteEmail">True if an email should be sent to the invitee.</param>
     /// <param name="inviteeFirstName">The first name of the person being invited.</param>
     /// <param name="inviteeLastName">The last name of the person being invited.</param>
+    /// <param name="onboardingRoleID">The role ID to automatically assign to the merchant’s very first user.</param>
     public Task<RestApiResponse<UserInvite>> SendInviteAsync(string userAccessToken, Guid merchantID, 
         string inviteeEmailAddress, 
         string inviteRegistrationUrl, 
         bool sendInviteEmail,
         string inviteeFirstName,
-        string inviteeLastName)
+        string inviteeLastName,
+        Guid? onboardingRoleID = null)
     {
         var url = MoneyMoovUrlBuilder.UserInvitesApi.UserInvitesUrl(_apiClient.GetBaseUri().ToString());
 
@@ -127,7 +134,8 @@ public class UserInviteClient : IUserInviteClient
             RegistrationUrl = inviteRegistrationUrl,
             SendInviteEmail = sendInviteEmail,
             InviteeFirstName = inviteeFirstName,
-            InviteeLastName = inviteeLastName
+            InviteeLastName = inviteeLastName,
+            InitialRoleID = onboardingRoleID
         };
 
         return prob switch

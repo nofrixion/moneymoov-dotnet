@@ -53,6 +53,13 @@ public class UserInviteCreate
     /// how to accept the invite.
     /// </summary>
     public bool SendInviteEmail { get; set; }
+    
+    /// <summary>
+    /// The role ID to automatically assign to the merchant’s very first user. 
+    /// This property can only be set when the merchant has no users with roles.
+    /// Typically set by the compliance team when the first user is invited to a new merchant.
+    /// </summary>
+    public Guid? InitialRoleID { get; set; }
 
     /// <summary>
     /// Places all the user invite create's properties into a dictionary.
@@ -67,7 +74,8 @@ public class UserInviteCreate
             { nameof(RegistrationUrl), RegistrationUrl ?? string.Empty },
             { nameof(SendInviteEmail), SendInviteEmail.ToString() },
             {nameof(InviteeFirstName), InviteeFirstName ?? string.Empty},
-            {nameof(InviteeLastName), InviteeLastName ?? string.Empty}
+            {nameof(InviteeLastName), InviteeLastName ?? string.Empty},
+            { nameof(InitialRoleID), InitialRoleID?.ToString() ?? string.Empty }
         };
     }
 }
