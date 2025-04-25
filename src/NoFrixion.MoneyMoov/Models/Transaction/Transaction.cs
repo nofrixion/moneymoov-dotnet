@@ -54,6 +54,11 @@ public class Transaction : IWebhookPayload, IExportableToCsv
     public decimal Amount { get; set; }
 
     /// <summary>
+    /// Amount of the transaction expressed in the currency’s minor units (e.g. cents, pence).
+    /// </summary>
+    public long AmountMinorUnits => Amount.ToAmountMinorUnits(Currency);
+
+    /// <summary>
     /// Currency of transaction.
     /// </summary>
     public CurrencyTypeEnum Currency { get; set; }
@@ -110,7 +115,12 @@ public class Transaction : IWebhookPayload, IExportableToCsv
     /// Balance left on the account after the transaction.
     /// </summary>
     public decimal Balance { get; set; }
-    
+
+    /// <summary>
+    /// Balance on the account expressed in the currency’s minor units (e.g. cents, pence).
+    /// </summary>
+    public long BalanceMinorUnits => Balance.ToAmountMinorUnits(Currency);
+
     /// <summary>
     /// ID of the rule that resulted in the transaction.
     /// </summary>
