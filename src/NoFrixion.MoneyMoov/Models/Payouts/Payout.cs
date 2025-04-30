@@ -81,7 +81,7 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// <summary>
     /// The payout amount expressed in the currency’s minor units (e.g. cents, pence).
     /// </summary>
-    public long AmountMinorUnits => Amount.ToAmountMinorUnits(Currency);
+    public ulong AmountMinorUnits => Convert.ToUInt64(Amount.ToAmountMinorUnits(Currency));
 
     /// <summary>
     /// Currency and formatted amount string.
@@ -522,7 +522,7 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
                 ID.ToString() +
                 AccountID.ToString() +
                 Currency +
-                Math.Round(Amount, Currency.GetDecimalPlaces()).ToString() +
+                AmountMinorUnits +
                 Destination.GetApprovalHash() +
                 Scheduled.GetValueOrDefault().ToString() +
                 ScheduleDate?.ToString("o") +
