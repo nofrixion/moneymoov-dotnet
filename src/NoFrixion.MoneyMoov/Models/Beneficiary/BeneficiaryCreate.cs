@@ -112,27 +112,6 @@ public class BeneficiaryCreate : IValidatableObject
         return dict;
     }
 
-    private AccountIdentifierType GetAccountIdentifierType()
-    {
-        if (!string.IsNullOrWhiteSpace(Destination?.Identifier?.IBAN))
-        {
-            return AccountIdentifierType.IBAN;
-        }
-
-        if (!string.IsNullOrWhiteSpace(Destination?.Identifier?.AccountNumber) &&
-            !string.IsNullOrWhiteSpace(Destination?.Identifier?.SortCode))
-        {
-            return AccountIdentifierType.SCAN;
-        }
-
-        if (Currency == CurrencyTypeEnum.BTC)
-        {
-            return AccountIdentifierType.BTC;
-        }
-
-        return AccountIdentifierType.Unknown;
-    }
-
     /// <summary>
     /// Maps the beneficiary to a Payout. Used for creating a new Payout and also validating the 
     /// Beneficiary.
@@ -140,12 +119,13 @@ public class BeneficiaryCreate : IValidatableObject
     /// <returns>A new Payout object.</returns>
     public Payout ToPayout()
     {
+        var destination = Destination.ToCounterparty(Currency);
         return new Payout
         {
             ID = Guid.NewGuid(),
-            Type = GetAccountIdentifierType(),
+            Type = destination.Identifier?.Type ?? AccountIdentifierType.Unknown,
             Currency = Currency,
-            Destination = Destination.ToCounterparty(Currency)
+            Destination = destination
         };
     }
 }
