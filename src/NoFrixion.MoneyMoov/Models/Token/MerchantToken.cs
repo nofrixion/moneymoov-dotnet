@@ -113,7 +113,26 @@ public class MerchantToken
     public List<AuthenticationTypesEnum> AuthenticationMethods { get; set; }
     
     public DateTimeOffset? LastAuthorised { get; set; }
-    
+
+    /// <summary>
+    /// Optional. If set represents a comma separated list of IP addresses that this token is authorised to be used from.
+    /// Attempts to use the token from an IP address not in the list will be rejected.
+    /// </summary>
+    public string IPAddressWhitelist { get; set; }
+
+    /// <summary>
+    /// Optional. If set to greater than 0 indicates the token is enabled for shared secret (HMAC) authentication. This
+    ///  field represents the version of the master key, contained in the app settings, that was used to derive the shared secret key.
+    /// </summary>
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
+    public int SharedSecretMasterKeyVersion { get; set; }
+
+    /// <summary>
+    /// Indicates whether the merchant token is archived.
+    /// </summary>
+    public bool IsArchived { get; set; }
+
     /// <summary>
     /// Gets a hash of the critical fields for the beneficiary. This hash is
     /// used to ensure a beneficiary's details are not modified between the time the

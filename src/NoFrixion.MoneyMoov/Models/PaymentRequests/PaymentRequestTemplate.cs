@@ -96,3 +96,63 @@ public enum FieldRequirement
     Required,
     Hidden
 }
+
+public class DefaultPaymentRequestTemplate
+{
+    public static PaymentRequestTemplate Default => new()
+    {
+        PaymentMethods = new PaymentMethods
+        {
+            Bank = true,
+        },
+        PaymentTerms = new PaymentTerms
+        {
+            AllowPartialPayments = false
+        },
+        NotificationOptions = new NotificationOptions
+        {
+            Creator = true,
+            UserRoles = null,
+            ExternalRecipients = null
+        },
+        BankPaymentOptions = new BankPaymentOptions
+        {
+            DestinationAccounts = null,
+        },
+        CardPaymentAddressOptions = new CardPaymentAddressOptions
+        {
+            RequireAddress = false
+        },
+        CardPaymentCaptureOptions = new CardPaymentCaptureOptions
+        {
+            Automatic = true
+        },
+        Fields =
+        [
+            new()
+            {
+                Name = "Description",
+                Description = "A free text to include extra information about the payment.",
+                Requirement = FieldRequirement.Optional
+            },
+            new()
+            {
+                Name = "Due date",
+                Description = "Displayed on the payment link and on your accounts receivables.",
+                Requirement = FieldRequirement.Optional
+            },
+            new()
+            {
+                Name = "Customer",
+                Description = "Set of fields to identify a customer. It includes complete name and an email address which allows to automatically send the payment link and a payment receipt.",
+                Requirement = FieldRequirement.Optional
+            },
+            new()
+            {
+                Name = "Destination account",
+                Description = "Allows the creator to choose the account where bank payments are settled.",
+                Requirement = FieldRequirement.Hidden
+            }
+        ]
+    };
+}

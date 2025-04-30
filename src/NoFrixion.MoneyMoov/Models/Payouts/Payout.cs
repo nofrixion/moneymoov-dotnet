@@ -79,6 +79,11 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     public decimal Amount { get; set; }
 
     /// <summary>
+    /// The payout amount expressed in the currency’s minor units (e.g. cents, pence).
+    /// </summary>
+    public ulong AmountMinorUnits => Convert.ToUInt64(Amount.ToAmountMinorUnits(Currency));
+
+    /// <summary>
     /// Currency and formatted amount string.
     /// </summary>
     public string FormattedAmount => PaymentAmount.DisplayCurrencyAndAmount(Currency, Amount);
@@ -272,6 +277,13 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// The available balance of the account the payout is being made from.
     /// </summary>
     public decimal? SourceAccountAvailableBalance { get; set; }
+
+    /// <summary>
+    /// The available balance of the source account expressed in the currency’s minor units (e.g. cents, pence).
+    /// </summary>
+    public long? SourceAccountAvailableBalanceMinorUnits =>
+        SourceAccountCurrency != CurrencyTypeEnum.None ?
+        SourceAccountAvailableBalance?.ToAmountMinorUnits(SourceAccountCurrency) : 0;
 
     /// <summary>
     /// The available balance of the account the payout is being made from.
@@ -510,7 +522,7 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
                 ID.ToString() +
                 AccountID.ToString() +
                 Currency +
-                Math.Round(Amount, Currency.GetDecimalPlaces()).ToString() +
+                AmountMinorUnits +
                 Destination.GetApprovalHash() +
                 Scheduled.GetValueOrDefault().ToString() +
                 ScheduleDate?.ToString("o") +
