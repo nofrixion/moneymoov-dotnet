@@ -140,6 +140,11 @@ public class Merchant
     public List<PaymentAccount> PaymentAccounts { get; set; } = new List<PaymentAccount>();
 
     /// <summary>
+    /// The list of currencies that the merchant has accounts for.
+    /// </summary>
+    public List<CurrencyTypeEnum> AccountCurrencies { get; set; } = [];
+
+    /// <summary>
     /// Gets the most appropriate display name for the merchant which
     /// means use the trading name if set and if not, default to the business name.
     /// </summary>
