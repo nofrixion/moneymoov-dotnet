@@ -16,6 +16,7 @@
 
 using NoFrixion.MoneyMoov.Attributes;
 using System.ComponentModel.DataAnnotations;
+using NoFrixion.MoneyMoov.Models.PaymentRequests;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -263,6 +264,18 @@ public class PaymentRequestUpdate
     /// Date and time of expiration of the lightning invoice.
     /// </summary>
     public DateTimeOffset? LightningInvoiceExpiresAt { get; set; }
+    
+    /// <summary>
+    /// If set to true, a receipt will be automatically sent to the CustomerEmailAddress when payments are received.
+    /// </summary>
+    public bool? AutoSendReceipt { get; set; }
+    
+    /// <summary>
+    /// A list of custom fields to add to the payment request. The custom fields
+    /// are data type agnostic which means that the API will not do any validation or formatting
+    /// in the key-value pairs. The API will store the custom fields as is.
+    /// </summary>
+    public List<PaymentRequestCustomFieldCreate>? CustomFields { get; set; }
     
     /// <summary>
     /// Places all the payment request's properties into a dictionary. Useful for testing
