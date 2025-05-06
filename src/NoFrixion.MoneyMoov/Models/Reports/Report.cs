@@ -27,6 +27,7 @@ public class Report : IWebhookPayload
     public DateTimeOffset Inserted { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
     public string? CronExpression { get; set; }
+    public string? TimeZoneId { get; set; }
     public ReportStatusTypesEnum Status { get; set; }
     public DateTimeOffset LastCompletedAt { get; set; }
     public int StatementNumber { get; set; }
