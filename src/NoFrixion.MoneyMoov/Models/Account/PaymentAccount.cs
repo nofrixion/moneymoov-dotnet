@@ -240,6 +240,16 @@ public class PaymentAccount: IExportableToCsv
 
     public string CsvHeader() =>
         "ID,AccountName,AccountSupplierName,IsConnectedAccount,Balance,SubmittedPayoutsBalance,AvailableBalance,Currency,IBAN,SortCode,AccountNumber,Bic,Inserted,LastUpdated,IsDefault,BankName,ExpiryDate,XeroBankFeedConnectionStatus,XeroBankFeedSyncStatus,XeroBankFeedLastSyncedAt,XeroBankFeedSyncLastFailedAt,XeroBankFeedSyncLastFailureReason,XeroUnsynchronisedTransactionsCount,DefaultPaymentRail,IsArchived,SupplierSepaInstantStatus";
+
+    /// <summary>
+    /// For virtual accounts this is the ID of the physical account that the virtual account is linked to.
+    /// </summary>
+    public Guid? PhysicalAccountID { get; set; }
+    
+    /// <summary>
+    /// True if the account is a virtual account.
+    /// </summary>
+    public bool IsVirtual => PhysicalAccountID != null;
     
     public string ToCsvRow()
     {
