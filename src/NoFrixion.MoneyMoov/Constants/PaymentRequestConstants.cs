@@ -78,4 +78,17 @@ public class PaymentRequestConstants
 
     public const string NOTIFICATION_EMAIL_ADDRESSES_ERROR_MESSAGE =
         "One or more of the email addresses are invalid. Addresses can be separated by a comma, semi-colon or space.";
+    
+    /// <summary>
+    /// This is the display name for the card payment method. It is used to
+    /// display the payment method in receipts and other user interfaces.
+    /// </summary>
+    public const string DISPLAY_CARD_PAYMENT_METHOD = "Card";
+    
+    /// <summary>
+    /// This is the display name for the direct debit payment method. It is used to
+    /// display the payment method in receipts and other user interfaces.
+    /// </summary>
+    public const string DISPLAY_DIRECT_DEBIT_PAYMENT_METHOD = "Direct debit";
+    
 }
