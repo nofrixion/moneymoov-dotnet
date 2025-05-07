@@ -14,8 +14,8 @@
 //-----------------------------------------------------------------------------
 
 using NoFrixion.MoneyMoov.Attributes;
-using NoFrixion.MoneyMoov.Json;
 using System.ComponentModel.DataAnnotations;
+using NoFrixion.MoneyMoov.Models.PaymentRequests;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -360,6 +360,18 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// tag exists it will be created.
     /// </summary>
     public List<string>? Tags { get; set; }
+    
+    /// <summary>
+    /// If set to true, a receipt will be automatically sent to the CustomerEmailAddress when payments are received.
+    /// </summary>
+    public bool AutoSendReceipt { get; set; }
+    
+    /// <summary>
+    /// A list of custom fields to add to the payment request. The custom fields
+    /// are data type agnostic which means that the API will not do any validation or formatting
+    /// in the key-value pairs. The API will store the custom fields as is.
+    /// </summary>
+    public List<PaymentRequestCustomFieldCreate>? CustomFields { get; set; }
 
     public NoFrixionProblem Validate()
     {
@@ -433,6 +445,21 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(Title), Title ?? string.Empty);
         dict.Add(nameof(PartialPaymentSteps), PartialPaymentSteps ?? string.Empty);
         dict.Add(nameof(NotificationEmailAddresses), NotificationEmailAddresses ?? string.Empty);
+        dict.Add(nameof(AutoSendReceipt), AutoSendReceipt.ToString());
+        // Add custom fields
+        if (CustomFields?.Count > 0)
+        {
+            var customFieldNumber = 0;
+            foreach (var customField in CustomFields.Where(customField =>
+                         !string.IsNullOrWhiteSpace(customField.Value) && !string.IsNullOrWhiteSpace(customField.Name)))
+            {
+                dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].Name", customField.Name ?? string.Empty);
+                dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].Value", customField.Value ?? string.Empty);
+                dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].DisplayToPayer",
+                    customField.DisplayToPayer.ToString());
+                customFieldNumber++;
+            }
+        }
 
         if (PaymentMethods?.Count() > 0)
         {
