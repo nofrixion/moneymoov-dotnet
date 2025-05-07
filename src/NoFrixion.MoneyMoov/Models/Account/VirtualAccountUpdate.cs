@@ -1,13 +1,13 @@
 // -----------------------------------------------------------------------------
-//  Filename: VirtualAccountCreate.cs
+//  Filename: VirtualAccountUpdate.cs
 // 
-//  Description: VirtualAccountCreate model:
+//  Description: VirtualAccountUpdate model:
 // 
 //  Author(s):
 //  Donal O'Connor (donal@nofrixion.com)
 // 
 //  History:
-//  02 05 2025  Donal O'Connor   Created, Harcourt St, Dublin, Ireland.
+//  07 05 2025  Donal O'Connor   Created, Harcourt St, Dublin, Ireland.
 // 
 //  License:
 //  Proprietary NoFrixion.
@@ -17,7 +17,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
 
-public class VirtualAccountCreate
+public class VirtualAccountUpdate
 {
     /// <summary>
     /// The name of the virtual account.
