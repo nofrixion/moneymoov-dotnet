@@ -445,6 +445,21 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(Title), Title ?? string.Empty);
         dict.Add(nameof(PartialPaymentSteps), PartialPaymentSteps ?? string.Empty);
         dict.Add(nameof(NotificationEmailAddresses), NotificationEmailAddresses ?? string.Empty);
+        dict.Add(nameof(AutoSendReceipt), AutoSendReceipt.ToString());
+        // Add custom fields
+        if (CustomFields?.Count > 0)
+        {
+            var customFieldNumber = 0;
+            foreach (var customField in CustomFields.Where(customField =>
+                         !string.IsNullOrWhiteSpace(customField.Value) && !string.IsNullOrWhiteSpace(customField.Name)))
+            {
+                dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].Name", customField.Name ?? string.Empty);
+                dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].Value", customField.Value ?? string.Empty);
+                dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].DisplayToPayer",
+                    customField.DisplayToPayer.ToString());
+                customFieldNumber++;
+            }
+        }
 
         if (PaymentMethods?.Count() > 0)
         {
