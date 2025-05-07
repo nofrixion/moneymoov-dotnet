@@ -22,13 +22,13 @@ public class PaymentRequestCustomFieldCreate
     /// <summary>
     /// The name of the custom field.
     /// </summary>
-    [Required(ErrorMessage = "Custom field name is required")]
+    [Required(ErrorMessage = "Custom field name is required", AllowEmptyStrings = false)]
     public string? Name { get; set; }
     
     /// <summary>
     /// The value of the custom field.
     /// </summary>
-    [Required(ErrorMessage = "Custom field value is required")]
+    [Required(ErrorMessage = "Custom field value is required", AllowEmptyStrings = false)]
     public string? Value { get; set; }
     
     /// <summary>
