@@ -23,6 +23,12 @@ public class TransactionKeysetPageResponse(
     bool hasMorePages)
     : ApiKeysetPageResponseBase<Transaction, int>(content, lastKey, hasMorePages);
 
+public class PayoutKeysetPageResponse(
+    List<Payout> content,
+    string lastKey,
+    bool hasMorePages)
+    : ApiKeysetPageResponseBase<Payout, string>(content, lastKey, hasMorePages);
+
 public abstract class ApiKeysetPageResponseBase<TContentType, TKeyType>
 {
     public List<TContentType> Content { get; set; }

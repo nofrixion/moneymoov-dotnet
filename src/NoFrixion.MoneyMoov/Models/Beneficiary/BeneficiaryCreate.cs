@@ -119,18 +119,13 @@ public class BeneficiaryCreate : IValidatableObject
     /// <returns>A new Payout object.</returns>
     public Payout ToPayout()
     {
+        var destination = Destination.ToCounterparty(Currency);
         return new Payout
         {
             ID = Guid.NewGuid(),
-            Type = Currency switch
-            {
-                CurrencyTypeEnum.EUR => AccountIdentifierType.IBAN,
-                CurrencyTypeEnum.GBP => AccountIdentifierType.SCAN,
-                CurrencyTypeEnum.BTC => AccountIdentifierType.BTC,
-                _ => AccountIdentifierType.Unknown
-            },
+            Type = destination.Identifier?.Type ?? AccountIdentifierType.Unknown,
             Currency = Currency,
-            Destination = Destination.ToCounterparty(Currency)
+            Destination = destination
         };
     }
 }
