@@ -24,6 +24,7 @@
 using System.ComponentModel.DataAnnotations;
 using NoFrixion.MoneyMoov.Extensions;
 using LanguageExt;
+using NoFrixion.MoneyMoov.Models.PaymentRequests;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -356,6 +357,16 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload, IExportableToCsv
     /// Minimal destination account details, if available.
     /// </summary>
     public PaymentAccount? DestinationAccount { get; set; }
+    
+    /// <summary>
+    /// If set to true, a receipt will be automatically sent to the CustomerEmailAddress when payments are received.
+    /// </summary>
+    public bool AutoSendReceipt { get; set; }
+    
+    /// <summary>
+    /// A list of custom fields attached to the payment request.
+    /// </summary>
+    public List<PaymentRequestCustomField>? CustomFields { get; set; }
     
     /// <summary>
     /// Sandbox only. Optional. If set, simulated settlements will be delayed by the specified number of seconds.
