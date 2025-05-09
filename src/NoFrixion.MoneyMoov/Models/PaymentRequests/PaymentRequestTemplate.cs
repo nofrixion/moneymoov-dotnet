@@ -29,7 +29,29 @@ public class PaymentRequestTemplate
     
     public CardPaymentCaptureOptions CardPaymentCaptureOptions { get; set; } = null!;
     
-    public List<PaymentRequestTemplateField> Fields { get; set; } = null!;
+    /// <summary>
+    /// A list of default fields that are included in the payment request template.
+    /// These fields are predefined and map to concrete fields in the payment request.
+    /// </summary>
+    public List<PaymentRequestTemplateDefaultField>? DefaultFields { get; set; }
+    
+    /// <summary>
+    /// A list of custom fields that can be included in the payment request template.
+    /// </summary>
+    public List<PaymentRequestTemplateCustomField>? CustomFields { get; set; }
+}
+
+/// <summary>
+/// This enum defines the type of field in a payment request template.
+/// It is one of the predefined types that map to
+/// concrete fields in the payment request.
+/// </summary>
+public enum PaymentRequestDefaultFieldsEnum
+{
+    None,
+    Description,
+    Customer,
+    DestinationAccount
 }
 
 public class PaymentMethods : PaymentOptions
@@ -74,12 +96,25 @@ public class CardPaymentCaptureOptions : PaymentOptions
     public bool Automatic { get; set; }
 }
 
-public class PaymentRequestTemplateField
+/// <summary>
+/// This represents a default field in a payment request template.
+/// Default fields are predefined fields that map to concrete payment request properties.
+/// </summary>
+public class PaymentRequestTemplateDefaultField 
+    : PaymentRequestTemplateFieldOptions
+{
+    public required PaymentRequestDefaultFieldsEnum DefaultField { get; set; }
+}
+
+public class PaymentRequestTemplateCustomField: PaymentRequestTemplateFieldOptions
 {
     public required string Name { get; set; }
     
     public required string Description { get; set; }
+}
 
+public abstract class PaymentRequestTemplateFieldOptions
+{
     public bool DisplayForPayer { get; set; }
 
     public FieldRequirement Requirement { get; set; }
@@ -127,31 +162,23 @@ public class DefaultPaymentRequestTemplate
         {
             Automatic = true
         },
-        Fields =
+        DefaultFields = 
         [
-            new()
+            new PaymentRequestTemplateDefaultField
             {
-                Name = "Description",
-                Description = "A free text to include extra information about the payment.",
-                Requirement = FieldRequirement.Optional
+                Requirement = FieldRequirement.Optional,
+                DisplayForPayer = true,
+                DefaultField = PaymentRequestDefaultFieldsEnum.Description
             },
-            new()
+            new PaymentRequestTemplateDefaultField
             {
-                Name = "Due date",
-                Description = "Displayed on the payment link and on your accounts receivables.",
-                Requirement = FieldRequirement.Optional
+                Requirement = FieldRequirement.Optional,
+                DefaultField = PaymentRequestDefaultFieldsEnum.Customer
             },
-            new()
+            new PaymentRequestTemplateDefaultField
             {
-                Name = "Customer",
-                Description = "Set of fields to identify a customer. It includes complete name and an email address which allows to automatically send the payment link and a payment receipt.",
-                Requirement = FieldRequirement.Optional
-            },
-            new()
-            {
-                Name = "Destination account",
-                Description = "Allows the creator to choose the account where bank payments are settled.",
-                Requirement = FieldRequirement.Hidden
+                Requirement = FieldRequirement.Hidden,
+                DefaultField = PaymentRequestDefaultFieldsEnum.DestinationAccount
             }
         ]
     };
