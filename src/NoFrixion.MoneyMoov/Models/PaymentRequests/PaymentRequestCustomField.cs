@@ -22,4 +22,6 @@ public class PaymentRequestCustomField
     public required string Value { get; set; }
     
     public bool DisplayToPayer { get; set; }
+    
+    public int Priority { get; set; }
 }
