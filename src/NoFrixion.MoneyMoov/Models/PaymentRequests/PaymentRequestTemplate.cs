@@ -111,6 +111,12 @@ public class PaymentRequestTemplateCustomField: PaymentRequestTemplateFieldOptio
     public required string Name { get; set; }
     
     public required string Description { get; set; }
+    
+    /// <summary>
+    /// The priority of the field. This can be used to determine the order in which
+    /// the fields are displayed when creating a payment request.
+    /// </summary>
+    public int Priority { get; set; }
 }
 
 public abstract class PaymentRequestTemplateFieldOptions

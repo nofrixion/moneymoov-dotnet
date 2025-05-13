@@ -33,7 +33,14 @@ public class PaymentRequestCustomFieldCreate
     
     /// <summary>
     /// If true, the custom field is for internal use only and will not be
-    /// displayed to the customer on the pay element.
+    /// displayed to the customer on the UI or in the payment receipt.
     /// </summary>
     public bool DisplayToPayer { get; set; }
+    
+    /// <summary>
+    /// The priority of the custom field. The higher the number, the higher the priority.
+    /// This is used to determine the order in which the custom fields are displayed
+    /// on the UI, for example, on the hosted payment page and payment receipt.
+    /// </summary>
+    public int Priority { get; set; }
 }
