@@ -41,6 +41,11 @@ public class RestApiResponse
 
     public NoFrixionProblem Problem { get; } = NoFrixionProblem.Empty;
 
+    public RestApiResponse(HttpStatusCode statusCode)
+    {
+        StatusCode = statusCode;
+    }
+    
     public RestApiResponse(HttpStatusCode statusCode, Uri? requestUri, HttpResponseHeaders headers)
     {
         StatusCode = statusCode;

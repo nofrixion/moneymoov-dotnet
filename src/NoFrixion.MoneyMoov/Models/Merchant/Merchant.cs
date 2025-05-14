@@ -116,20 +116,15 @@ public class Merchant
     /// </summary>
     public List<PaymentMethodTypeEnum> SupportedPaymentMethodsList { get; set; } = new List<PaymentMethodTypeEnum>();
 
-    /// <summary>
-    /// The role of the identity that loaded the merchant record.
-    /// </summary>
-    public UserRolesEnum YourRole { get; set; } = UserRolesEnum.NewlyRegistered;
-
+    // /// <summary>
+    // /// The role of the identity that loaded the merchant record.
+    // /// </summary>
+    // public UserRolesEnum YourRole { get; set; } = UserRolesEnum.NewlyRegistered;
+    //
     /// <summary>
     /// The name of the role for the identity that loaded the merchant record.
     /// </summary>
     public string? YourRoleName { get; set; }
-
-    /// <summary>
-    /// The list of users that have been assigned a role on the merchant.
-    /// </summary>
-    public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
     /// <summary>
     /// An optional list of descriptive tags that can be used on merchant entities

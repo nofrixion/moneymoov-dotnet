@@ -190,14 +190,6 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     public Guid? CurrentUserID { get; set; }
 
     /// <summary>
-    /// The role of the user that requested access to the PayOut record. Note
-    /// this is NOT necessarily the user that created it. For example one user
-    /// may create the payout and then a different user will load the record to
-    /// approve it.
-    /// </summary>
-    public UserRolesEnum? CurrentUserRole { get; set; }
-
-    /// <summary>
     /// This field is used when returning an payout record to a client. If set it holds the URL
     /// the user needs to visit in order to complete a strong authentication check in order to approve 
     /// the payout.
