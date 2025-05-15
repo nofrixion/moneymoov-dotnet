@@ -26,6 +26,10 @@ public class PaymentRequestMinimal
     public string? MerchantName { get; set; }
 
     public string? MerchantShortName { get; set; }
+    
+    public string? MerchantLogoUrlPng { get; set; }
+    
+    public string? MerchantLogoUrlSvg { get; set; }
 
     /// <summary>
     /// The amount of money to request.

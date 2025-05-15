@@ -125,6 +125,16 @@ public class Merchant
     /// The name of the role for the identity that loaded the merchant record.
     /// </summary>
     public string? YourRoleName { get; set; }
+    
+    /// <summary>
+    /// The CDN URL of the merchant's logo in PNG format.
+    /// </summary>
+    public string? LogoUrlPng { get; set; }
+    
+    /// <summary>
+    /// The CDN URL of the merchant's logo in SVG format.
+    /// </summary>
+    public string? LogoUrlSvg { get; set; }
 
     /// <summary>
     /// The list of users that have been assigned a role on the merchant.
