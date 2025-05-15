@@ -38,9 +38,9 @@ public class PaymentRequestCustomFieldCreate
     public bool DisplayToPayer { get; set; }
     
     /// <summary>
-    /// The priority of the custom field. The higher the number, the higher the priority.
+    /// The sequence number of the custom field. The lowest number is displayed first.
     /// This is used to determine the order in which the custom fields are displayed
     /// on the UI, for example, on the hosted payment page and payment receipt.
     /// </summary>
-    public int Priority { get; set; }
+    public int SequenceNumber { get; set; }
 }

@@ -23,5 +23,5 @@ public class PaymentRequestCustomField
     
     public bool DisplayToPayer { get; set; }
     
-    public int Priority { get; set; }
+    public int SequenceNumber { get; set; }
 }
