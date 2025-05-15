@@ -174,7 +174,7 @@ public class MerchantClient : IMerchantClient
     {
         var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantAccountsUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
-        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetUserRolesAsync));
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetAccountsAsync));
 
         return prob switch
         {
@@ -194,7 +194,7 @@ public class MerchantClient : IMerchantClient
     {
         var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantUserInvitesUrl(_apiClient.GetBaseUri().ToString(), merchantID);
 
-        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetUserRolesAsync));
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetUserInvitesAsync));
 
         return prob switch
         {
