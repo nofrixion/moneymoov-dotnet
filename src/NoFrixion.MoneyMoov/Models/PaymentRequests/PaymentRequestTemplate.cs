@@ -113,11 +113,11 @@ public class PaymentRequestTemplateCustomField: PaymentRequestTemplateFieldOptio
     public required string Description { get; set; }
     
     /// <summary>
-    /// The sequence number of the custom field. The lowest number is displayed first.
+    /// The display order of the custom field. The lowest number is displayed first.
     /// This can be used to determine the order in which
     /// the fields are displayed when creating a payment request.
     /// </summary>
-    public int SequenceNumber { get; set; }
+    public int DisplayOrder { get; set; }
 }
 
 public abstract class PaymentRequestTemplateFieldOptions
