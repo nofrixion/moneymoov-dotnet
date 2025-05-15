@@ -78,8 +78,11 @@ public enum MerchantPermissions : ulong
     CanDeletePayruns = 1L << 16,
     
     // User roles
+    [Obsolete]
     CanViewUserRoles = 1L << 17,
+    [Obsolete]
     CanDeleteUserRoles = 1L << 18,
+    [Obsolete]
     CanAssignUserRoles = 1L << 19,
     
     // Users
