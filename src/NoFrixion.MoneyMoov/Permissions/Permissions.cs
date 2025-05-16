@@ -120,6 +120,8 @@ public enum MerchantPermissions : ulong
     CanViewXeroConnection = 1L << 37,
     CanUpdateXeroConnection = 1L << 38,
     CanDeleteXeroConnection = 1L << 39,
+    
+    InviteAccepted = 1L << 40,
 }
 
 public static class ClaimTypePrefixes
