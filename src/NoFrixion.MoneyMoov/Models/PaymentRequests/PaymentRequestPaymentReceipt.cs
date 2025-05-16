@@ -22,6 +22,10 @@ public class PaymentRequestPaymentReceipt
     public required string MerchantName { get; set; }
     
     public string? MerchantShortName { get; set; }
+    
+    public string? MerchantLogoUrlPng { get; set; }
+    
+    public string? MerchantLogoUrlSvg { get; set; }
 
     public required string MerchantDisplayAddress { get; set; }
 
@@ -42,8 +46,6 @@ public class PaymentRequestPaymentReceipt
     public List<PaymentRequestCustomField>? CustomFields { get; set; }
 
     public string? CustomerName { get; set; }
-
-    public string? MerchantLogoUrl { get; set; }
 
     public string? Title { get; set; }
 
