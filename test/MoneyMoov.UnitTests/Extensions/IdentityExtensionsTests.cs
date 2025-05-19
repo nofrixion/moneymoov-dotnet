@@ -17,6 +17,7 @@ public class IdentityExtensionsTests
 
         var identity = new ClaimsIdentity(new[]
         {
+            new Claim(ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.use_permissions, true.ToString()),
             new Claim($"{ClaimTypePrefixes.MERCHANT}.{merchantID}", merchantPermissions),
         });
 
@@ -39,6 +40,7 @@ public class IdentityExtensionsTests
 
         var identity = new ClaimsIdentity(new[]
         {
+            new Claim(ClaimsConstants.NOFRIXION_CLAIMS_NAMESPACE + NoFrixionClaimsEnum.use_permissions, true.ToString()),
             new Claim($"{ClaimTypePrefixes.MERCHANT}.{merchantID}", merchantPermissions),
         });
 

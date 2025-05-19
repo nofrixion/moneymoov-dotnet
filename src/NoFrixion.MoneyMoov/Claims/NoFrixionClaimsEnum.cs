@@ -96,8 +96,6 @@ public enum NoFrixionClaimsEnum
     
     appid,
     
-    use_standard_user_roles,
-    
     use_permissions,
 
     /// <summary>

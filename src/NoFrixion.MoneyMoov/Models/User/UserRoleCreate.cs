@@ -23,8 +23,6 @@ public class UserRoleCreate
 
     public string? EmailAddress { get; set; }
 
-    public UserRolesEnum UserRole { get; set; }
-
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (MerchantID == Guid.Empty)

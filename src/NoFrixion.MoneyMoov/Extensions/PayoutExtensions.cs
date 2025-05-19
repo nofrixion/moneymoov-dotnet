@@ -48,7 +48,6 @@ public static class PayoutExtensions
             payout.MerchantTokenDescription ?? "",
             payout.Status.ToString(),
             payout.CurrentUserID?.ToString() ?? "", // Mapped from ExportedByUserID
-            payout.CurrentUserRole?.ToString() ?? "", // Mapped from ExportedByUserRole
             payout.ApprovePayoutUrl ?? "", // Mapped from AuthoriseUrl
             payout.CreatedBy ?? "", // Mapped from CreatedByUserName
             payout.CreatedByEmailAddress ?? "",
