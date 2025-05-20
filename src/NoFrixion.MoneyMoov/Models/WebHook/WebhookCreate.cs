@@ -62,6 +62,11 @@ public class WebhookCreate : IValidatableObject
 
     public string? EmailAddress { get; set; }
 
+    /// <summary>
+    /// The email address to which notifications about failed webhook deliveries will be sent.
+    /// </summary>
+    public string? FailedNotificationEmailAddress { get; set; }
+
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (Secret?.Length > SECRET_MAX_LENGTH)
