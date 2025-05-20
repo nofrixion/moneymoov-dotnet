@@ -13,6 +13,7 @@
 // MIT.
 //-----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -60,13 +61,13 @@ public class WebhookCreate : IValidatableObject
 
     public bool IsActive { get; set; } = true;
 
-    [EmailAddress]
+    [EmailAddressMultiple(ErrorMessage = "One or more of the email addresses are invalid. Addresses can be separated by a comma, semi-colon or space.")]
     public string? EmailAddress { get; set; }
 
     /// <summary>
     /// The email address to which notifications about failed webhook deliveries will be sent.
     /// </summary>
-    [EmailAddress]
+    [EmailAddressMultiple(ErrorMessage = "One or more of the email addresses are invalid. Addresses can be separated by a comma, semi-colon or space.")]
     public string? FailedNotificationEmailAddress { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
