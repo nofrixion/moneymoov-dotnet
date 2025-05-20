@@ -50,7 +50,12 @@ public class Webhook
     public string? EmailAddress { get; set; }
 
     public int Version { get; set; }
-    
+
+    /// <summary>
+    /// The email address to which notifications about failed webhook deliveries will be sent.
+    /// </summary>
+    public string? FailedNotificationEmailAddress { get; set; }
+
     /// <summary>
     /// The ID of the merchant that the webhook is for.
     /// </summary>
