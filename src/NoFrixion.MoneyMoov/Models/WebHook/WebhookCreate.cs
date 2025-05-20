@@ -60,11 +60,13 @@ public class WebhookCreate : IValidatableObject
 
     public bool IsActive { get; set; } = true;
 
+    [EmailAddress]
     public string? EmailAddress { get; set; }
 
     /// <summary>
     /// The email address to which notifications about failed webhook deliveries will be sent.
     /// </summary>
+    [EmailAddress]
     public string? FailedNotificationEmailAddress { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -95,7 +97,8 @@ public class WebhookCreate : IValidatableObject
             { nameof(Retry), Retry.ToString() },
             { nameof(Secret), Secret ?? string.Empty },
             { nameof(IsActive), IsActive.ToString() },
-            { nameof(EmailAddress), EmailAddress ?? string.Empty }
+            { nameof(EmailAddress), EmailAddress ?? string.Empty },
+            { nameof(FailedNotificationEmailAddress), FailedNotificationEmailAddress ?? string.Empty }
         };
 
         if (ResourceTypes?.Count() > 0)
