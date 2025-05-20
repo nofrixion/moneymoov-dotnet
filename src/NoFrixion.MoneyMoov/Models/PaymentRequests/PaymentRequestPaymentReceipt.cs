@@ -47,7 +47,7 @@ public class PaymentRequestPaymentReceipt
 
     public string? Description { get; set; }
     
-    public required string CustomerEmailAddress { get; set; }
+    public string? CustomerEmailAddress { get; set; }
 
     public bool ShowDescriptionInEmail => !string.IsNullOrWhiteSpace(Description) ||
                                           !string.IsNullOrWhiteSpace(Title);
