@@ -149,6 +149,26 @@ public class PaymentRequestPaymentAttempt
     public DateTimeOffset? PispAuthorisationFailedAt { get; set; }
 
     public PaymentResultEnum Status => this.GetPaymentAttemptStatus();
+    
+    /// <summary>
+    /// True once the attempt has actually been paid (card authorised or settled).
+    /// </summary>
+    public bool IsPaid => CardAuthorisedAt.HasValue || SettledAt.HasValue;
+
+    /// <summary>
+    /// The time the payment went through (card authorisation time or settlement time).
+    /// </summary>
+    public DateTimeOffset? PaidAt => CardAuthorisedAt
+                                                  ?? SettledAt;
+
+    /// <summary>
+    /// The amount that was actually paid.
+    /// </summary>
+    public decimal PaidAmount => CardAuthorisedAt.HasValue 
+        ? CardAuthorisedAmount 
+        : SettledAt.HasValue 
+            ? SettledAmount 
+            : 0;
 }
 
 
