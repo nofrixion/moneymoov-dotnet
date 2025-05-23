@@ -98,6 +98,8 @@ public class Payrun : IWebhookPayload
     
     public string? Nonce { get; set; }
     
+    public List<Guid>? InvoiceIds { get; set; }
+    
     /// <summary>
     /// Gets a hash of the critical fields for the payrun. This hash is
     /// used to ensure a payrun's details are not modified between the time the
