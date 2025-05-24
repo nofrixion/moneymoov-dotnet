@@ -325,8 +325,8 @@ public class PaymentRequestUpdate
                 dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].{nameof(customField.Name)}", customField.Name!);
                 dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].{nameof(customField.Value)}",
                     customField.Value!);
-                dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].{nameof(customField.DisplayToPayer)}",
-                    customField.DisplayToPayer.ToString());
+                dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].{nameof(customField.DisplayForPayer)}",
+                    customField.DisplayForPayer.ToString());
                 customFieldNumber++;
             }
         }
