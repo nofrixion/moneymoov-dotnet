@@ -278,6 +278,11 @@ public class PaymentRequestUpdate
     public List<PaymentRequestCustomFieldCreate>? CustomFields { get; set; }
     
     /// <summary>
+    /// The due date of the payment request.
+    /// </summary>
+    public DateTimeOffset? DueDate { get; set; }
+    
+    /// <summary>
     /// Places all the payment request's properties into a dictionary. Useful for testing
     /// when HTML form encoding is required.
     /// </summary>
@@ -316,6 +321,7 @@ public class PaymentRequestUpdate
         if (Title != null) dict.Add(nameof(Title), Title);
         if (PartialPaymentSteps != null) dict.Add(nameof(PartialPaymentSteps), PartialPaymentSteps);
         if(AutoSendReceipt != null) dict.Add(nameof(AutoSendReceipt), AutoSendReceipt.Value.ToString());
+        if(DueDate != null) dict.Add(nameof(DueDate), DueDate.Value.ToString());
         if (CustomFields != null && CustomFields.Count > 0)
         {
             var customFieldNumber = 0;

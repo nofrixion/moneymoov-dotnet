@@ -137,4 +137,9 @@ public class PaymentRequestMinimal
     /// Custom fields to display to the customer.
     /// </summary>
     public List<PaymentRequestCustomField> CustomFieldsToDisplay { get; set; } = [];
+    
+    /// <summary>
+    /// The due date of the payment request.
+    /// </summary>
+    public DateTimeOffset? DueDate { get; set; }
 }
