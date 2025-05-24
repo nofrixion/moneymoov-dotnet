@@ -137,4 +137,9 @@ public class PaymentRequestMinimal
     /// Custom fields to display to the customer.
     /// </summary>
     public List<PaymentRequestCustomField> CustomFieldsToDisplay { get; set; } = [];
+    
+    /// <summary>
+    /// The payment request template if any that this payment request is based on.
+    /// </summary>
+    public PaymentRequestTemplate? Template { get; set; }
 }
