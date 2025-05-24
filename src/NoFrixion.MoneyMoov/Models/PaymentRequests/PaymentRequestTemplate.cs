@@ -51,7 +51,8 @@ public enum PaymentRequestDefaultFieldsEnum
     None,
     Description,
     Customer,
-    DestinationAccount
+    DestinationAccount,
+    DueDate,
 }
 
 public class PaymentMethods : PaymentOptions

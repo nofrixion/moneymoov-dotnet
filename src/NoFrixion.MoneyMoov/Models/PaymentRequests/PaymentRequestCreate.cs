@@ -372,6 +372,11 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// in the key-value pairs. The API will store the custom fields as is.
     /// </summary>
     public List<PaymentRequestCustomFieldCreate>? CustomFields { get; set; }
+    
+    /// <summary>
+    /// An optional due date for the payment request.
+    /// </summary>
+    public DateTimeOffset? DueDate { get; set; }
 
     public NoFrixionProblem Validate()
     {
@@ -446,6 +451,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(PartialPaymentSteps), PartialPaymentSteps ?? string.Empty);
         dict.Add(nameof(NotificationEmailAddresses), NotificationEmailAddresses ?? string.Empty);
         dict.Add(nameof(AutoSendReceipt), AutoSendReceipt.ToString());
+        dict.Add(nameof(DueDate), DueDate?.ToString() ?? string.Empty);
         // Add custom fields
         if (CustomFields?.Count > 0)
         {
