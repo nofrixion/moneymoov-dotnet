@@ -61,6 +61,8 @@ public class PaymentRequestPaymentReceipt
     public string? LastPaymentAmount { get; set; }
     
     public Guid? LastPaymentRequestEventID { get; set; }
+    
+    public PaymentRequestTemplate? Template { get; set; }
 }
 
 public class PaymentRequestSuccessfulPayment
