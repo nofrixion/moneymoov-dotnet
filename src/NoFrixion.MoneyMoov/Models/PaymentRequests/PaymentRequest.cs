@@ -372,6 +372,11 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload, IExportableToCsv
     /// Sandbox only. Optional. If set, simulated settlements will be delayed by the specified number of seconds.
     /// </summary>
     public int? SandboxSettleDelayInSeconds { get; set; }
+    
+    /// <summary>
+    /// The due date for the payment request.
+    /// </summary>
+    public DateTimeOffset? DueDate { get; set; }
 
     public string CustomerName =>
         Addresses.Any() ? $"{Addresses.First().FirstName} {Addresses.First().LastName}" : string.Empty;
