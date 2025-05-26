@@ -142,4 +142,9 @@ public class PaymentRequestMinimal
     /// The due date of the payment request.
     /// </summary>
     public DateTimeOffset? DueDate { get; set; }
+    
+    /// <summary>
+    /// The payment request template if any that this payment request is based on.
+    /// </summary>
+    public PaymentRequestTemplate? Template { get; set; }
 }
