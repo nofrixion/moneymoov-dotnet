@@ -467,6 +467,16 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// </summary>
     public bool IsSettled { get; set; }
 
+    /// <summary>
+    /// For an FX payout this is the currency to send to the beneficiary.
+    /// </summary>
+    public CurrencyTypeEnum? FxDestinationCurrency { get; set; }
+
+    /// <summary>
+    /// For an FX payout this is the exchange rate to use for the payout.
+    /// </summary>
+    public decimal? FxRate { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
