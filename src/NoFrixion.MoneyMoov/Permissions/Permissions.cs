@@ -122,6 +122,12 @@ public enum MerchantPermissions : ulong
     CanDeleteXeroConnection = 1L << 39,
     
     InviteAccepted = 1L << 40,
+    
+    // Payment request templates
+    CanCreatePaymentRequestTemplates = 1L << 41,
+    CanViewPaymentRequestTemplates = 1L << 42,
+    CanUpdatePaymentRequestTemplates = 1L << 43,
+    CanDeletePaymentRequestTemplates = 1L << 44,
 }
 
 public static class ClaimTypePrefixes
