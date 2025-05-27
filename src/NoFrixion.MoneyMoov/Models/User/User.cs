@@ -34,8 +34,6 @@ public class User
     [EmailAddress]
     public string EmailAddress { get; set; } = string.Empty;
 
-    public List<UserRole> Roles { get; set; } = new List<UserRole>();
-    
     public bool TwoFactorEnabled { get; set; }
     
     public bool PasskeyAdded { get; set; }

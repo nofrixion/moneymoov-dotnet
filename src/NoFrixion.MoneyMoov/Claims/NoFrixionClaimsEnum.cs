@@ -96,8 +96,6 @@ public enum NoFrixionClaimsEnum
     
     appid,
     
-    use_standard_user_roles,
-    
     use_permissions,
 
     /// <summary>
@@ -113,5 +111,10 @@ public enum NoFrixionClaimsEnum
     /// <summary>
     /// If set indicates the request was authenticated by a signed (HMAC or public key) merchant token.
     /// </summary>
-    merchant_token_signed
+    merchant_token_signed,
+
+    /// <summary>
+    /// Set to true if the authenticated identity is for a NoFrixion operations manager.
+    /// </summary>
+    isoperationsmanager,
 }

@@ -13,6 +13,8 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Models.PaymentRequests;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class PaymentRequestMinimal
@@ -24,6 +26,10 @@ public class PaymentRequestMinimal
     public string? MerchantName { get; set; }
 
     public string? MerchantShortName { get; set; }
+    
+    public string? MerchantLogoUrlPng { get; set; }
+    
+    public string? MerchantLogoUrlSvg { get; set; }
 
     /// <summary>
     /// The amount of money to request.
@@ -126,4 +132,19 @@ public class PaymentRequestMinimal
     /// </summary>
     [Obsolete("This field is deprecated. Lightning payments are no longer supported.")]
     public DateTimeOffset? LightningInvoiceExpiresAt { get; set; }
+    
+    /// <summary>
+    /// Custom fields to display to the customer.
+    /// </summary>
+    public List<PaymentRequestCustomField> CustomFieldsToDisplay { get; set; } = [];
+    
+    /// <summary>
+    /// The due date of the payment request.
+    /// </summary>
+    public DateTimeOffset? DueDate { get; set; }
+    
+    /// <summary>
+    /// The payment request template if any that this payment request is based on.
+    /// </summary>
+    public PaymentRequestTemplate? Template { get; set; }
 }

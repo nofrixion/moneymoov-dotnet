@@ -78,8 +78,11 @@ public enum MerchantPermissions : ulong
     CanDeletePayruns = 1L << 16,
     
     // User roles
+    [Obsolete]
     CanViewUserRoles = 1L << 17,
+    [Obsolete]
     CanDeleteUserRoles = 1L << 18,
+    [Obsolete]
     CanAssignUserRoles = 1L << 19,
     
     // Users
@@ -117,6 +120,14 @@ public enum MerchantPermissions : ulong
     CanViewXeroConnection = 1L << 37,
     CanUpdateXeroConnection = 1L << 38,
     CanDeleteXeroConnection = 1L << 39,
+    
+    InviteAccepted = 1L << 40,
+    
+    // Payment request templates
+    CanCreatePaymentRequestTemplates = 1L << 41,
+    CanViewPaymentRequestTemplates = 1L << 42,
+    CanUpdatePaymentRequestTemplates = 1L << 43,
+    CanDeletePaymentRequestTemplates = 1L << 44,
 }
 
 public static class ClaimTypePrefixes

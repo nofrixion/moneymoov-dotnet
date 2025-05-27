@@ -1940,4 +1940,248 @@ public class PaymentRequestResultTests
         Assert.Equal(PaymentResultEnum.PartiallyPaid, result.Result);
         Assert.Equal(entity.Amount/2, result.Payments.Sum(x=>x.RefundedAmount));
     }
+
+    /// <summary>
+    /// Checks that a paid DD correctly transitions to FullyPaid.
+    /// </summary>
+    [Fact]
+    public void Direct_Debit_Paid_FullyPaid()
+    {
+        var entity = GetTestPaymentRequest();
+
+        entity.Amount = 100;
+
+        var ddPaymentReference = Guid.NewGuid().ToString();
+
+        var initiateEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.direct_debit_initiate,
+            Status = "INITIATED",
+            PaymentProcessorName = PaymentProcessorsEnum.BankingCircleDirectDebit
+        };
+
+        var createdEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.direct_debit_create,
+            Status = "created",
+            PaymentProcessorName = PaymentProcessorsEnum.BankingCircleDirectDebit,
+            DirectDebitPaymentReference = ddPaymentReference
+        };
+
+        var paidEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.direct_debit_paid,
+            Status = "paid",
+            PaymentProcessorName = PaymentProcessorsEnum.BankingCircleDirectDebit,
+            DirectDebitPaymentReference = ddPaymentReference
+        };
+
+        entity.Events = new List<PaymentRequestEvent> { initiateEvent, createdEvent, paidEvent };
+
+        var result = new PaymentRequestResult(entity);
+
+        Assert.Equal(entity.Amount, result.Amount);
+        Assert.Equal(0, result.PispAmountAuthorized());
+        Assert.Equal(0, result.AmountOutstanding());
+        Assert.Equal(entity.Currency, result.Currency);
+        Assert.Equal(PaymentResultEnum.FullyPaid, result.Result);
+    }
+
+    /// <summary>
+    /// Checks that a paid DD that is subsequently charged back correctly transitions to None.
+    /// </summary>
+    [Fact]
+    public void Direct_Debit_Paid_And_ChargedBack_Status_Is_None()
+    {
+        var entity = GetTestPaymentRequest();
+
+        entity.Amount = 100;
+
+        var ddPaymentReference = Guid.NewGuid().ToString();
+        
+        var initiateEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.direct_debit_initiate,
+            Status = "INITIATED",
+            PaymentProcessorName = PaymentProcessorsEnum.BankingCircleDirectDebit
+        };
+
+        var createdEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.direct_debit_create,
+            Status = "created",
+            PaymentProcessorName = PaymentProcessorsEnum.BankingCircleDirectDebit,
+            DirectDebitPaymentReference = ddPaymentReference
+        };
+
+        var paidEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.direct_debit_paid,
+            Status = "paid",
+            PaymentProcessorName = PaymentProcessorsEnum.BankingCircleDirectDebit,
+            DirectDebitPaymentReference = ddPaymentReference
+        };
+
+        var chargedBackEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount * -1,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.direct_debit_failed,
+            Status = "chargedBack",
+            PaymentProcessorName = PaymentProcessorsEnum.BankingCircleDirectDebit,
+            DirectDebitPaymentReference = ddPaymentReference
+        };
+
+        entity.Events = new List<PaymentRequestEvent> { initiateEvent, createdEvent, paidEvent, chargedBackEvent };
+
+        var result = new PaymentRequestResult(entity);
+
+        Assert.Equal(0, result.Amount);
+        Assert.Equal(0, result.PispAmountAuthorized());
+        Assert.Equal(entity.Amount, result.AmountOutstanding());
+        Assert.Equal(entity.Currency, result.Currency);
+        Assert.Equal(PaymentResultEnum.None, result.Result);
+    }
+
+    /// <summary>
+    /// Checks that a DD created event sequence sets the payment request to Authorized.
+    /// </summary>
+    [Fact]
+    public void Direct_Debit_Created_Authorized()
+    {
+        var entity = GetTestPaymentRequest();
+
+        entity.Amount = 100;
+
+        var ddPaymentReference = Guid.NewGuid().ToString();
+
+        var initiateEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.direct_debit_initiate,
+            Status = "INITIATED",
+            PaymentProcessorName = PaymentProcessorsEnum.BankingCircleDirectDebit
+        };
+
+        var createdEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.direct_debit_create,
+            Status = "created",
+            PaymentProcessorName = PaymentProcessorsEnum.BankingCircleDirectDebit,
+            DirectDebitPaymentReference = ddPaymentReference
+        };
+
+        entity.Events = new List<PaymentRequestEvent> { initiateEvent, createdEvent };
+
+        var result = new PaymentRequestResult(entity);
+
+        Assert.Equal(0, result.Amount);
+        Assert.Equal(entity.Amount, result.PispAmountAuthorized());
+        Assert.Equal(0, result.AmountOutstanding());
+        Assert.Equal(entity.Currency, result.Currency);
+        Assert.Equal(PaymentResultEnum.Authorized, result.Result);
+    }
+
+    /// <summary>
+    /// Checks that a DD charge back event sequence sets the payment request back to a None status.
+    /// </summary>
+    [Fact]
+    public void Direct_Debit_Not_Paid_ChargedBack_Status_Is_None()
+    {
+        var entity = GetTestPaymentRequest();
+
+        entity.Amount = 100;
+
+        var ddPaymentReference = Guid.NewGuid().ToString();
+
+        var initiateEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.direct_debit_initiate,
+            Status = "INITIATED",
+            PaymentProcessorName = PaymentProcessorsEnum.BankingCircleDirectDebit
+        };
+
+        var createdEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.direct_debit_create,
+            Status = "created",
+            PaymentProcessorName = PaymentProcessorsEnum.BankingCircleDirectDebit,
+            DirectDebitPaymentReference = ddPaymentReference
+        };
+
+        var chargedBackEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount * -1,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.direct_debit_failed,
+            Status = "chargedBack",
+            PaymentProcessorName = PaymentProcessorsEnum.BankingCircleDirectDebit,
+            DirectDebitPaymentReference = ddPaymentReference
+        };
+
+        entity.Events = new List<PaymentRequestEvent> { initiateEvent, createdEvent, chargedBackEvent };
+
+        var result = new PaymentRequestResult(entity);
+
+        Assert.Equal(0, result.Amount);
+        Assert.Equal(0, result.PispAmountAuthorized());
+        Assert.Equal(entity.Amount, result.AmountOutstanding());
+        Assert.Equal(entity.Currency, result.Currency);
+        Assert.Equal(PaymentResultEnum.None, result.Result);
+    }
 }

@@ -17,6 +17,7 @@
 using NoFrixion.MoneyMoov.Enums;
 using NoFrixion.MoneyMoov.Extensions;
 using NoFrixion.MoneyMoov.Models.Approve;
+using NoFrixion.MoneyMoov.Models.Invoices;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -97,6 +98,8 @@ public class Payrun : IWebhookPayload
     public List<Authorisation>? Authorisations { get; set; }
     
     public string? Nonce { get; set; }
+    
+    public List<PayrunInvoiceMinimal>? InvoicesMinimal { get; set; }
     
     /// <summary>
     /// Gets a hash of the critical fields for the payrun. This hash is
