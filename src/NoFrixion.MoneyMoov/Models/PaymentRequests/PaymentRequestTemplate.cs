@@ -187,6 +187,12 @@ public class DefaultPaymentRequestTemplate
             {
                 Requirement = FieldRequirement.Hidden,
                 DefaultField = PaymentRequestDefaultFieldsEnum.DestinationAccount
+            },
+            new PaymentRequestTemplateDefaultField
+            {
+                Requirement = FieldRequirement.Optional,
+                DisplayForPayer = true,
+                DefaultField = PaymentRequestDefaultFieldsEnum.DueDate
             }
         ]
     };
