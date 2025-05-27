@@ -486,6 +486,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload, IExportableToCsv
                 pa.PaymentMethod switch
                 {
                     PaymentMethodTypeEnum.pisp => pa.AuthorisedAmount - pa.SettledAmount,
+                    PaymentMethodTypeEnum.directDebit => pa.AuthorisedAmount - pa.SettledAmount,
                     _ => 0
                 });
     }
