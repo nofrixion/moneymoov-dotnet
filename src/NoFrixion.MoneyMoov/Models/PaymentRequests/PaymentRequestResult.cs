@@ -82,7 +82,7 @@ public class PaymentRequestResult
     /// <summary>
     /// Status for when a mandate has been successfully created in the Banking Circle Direct Debit API.
     /// </summary>
-    public const string PISP_BANKINGCIRCLE_DIRECTDEBIT_CREATED_STATUS = "created";
+    public const string BANKINGCIRCLE_DIRECTDEBIT_CREATED_STATUS = "created";
 
     /// <summary>
     /// The ID of the payment request the result is for.
