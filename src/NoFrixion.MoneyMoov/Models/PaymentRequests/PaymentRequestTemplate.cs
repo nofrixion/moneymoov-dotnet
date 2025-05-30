@@ -194,6 +194,7 @@ public class DefaultPaymentRequestTemplate
                 DisplayForPayer = true,
                 DefaultField = PaymentRequestDefaultFieldsEnum.DueDate
             }
-        ]
+        ],
+        CustomFields = []
     };
 }
