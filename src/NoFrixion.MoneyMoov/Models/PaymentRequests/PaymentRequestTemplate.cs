@@ -167,6 +167,10 @@ public class DefaultPaymentRequestTemplate
         {
             DestinationAccounts = null,
         },
+        PriorityBankOptions = new PriorityBankOptions()
+        {
+            PriorityBank = null
+        },
         CardPaymentAddressOptions = new CardPaymentAddressOptions
         {
             RequireAddress = false
@@ -199,6 +203,7 @@ public class DefaultPaymentRequestTemplate
                 DisplayForPayer = true,
                 DefaultField = PaymentRequestDefaultFieldsEnum.DueDate
             }
-        ]
+        ],
+        CustomFields = []
     };
 }
