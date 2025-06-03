@@ -136,7 +136,10 @@ public static class MoneyMoovUrlBuilder
         
         public static string MerchantRolesUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.roles}";
-        
+
+        public static string MerchantRoleUrl(string moneyMoovBaseUrl, Guid merchantID, Guid roleID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.roles}/{roleID}";
+
         public static string MerchantRoleUsersUrl(string moneyMoovBaseUrl, Guid merchantID, Guid roleID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.roles}/{roleID}/{MoneyMoovResources.users}";
         
