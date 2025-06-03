@@ -25,6 +25,8 @@ public class PaymentRequestTemplate
     
     public BankPaymentOptions BankPaymentOptions { get; set; } = null!;
     
+    public PriorityBankOptions PriorityBankOptions { get; set; } = null!;
+    
     public CardPaymentAddressOptions CardPaymentAddressOptions { get; set; } = null!;
     
     public CardPaymentCaptureOptions CardPaymentCaptureOptions { get; set; } = null!;
@@ -83,7 +85,10 @@ public class NotificationOptions : PaymentOptions
 public class BankPaymentOptions : PaymentOptions
 {
     public Dictionary<CurrencyTypeEnum, Guid>? DestinationAccounts { get; set; }
-    
+}
+
+public class PriorityBankOptions : PaymentOptions
+{
     public string? PriorityBank { get; set; }
 }
 
