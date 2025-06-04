@@ -377,6 +377,12 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// An optional due date for the payment request.
     /// </summary>
     public DateTimeOffset? DueDate { get; set; }
+    
+    /// <summary>
+    /// An optional display settings for the payment request fields. This allows the merchant to control how
+    /// the fields are displayed on the hosted payment page, receipt, etc.
+    /// </summary>
+    public List<PaymentRequestFieldDisplaySetting>? FieldDisplaySettings { get; set; }
 
     public NoFrixionProblem Validate()
     {
