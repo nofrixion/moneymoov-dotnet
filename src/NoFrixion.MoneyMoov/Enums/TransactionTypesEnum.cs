@@ -93,5 +93,10 @@ public enum TransactionTypesEnum
     SEPA_DD_REJECT = 14,
 
     [Display(Name = "Cross Border")]
-    CROSS_BORDER = 15
+    CROSS_BORDER = 15,
+
+    /// <summary>
+    /// The UK, Bankers Automated Clearing House network.
+    /// </summary>
+    UK_CHAPS = 16
 }
