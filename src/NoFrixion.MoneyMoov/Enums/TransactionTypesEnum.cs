@@ -96,7 +96,7 @@ public enum TransactionTypesEnum
     CROSS_BORDER = 15,
 
     /// <summary>
-    /// The UK, Bankers Automated Clearing House network.
+    /// The UK, Clearing House Automated Payment System network.
     /// </summary>
     UK_CHAPS = 16
 }
