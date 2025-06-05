@@ -62,7 +62,7 @@ public class PaymentRequestPaymentReceipt
     
     public Guid? LastPaymentRequestEventID { get; set; }
     
-    public PaymentRequestTemplate? Template { get; set; }
+    public List<PaymentRequestFieldDisplaySetting>? FieldDisplaySettings { get; set; }
 }
 
 public class PaymentRequestSuccessfulPayment

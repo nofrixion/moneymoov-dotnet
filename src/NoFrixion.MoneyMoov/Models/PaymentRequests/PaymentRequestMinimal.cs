@@ -143,8 +143,5 @@ public class PaymentRequestMinimal
     /// </summary>
     public DateTimeOffset? DueDate { get; set; }
     
-    /// <summary>
-    /// The payment request template if any that this payment request is based on.
-    /// </summary>
-    public PaymentRequestTemplate? Template { get; set; }
+    public List<PaymentRequestFieldDisplaySetting> FieldDisplaySettings { get; set; } = [];
 }
