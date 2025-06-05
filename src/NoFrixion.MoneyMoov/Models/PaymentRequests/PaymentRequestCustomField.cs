@@ -21,7 +21,9 @@ public class PaymentRequestCustomField
     
     public required string Value { get; set; }
     
-    public bool DisplayForPayer { get; set; }
+    public bool DisplayOnHostedPaymentPage { get; set; }
+    
+    public bool DisplayOnPaymentReceipt { get; set; }
     
     public int DisplayOrder { get; set; }
 }

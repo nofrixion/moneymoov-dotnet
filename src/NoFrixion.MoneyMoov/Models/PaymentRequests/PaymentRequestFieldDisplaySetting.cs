@@ -19,7 +19,18 @@ namespace NoFrixion.MoneyMoov.Models.PaymentRequests;
 
 public class PaymentRequestFieldDisplaySetting
 {
+    /// <summary>
+    /// The field for which the display settings are defined.
+    /// </summary>
     public PaymentRequestPayerVisibleFieldsEnum Field { get; set; }
     
-    public bool DisplayForPayer { get; set; }
+    /// <summary>
+    /// If false, the field will not be displayed on the hosted payment page.
+    /// </summary>
+    public bool DisplayOnHostedPaymentPage { get; set; }
+    
+    /// <summary>
+    /// If false, the field will not be displayed on the payment receipt.
+    /// </summary>
+    public bool DisplayOnPaymentReceipt { get; set; }
 }
