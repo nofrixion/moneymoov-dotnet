@@ -128,8 +128,10 @@ public class PaymentRequestTemplateCustomField: PaymentRequestTemplateFieldOptio
 
 public abstract class PaymentRequestTemplateFieldOptions
 {
-    public bool DisplayForPayer { get; set; }
-
+    public bool DisplayOnHostedPaymentPage { get; set; }
+    
+    public bool DisplayOnPaymentReceipt { get; set; }
+    
     public FieldRequirement Requirement { get; set; }
 }
 
@@ -180,13 +182,15 @@ public class DefaultPaymentRequestTemplate
             new PaymentRequestTemplateDefaultField
             {
                 Requirement = FieldRequirement.Optional,
-                DisplayForPayer = true,
+                DisplayOnHostedPaymentPage = true,
+                DisplayOnPaymentReceipt = true,
                 DefaultField = PaymentRequestDefaultFieldsEnum.Description
             },
             new PaymentRequestTemplateDefaultField
             {
                 Requirement = FieldRequirement.Optional,
-                DefaultField = PaymentRequestDefaultFieldsEnum.Customer
+                DefaultField = PaymentRequestDefaultFieldsEnum.Customer,
+                DisplayOnPaymentReceipt = true
             },
             new PaymentRequestTemplateDefaultField
             {
@@ -196,7 +200,7 @@ public class DefaultPaymentRequestTemplate
             new PaymentRequestTemplateDefaultField
             {
                 Requirement = FieldRequirement.Optional,
-                DisplayForPayer = true,
+                DisplayOnHostedPaymentPage = true,
                 DefaultField = PaymentRequestDefaultFieldsEnum.DueDate
             }
         ]

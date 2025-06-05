@@ -467,8 +467,10 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
             {
                 dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].Name", customField.Name ?? string.Empty);
                 dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].Value", customField.Value ?? string.Empty);
-                dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].DisplayForPayer",
-                    customField.DisplayForPayer.ToString());
+                dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].DisplayOnHostedPaymentPage",
+                    customField.DisplayOnHostedPaymentPage.ToString());
+                dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].DisplayOnPaymentReceipt",
+                    customField.DisplayOnPaymentReceipt.ToString());
                 customFieldNumber++;
             }
         }
