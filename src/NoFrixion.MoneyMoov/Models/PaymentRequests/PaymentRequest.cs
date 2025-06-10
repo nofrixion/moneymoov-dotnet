@@ -382,6 +382,11 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload, IExportableToCsv
     /// A list of field display settings that control which fields are displayed to the payer.
     /// </summary>
     public List<PaymentRequestFieldDisplaySetting>? FieldDisplaySettings { get; set; }
+    
+    /// <summary>
+    /// A list of roles whose members will receive notifications about this payment request.
+    /// </summary>
+    public List<Guid>? NotificationRoleIDs { get; set; }
 
     public string CustomerName =>
         Addresses.Any() ? $"{Addresses.First().FirstName} {Addresses.First().LastName}" : string.Empty;
