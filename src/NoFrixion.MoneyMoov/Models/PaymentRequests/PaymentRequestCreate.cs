@@ -383,6 +383,13 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// the fields are displayed on the hosted payment page, receipt, etc.
     /// </summary>
     public List<PaymentRequestFieldDisplaySetting>? FieldDisplaySettings { get; set; }
+    
+    /// <summary>
+    /// An optional list of notification role IDs that will receive notifications
+    /// about the payment request. This is useful for roles that need to be notified
+    /// about payment request events.
+    /// </summary>
+    public List<Guid>? NotificationRoleIDs { get; set; }
 
     public NoFrixionProblem Validate()
     {
@@ -510,6 +517,16 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
                         break;
                     }
                 }
+            }
+        }
+        
+        if(NotificationRoleIDs?.Count() > 0)
+        {
+            int notificationRoleIdNumber = 0;
+            foreach (var notificationRoleId in NotificationRoleIDs)
+            {
+                dict.Add($"{nameof(NotificationRoleIDs)}[{notificationRoleIdNumber}]", notificationRoleId.ToString());
+                notificationRoleIdNumber++;
             }
         }
 
