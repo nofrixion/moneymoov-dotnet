@@ -167,7 +167,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     [OptionalEmailAddress]
     public string? ShippingEmail { get; set; }
 
-    [Obsolete("Please use BaseOriginUrl.")]
+    [Obsolete("Not required anymore")]
     public string? OriginUrl 
     { 
         get => BaseOriginUrl; 
@@ -179,6 +179,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// A public key context is generated to encrypt sensitive card details and is bound
     /// to a single origin URL.
     /// </summary>
+    [Obsolete("Not required anymore")]
     public string? BaseOriginUrl { get; set; }
 
     /// <summary>
@@ -435,7 +436,9 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(CustomerID), CustomerID ?? string.Empty);
         dict.Add(nameof(OrderID), OrderID ?? string.Empty);
         dict.Add(nameof(Description), Description ?? string.Empty);
+#pragma warning disable CS0618 // Type or member is obsolete
         dict.Add(nameof(BaseOriginUrl), BaseOriginUrl!);
+#pragma warning restore CS0618 // Type or member is obsolete     
         dict.Add(nameof(CallbackUrl), CallbackUrl!);
         dict.Add(nameof(FailureCallbackUrl), FailureCallbackUrl ?? string.Empty);
         dict.Add(nameof(CardAuthorizeOnly), CardAuthorizeOnly.ToString());
