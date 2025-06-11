@@ -135,4 +135,24 @@ public enum MerchantTokenPermissionsEnum
     /// Privileged operation. Permission to view payouts.
     /// </summary>
     ViewPayout = 1 << 21,
+    
+    /// <summary>
+    /// Permission to create a payrun
+    /// </summary>
+    CreatePayrun = 1 << 22,
+
+    /// <summary>
+    /// Permission to view payruns
+    /// </summary>
+    ViewPayrun = 1 << 23,
+    
+    /// <summary>
+    /// Permission to edit a payrun
+    /// </summary>
+    EditPayrun = 1 << 24,
+
+    /// <summary>
+    /// Permission to delete a payrun
+    /// </summary>
+    DeletePayrun = 1 << 25,
 }
