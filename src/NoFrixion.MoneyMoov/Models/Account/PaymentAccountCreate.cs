@@ -69,6 +69,12 @@ public class PaymentAccountCreate
     /// receive funds but the transactions will be recorded aginst the backing physical account.
     /// </summary>
     public Guid? PhysicalAccountID { get; set; }
+    
+    /// <summary>
+    /// Optional property to indicate whether the account is a trust account.
+    /// The account name is displayed on the statement for trust accounts instead of the merchant name.
+    /// </summary>
+    public bool IsTrustAccount { get; set; }
 
     /// <summary>
     /// Places all the payment request's properties into a dictionary.
@@ -85,7 +91,8 @@ public class PaymentAccountCreate
             { nameof(SupplierPhysicalAccountID), SupplierPhysicalAccountID.ToString() },
             { nameof(AccountType), AccountType?.ToString() ?? string.Empty },
             { nameof(TribeAccountId), TribeAccountId ?? string.Empty },
-            { nameof(PhysicalAccountID), PhysicalAccountID?.ToString() ?? string.Empty }
+            { nameof(PhysicalAccountID), PhysicalAccountID?.ToString() ?? string.Empty },
+            {nameof(IsTrustAccount), IsTrustAccount.ToString()}
         };
     }
 }
