@@ -89,7 +89,9 @@ public class BankPaymentOptions : PaymentOptions
 
 public class PriorityBankOptions : PaymentOptions
 {
+    [Obsolete("Use the PriorityBankForEur and PriorityBankForGbp properties instead.")]
     public string? PriorityBank { get; set; }
+    public Dictionary<CurrencyTypeEnum, Guid>? PriorityBankIDs { get; set; }
 }
 
 public class CardPaymentAddressOptions : PaymentOptions
@@ -171,7 +173,7 @@ public class DefaultPaymentRequestTemplate
         },
         PriorityBankOptions = new PriorityBankOptions()
         {
-            PriorityBank = null
+            PriorityBankIDs = null
         },
         CardPaymentAddressOptions = new CardPaymentAddressOptions
         {
