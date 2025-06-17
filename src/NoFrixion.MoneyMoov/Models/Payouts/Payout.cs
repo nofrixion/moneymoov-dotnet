@@ -479,9 +479,12 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     public decimal? FxRate { get; set; }
 
     /// <summary>
+    /// NOTE: This property is not currently being published publicly until some additional live testing has been carried out.
     /// Optional. For an FX payout a value of true indicates the payout amount is in the FX currency. A value of false
     /// indicates the payout amount is in the source account currency.
     /// </summary>
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
     public bool IsAmountInFxCurrency { get; set; } = false;
 
     public NoFrixionProblem Validate()
