@@ -283,6 +283,20 @@ public class PaymentRequestUpdate
     public DateTimeOffset? DueDate { get; set; }
     
     /// <summary>
+    /// If a payment event results in the payment request being classified as fully paid this
+    /// success webhook URL will be invoked. The URL will be invoked as a GET request, i.e.
+    /// there will be no request body. Two query parameters will be added to the URL. The 
+    /// first one will be "id" and will hold the payment request ID. The second one will be
+    /// "orderid" and will hold the payment request OrderID, note the OrderID could be empty
+    /// if it was not set when the payment request was created.
+    /// The recommended approach when receiving a success web hook is to use the "id" parameter
+    /// to call the moneymoov get payment request endpoint to retrieve the full details of the
+    /// payment request and check the status. Web hooks can be easily spoofed and should not be
+    /// relied upon.
+    /// </summary>
+    public string? SuccessWebHookUrl { get; set; }
+    
+    /// <summary>
     /// Places all the payment request's properties into a dictionary. Useful for testing
     /// when HTML form encoding is required.
     /// </summary>
@@ -322,6 +336,7 @@ public class PaymentRequestUpdate
         if (PartialPaymentSteps != null) dict.Add(nameof(PartialPaymentSteps), PartialPaymentSteps);
         if(AutoSendReceipt != null) dict.Add(nameof(AutoSendReceipt), AutoSendReceipt.Value.ToString());
         if(DueDate != null) dict.Add(nameof(DueDate), DueDate.Value.ToString());
+        if (SuccessWebHookUrl != null) dict.Add(nameof(SuccessWebHookUrl), SuccessWebHookUrl);
         if (CustomFields != null && CustomFields.Count > 0)
         {
             var customFieldNumber = 0;
