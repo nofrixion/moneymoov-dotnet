@@ -186,6 +186,17 @@ public class PayoutUpdate
     public PayoutChargeBearerEnum? ChargeBearer { get; set; }
 
     /// <summary>
+    /// Optional. For an FX payout this is the currency that the beneficiary should be sent.
+    /// </summary>
+    public CurrencyTypeEnum? FxDestinationCurrency { get; set; }
+
+    /// <summary>
+    /// Optional. For an FX payout a value of true indicates the amount is in the FX currency. A value of false
+    /// indicates the amount is in the source account currency.
+    /// </summary>
+    public bool? IsAmountInFxCurrency { get; set; } = false;
+
+    /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payout's non-collection properties 
@@ -203,6 +214,8 @@ public class PayoutUpdate
         if (AllowIncomplete != null) dict.Add(nameof(AllowIncomplete), AllowIncomplete.Value.ToString());
         if (PaymentRail != null) dict.Add(nameof(PaymentRail), PaymentRail.Value.ToString());
         if (ChargeBearer != null) dict.Add(nameof(ChargeBearer), ChargeBearer.Value.ToString());
+        if (FxDestinationCurrency != null) dict.Add(nameof(FxDestinationCurrency), FxDestinationCurrency.Value.ToString());
+        if (IsAmountInFxCurrency != null) dict.Add(nameof(IsAmountInFxCurrency), IsAmountInFxCurrency.Value.ToString());
 
         if (Destination != null)
         {

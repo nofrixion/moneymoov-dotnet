@@ -152,6 +152,21 @@ public class Transaction : IWebhookPayload, IExportableToCsv
     /// </summary>
     public Guid? PaymentRequestID { get; set; }
 
+    /// <summary>
+    /// For an FX payout this is the currency that was received or that was instructed.
+    /// </summary>
+    public CurrencyTypeEnum? FxCurrency { get; set; }
+
+    /// <summary>
+    /// For an FX payout this is the amound in the FX currency.
+    /// </summary>
+    public decimal? FxAmount { get; set; }
+
+    /// <summary>
+    /// For an FX payout this is the exchange rate between the transaction currency and the FX currency.
+    /// </summary>
+    public decimal? FxRate { get; set; }
+
     public string CsvHeader() => "ID,AccountID,AccountName,MerchantID,Type,Amount,Currency,Description,TransactionDate,Inserted,YourReference,TheirReference,Counterparty,Balance,RuleID,PayoutID,VirtualIBAN,Tags,AccountSequenceNumber,PaymentRequestID";
     
     public string ToCsvRow()

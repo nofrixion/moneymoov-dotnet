@@ -8,6 +8,7 @@
 //  History:
 //  22 Nov 2021  Arif Matin     Created, Carmichael House, Dublin, Ireland.
 //  12 Dec 2022  Aaron Clauson  Renamed from PortalPayout to Payout.
+//  17 Jun 2025  Aaron Clauson  Added support for implicite FX payouts. 
 // 
 //  License:
 //  MIT.
@@ -476,6 +477,12 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// For an FX payout this is the exchange rate to use for the payout.
     /// </summary>
     public decimal? FxRate { get; set; }
+
+    /// <summary>
+    /// Optional. For an FX payout a value of true indicates the payout amount is in the FX currency. A value of false
+    /// indicates the payout amount is in the source account currency.
+    /// </summary>
+    public bool IsAmountInFxCurrency { get; set; } = false;
 
     public NoFrixionProblem Validate()
     {
