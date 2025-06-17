@@ -244,7 +244,7 @@ public class PayoutCreate
             { nameof(AllowIncomplete), AllowIncomplete.ToString() },
             { nameof(PaymentRail), PaymentRail.ToString() },
             { nameof(ChargeBearer), ChargeBearer.ToString() },
-            {  nameof(IsAmountInFxCurrency), IsAmountInFxCurrency.ToString() }
+            { nameof(IsAmountInFxCurrency), IsAmountInFxCurrency.ToString() }
         };
 
         if (Destination != null)
