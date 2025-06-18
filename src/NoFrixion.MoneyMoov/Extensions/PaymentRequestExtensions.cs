@@ -483,7 +483,8 @@ public static class PaymentRequestExtensions
             paymentRequest.PaymentProcessor.ToString(),
             paymentRequest.Tags != null && paymentRequest.Tags.Count != 0
                 ? string.Join(",", paymentRequest.Tags.Select(t => t.Name))
-                : ""
+                : "",
+            paymentRequest.DueDate?.ToString("o") ?? "",
         };
 
 
