@@ -211,6 +211,20 @@ public class PayoutCreate
     public PayoutChargeBearerEnum ChargeBearer { get; set; }
 
     /// <summary>
+    /// Optional. For an FX payout this is the currency that the beneficiary should be sent.
+    /// </summary>
+    public CurrencyTypeEnum? FxDestinationCurrency { get; set; }
+
+    /// <summary>
+    /// NOTE: This property is not currently being published publicly until some additional live testing has been carried out.
+    /// Optional. For an FX payout a value of true indicates the amount is in the FX currency. A value of false
+    /// indicates the amount is in the source account currency.
+    /// </summary>
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
+    public bool IsAmountInFxCurrency { get; set; } = false;
+
+    /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payout's non-collection properties 
@@ -229,7 +243,8 @@ public class PayoutCreate
             { nameof(InvoiceID), InvoiceID ?? string.Empty },
             { nameof(AllowIncomplete), AllowIncomplete.ToString() },
             { nameof(PaymentRail), PaymentRail.ToString() },
-            { nameof(ChargeBearer), ChargeBearer.ToString() }
+            { nameof(ChargeBearer), ChargeBearer.ToString() },
+            { nameof(IsAmountInFxCurrency), IsAmountInFxCurrency.ToString() }
         };
 
         if (Destination != null)
@@ -238,6 +253,8 @@ public class PayoutCreate
                 .ToLookup(x => x.Key, x => x.Value)
                 .ToDictionary(x => x.Key, g => g.First());
         }
+
+        if (FxDestinationCurrency != null) dict.Add(nameof(FxDestinationCurrency), FxDestinationCurrency.Value.ToString());
 
         return dict;
     }
