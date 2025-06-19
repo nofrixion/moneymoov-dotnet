@@ -144,4 +144,19 @@ public class PaymentRequestMinimal
     public DateTimeOffset? DueDate { get; set; }
     
     public List<PaymentRequestFieldDisplaySetting> FieldDisplaySettings { get; set; } = [];
+    
+    /// <summary>
+    /// The amount of money that has been received for this payment request.
+    /// </summary>
+    public decimal AmountReceived { get; set; }
+    
+    /// <summary>
+    /// The amount of money that has been refunded for this payment request.
+    /// </summary>
+    public decimal AmountRefunded { get; set; }
+    
+    /// <summary>
+    /// The amount of money that was authorised but has not arrived in the account yet.
+    /// </summary>
+    public decimal AmountPending { get; set; }
 }
