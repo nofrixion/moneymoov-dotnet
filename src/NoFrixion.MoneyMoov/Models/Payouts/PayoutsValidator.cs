@@ -300,6 +300,8 @@ public static class PayoutsValidator
             yield return new ValidationResult("Destination account required.", [ nameof(payout.Destination) ]);
         }
 
+        var destinationCurrency = payout.FxDestinationCurrency ?? payout.Currency;
+
         if (payout.Destination?.AccountID == null && payout.Destination?.BeneficiaryID == null)
         {
             // Only validate the identifier details if the account or beneficiary ID is not set.
@@ -348,10 +350,10 @@ public static class PayoutsValidator
             }
 
             // IBAN's can be used for all Fiat currencies
-            if (payout.Type == AccountIdentifierType.IBAN && payout.Currency.IsFiat() == false)
+            if (payout.Type == AccountIdentifierType.IBAN && destinationCurrency.IsFiat() == false)
             {
                 yield return new ValidationResult(
-                    $"Currency {payout.Currency} cannot be used with IBAN destinations.", [ nameof(payout.Currency) ]);
+                    $"Currency {destinationCurrency} cannot be used with IBAN destinations.", [ nameof(destinationCurrency) ]);
             }
 
             if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
@@ -366,27 +368,27 @@ public static class PayoutsValidator
                 yield return new ValidationResult("Destination account number is required for a SCAN payout type.", [ nameof(payout.Destination.Identifier.AccountNumber) ]);
             }
 
-            if (payout.Type == AccountIdentifierType.SCAN && payout.Currency == CurrencyTypeEnum.EUR)
+            if (payout.Type == AccountIdentifierType.SCAN && destinationCurrency == CurrencyTypeEnum.EUR)
             {
-                yield return new ValidationResult($"Currency {payout.Currency} cannot be used with SCAN destinations.", [ nameof(payout.Currency) ]);
+                yield return new ValidationResult($"Currency {destinationCurrency} cannot be used with SCAN destinations.", [ nameof(destinationCurrency) ]);
             }
             
             if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
-                payout.Currency == CurrencyTypeEnum.GBP &&
+                destinationCurrency == CurrencyTypeEnum.GBP &&
                 !string.IsNullOrEmpty(payout.Destination?.Identifier?.AccountNumber) && payout.Destination.Identifier.AccountNumber.Length != GBP_SCAN_REQUIRED_ACCOUNT_NUMBER_LENGTH)
             {
                 yield return new ValidationResult("Destination account number must be eight digits for a GBP SCAN payout type.", [ nameof(payout.Destination.Identifier.AccountNumber) ]);
             }
             
             if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
-                payout.Currency == CurrencyTypeEnum.GBP && 
+                destinationCurrency == CurrencyTypeEnum.GBP && 
                 !string.IsNullOrEmpty(payout.Destination?.Identifier?.SortCode) && payout.Destination.Identifier.SortCode.Length != GBP_SCAN_REQUIRED_SORT_CODE_LENGTH)
             {
                 yield return new ValidationResult("Destination sort code must be six digits for a GBP SCAN payout type.",[ nameof(payout.Destination.Identifier.SortCode) ]);
             }
 
             if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
-                payout.Currency == CurrencyTypeEnum.USD &&
+                destinationCurrency == CurrencyTypeEnum.USD &&
                 !string.IsNullOrEmpty(payout.Destination?.Identifier?.SortCode) && payout.Destination.Identifier.SortCode.Length != USD_SCAN_REQUIRED_SORT_CODE_LENGTH)
             {
                 yield return new ValidationResult("Destination sort code must be nine digits for a USD SCAN payout type.", [nameof(payout.Destination.Identifier.SortCode)]);
