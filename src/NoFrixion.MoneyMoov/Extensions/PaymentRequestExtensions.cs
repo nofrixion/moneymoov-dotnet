@@ -226,28 +226,12 @@ public static class PaymentRequestExtensions
                     paymentAttempt.SettledAt = settleEvent.Inserted;
                     paymentAttempt.SettledAmount = settleEvent.Amount;
                     paymentAttempt.ReconciledTransactionID = settleEvent.ReconciledTransactionID;
-                    
                     paymentAttempt.RefundAttempts = GetPispRefundAttempts(events, settleEvent.PispPaymentInitiationID!).ToList();
 
                     foreach (var paymentRequestEvent in attempt.Where(x => x.EventType == PaymentRequestEventTypesEnum.pisp_settle).Skip(1).ToList())
                     {
-                        var otherPaymentAttempt = new PaymentRequestPaymentAttempt
-                        {
-                            AttemptKey = attempt.Key ?? string.Empty,
-                            PaymentRequestID = paymentRequestEvent.PaymentRequestID,
-                            InitiatedAt = paymentRequestEvent.Inserted,
-                            PaymentMethod = PaymentMethodTypeEnum.pisp,
-                            Currency = paymentRequestEvent.Currency,
-                            AttemptedAmount = paymentRequestEvent.Amount,
-                            PaymentProcessor = paymentRequestEvent.PaymentProcessorName,
-                            InstitutionID = paymentRequestEvent.PispPaymentServiceProviderID,
-                            InstitutionName = paymentRequestEvent.PispPaymentInstitutionName,
-                            SettledAmount = paymentRequestEvent.Amount,
-                            SettledAt = paymentRequestEvent.Inserted,
-                            ReconciledTransactionID = paymentRequestEvent.ReconciledTransactionID,
-                            RefundAttempts = GetPispRefundAttempts(events, settleEvent.PispPaymentInitiationID!).ToList()
-                        };
-                        
+                        var otherPaymentAttempt = AddPaymentAttempt(events, attempt, paymentRequestEvent);
+
                         pispPaymentAttempts.Add(otherPaymentAttempt);
                     }
                 }
@@ -266,21 +250,8 @@ public static class PaymentRequestExtensions
 
                 if (settledEvent != null)
                 {
-                    var paymentAttempt = new PaymentRequestPaymentAttempt
-                    {
-                        AttemptKey = attempt.Key ?? string.Empty,
-                        PaymentRequestID = settledEvent.PaymentRequestID,
-                        InitiatedAt = settledEvent.Inserted,
-                        PaymentMethod = PaymentMethodTypeEnum.pisp,
-                        Currency = settledEvent.Currency,
-                        AttemptedAmount = settledEvent.Amount,
-                        PaymentProcessor = settledEvent.PaymentProcessorName,
-                        InstitutionID = settledEvent.PispPaymentServiceProviderID,
-                        InstitutionName = settledEvent.PispPaymentInstitutionName,
-                        SettledAmount = settledEvent.Amount,
-                        SettledAt = settledEvent.Inserted,
-                    };
-                
+                    var paymentAttempt = AddPaymentAttempt(events, attempt, settledEvent);
+                    
                     pispPaymentAttempts.Add(paymentAttempt);
                 }
                 
@@ -289,7 +260,7 @@ public static class PaymentRequestExtensions
 
         return pispPaymentAttempts;
     }
-
+    
     private static IEnumerable<PaymentRequestRefundAttempt> GetPispRefundAttempts(
         this IEnumerable<PaymentRequestEvent> events, string pispPaymentInitiationID)
     {
@@ -537,6 +508,30 @@ public static class PaymentRequestExtensions
 
         // Quote values to handle commas in the data
         return string.Join(",", values.Select(x => x.ToSafeCsvString()));
-
+    }
+    
+    private static PaymentRequestPaymentAttempt AddPaymentAttempt(IEnumerable<PaymentRequestEvent> events,
+        IGrouping<string?, PaymentRequestEvent> attempt,
+        PaymentRequestEvent paymentRequestEvent)
+    {
+        var otherPaymentAttempt = new PaymentRequestPaymentAttempt
+        {
+            AttemptKey = attempt.Key ?? string.Empty,
+            PaymentRequestID = paymentRequestEvent.PaymentRequestID,
+            InitiatedAt = paymentRequestEvent.Inserted,
+            PaymentMethod = PaymentMethodTypeEnum.pisp,
+            Currency = paymentRequestEvent.Currency,
+            AttemptedAmount = paymentRequestEvent.Amount,
+            PaymentProcessor = paymentRequestEvent.PaymentProcessorName,
+            InstitutionID = paymentRequestEvent.PispPaymentServiceProviderID,
+            InstitutionName = paymentRequestEvent.PispPaymentInstitutionName,
+            SettledAmount = paymentRequestEvent.Amount,
+            SettledAt = paymentRequestEvent.Inserted,
+            ReconciledTransactionID = paymentRequestEvent.ReconciledTransactionID,
+            RefundAttempts = GetPispRefundAttempts(events, paymentRequestEvent.PispPaymentInitiationID!).ToList(),
+            AuthorisedAmount = paymentRequestEvent.Amount,
+            AuthorisedAt = paymentRequestEvent.Inserted
+        };
+        return otherPaymentAttempt;
     }
 }
