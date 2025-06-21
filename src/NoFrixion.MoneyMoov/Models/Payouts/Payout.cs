@@ -485,7 +485,7 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// </summary>
     [System.Text.Json.Serialization.JsonIgnore]
     [Newtonsoft.Json.JsonIgnore]
-    public bool IsAmountInFxCurrency { get; set; } = false;
+    public bool FxUseDestinationCurrencyForAmount { get; set; } = false;
 
     /// <summary>
     /// Currency and formatted amount string.
