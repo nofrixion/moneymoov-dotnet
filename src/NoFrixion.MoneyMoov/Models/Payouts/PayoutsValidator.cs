@@ -15,6 +15,7 @@
 // -----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -298,6 +299,16 @@ public static class PayoutsValidator
         if (payout.Destination == null)
         {
             yield return new ValidationResult("Destination account required.", [ nameof(payout.Destination) ]);
+        }
+
+        if(payout.Currency == payout.FxDestinationCurrency)
+        {
+            yield return new ValidationResult("FxDestinationCurrency must be different from Currency.", [ nameof(payout.FxDestinationCurrency) ]);
+        }
+
+        if(payout.FxDestinationCurrency != null && payout.Amount < decimal.One)
+        {
+            yield return new ValidationResult("Multi-currency payouts can only be set for amounts greater than or equal to 1.", [ nameof(payout.FxDestinationCurrency) ]);
         }
 
         var destinationCurrency = payout.FxDestinationCurrency ?? payout.Currency;
