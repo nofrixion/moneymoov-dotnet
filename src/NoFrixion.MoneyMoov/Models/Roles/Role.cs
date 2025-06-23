@@ -36,4 +36,6 @@ public class Role
     public DateTimeOffset LastUpdated { get; set; }
 
     public List<RoleUser>? Users { get; set; }
+    
+    public bool IsSystemRole { get; set; }
 }

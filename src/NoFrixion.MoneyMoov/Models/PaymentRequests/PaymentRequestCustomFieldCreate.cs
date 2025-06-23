@@ -32,10 +32,14 @@ public class PaymentRequestCustomFieldCreate
     public string? Value { get; set; }
     
     /// <summary>
-    /// If true, the custom field is for internal use only and will not be
-    /// displayed to the customer on the UI or in the payment receipt.
+    /// If true, the custom field will be displayed on the hosted payment page.
     /// </summary>
-    public bool DisplayForPayer { get; set; }
+    public bool DisplayOnHostedPaymentPage { get; set; }
+    
+    /// <summary>
+    /// If true, the custom field will be displayed on the payment receipt.
+    /// </summary>
+    public bool DisplayOnPaymentReceipt { get; set; }
     
     /// <summary>
     /// The display order of the custom field. The lowest number is displayed first.

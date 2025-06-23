@@ -167,7 +167,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     [OptionalEmailAddress]
     public string? ShippingEmail { get; set; }
 
-    [Obsolete("Please use BaseOriginUrl.")]
+    [Obsolete("Not required anymore")]
     public string? OriginUrl 
     { 
         get => BaseOriginUrl; 
@@ -179,6 +179,7 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// A public key context is generated to encrypt sensitive card details and is bound
     /// to a single origin URL.
     /// </summary>
+    [Obsolete("Not required anymore")]
     public string? BaseOriginUrl { get; set; }
 
     /// <summary>
@@ -377,6 +378,19 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// An optional due date for the payment request.
     /// </summary>
     public DateTimeOffset? DueDate { get; set; }
+    
+    /// <summary>
+    /// An optional display settings for the payment request fields. This allows the merchant to control how
+    /// the fields are displayed on the hosted payment page, receipt, etc.
+    /// </summary>
+    public List<PaymentRequestFieldDisplaySetting>? FieldDisplaySettings { get; set; }
+    
+    /// <summary>
+    /// An optional list of notification role IDs that will receive notifications
+    /// about the payment request. This is useful for roles that need to be notified
+    /// about payment request events.
+    /// </summary>
+    public List<Guid>? NotificationRoleIDs { get; set; }
 
     public NoFrixionProblem Validate()
     {
@@ -422,7 +436,9 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
         dict.Add(nameof(CustomerID), CustomerID ?? string.Empty);
         dict.Add(nameof(OrderID), OrderID ?? string.Empty);
         dict.Add(nameof(Description), Description ?? string.Empty);
+#pragma warning disable CS0618 // Type or member is obsolete
         dict.Add(nameof(BaseOriginUrl), BaseOriginUrl!);
+#pragma warning restore CS0618 // Type or member is obsolete     
         dict.Add(nameof(CallbackUrl), CallbackUrl!);
         dict.Add(nameof(FailureCallbackUrl), FailureCallbackUrl ?? string.Empty);
         dict.Add(nameof(CardAuthorizeOnly), CardAuthorizeOnly.ToString());
@@ -461,8 +477,10 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
             {
                 dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].Name", customField.Name ?? string.Empty);
                 dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].Value", customField.Value ?? string.Empty);
-                dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].DisplayForPayer",
-                    customField.DisplayForPayer.ToString());
+                dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].DisplayOnHostedPaymentPage",
+                    customField.DisplayOnHostedPaymentPage.ToString());
+                dict.Add($"{nameof(CustomFields)}[{customFieldNumber}].DisplayOnPaymentReceipt",
+                    customField.DisplayOnPaymentReceipt.ToString());
                 customFieldNumber++;
             }
         }
@@ -502,6 +520,16 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
                         break;
                     }
                 }
+            }
+        }
+        
+        if(NotificationRoleIDs?.Count() > 0)
+        {
+            int notificationRoleIdNumber = 0;
+            foreach (var notificationRoleId in NotificationRoleIDs)
+            {
+                dict.Add($"{nameof(NotificationRoleIDs)}[{notificationRoleIdNumber}]", notificationRoleId.ToString());
+                notificationRoleIdNumber++;
             }
         }
 

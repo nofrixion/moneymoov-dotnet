@@ -180,6 +180,12 @@ public class PaymentAccount: IExportableToCsv
     public bool IsXeroBankFeed { get; set; }
     
     /// <summary>
+    /// Indicates if the payment account is a trust account. The account name is displayed in the statement
+    /// instead of the merchant name for trust accounts.
+    /// </summary>
+    public bool IsTrustAccount { get; set; }
+    
+    /// <summary>
     /// States the status of the Xero bank feed connection, if applicable.
     /// </summary>
     public XeroBankFeedConnectionStatusEnum? XeroBankFeedConnectionStatus { get; set; }

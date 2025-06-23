@@ -40,7 +40,11 @@ public interface IMerchantClient
     Task<RestApiResponse<IEnumerable<UserInvite>>> GetUserInvitesAsync(string userAccessToken, Guid merchantID);
     
     Task<RestApiResponse<IEnumerable<Role>>> GetRolesAsync(string userAccessToken, Guid merchantID);
-    
+
+    Task<RestApiResponse<Role>> GetRoleAsync(string userAccessToken, Guid merchantID, Guid roleID);
+
+    Task<RestApiResponse<Role>> UpdateRoleAsync(string userAccessToken, Guid merchantID, Guid roleID, RoleUpdate roleUpdate);
+
     Task<RestApiResponse<Role>> AddUserToRole(string userAccessToken, RoleUserCreate roleUserCreate, Guid merchantID, Guid roleID);
     
     Task<RestApiResponse> DeleteUserFromRole(string userAccessToken, Guid merchantID, Guid roleID, Guid userID);
@@ -215,7 +219,48 @@ public class MerchantClient : IMerchantClient
             _ => Task.FromResult(new RestApiResponse<IEnumerable<Role>>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
-    
+
+    /// <summary>
+    /// Gets a specific merchant role by its ID.
+    /// </summary>
+    /// <param name="userAccessToken">A user scoped JWT access token.</param>
+    /// <param name="merchantID">The ID of the merchant.</param>
+    /// <param name="roleID">The role ID to get.</param>
+    /// <returns>If successful, the merchant role.</returns>
+    public Task<RestApiResponse<Role>> GetRoleAsync(string userAccessToken, Guid merchantID, Guid roleID)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantRoleUrl(_apiClient.GetBaseUri().ToString(), merchantID, roleID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetRolesAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<Role>(url, userAccessToken),
+            _ => Task.FromResult(new RestApiResponse<Role>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Updates the permissions of a specific role for a merchant.
+    /// </summary>
+    /// <param name="userAccessToken">A user scoped JWT access token.</param>
+    /// <param name="merchantID">The ID of the merchant.</param>
+    /// <param name="roleID">The ID of the role to update.</param>
+    /// <param name="roleUpdate">The role with updated permissions.</param>
+    /// <returns>If successful, the updated merchant role.</returns>
+    public Task<RestApiResponse<Role>> UpdateRoleAsync(string userAccessToken, Guid merchantID, Guid roleID, RoleUpdate roleUpdate)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantRoleUrl(_apiClient.GetBaseUri().ToString(), merchantID, roleID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(UpdateRoleAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PutAsync<Role>(url, userAccessToken, roleUpdate.ToJsonContent()),
+            _ => Task.FromResult(new RestApiResponse<Role>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
     public Task<RestApiResponse<Role>> AddUserToRole(string userAccessToken, RoleUserCreate roleUserCreate, Guid merchantID, Guid roleID)
     {
         var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantRoleUsersUrl(_apiClient.GetBaseUri().ToString(), merchantID, roleID);

@@ -86,4 +86,6 @@ public class StatementHeader
     /// Account transactions for the specified date range.
     /// </summary>
     public IEnumerable<Transaction> Transactions { get; set; }
+    
+    public bool IsTrustAccount { get; set; }
 }

@@ -39,13 +39,14 @@ public class PaymentRequestCreateTests
     [Fact]
     public void Create_PaymentRequestCreate_Mandatory_Fields_Only()
     {
+
         var paymentRequest = new PaymentRequestCreate
         {
             Amount = 1.00M,
             Currency = CurrencyTypeEnum.EUR,
-            CallbackUrl = "https://localhost/callback",
-            BaseOriginUrl = "https://localhost"
+            CallbackUrl = "https://localhost/callback"
         };
+
 
         Assert.NotNull(paymentRequest);
 
@@ -65,8 +66,7 @@ public class PaymentRequestCreateTests
         {
             Amount = 1.00M,
             Currency = CurrencyTypeEnum.EUR,
-            CallbackUrl = "not a url",
-            BaseOriginUrl = "https://localhost"
+            CallbackUrl = "not a url"
         };
 
         var context = new ValidationContext(this, serviceProvider: null, items: null);
@@ -107,6 +107,7 @@ public class PaymentRequestCreateTests
     [Fact]
     public void Create_Card_PaymentRequest_Malformed_OriginUrl_Invalid()
     {
+#pragma warning disable CS0618 // Type or member is obsolete
         var paymentRequestCreate = new PaymentRequestCreate
         {
             Amount = 1.00M,
@@ -122,6 +123,7 @@ public class PaymentRequestCreateTests
         Assert.Single(validationResults);
         Assert.Contains(validationResults.Single().MemberNames, x => x == nameof(paymentRequestCreate.BaseOriginUrl));
         Assert.Contains("not recognised as a valid URL", validationResults.Single().ErrorMessage);
+#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -131,6 +133,7 @@ public class PaymentRequestCreateTests
     [Fact]
     public void Create_Card_PaymentRequest_ExtraSegments_OriginUrl_Invalid()
     {
+#pragma warning disable CS0618 // Type or member is obsolete
         var paymentRequestCreate = new PaymentRequestCreate
         {
             Amount = 1.00M,
@@ -146,6 +149,7 @@ public class PaymentRequestCreateTests
         Assert.Single(validationResults);
         Assert.Contains(validationResults.Single().MemberNames, x => x == nameof(paymentRequestCreate.BaseOriginUrl));
         Assert.Contains("had extra segments", validationResults.Single().ErrorMessage);
+#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -160,7 +164,6 @@ public class PaymentRequestCreateTests
             Amount = 0.00M,
             Currency = CurrencyTypeEnum.EUR,
             CallbackUrl = "https://localhost/good",
-            BaseOriginUrl = "https://localhost",
             PaymentMethods = new() { PaymentMethodTypeEnum.card, PaymentMethodTypeEnum.lightning }
         };
 
@@ -185,7 +188,6 @@ public class PaymentRequestCreateTests
             Amount = 0.00M,
             Currency = CurrencyTypeEnum.EUR,
             CallbackUrl = "https://localhost/good",
-            BaseOriginUrl = "https://localhost",
             CardAuthorizeOnly = true
         };
 
@@ -202,6 +204,7 @@ public class PaymentRequestCreateTests
     [Fact]
     public void Create_Card_PaymentRequest_NonHttps_BaseOriginUrl_Invalid()
     {
+#pragma warning disable CS0618 // Type or member is obsolete
         var paymentRequestCreate = new PaymentRequestCreate
         {
             Amount = 1.00M,
@@ -217,6 +220,7 @@ public class PaymentRequestCreateTests
         Assert.Single(validationResults);
         Assert.Contains(validationResults.Single().MemberNames, x => x == nameof(paymentRequestCreate.BaseOriginUrl));
         Assert.Contains("must be an https URL", validationResults.Single().ErrorMessage);
+#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -311,7 +315,6 @@ public class PaymentRequestCreateTests
             Amount = 0.01M,
             Currency = CurrencyTypeEnum.EUR,
             CallbackUrl = "https://localhost/callback",
-            BaseOriginUrl = "https://localhost",
             PaymentMethods = new() { PaymentMethodTypeEnum.card },
             CardCreateToken = true,
             CardCreateTokenMode = CardTokenCreateModes.ConsentNotRequired,
@@ -335,7 +338,6 @@ public class PaymentRequestCreateTests
             Amount = 0.01M,
             Currency = CurrencyTypeEnum.GBP,
             CallbackUrl = "https://localhost/callback",
-            BaseOriginUrl = "https://localhost",
             PaymentMethods = new() { PaymentMethodTypeEnum.card },
             CardCreateToken = true
         };
@@ -358,7 +360,6 @@ public class PaymentRequestCreateTests
             Amount = 0.01M,
             Currency = CurrencyTypeEnum.EUR,
             CallbackUrl = "https://localhost/callback",
-            BaseOriginUrl = "https://localhost",
             PaymentMethods = new() { PaymentMethodTypeEnum.card },
             CardCreateToken = true,
             CustomerEmailAddress = "qa-nofrixion.com"

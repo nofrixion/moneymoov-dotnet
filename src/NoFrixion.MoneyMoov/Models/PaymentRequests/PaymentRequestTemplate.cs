@@ -25,6 +25,8 @@ public class PaymentRequestTemplate
     
     public BankPaymentOptions BankPaymentOptions { get; set; } = null!;
     
+    public PriorityBankOptions PriorityBankOptions { get; set; } = null!;
+    
     public CardPaymentAddressOptions CardPaymentAddressOptions { get; set; } = null!;
     
     public CardPaymentCaptureOptions CardPaymentCaptureOptions { get; set; } = null!;
@@ -83,8 +85,13 @@ public class NotificationOptions : PaymentOptions
 public class BankPaymentOptions : PaymentOptions
 {
     public Dictionary<CurrencyTypeEnum, Guid>? DestinationAccounts { get; set; }
-    
+}
+
+public class PriorityBankOptions : PaymentOptions
+{
+    [Obsolete("Use the PriorityBankForEur and PriorityBankForGbp properties instead.")]
     public string? PriorityBank { get; set; }
+    public Dictionary<CurrencyTypeEnum, Guid>? PriorityBankIDs { get; set; }
 }
 
 public class CardPaymentAddressOptions : PaymentOptions
@@ -123,8 +130,10 @@ public class PaymentRequestTemplateCustomField: PaymentRequestTemplateFieldOptio
 
 public abstract class PaymentRequestTemplateFieldOptions
 {
-    public bool DisplayForPayer { get; set; }
-
+    public bool DisplayOnHostedPaymentPage { get; set; }
+    
+    public bool DisplayOnPaymentReceipt { get; set; }
+    
     public FieldRequirement Requirement { get; set; }
 }
 
@@ -162,6 +171,10 @@ public class DefaultPaymentRequestTemplate
         {
             DestinationAccounts = null,
         },
+        PriorityBankOptions = new PriorityBankOptions()
+        {
+            PriorityBankIDs = null
+        },
         CardPaymentAddressOptions = new CardPaymentAddressOptions
         {
             RequireAddress = false
@@ -175,13 +188,15 @@ public class DefaultPaymentRequestTemplate
             new PaymentRequestTemplateDefaultField
             {
                 Requirement = FieldRequirement.Optional,
-                DisplayForPayer = true,
+                DisplayOnHostedPaymentPage = true,
+                DisplayOnPaymentReceipt = true,
                 DefaultField = PaymentRequestDefaultFieldsEnum.Description
             },
             new PaymentRequestTemplateDefaultField
             {
                 Requirement = FieldRequirement.Optional,
-                DefaultField = PaymentRequestDefaultFieldsEnum.Customer
+                DefaultField = PaymentRequestDefaultFieldsEnum.Customer,
+                DisplayOnPaymentReceipt = true
             },
             new PaymentRequestTemplateDefaultField
             {
@@ -191,9 +206,10 @@ public class DefaultPaymentRequestTemplate
             new PaymentRequestTemplateDefaultField
             {
                 Requirement = FieldRequirement.Optional,
-                DisplayForPayer = true,
+                DisplayOnHostedPaymentPage = true,
                 DefaultField = PaymentRequestDefaultFieldsEnum.DueDate
             }
-        ]
+        ],
+        CustomFields = []
     };
 }

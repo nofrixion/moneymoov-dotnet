@@ -377,6 +377,16 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload, IExportableToCsv
     /// The due date for the payment request.
     /// </summary>
     public DateTimeOffset? DueDate { get; set; }
+    
+    /// <summary>
+    /// A list of field display settings that control which fields are displayed to the payer.
+    /// </summary>
+    public List<PaymentRequestFieldDisplaySetting>? FieldDisplaySettings { get; set; }
+    
+    /// <summary>
+    /// A list of roles whose members will receive notifications about this payment request.
+    /// </summary>
+    public List<Guid>? NotificationRoleIDs { get; set; }
 
     public string CustomerName =>
         Addresses.Any() ? $"{Addresses.First().FirstName} {Addresses.First().LastName}" : string.Empty;
@@ -492,7 +502,7 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload, IExportableToCsv
     }
 
     public string CsvHeader() =>
-        "ID,MerchantID,Amount,Currency,PaymentMethods,Description,CustomerID,OrderID,Inserted,LastUpdated,PispAccountID,PispAccountName,BaseOriginUrl,CardAuthorizeOnly,CardCreateToken,CardCreateTokenMode,Status,PartialPaymentMethod,CustomerEmailAddress,CardStripePaymentIntentID,CardStripePaymentIntentSecret,NotificationEmailAddresses,PriorityBankID,Title,PartialPaymentSteps,AmountReceived,AmountRefunded,AmountPending,CreatedByUserID,CreatedByUserName,MerchantTokenDescription,TransactionIDs,PayrunID,ShippingAddress,BillingAddress,CustomerName,PaymentProcessor,Tags";
+        "ID,MerchantID,Amount,Currency,PaymentMethods,Description,CustomerID,OrderID,Inserted,LastUpdated,PispAccountID,PispAccountName,BaseOriginUrl,CardAuthorizeOnly,CardCreateToken,CardCreateTokenMode,Status,PartialPaymentMethod,CustomerEmailAddress,CardStripePaymentIntentID,CardStripePaymentIntentSecret,NotificationEmailAddresses,PriorityBankID,Title,PartialPaymentSteps,AmountReceived,AmountRefunded,AmountPending,CreatedByUserID,CreatedByUserName,MerchantTokenDescription,TransactionIDs,PayrunID,ShippingAddress,BillingAddress,CustomerName,PaymentProcessor,Tags,DueDate";
     
     public string ToCsvRow()
     {
