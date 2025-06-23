@@ -222,7 +222,7 @@ public class PayoutCreate
     /// </summary>
     [System.Text.Json.Serialization.JsonIgnore]
     [Newtonsoft.Json.JsonIgnore]
-    public bool IsAmountInFxCurrency { get; set; } = false;
+    public bool FxUseDestinationCurrencyForAmount { get; set; } = false;
 
     /// <summary>
     /// Places all the payout's properties into a dictionary.
@@ -244,7 +244,7 @@ public class PayoutCreate
             { nameof(AllowIncomplete), AllowIncomplete.ToString() },
             { nameof(PaymentRail), PaymentRail.ToString() },
             { nameof(ChargeBearer), ChargeBearer.ToString() },
-            { nameof(IsAmountInFxCurrency), IsAmountInFxCurrency.ToString() }
+            { nameof(FxUseDestinationCurrencyForAmount), FxUseDestinationCurrencyForAmount.ToString() }
         };
 
         if (Destination != null)

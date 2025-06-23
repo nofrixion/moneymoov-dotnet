@@ -485,7 +485,13 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// </summary>
     [System.Text.Json.Serialization.JsonIgnore]
     [Newtonsoft.Json.JsonIgnore]
-    public bool IsAmountInFxCurrency { get; set; } = false;
+    public bool FxUseDestinationCurrencyForAmount { get; set; } = false;
+
+    /// <summary>
+    /// Currency and formatted amount string.
+    /// </summary>
+    public string FxFormattedDestinationAmount => FxDestinationCurrency != null && FxRate != null ? 
+        PaymentAmount.DisplayCurrencyAndAmount(FxDestinationCurrency.Value, Amount * FxRate.Value) : string.Empty;
 
     public NoFrixionProblem Validate()
     {

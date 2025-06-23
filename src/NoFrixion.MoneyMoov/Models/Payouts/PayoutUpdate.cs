@@ -197,7 +197,7 @@ public class PayoutUpdate
     /// </summary>
     [System.Text.Json.Serialization.JsonIgnore]
     [Newtonsoft.Json.JsonIgnore]
-    public bool? IsAmountInFxCurrency { get; set; } = false;
+    public bool? FxUseDestinationCurrencyForAmount { get; set; } = false;
 
     /// <summary>
     /// Places all the payout's properties into a dictionary.
@@ -218,7 +218,7 @@ public class PayoutUpdate
         if (PaymentRail != null) dict.Add(nameof(PaymentRail), PaymentRail.Value.ToString());
         if (ChargeBearer != null) dict.Add(nameof(ChargeBearer), ChargeBearer.Value.ToString());
         if (FxDestinationCurrency != null) dict.Add(nameof(FxDestinationCurrency), FxDestinationCurrency.Value.ToString());
-        if (IsAmountInFxCurrency != null) dict.Add(nameof(IsAmountInFxCurrency), IsAmountInFxCurrency.Value.ToString());
+        if (FxUseDestinationCurrencyForAmount != null) dict.Add(nameof(FxUseDestinationCurrencyForAmount), FxUseDestinationCurrencyForAmount.Value.ToString());
 
         if (Destination != null)
         {
