@@ -362,8 +362,9 @@ public static class PayoutsValidator
             // IBAN's can be used for all Fiat currencies
             if (payout.Type == AccountIdentifierType.IBAN && destinationCurrency.IsFiat() == false)
             {
+                string destinationCurrencyField = payout.FxDestinationCurrency != null ? nameof(payout.FxDestinationCurrency) : nameof(payout.Currency);
                 yield return new ValidationResult(
-                    $"Currency {destinationCurrency} cannot be used with IBAN destinations.", [ nameof(destinationCurrency) ]);
+                    $"Currency {destinationCurrency} cannot be used with IBAN destinations.", [destinationCurrencyField]);
             }
 
             if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
@@ -380,7 +381,8 @@ public static class PayoutsValidator
 
             if (payout.Type == AccountIdentifierType.SCAN && destinationCurrency == CurrencyTypeEnum.EUR)
             {
-                yield return new ValidationResult($"Currency {destinationCurrency} cannot be used with SCAN destinations.", [ nameof(destinationCurrency) ]);
+                string destinationCurrencyField = payout.FxDestinationCurrency != null ? nameof(payout.FxDestinationCurrency) : nameof(payout.Currency);
+                yield return new ValidationResult($"Currency {destinationCurrency} cannot be used with SCAN destinations.", [ destinationCurrencyField ]);
             }
             
             if (payout.Type == AccountIdentifierType.SCAN && payout.Destination?.Identifier != null &&
