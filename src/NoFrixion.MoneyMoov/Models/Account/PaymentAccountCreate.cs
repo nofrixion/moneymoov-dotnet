@@ -75,6 +75,14 @@ public class PaymentAccountCreate
     /// The account name is displayed on the statement for trust accounts instead of the merchant name.
     /// </summary>
     public bool IsTrustAccount { get; set; }
+    
+    /// <summary>
+    /// Optional list of role IDs that will get access to the payment account when created.
+    /// Creator user's roles will always be able to access the account.
+    /// If not specified, the account will be accessible by all the merchant's roles.
+    /// If specified as an empty list, the account will only be accessible by the creator user.
+    /// </summary>
+    public List<Guid>? RoleIDs { get; set; }
 
     /// <summary>
     /// Places all the payment request's properties into a dictionary.
