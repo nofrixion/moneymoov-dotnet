@@ -300,12 +300,12 @@ public static class PayoutsValidator
             yield return new ValidationResult($"The payout amount must only be specified to two decimal places for currency {payout.Currency}.", [ nameof(payout.Amount) ]);
         }
 
-        if (payout.Amount > 0 && payout.FxDestinationAmount == null && payout.Amount < FX_MINIMUM_QUOTE_AMOUNT)
+        if (payout.Amount > 0 && payout.FxDestinationAmount == null && payout.FxDestinationCurrency != null && payout.Amount < FX_MINIMUM_QUOTE_AMOUNT)
         {
             yield return new ValidationResult($"The payout amount for a multi-currency payout must be at least {FX_MINIMUM_QUOTE_AMOUNT}.", [nameof(payout.FxDestinationAmount)]);
         }
 
-        if (payout.FxDestinationAmount > 0 && payout.FxDestinationAmount < FX_MINIMUM_QUOTE_AMOUNT)
+        if (payout.FxDestinationAmount != null && payout.FxDestinationAmount < FX_MINIMUM_QUOTE_AMOUNT)
         {
             yield return new ValidationResult($"The payout FX destination amount for a multi-currency payout must be at least {FX_MINIMUM_QUOTE_AMOUNT}.", [nameof(payout.FxDestinationAmount)]);
         }
