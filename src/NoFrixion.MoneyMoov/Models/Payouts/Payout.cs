@@ -18,6 +18,7 @@ using NoFrixion.MoneyMoov.Enums;
 using NoFrixion.MoneyMoov.Models.Approve;
 using System.ComponentModel.DataAnnotations;
 using NoFrixion.MoneyMoov.Extensions;
+using LanguageExt;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -479,19 +480,26 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     public decimal? FxRate { get; set; }
 
     /// <summary>
-    /// NOTE: This property is not currently being published publicly until some additional live testing has been carried out.
-    /// Optional. For an FX payout a value of true indicates the payout amount is in the FX currency. A value of false
-    /// indicates the payout amount is in the source account currency.
+    /// If specified this will be the amount sent to the payee. The payout's Amount will be dynamically adjusted based on 
+    /// this amount and the FX rate.
     /// </summary>
-    [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonIgnore]
-    public bool FxUseDestinationCurrencyForAmount { get; set; } = false;
+    public decimal? FxDestinationAmount { get; set; }
 
     /// <summary>
-    /// Currency and formatted amount string.
+    /// FX destination currency and amount formatted string.
     /// </summary>
-    public string FxFormattedDestinationAmount => FxDestinationCurrency != null && FxRate != null ? 
-        PaymentAmount.DisplayCurrencyAndAmount(FxDestinationCurrency.Value, Amount * FxRate.Value) : string.Empty;
+    public string FxFormattedDestinationAmount => (FxDestinationCurrency, FxRate, FxDestinationAmount) switch
+    {
+        // If FxDestinationAmount is explicitly set, use the Amount and FxRate to calculate it.
+        (CurrencyTypeEnum fxCurrency, _, decimal fxDestAmount)
+            when FxDestinationCurrency != null && FxRate != null => PaymentAmount.DisplayCurrencyAndAmount(fxCurrency, fxDestAmount),
+
+        // If FxDestinationAmount is not explicitly set, use the Amount and FxRate to calculate it.
+        (CurrencyTypeEnum fxCurrency, decimal rate, null)
+            when FxDestinationCurrency != null && FxRate != null => PaymentAmount.DisplayCurrencyAndAmount(fxCurrency, Amount * rate),
+
+        _ => string.Empty
+    };
 
     public NoFrixionProblem Validate()
     {
