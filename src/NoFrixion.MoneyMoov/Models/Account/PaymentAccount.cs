@@ -216,11 +216,16 @@ public class PaymentAccount: IExportableToCsv
     [CanBeNull] public LastTransaction LastTransaction { get; set; }
     
     /// <summary>
-    /// The user that created the account
+    /// The user if available that created the account
     /// </summary>
     [CanBeNull]
     public User CreatedBy { get; set; }
 
+    /// <summary>
+    /// Either the name of the user, merchant token or api key that created the account 
+    /// </summary>
+    [CanBeNull] public string CreatedByDisplayName { get; set; }
+    
     /// <summary>
     /// Indicates the default payment rail for this account. Normally it will be left as the
     /// default value but in some special cases it may be set to indicate payouts from this account
