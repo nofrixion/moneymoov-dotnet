@@ -54,6 +54,8 @@ public interface IMerchantClient
     Task<RestApiResponse> RemoveRolesFromUser(string userAccessToken, RolesUserDelete rolesUserDelete, Guid merchantID, Guid userID);
     
     Task<RestApiResponse<Merchant>> GetMerchantAsync(string userAccessToken, Guid merchantID);
+    
+    Task<RestApiResponse<Merchant>> UpdateMerchantAsync(string userAccessToken, Guid merchantID, MerchantUpdate merchantUpdate);
 }
 
 public class MerchantClient : IMerchantClient
@@ -339,6 +341,27 @@ public class MerchantClient : IMerchantClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.GetAsync<Merchant>(url, userAccessToken),
+            _ => Task.FromResult(new RestApiResponse<Merchant>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+    
+    /// <summary>
+    /// Calls the MoneyMoov Merchant update merchant endpoint to update the details of a merchant.
+    /// </summary>
+    /// <param name="userAccessToken">A User scoped JWT access token.</param>
+    /// <param name="merchantID">The unique identifier of the merchant to update.</param>
+    /// <param name="merchantUpdate">The merchant details to update.</param>
+    /// <returns>If successful, the updated merchant details.</returns>
+    public Task<RestApiResponse<Merchant>> UpdateMerchantAsync(string userAccessToken, Guid merchantID, MerchantUpdate merchantUpdate)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantsUrl(_apiClient.GetBaseUri().ToString()) +
+                  $"/{merchantID}";
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(UpdateMerchantAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PutAsync<Merchant>(url, userAccessToken, merchantUpdate.ToJsonContent()),
             _ => Task.FromResult(new RestApiResponse<Merchant>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
