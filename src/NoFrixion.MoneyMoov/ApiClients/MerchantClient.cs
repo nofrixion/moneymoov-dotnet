@@ -52,6 +52,8 @@ public interface IMerchantClient
     Task<RestApiResponse<User>> AssignRolesToUser(string userAccessToken, RolesUserCreate rolesUserCreate, Guid merchantID, Guid userID);
 
     Task<RestApiResponse> RemoveRolesFromUser(string userAccessToken, RolesUserDelete rolesUserDelete, Guid merchantID, Guid userID);
+    
+    Task<RestApiResponse<Merchant>> GetMerchantAsync(string userAccessToken, Guid merchantID);
 }
 
 public class MerchantClient : IMerchantClient
@@ -325,6 +327,19 @@ public class MerchantClient : IMerchantClient
         {
             var p when p.IsEmpty => _apiClient.DeleteAsync(url, userAccessToken, rolesUserDelete.ToJsonContent()),
             _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    public Task<RestApiResponse<Merchant>> GetMerchantAsync(string userAccessToken, Guid merchantID)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantsUrl(_apiClient.GetBaseUri().ToString(), merchantID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetMerchantAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<Merchant>(url, userAccessToken),
+            _ => Task.FromResult(new RestApiResponse<Merchant>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }
