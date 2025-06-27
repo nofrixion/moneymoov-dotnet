@@ -45,7 +45,7 @@ public class PayoutCreate
     /// and it will be dynamically adjusted based on the FX rate.
     /// </summary>
     [Range(0.01, double.MaxValue,ErrorMessage = "Minimum value of 0.01 is required for Amount.")]
-    public decimal Amount { get; set; }
+    public decimal? Amount { get; set; }
 
     /// <summary>
     /// Gets or Sets the your reference property.
@@ -240,7 +240,6 @@ public class PayoutCreate
             { nameof(Type), Type.ToString() },
             { nameof(Description), Description ?? string.Empty },
             { nameof(Currency), Currency.ToString() },
-            { nameof(Amount), Amount.ToString() },
             { nameof(YourReference), YourReference ?? string.Empty },
             { nameof(TheirReference), TheirReference ?? string.Empty },
             { nameof(InvoiceID), InvoiceID ?? string.Empty },
@@ -256,6 +255,7 @@ public class PayoutCreate
                 .ToDictionary(x => x.Key, g => g.First());
         }
 
+        if (Amount != null) dict.Add(nameof(Amount), Amount.Value.ToString());
         if (FxDestinationCurrency != null) dict.Add(nameof(FxDestinationCurrency), FxDestinationCurrency.Value.ToString());
         if (FxDestinationAmount != null) dict.Add(nameof(FxDestinationAmount), FxDestinationAmount.Value.ToString());
 
