@@ -14,6 +14,7 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using LanguageExt;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -295,17 +296,37 @@ public static class PayoutsValidator
             yield return new ValidationResult($"Either the payout {nameof(payout.Amount)} or {nameof(payout.FxDestinationAmount)} must be supplied.", [ nameof(payout.Amount), nameof(payout.FxDestinationAmount)]);
         }
 
+        if(payout.FxUseDestinationAmount == true && (payout.FxDestinationAmount == null || payout.FxDestinationAmount <= 0))
+        {
+            yield return new ValidationResult($"FxDestinationAmount must be supplied when FxUseDestinationAmount is true.", [ nameof(payout.FxDestinationAmount) ]);
+        }
+
+        if (payout.FxUseDestinationAmount == true && payout.FxDestinationCurrency == null)
+        {
+            yield return new ValidationResult($"FxDestinationCurrency must be supplied when FxUseDestinationAmount is true.", [ nameof(payout.FxDestinationCurrency) ]);
+        }
+
+        if (payout.FxUseDestinationAmount == false && payout.Amount <= 0)
+        {
+            yield return new ValidationResult($"Amount must be supplied when FxUseDestinationAmount is false.", [ nameof(payout.Amount) ]);
+        }
+
         if (payout.Amount > 0 && payout.Currency.IsFiat() && payout.Amount % FIAT_CURRENCY_RESOLUTION != 0)
         {
             yield return new ValidationResult($"The payout amount must only be specified to two decimal places for currency {payout.Currency}.", [ nameof(payout.Amount) ]);
         }
 
-        if (payout.Amount > 0 && payout.FxDestinationAmount == null && payout.FxDestinationCurrency != null && payout.Amount < FX_MINIMUM_QUOTE_AMOUNT)
+        if (payout.FxDestinationAmount > 0 && payout.FxDestinationCurrency != null && payout.FxDestinationCurrency.Value.IsFiat() && payout.FxDestinationAmount % FIAT_CURRENCY_RESOLUTION != 0)
+        {
+            yield return new ValidationResult($"The payout FxDestinationAmount must only be specified to two decimal places for currency {payout.FxDestinationCurrency}.", [nameof(payout.FxDestinationAmount)]);
+        }
+
+        if (payout.Amount < FX_MINIMUM_QUOTE_AMOUNT && payout.FxUseDestinationAmount == false && payout.FxDestinationCurrency != null)
         {
             yield return new ValidationResult($"The payout amount for a multi-currency payout must be at least {FX_MINIMUM_QUOTE_AMOUNT}.", [nameof(payout.FxDestinationAmount)]);
         }
 
-        if (payout.FxDestinationAmount != null && payout.FxDestinationAmount < FX_MINIMUM_QUOTE_AMOUNT)
+        if (payout.FxUseDestinationAmount == true && payout.FxDestinationAmount < FX_MINIMUM_QUOTE_AMOUNT)
         {
             yield return new ValidationResult($"The payout FX destination amount for a multi-currency payout must be at least {FX_MINIMUM_QUOTE_AMOUNT}.", [nameof(payout.FxDestinationAmount)]);
         }

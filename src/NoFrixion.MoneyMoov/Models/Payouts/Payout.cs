@@ -486,6 +486,14 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     public decimal? FxDestinationAmount { get; set; }
 
     /// <summary>
+    /// For a multi-currency payout this indicates how the Amount and FxDestinaationAmount are treated.
+    /// If true the FxDestinationAmount is authoritative and the Amount is set based on the FxRate. If false then the Amount is authoritative
+    /// and the FxDestinationAmount is set based on the Amount and FxRate.
+    /// </summary>
+    public bool FxUseDestinationAmount { get; set; }
+
+
+    /// <summary>
     /// FX destination currency and amount formatted string.
     /// </summary>
     public string FxFormattedDestinationAmount => (FxDestinationCurrency, FxRate, FxDestinationAmount) switch

@@ -228,6 +228,13 @@ public class PayoutCreate
     public decimal? FxDestinationAmount { get; set; }
 
     /// <summary>
+    /// For a multi-currency payout this indicates how the Amount and FxDestinaationAmount are treated.
+    /// If true the FxDestinationAmount is authoritative and the Amount is set based on the FxRate. If false then the Amount is authoritative
+    /// and the FxDestinationAmount is set based on the Amount and FxRate.
+    /// </summary>
+    public bool FxUseDestinationAmount { get; set; }
+
+    /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payout's non-collection properties 
@@ -245,7 +252,8 @@ public class PayoutCreate
             { nameof(InvoiceID), InvoiceID ?? string.Empty },
             { nameof(AllowIncomplete), AllowIncomplete.ToString() },
             { nameof(PaymentRail), PaymentRail.ToString() },
-            { nameof(ChargeBearer), ChargeBearer.ToString() }
+            { nameof(ChargeBearer), ChargeBearer.ToString() },
+            { nameof(FxUseDestinationAmount), FxUseDestinationAmount.ToString() }
         };
 
         if (Destination != null)

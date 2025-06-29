@@ -201,6 +201,13 @@ public class PayoutUpdate
     public decimal? FxDestinationAmount { get; set; }
 
     /// <summary>
+    /// For a multi-currency payout this indicates how the Amount and FxDestinaationAmount are treated.
+    /// If true the FxDestinationAmount is authoritative and the Amount is set based on the FxRate. If false then the Amount is authoritative
+    /// and the FxDestinationAmount is set based on the Amount and FxRate.
+    /// </summary>
+    public bool? FxUseDestinationAmount { get; set; }
+
+    /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payout's non-collection properties 
@@ -220,6 +227,7 @@ public class PayoutUpdate
         if (ChargeBearer != null) dict.Add(nameof(ChargeBearer), ChargeBearer.Value.ToString());
         if (FxDestinationCurrency != null) dict.Add(nameof(FxDestinationCurrency), FxDestinationCurrency.Value.ToString());
         if (FxDestinationAmount != null) dict.Add(nameof(FxDestinationAmount), FxDestinationAmount.Value.ToString());
+        if (FxUseDestinationAmount != null) dict.Add(nameof(FxUseDestinationAmount), FxUseDestinationAmount.Value.ToString());
 
         if (Destination != null)
         {
