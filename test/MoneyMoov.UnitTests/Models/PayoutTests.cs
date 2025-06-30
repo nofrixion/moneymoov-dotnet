@@ -43,12 +43,12 @@ public class PayoutTests
             Amount = 200m
         };
 
-        Assert.Equal(string.Empty, payout.FormattedFxDestinationAmount);
+        Assert.Equal("? 100.00", payout.FormattedFxDestinationAmount);
 
         payout.FxDestinationCurrency = CurrencyTypeEnum.EUR;
         payout.FxRate = null;
 
-        Assert.Equal(string.Empty, payout.FormattedFxDestinationAmount);
+        Assert.Equal("€ 100.00", payout.FormattedFxDestinationAmount);
     }
 
     [Fact]
@@ -62,7 +62,7 @@ public class PayoutTests
             Amount = 100m
         };
 
-        Assert.Equal(string.Empty, payout.FormattedFxDestinationAmount);
+        Assert.Equal("? 0.00", payout.FormattedFxDestinationAmount);
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public class PayoutTests
             Amount = 200m
         };
 
-        Assert.Equal(string.Empty, payout.FormattedFxDestinationAmount);
+        Assert.Equal("? 100.00", payout.FormattedFxDestinationAmount);
     }
 
     [Fact]
@@ -90,7 +90,7 @@ public class PayoutTests
             Amount = 300m
         };
 
-        Assert.Equal(string.Empty, payout.FormattedFxDestinationAmount);
+        Assert.Equal("$ 0.00", payout.FormattedFxDestinationAmount);
     }
 
     [Fact]
@@ -115,11 +115,11 @@ public class PayoutTests
         {
             FxDestinationCurrency = CurrencyTypeEnum.GBP,
             FxRate = 1.1m,
-            FxDestinationAmount = null,
+            FxDestinationAmount = 82.5m,
             Amount = 75m
         };
 
-        var expected = PaymentAmount.DisplayCurrencyAndAmount(CurrencyTypeEnum.GBP, 75m * 1.1m);
+        var expected = PaymentAmount.DisplayCurrencyAndAmount(CurrencyTypeEnum.GBP, 82.5m);
         Assert.Equal(expected, payout.FormattedFxDestinationAmount);
     }
 }
