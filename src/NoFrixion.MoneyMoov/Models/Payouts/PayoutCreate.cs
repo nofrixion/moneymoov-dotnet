@@ -41,7 +41,7 @@ public class PayoutCreate
     /// <summary>
     /// Optional but one of Amount or FxDestinationAmount must be set. 
     /// - For single currency payouts this property is mandatory. 
-    /// - For mulit-currency payouts this property is optional. If FxDestinationAmount is set this field must be set to 0
+    /// - For multi-currency payouts this property is optional. If FxDestinationAmount is set this field must be set to 0
     /// and it will be dynamically adjusted based on the FX rate.
     /// </summary>
     [Range(0.01, double.MaxValue,ErrorMessage = "Minimum value of 0.01 is required for Amount.")]
