@@ -38,9 +38,14 @@ public class PayoutCreate
     [Required(ErrorMessage = "Currency is required.")]
     public CurrencyTypeEnum Currency { get; set; }
 
-    [Required(ErrorMessage = "Amount is required.")]
-    [Range(0.00001, double.MaxValue,ErrorMessage = "Minimum value of 0.01 is required for Amount")]
-    public decimal Amount { get; set; }
+    /// <summary>
+    /// Optional but one of Amount or FxDestinationAmount must be set. 
+    /// - For single currency payouts this property is mandatory. 
+    /// - For multi-currency payouts this property is optional. If FxDestinationAmount is set this field must be set to 0
+    /// and it will be dynamically adjusted based on the FX rate.
+    /// </summary>
+    [Range(0.01, double.MaxValue,ErrorMessage = "Minimum value of 0.01 is required for Amount.")]
+    public decimal? Amount { get; set; }
 
     /// <summary>
     /// Gets or Sets the your reference property.
@@ -216,13 +221,18 @@ public class PayoutCreate
     public CurrencyTypeEnum? FxDestinationCurrency { get; set; }
 
     /// <summary>
-    /// NOTE: This property is not currently being published publicly until some additional live testing has been carried out.
-    /// Optional. For an FX payout a value of true indicates the amount is in the FX currency. A value of false
-    /// indicates the amount is in the source account currency.
+    /// Optional but one of Amount or FxDestinationAmount must be set. If specified this will be the amount sent to the payee.
+    /// The payout's Amount will be dynamically adjusted based on this amount and the FX rate.
     /// </summary>
-    [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonIgnore]
-    public bool FxUseDestinationCurrencyForAmount { get; set; } = false;
+    [Range(1.00, double.MaxValue, ErrorMessage = "Minimum value of 1.00 is required for FxDestinationAmount.")]
+    public decimal? FxDestinationAmount { get; set; }
+
+    /// <summary>
+    /// For a multi-currency payout this indicates how the Amount and FxDestinaationAmount are treated.
+    /// If true the FxDestinationAmount is authoritative and the Amount is set based on the FxRate. If false then the Amount is authoritative
+    /// and the FxDestinationAmount is set based on the Amount and FxRate.
+    /// </summary>
+    public bool FxUseDestinationAmount { get; set; }
 
     /// <summary>
     /// Places all the payout's properties into a dictionary.
@@ -237,14 +247,13 @@ public class PayoutCreate
             { nameof(Type), Type.ToString() },
             { nameof(Description), Description ?? string.Empty },
             { nameof(Currency), Currency.ToString() },
-            { nameof(Amount), Amount.ToString() },
             { nameof(YourReference), YourReference ?? string.Empty },
             { nameof(TheirReference), TheirReference ?? string.Empty },
             { nameof(InvoiceID), InvoiceID ?? string.Empty },
             { nameof(AllowIncomplete), AllowIncomplete.ToString() },
             { nameof(PaymentRail), PaymentRail.ToString() },
             { nameof(ChargeBearer), ChargeBearer.ToString() },
-            { nameof(FxUseDestinationCurrencyForAmount), FxUseDestinationCurrencyForAmount.ToString() }
+            { nameof(FxUseDestinationAmount), FxUseDestinationAmount.ToString() }
         };
 
         if (Destination != null)
@@ -254,7 +263,9 @@ public class PayoutCreate
                 .ToDictionary(x => x.Key, g => g.First());
         }
 
+        if (Amount != null) dict.Add(nameof(Amount), Amount.Value.ToString());
         if (FxDestinationCurrency != null) dict.Add(nameof(FxDestinationCurrency), FxDestinationCurrency.Value.ToString());
+        if (FxDestinationAmount != null) dict.Add(nameof(FxDestinationAmount), FxDestinationAmount.Value.ToString());
 
         return dict;
     }

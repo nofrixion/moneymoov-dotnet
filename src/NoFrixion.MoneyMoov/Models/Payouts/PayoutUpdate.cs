@@ -14,6 +14,8 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class PayoutUpdate
@@ -29,6 +31,7 @@ public class PayoutUpdate
 
     public CurrencyTypeEnum? Currency { get; set; }
 
+    [Range(0.01, double.MaxValue, ErrorMessage = "Minimum value of 0.01 is required for Amount.")]
     public decimal? Amount { get; set; }
 
     public string? YourReference { get; set; }
@@ -191,13 +194,18 @@ public class PayoutUpdate
     public CurrencyTypeEnum? FxDestinationCurrency { get; set; }
 
     /// <summary>
-    /// NOTE: This property is not currently being published publicly until some additional live testing has been carried out.
-    /// Optional. For an FX payout a value of true indicates the amount is in the FX currency. A value of false
-    /// indicates the amount is in the source account currency.
+    /// Optional but one of Amount or FxDestinationAmount must be set. If specified this will be the amount sent to the payee.
+    /// The payout's Amount will be dynamically adjusted based on this amount and the FX rate.
     /// </summary>
-    [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonIgnore]
-    public bool? FxUseDestinationCurrencyForAmount { get; set; } = false;
+    [Range(1.00, double.MaxValue, ErrorMessage = "Minimum value of 1.00 is required for FxDestinationAmount.")]
+    public decimal? FxDestinationAmount { get; set; }
+
+    /// <summary>
+    /// For a multi-currency payout this indicates how the Amount and FxDestinaationAmount are treated.
+    /// If true the FxDestinationAmount is authoritative and the Amount is set based on the FxRate. If false then the Amount is authoritative
+    /// and the FxDestinationAmount is set based on the Amount and FxRate.
+    /// </summary>
+    public bool? FxUseDestinationAmount { get; set; }
 
     /// <summary>
     /// Places all the payout's properties into a dictionary.
@@ -218,7 +226,8 @@ public class PayoutUpdate
         if (PaymentRail != null) dict.Add(nameof(PaymentRail), PaymentRail.Value.ToString());
         if (ChargeBearer != null) dict.Add(nameof(ChargeBearer), ChargeBearer.Value.ToString());
         if (FxDestinationCurrency != null) dict.Add(nameof(FxDestinationCurrency), FxDestinationCurrency.Value.ToString());
-        if (FxUseDestinationCurrencyForAmount != null) dict.Add(nameof(FxUseDestinationCurrencyForAmount), FxUseDestinationCurrencyForAmount.Value.ToString());
+        if (FxDestinationAmount != null) dict.Add(nameof(FxDestinationAmount), FxDestinationAmount.Value.ToString());
+        if (FxUseDestinationAmount != null) dict.Add(nameof(FxUseDestinationAmount), FxUseDestinationAmount.Value.ToString());
 
         if (Destination != null)
         {
