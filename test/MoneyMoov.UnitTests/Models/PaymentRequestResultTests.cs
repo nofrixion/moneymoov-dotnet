@@ -1157,7 +1157,7 @@ public class PaymentRequestResultTests
     }
 
     /// <summary>
-    /// Tests that a pisp attempt that has mutliple settlement events results
+    /// Tests that a pisp attempt that has multiple settlement events results
     /// in an over paid status.
     /// </summary>
     [Fact]
