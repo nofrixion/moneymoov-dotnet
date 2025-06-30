@@ -323,7 +323,7 @@ public static class PayoutsValidator
 
         if (payout.Amount < FX_MINIMUM_QUOTE_AMOUNT && payout.FxUseDestinationAmount == false && payout.FxDestinationCurrency != null)
         {
-            yield return new ValidationResult($"The payout amount for a multi-currency payout must be at least {FX_MINIMUM_QUOTE_AMOUNT}.", [nameof(payout.FxDestinationAmount)]);
+            yield return new ValidationResult($"The payout amount for a multi-currency payout must be at least {FX_MINIMUM_QUOTE_AMOUNT}.", [nameof(payout.Amount)]);
         }
 
         if (payout.FxUseDestinationAmount == true && payout.FxDestinationAmount < FX_MINIMUM_QUOTE_AMOUNT)
