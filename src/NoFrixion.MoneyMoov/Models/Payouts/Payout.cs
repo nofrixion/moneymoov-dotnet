@@ -492,22 +492,15 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// </summary>
     public bool FxUseDestinationAmount { get; set; }
 
+    /// <summary>
+    /// The payout FxDestinationAmount expressed in the currency’s minor units (e.g. cents, pence).
+    /// </summary>
+    public ulong? FxDestinationAmountMinorUnits => FxDestinationAmount != null ? Convert.ToUInt64(FxDestinationAmount.Value.ToAmountMinorUnits(Currency)) : null;
 
     /// <summary>
     /// FX destination currency and amount formatted string.
     /// </summary>
-    public string FxFormattedDestinationAmount => (FxDestinationCurrency, FxRate, FxDestinationAmount) switch
-    {
-        // If FxDestinationAmount is explicitly set, use the Amount and FxRate to calculate it.
-        (CurrencyTypeEnum fxCurrency, _, decimal fxDestAmount)
-            when FxDestinationCurrency != null && FxRate != null => PaymentAmount.DisplayCurrencyAndAmount(fxCurrency, fxDestAmount),
-
-        // If FxDestinationAmount is not explicitly set, use the Amount and FxRate to calculate it.
-        (CurrencyTypeEnum fxCurrency, decimal rate, null)
-            when FxDestinationCurrency != null && FxRate != null => PaymentAmount.DisplayCurrencyAndAmount(fxCurrency, Amount * rate),
-
-        _ => string.Empty
-    };
+    public string FormattedFxDestinationAmount => PaymentAmount.DisplayCurrencyAndAmount(FxDestinationCurrency.GetValueOrDefault(), FxDestinationAmount.GetValueOrDefault());
 
     public NoFrixionProblem Validate()
     {
