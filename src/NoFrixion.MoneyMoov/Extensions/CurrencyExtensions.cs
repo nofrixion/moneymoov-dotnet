@@ -24,6 +24,7 @@ public static class CurrencyExtensions
         CurrencyTypeEnum.GBP => "£",
         CurrencyTypeEnum.EUR => "€",
         CurrencyTypeEnum.USD => "$",
+        CurrencyTypeEnum.None => "?",
         _ => "€"
     };
 

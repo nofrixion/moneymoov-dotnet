@@ -18,6 +18,7 @@ using NoFrixion.MoneyMoov.Enums;
 using NoFrixion.MoneyMoov.Models.Approve;
 using System.ComponentModel.DataAnnotations;
 using NoFrixion.MoneyMoov.Extensions;
+using LanguageExt;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -479,19 +480,27 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     public decimal? FxRate { get; set; }
 
     /// <summary>
-    /// NOTE: This property is not currently being published publicly until some additional live testing has been carried out.
-    /// Optional. For an FX payout a value of true indicates the payout amount is in the FX currency. A value of false
-    /// indicates the payout amount is in the source account currency.
+    /// If specified this will be the amount sent to the payee. The payout's Amount will be dynamically adjusted based on 
+    /// this amount and the FX rate.
     /// </summary>
-    [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonIgnore]
-    public bool FxUseDestinationCurrencyForAmount { get; set; } = false;
+    public decimal? FxDestinationAmount { get; set; }
 
     /// <summary>
-    /// Currency and formatted amount string.
+    /// For a multi-currency payout this indicates how the Amount and FxDestinationAmount are treated.
+    /// If true the FxDestinationAmount is authoritative and the Amount is set based on the FxRate. If false then the Amount is authoritative
+    /// and the FxDestinationAmount is set based on the Amount and FxRate.
     /// </summary>
-    public string FxFormattedDestinationAmount => FxDestinationCurrency != null && FxRate != null ? 
-        PaymentAmount.DisplayCurrencyAndAmount(FxDestinationCurrency.Value, Amount * FxRate.Value) : string.Empty;
+    public bool FxUseDestinationAmount { get; set; }
+
+    /// <summary>
+    /// The payout FxDestinationAmount expressed in the currency’s minor units (e.g. cents, pence).
+    /// </summary>
+    public ulong? FxDestinationAmountMinorUnits => FxDestinationAmount != null ? Convert.ToUInt64(FxDestinationAmount.Value.ToAmountMinorUnits(Currency)) : null;
+
+    /// <summary>
+    /// FX destination currency and amount formatted string.
+    /// </summary>
+    public string FormattedFxDestinationAmount => PaymentAmount.DisplayCurrencyAndAmount(FxDestinationCurrency.GetValueOrDefault(), FxDestinationAmount.GetValueOrDefault());
 
     public NoFrixionProblem Validate()
     {

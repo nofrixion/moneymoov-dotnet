@@ -1157,11 +1157,11 @@ public class PaymentRequestResultTests
     }
 
     /// <summary>
-    /// Tests that a pisp attempt ignores duplicate settlement events and results
-    /// in a fully paid status.
+    /// Tests that a pisp attempt that has multiple settlement events results
+    /// in an over paid status.
     /// </summary>
     [Fact]
-    public void Duplicate_Settlements_Igrnored_FullyPaid()
+    public void Multiple_Settlements_OverPaid()
     {
         var entity = GetTestPaymentRequest();
 
@@ -1221,11 +1221,11 @@ public class PaymentRequestResultTests
 
         var result = new PaymentRequestResult(entity);
 
-        Assert.Equal(entity.Amount, result.Amount);
+        Assert.Equal(entity.Amount * 2, result.Amount);
         Assert.Equal(0, result.PispAmountAuthorized());
         Assert.Equal(decimal.Zero, result.AmountOutstanding());
         Assert.Equal(entity.Currency, result.Currency);
-        Assert.Equal(PaymentResultEnum.FullyPaid, result.Result);
+        Assert.Equal(PaymentResultEnum.OverPaid, result.Result);
     }
 
     /// <summary>
