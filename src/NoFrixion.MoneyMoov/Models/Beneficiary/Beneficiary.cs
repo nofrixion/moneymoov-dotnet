@@ -112,6 +112,12 @@ public class Beneficiary : IValidatableObject, IExportableToCsv
     public DateTimeOffset? LastAuthorised { get; set; }
     
     public User CreatedBy { get; set; }
+    
+    /// <summary>
+    /// The reference that will be used by default as TheirReference when creating payouts to this beneficiary
+    /// if no TheirReference is specified for the payout.
+    /// </summary>
+    [CanBeNull] public string TheirReference { get; set; }
 
     // Don't serialize the events if there are none.
     [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
