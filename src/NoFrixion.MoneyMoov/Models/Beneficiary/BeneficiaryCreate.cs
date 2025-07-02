@@ -15,6 +15,7 @@
 // -----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using JetBrains.Annotations;
 
 #nullable disable
 
@@ -46,6 +47,12 @@ public class BeneficiaryCreate : IValidatableObject
 
     [Required(ErrorMessage = "Destination is required.")]
     public CounterpartyCreate Destination { get; set; }
+    
+    /// <summary>
+    /// Optional reference that will be used by default as TheirReference when creating payouts to this beneficiary 
+    /// if no TheirReference is specified for the payout.
+    /// </summary>
+    [CanBeNull] public string TheirReference { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -53,7 +60,7 @@ public class BeneficiaryCreate : IValidatableObject
         payout.Amount = 0.01M;
         // Use dummy valid values for references. Beneficiaries can have invalid references as
         // they will be forced to fix them when the payout is created.
-        payout.TheirReference = "GoodRef";
+        payout.TheirReference = TheirReference ?? "GoodRef";
         payout.YourReference = "GoodRef";
         return payout.Validate(validationContext);
     }
@@ -91,7 +98,8 @@ public class BeneficiaryCreate : IValidatableObject
             { nameof(ID), ID.ToString() },
             { nameof(MerchantID), MerchantID.ToString() },
             { nameof(Name), Name },
-            { nameof(Currency), Currency.ToString() }
+            { nameof(Currency), Currency.ToString() },
+            { nameof(TheirReference), TheirReference}
         };
 
         if (Destination != null)
