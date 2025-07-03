@@ -176,7 +176,7 @@ public class AccountIdentifier : IValidatableObject
 
     public string DisplayScanSummary =>
         !string.IsNullOrEmpty(SortCode) && !string.IsNullOrEmpty(AccountNumber) && SortCode.Length == GBP_SORT_CODE_LENGTH
-            ? $"{SortCode[..2]}-{SortCode.Substring(2, 2)}-{SortCode.Substring(4, 2)} / {AccountNumber}"
+            ? $"{SortCode[..2]}-{SortCode[2..4]}-{SortCode[4..6]} / {AccountNumber}"
             : $"{SortCode} / {AccountNumber}";
 
     public string DisplayBicSummary => $"{BIC} / {AccountNumber}";
