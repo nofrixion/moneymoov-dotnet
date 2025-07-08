@@ -33,6 +33,12 @@ public class BeneficiaryUpdate
 
     public Counterparty? Destination { get; set; }
     
+    /// <summary>
+    /// The default reference that will be used by default as TheirReference when creating payouts to this beneficiary
+    /// if no TheirReference is specified for the payout.
+    /// </summary>
+    public string? TheirReference { get; set; }
+    
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
