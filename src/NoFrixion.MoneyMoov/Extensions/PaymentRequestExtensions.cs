@@ -503,6 +503,8 @@ public static class PaymentRequestExtensions
                 ? string.Join(",", paymentRequest.Tags.Select(t => t.Name))
                 : "",
             paymentRequest.DueDate?.ToString("o") ?? "",
+            paymentRequest.CustomFields?.Select(cf => $"{cf.Name}: {cf.Value}")
+                .Aggregate((current, next) => $"{current}, {next}") ?? "",
         };
 
 
