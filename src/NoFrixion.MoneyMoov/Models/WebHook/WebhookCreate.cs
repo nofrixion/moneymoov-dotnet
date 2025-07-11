@@ -14,6 +14,7 @@
 //-----------------------------------------------------------------------------
 
 using NoFrixion.MoneyMoov.Attributes;
+using NoFrixion.MoneyMoov.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -70,6 +71,11 @@ public class WebhookCreate : IValidatableObject
     [EmailAddressMultiple(ErrorMessage = "One or more of the email addresses are invalid. Addresses can be separated by a comma, semi-colon or space.")]
     public string? FailedNotificationEmailAddress { get; set; }
 
+    /// <summary>
+    /// The type of notification that will be sent.
+    /// </summary>
+    public NotificationMethodTypesEnum NotificationMethod { get; set; }
+
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (Secret?.Length > SECRET_MAX_LENGTH)
@@ -85,6 +91,11 @@ public class WebhookCreate : IValidatableObject
         if (ResourceTypes?.Contains(WebhookResourceTypesEnum.None) == true)
         {
             yield return new ValidationResult("Cannot create a webhook with a resource type of none.");
+        }
+
+        if (NotificationMethod is NotificationMethodTypesEnum.None)
+        {
+            yield return new ValidationResult("Cannot create a webhook with a notification method type of none.");
         }
     }
 

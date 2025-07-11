@@ -12,6 +12,7 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Enums;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -60,6 +61,11 @@ public class Webhook
     /// The ID of the merchant that the webhook is for.
     /// </summary>
     public Guid MerchantID { get; set; }
+
+    /// <summary>
+    /// The type of notification that will be sent.
+    /// </summary>
+    public NotificationMethodTypesEnum NotificationMethod { get; set; }
 
     public static string GetSignature(string secret, byte[] payloadBytes)
     {
