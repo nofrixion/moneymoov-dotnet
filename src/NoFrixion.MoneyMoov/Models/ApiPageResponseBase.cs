@@ -22,7 +22,7 @@ public class BeneficiaryPageResponse : ApiPageResponseBase<Beneficiary>
     public BeneficiaryPageResponse(List<Beneficiary> content,
         int pageNumber = 1,
         int pageSize = 10,
-        int totalPages = default,
+        long totalPages = default,
         long totalSize = default)
         : base(content, pageNumber, pageSize, totalPages, totalSize)
     { }
@@ -33,7 +33,7 @@ public class BeneficiaryGroupPageResponse : ApiPageResponseBase<BeneficiaryGroup
     public BeneficiaryGroupPageResponse(List<BeneficiaryGroup> content,
         int pageNumber = 1,
         int pageSize = 10,
-        int totalPages = default,
+        long totalPages = default,
         long totalSize = default)
         : base(content, pageNumber, pageSize, totalPages, totalSize)
     { }
@@ -44,7 +44,7 @@ public class MerchantTokenPageResponse : ApiPageResponseBase<MerchantToken>
     public MerchantTokenPageResponse(List<MerchantToken> content,
                 int pageNumber = 1,
                 int pageSize = 10,
-                int totalPages = default,
+                long totalPages = default,
                 long totalSize = default)
         : base(content, pageNumber, pageSize, totalPages, totalSize)
     { }
@@ -55,7 +55,7 @@ public class TransactionPageResponse : ApiPageResponseBase<Transaction>
     public TransactionPageResponse(List<Transaction> content,
         int pageNumber = 1,
         int pageSize = 10,
-        int totalPages = default,
+        long totalPages = default,
         long totalSize = default)
         : base(content, pageNumber, pageSize, totalPages, totalSize)
     { }
@@ -66,7 +66,7 @@ public class PaymentAccountPageResponse : ApiPageResponseBase<PaymentAccount>
     public PaymentAccountPageResponse(List<PaymentAccount> content,
         int pageNumber = 1,
         int pageSize = 10,
-        int totalPages = default,
+        long totalPages = default,
         long totalSize = default)
         : base(content, pageNumber, pageSize, totalPages, totalSize)
     { }
@@ -77,7 +77,7 @@ public class MerchantPageResponse : ApiPageResponseBase<Merchant>
     public MerchantPageResponse(List<Merchant> content,
         int pageNumber = 1,
         int pageSize = 10,
-        int totalPages = default,
+        long totalPages = default,
         long totalSize = default)
         : base(content, pageNumber, pageSize, totalPages, totalSize)
     { }
@@ -96,7 +96,7 @@ public abstract class ApiPageResponseBase<T> : PageResponse<T>
     protected ApiPageResponseBase(List<T> content,
             int pageNumber = 1,
             int pageSize = 10,
-            int totalPages = default,
+            long totalPages = default,
             long totalSize = default)
     {
         // to ensure "content" is required (not null)
