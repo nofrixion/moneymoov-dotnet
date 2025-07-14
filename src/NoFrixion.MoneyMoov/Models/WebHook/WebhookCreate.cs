@@ -108,6 +108,18 @@ public class WebhookCreate : IValidatableObject
         {
             yield return new ValidationResult("Cannot create a webhook with a notification method type of none.");
         }
+
+        if (NotificationMethod is NotificationMethodTypesEnum.Email
+            && string.IsNullOrWhiteSpace(EmailAddress))
+        {
+            yield return new ValidationResult("Email address is required for email notification method.");
+        }
+
+        if (NotificationMethod is NotificationMethodTypesEnum.Webhook
+            && (string.IsNullOrWhiteSpace(DestinationUrl) || string.IsNullOrWhiteSpace(Secret)))
+        {
+            yield return new ValidationResult("Destination URL and Secret are required for webhook notification method.");
+        }
     }
 
     public Dictionary<string, string> ToDictionary()
