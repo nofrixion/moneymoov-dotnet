@@ -16,6 +16,7 @@
 
 #nullable disable
 
+using JetBrains.Annotations;
 using NoFrixion.MoneyMoov.Extensions;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -166,8 +167,14 @@ public class Transaction : IWebhookPayload, IExportableToCsv
     /// For an FX payout this is the exchange rate between the transaction currency and the FX currency.
     /// </summary>
     public decimal? FxRate { get; set; }
+    
+    /// <summary>
+    /// The custom fields that were attached to the payment request that resulted in this transaction.
+    /// </summary>
+    [CanBeNull]
+    public Dictionary<string, string> PaymentRequestCustomFields { get; set; }
 
-    public string CsvHeader() => "ID,AccountID,AccountName,MerchantID,Type,Amount,Currency,Description,TransactionDate,Inserted,YourReference,TheirReference,Counterparty,Balance,RuleID,PayoutID,VirtualIBAN,Tags,AccountSequenceNumber,PaymentRequestID";
+    public string CsvHeader() => "ID,AccountID,AccountName,MerchantID,Type,Amount,Currency,Description,TransactionDate,Inserted,YourReference,TheirReference,Counterparty,Balance,RuleID,PayoutID,VirtualIBAN,Tags,AccountSequenceNumber,PaymentRequestID,PaymentRequestCustomFields";
     
     public string ToCsvRow()
     {

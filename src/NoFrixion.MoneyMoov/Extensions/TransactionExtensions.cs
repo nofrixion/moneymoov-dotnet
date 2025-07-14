@@ -45,6 +45,7 @@ public static class TransactionExtensions
             transaction.Tags != null ? string.Join(",", transaction.Tags.Select(tag => tag.Name)) : "",
             transaction.AccountSequenceNumber.ToString(),
             transaction.PaymentRequestID?.ToString() ?? "",
+            transaction.PaymentRequestCustomFields?.Select(kv => $"{kv.Key}: {kv.Value}").Aggregate((a, b) => $"{a}, {b}") ?? string.Empty
         };
         
         // Quote values to handle commas in the data
