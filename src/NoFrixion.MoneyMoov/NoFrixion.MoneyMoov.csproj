@@ -16,6 +16,7 @@
         <PackageReference Include="CsvHelper" Version="33.0.1" />
         <PackageReference Include="IdentityModel" Version="7.0.0" />
         <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
+        <PackageReference Include="Marten" Version="8.3.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />

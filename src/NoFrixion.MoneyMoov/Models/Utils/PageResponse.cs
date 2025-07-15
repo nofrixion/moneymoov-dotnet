@@ -23,7 +23,7 @@ namespace NoFrixion.MoneyMoov.Models.Utils
         /// Total pages
         /// </summary>
         /// <value>Total pages</value>
-        public int TotalPages { get; set; }
+        public long TotalPages { get; set; }
 
         /// <summary>
         /// Total count

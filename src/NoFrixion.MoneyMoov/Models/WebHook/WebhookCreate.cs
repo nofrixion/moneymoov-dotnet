@@ -14,6 +14,7 @@
 //-----------------------------------------------------------------------------
 
 using NoFrixion.MoneyMoov.Attributes;
+using NoFrixion.MoneyMoov.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -51,16 +52,26 @@ public class WebhookCreate : IValidatableObject
     /// </summary>
     public List<WebhookResourceTypesEnum> ResourceTypes { get; set; } = new List<WebhookResourceTypesEnum>();
 
-    [Required]
+    /// <summary>
+    /// The destination URL for the webhook.
+    /// Required for webhook notifications.
+    /// </summary>
     public string? DestinationUrl { get; set; }
 
     public bool Retry { get; set; } = true;
 
-    [Required]
+    /// <summary>
+    /// The secret key required to authenticate webhook notifications.
+    /// Required for webhook notifications.
+    /// </summary>
     public string? Secret { get; set; }
 
     public bool IsActive { get; set; } = true;
 
+    /// <summary>
+    /// The recipient email address(es) for notifications. Multiple addresses can be separated by a comma, semicolon, or space.
+    /// Reruired for email notifications.
+    /// </summary>
     [EmailAddressMultiple(ErrorMessage = "One or more of the email addresses are invalid. Addresses can be separated by a comma, semi-colon or space.")]
     public string? EmailAddress { get; set; }
 
@@ -69,6 +80,12 @@ public class WebhookCreate : IValidatableObject
     /// </summary>
     [EmailAddressMultiple(ErrorMessage = "One or more of the email addresses are invalid. Addresses can be separated by a comma, semi-colon or space.")]
     public string? FailedNotificationEmailAddress { get; set; }
+
+    /// <summary>
+    /// The type of notification that will be sent.
+    /// </summary>
+    [Required]
+    public NotificationMethodTypesEnum NotificationMethod { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -86,6 +103,23 @@ public class WebhookCreate : IValidatableObject
         {
             yield return new ValidationResult("Cannot create a webhook with a resource type of none.");
         }
+
+        if (NotificationMethod is NotificationMethodTypesEnum.None)
+        {
+            yield return new ValidationResult("Cannot create a webhook with a notification method type of none.");
+        }
+
+        if (NotificationMethod is NotificationMethodTypesEnum.Email
+            && string.IsNullOrWhiteSpace(EmailAddress))
+        {
+            yield return new ValidationResult("Email address is required for email notification method.");
+        }
+
+        if (NotificationMethod is NotificationMethodTypesEnum.Webhook
+            && (string.IsNullOrWhiteSpace(DestinationUrl) || string.IsNullOrWhiteSpace(Secret)))
+        {
+            yield return new ValidationResult("Destination URL and Secret are required for webhook notification method.");
+        }
     }
 
     public Dictionary<string, string> ToDictionary()
@@ -99,7 +133,8 @@ public class WebhookCreate : IValidatableObject
             { nameof(Secret), Secret ?? string.Empty },
             { nameof(IsActive), IsActive.ToString() },
             { nameof(EmailAddress), EmailAddress ?? string.Empty },
-            { nameof(FailedNotificationEmailAddress), FailedNotificationEmailAddress ?? string.Empty }
+            { nameof(FailedNotificationEmailAddress), FailedNotificationEmailAddress ?? string.Empty },
+            { nameof(NotificationMethod), NotificationMethod.ToString() }
         };
 
         if (ResourceTypes?.Count() > 0)
