@@ -208,6 +208,11 @@ public class PayoutUpdate
     public bool? FxUseDestinationAmount { get; set; }
 
     /// <summary>
+    /// Optional. For an mulit-currency (FX) payout this is an optional ID of the FX held rate to use for the payout.
+    /// </summary>
+    public string? FxQuoteID { get; set; }
+
+    /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payout's non-collection properties 
@@ -228,6 +233,7 @@ public class PayoutUpdate
         if (FxDestinationCurrency != null) dict.Add(nameof(FxDestinationCurrency), FxDestinationCurrency.Value.ToString());
         if (FxDestinationAmount != null) dict.Add(nameof(FxDestinationAmount), FxDestinationAmount.Value.ToString());
         if (FxUseDestinationAmount != null) dict.Add(nameof(FxUseDestinationAmount), FxUseDestinationAmount.Value.ToString());
+        if (FxQuoteID != null) dict.Add(nameof(FxQuoteID), FxQuoteID);
 
         if (Destination != null)
         {

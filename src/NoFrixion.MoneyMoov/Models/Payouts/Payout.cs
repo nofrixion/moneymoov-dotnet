@@ -502,6 +502,11 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// </summary>
     public string FormattedFxDestinationAmount => PaymentAmount.DisplayCurrencyAndAmount(FxDestinationCurrency.GetValueOrDefault(), FxDestinationAmount.GetValueOrDefault());
 
+    /// <summary>
+    /// Optional. For an mulit-currency (FX) payout this is an optional ID of the FX held rate to use for the payout.
+    /// </summary>
+    public string? FxQuoteID { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
