@@ -16,7 +16,7 @@
 namespace NoFrixion.MoneyMoov.Models;
 
 /// <summary>
-/// Represents a Foreign Exhange (FX) rate.
+/// Represents a Foreign Exchange (FX) rate.
 /// </summary>
 public class FxRate
 {
