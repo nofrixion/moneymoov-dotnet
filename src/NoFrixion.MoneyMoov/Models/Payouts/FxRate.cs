@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
 // Filename: FxRate.cs
 // 
-// Description: A model representing a Foreign Exhange (FX) rate.
+// Description: A model representing a Foreign Exchange (FX) rate.
 // 
 // Author(s):
 // Aaron Clasuon (aaron@nofrixion.com)
