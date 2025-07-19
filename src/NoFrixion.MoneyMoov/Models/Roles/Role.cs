@@ -38,4 +38,6 @@ public class Role
     public List<RoleUser>? Users { get; set; }
     
     public bool IsSystemRole { get; set; }
+    
+    public List<RoleEvent> Events { get; set; } = null!;
 }
