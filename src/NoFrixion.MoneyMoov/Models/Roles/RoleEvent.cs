@@ -76,6 +76,11 @@ public class RoleEvent
     /// The number of users assigned to the role at the time of the event.
     /// </summary>
     public int? AssignedUsers { get; set; }
+
+    /// <summary>
+    /// IDs of the accounts that were assigned to the role-user during the event.
+    /// </summary>
+    public Guid[]? AccountIDs { get; set; }
     
     /// <summary>
     /// User that triggered the event.
