@@ -235,12 +235,6 @@ public class PayoutCreate
     public bool FxUseDestinationAmount { get; set; }
 
     /// <summary>
-    /// Optional. For multi-currency payouts this is the ID of a held rate that can be used for the FX conversion. If left
-    /// empty the mid-market FX rate will be used.
-    /// </summary>
-    public string? FxQuoteID { get; set; }
-
-    /// <summary>
     /// Places all the payout's properties into a dictionary.
     /// </summary>
     /// <returns>A dictionary with all the payout's non-collection properties 
@@ -272,7 +266,6 @@ public class PayoutCreate
         if (Amount != null) dict.Add(nameof(Amount), Amount.Value.ToString());
         if (FxDestinationCurrency != null) dict.Add(nameof(FxDestinationCurrency), FxDestinationCurrency.Value.ToString());
         if (FxDestinationAmount != null) dict.Add(nameof(FxDestinationAmount), FxDestinationAmount.Value.ToString());
-        if (!string.IsNullOrWhiteSpace(FxQuoteID)) dict.Add(nameof(FxQuoteID), FxQuoteID);
 
         return dict;
     }
