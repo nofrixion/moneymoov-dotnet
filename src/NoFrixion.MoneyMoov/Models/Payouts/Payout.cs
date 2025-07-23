@@ -502,6 +502,17 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// </summary>
     public string FormattedFxDestinationAmount => PaymentAmount.DisplayCurrencyAndAmount(FxDestinationCurrency.GetValueOrDefault(), FxDestinationAmount.GetValueOrDefault());
 
+    /// <summary>
+    /// Optional. For multi-currency payouts this is the ID of the held rate that was set for the FX conversion. If
+    /// empty it indicates the mid-market FX rate is being be used.
+    /// </summary>
+    public string? FxQuoteID { get; set; }
+
+    /// <summary>
+    /// If an FX held rate quote ID is being used this is the time the quote expires.
+    /// </summary>
+    public DateTimeOffset? FxQuoteExpiresAt { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
