@@ -72,6 +72,14 @@ public class PaymentAccountPageResponse : ApiPageResponseBase<PaymentAccount>
     { }
 }
 
+public class PaymentAccountMinimalPageResponse(
+    List<PaymentAccountMinimal> content,
+    int pageNumber = 1,
+    int pageSize = 10,
+    long totalPages = default,
+    long totalSize = default)
+    : ApiPageResponseBase<PaymentAccountMinimal>(content, pageNumber, pageSize, totalPages, totalSize);
+
 public class MerchantPageResponse : ApiPageResponseBase<Merchant>
 {
     public MerchantPageResponse(List<Merchant> content,
