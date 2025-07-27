@@ -134,11 +134,11 @@ public class MerchantToken
     public bool IsArchived { get; set; }
 
     /// <summary>
-    /// Gets a hash of the critical fields for the beneficiary. This hash is
-    /// used to ensure a beneficiary's details are not modified between the time the
-    /// authorisation is given and the time the beneficiary is enabled.
+    /// Gets a hash of the critical fields for the merhcant token. This hash is
+    /// used to ensure a merchant token's details are not modified between the time the
+    /// authorisation is given and the time the merchant token is enabled.
     /// </summary>
-    /// <returns>A hash of the beneficiary's critical fields.</returns>
+    /// <returns>A hash of the merchant token's critical fields.</returns>
     public string GetApprovalHash()
     {
         var input =
