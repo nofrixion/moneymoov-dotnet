@@ -291,23 +291,4 @@ public class PaymentRequestResult
 
         return outstanding >= 0 ? outstanding : 0;
     }
-
-    /// <summary>
-    /// Applies a cap on the amount a partial payment can be for to avoid exceeding
-    /// the total payment amount for the payment request.
-    /// </summary>
-    /// <param name="amountRequested">The partial payment amount being requested.</param>
-    /// <returns>A corrected payment amount.</returns>
-    public decimal GetCappedPartialAmount(decimal amountRequested)
-    {
-        if (amountRequested > decimal.Zero)
-        {
-            decimal outstandingAmount = this.AmountOutstanding();
-            return amountRequested > outstandingAmount ? outstandingAmount : amountRequested;
-        }
-        else
-        {
-            return this.AmountOutstanding();
-        }
-    }
 }
