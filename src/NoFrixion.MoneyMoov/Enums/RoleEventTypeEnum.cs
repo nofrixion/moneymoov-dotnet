@@ -24,17 +24,15 @@ public enum RoleEventTypeEnum
 
     Created = 1,
     
-    Authorised = 2,
+    Edited = 2,
     
-    Rejected = 3,
+    Archived = 3,
     
-    Edited = 4,
+    Unarchived = 4,
     
-    Archived = 6,
+    AssignedToUser = 5,
     
-    Unarchived = 7,
+    RemovedFromUser = 6,
     
-    AssignedToUser = 8,
-    
-    RemovedFromUser = 9,
+    UpdatedUserAssignment = 7
 }

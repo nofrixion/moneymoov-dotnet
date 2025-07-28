@@ -60,11 +60,6 @@ public class RoleEvent
     /// The client session timeout seconds the role had at the time of the event.
     /// </summary>
     public int? ClientSessionTimeoutSeconds { get; set; }
-
-    /// <summary>
-    /// If the role was a system role at the time of the event.
-    /// </summary>
-    public bool? IsSystem { get; set; }
     
     /// <summary>
     /// For <see cref="RoleEventTypeEnum.AssignedToUser"/> and <see cref="RoleEventTypeEnum.RemovedFromUser"/> event types.
