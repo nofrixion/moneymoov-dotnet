@@ -368,4 +368,43 @@ public static class PaymentRequestEventExtensions
             .Where(x => x.EventType == PaymentRequestEventTypesEnum.card_sale)
             .ToList() : new List<PaymentRequestEvent>();
     }
+
+    private static bool IsPispRelatedEvent(this PaymentRequestEvent paymentRequestEvent)
+    {
+        return
+            paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.pisp_initiate ||
+            paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.pisp_callback ||
+            paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.pisp_webhook ||
+            paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.pisp_settle ||
+            paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.pisp_settle_failure ||
+            paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.pisp_refund_initiated ||
+            paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.pisp_refund_settled;
+    }
+
+    private static bool IsDirectDebitRelatedEvent(this PaymentRequestEvent paymentRequestEvent)
+    {
+        return paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.direct_debit_create ||
+               paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.direct_debit_failed ||
+               paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.direct_debit_paid;
+    }
+
+    public static PaymentMethodTypeEnum GetPaymentMethodType(this PaymentRequestEvent paymentRequestEvent)
+    {
+        if (paymentRequestEvent.IsCardRelatedEvent())
+        {
+            return PaymentMethodTypeEnum.card;
+        }
+
+        if (paymentRequestEvent.IsPispRelatedEvent())
+        {
+            return PaymentMethodTypeEnum.pisp;
+        }
+
+        if (paymentRequestEvent.IsDirectDebitRelatedEvent())
+        {
+            return PaymentMethodTypeEnum.directDebit;
+        }
+
+        return PaymentMethodTypeEnum.None;
+    }
 }

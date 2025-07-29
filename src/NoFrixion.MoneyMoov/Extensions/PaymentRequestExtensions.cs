@@ -35,6 +35,9 @@ public static class PaymentRequestExtensions
             paymentAttempts.AddRange(GetPispPaymentAttempts(events));
             paymentAttempts.AddRange(GetLightningPaymentAttempts(events));
             paymentAttempts.AddRange(GetDirectDebitPaymentAttempts(events));
+            
+            paymentAttempts.Sort(
+                (x, y) => y.InitiatedAt.CompareTo(x.InitiatedAt));
 
             return paymentAttempts;
         }
