@@ -50,10 +50,20 @@ public class UserInvite
     /// </summary>
     public Guid? InitialRoleID { get; set; }
 
+    /// <summary>
+    /// Will be set to true once the invite has met the authorisation requirements.
+    /// </summary>
+    public bool IsAuthorised { get; set; }
+
     public UserInviteStatusEnum Status
     {
         get
         {
+            if(!IsAuthorised)
+            {
+                return UserInviteStatusEnum.AuthorisationRequired;
+            }
+
             if (UserID != null)
             {
                 return UserInviteStatusEnum.Accepted;
