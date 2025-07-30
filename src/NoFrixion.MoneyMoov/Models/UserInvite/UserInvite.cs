@@ -50,10 +50,20 @@ public class UserInvite
     /// </summary>
     public Guid? InitialRoleID { get; set; }
 
+    /// <summary>
+    /// Will be set to true once the invite has met the authorisation requirements.
+    /// </summary>
+    public bool IsAuthorised { get; set; }
+
     public UserInviteStatusEnum Status
     {
         get
         {
+            if(!IsAuthorised)
+            {
+                return UserInviteStatusEnum.AuthorisationRequired;
+            }
+
             if (UserID != null)
             {
                 return UserInviteStatusEnum.Accepted;
@@ -68,5 +78,21 @@ public class UserInvite
                 return UserInviteStatusEnum.Active;
             }
         }
+    }
+
+    /// <summary>
+    /// Gets a hash of the critical fields for the user invite. This hash is
+    /// used to ensure a user invite's details are not modified between the time the
+    /// authorisation is given and the time the user invite is enabled.
+    /// </summary>
+    /// <returns>A hash of the user invite's critical fields.</returns>
+    public string GetApprovalHash()
+    {
+        var input =
+            InviteeEmailAddress +
+            MerchantID +
+            InitialRoleID?.ToString();
+
+        return HashHelper.CreateHash(input);
     }
 }

@@ -35,5 +35,7 @@ public enum ApproveTypesEnum
     
     Payrun = 8,
 
-    MerchantToken = 9
+    MerchantToken = 9,
+
+    UserInvite = 10,
 }
