@@ -85,7 +85,7 @@ public class WebhookCreate : IValidatableObject
     /// The type of notification that will be sent.
     /// </summary>
     [Required]
-    public NotificationMethodTypesEnum NotificationMethod { get; set; }
+    public NotificationMethodTypesEnum NotificationMethod { get; set; } = NotificationMethodTypesEnum.Email;
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
