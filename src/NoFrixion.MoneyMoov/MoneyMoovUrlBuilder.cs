@@ -315,6 +315,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string UserInviteUrl(string moneyMoovBaseUrl, Guid userInviteID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.userinvites}/{userInviteID}";
+
+        public static string AuthoriseUserInviteUrl(string moneyMoovBaseUrl, Guid userInviteID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.userinvites}/authorise/{userInviteID}";
     }
 
     /// <summary>

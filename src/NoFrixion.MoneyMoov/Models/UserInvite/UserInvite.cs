@@ -12,6 +12,8 @@
 // MIT.
 // -----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Enums;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class UserInvite
@@ -54,6 +56,11 @@ public class UserInvite
     /// Will be set to true once the invite has met the authorisation requirements.
     /// </summary>
     public bool IsAuthorised { get; set; }
+
+    /// <summary>
+    /// A list of authentication types allowed to authorise the merchant token.
+    /// </summary>
+    public List<AuthenticationTypesEnum> AuthenticationMethods { get; set; } = [];
 
     public UserInviteStatusEnum Status
     {
