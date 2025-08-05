@@ -58,19 +58,15 @@ public class UserInvite
     public bool IsAuthorised { get; set; }
 
     /// <summary>
-    /// A list of authentication types allowed to authorise the merchant token.
+    /// The authorisation status for the user invite. It is used for invites
+    /// that require authorisation before they can be activated.
     /// </summary>
-    public List<AuthenticationTypesEnum> AuthenticationMethods { get; set; } = [];
+    public AuthorisationStatus? AuthorisationStatus { get; set; }
 
     public UserInviteStatusEnum Status
     {
         get
         {
-            if(!IsAuthorised)
-            {
-                return UserInviteStatusEnum.AuthorisationRequired;
-            }
-
             if (UserID != null)
             {
                 return UserInviteStatusEnum.Accepted;
@@ -79,6 +75,10 @@ public class UserInvite
             if ((DateTimeOffset.Now - LastInvited) > new TimeSpan(USER_INVITE_EXPIRATION_HOURS, 0, 0))
             {
                 return UserInviteStatusEnum.Expired;
+            }
+            else if (!IsAuthorised)
+            {
+                return UserInviteStatusEnum.AuthorisationRequired;
             }
             else
             {
@@ -92,6 +92,8 @@ public class UserInvite
     /// used to ensure a user invite's details are not modified between the time the
     /// authorisation is given and the time the user invite is enabled.
     /// </summary>
+    /// <remarks>There is currently no need for a nonce as user invites cannot have their critical details updated 
+    /// once created.</remarks>
     /// <returns>A hash of the user invite's critical fields.</returns>
     public string GetApprovalHash()
     {
