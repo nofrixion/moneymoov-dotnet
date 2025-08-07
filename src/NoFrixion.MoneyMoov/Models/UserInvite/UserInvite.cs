@@ -69,14 +69,14 @@ public class UserInvite
             {
                 return UserInviteStatusEnum.Accepted;
             }
-            
-            if ((DateTimeOffset.Now - LastInvited) > new TimeSpan(USER_INVITE_EXPIRATION_HOURS, 0, 0))
-            {
-                return UserInviteStatusEnum.Expired;
-            }
-            else if (!IsAuthorised)
+
+            if (!IsAuthorised)
             {
                 return UserInviteStatusEnum.AuthorisationRequired;
+            }
+            else if ((DateTimeOffset.Now - LastInvited) > new TimeSpan(USER_INVITE_EXPIRATION_HOURS, 0, 0))
+            {
+                return UserInviteStatusEnum.Expired;
             }
             else
             {
