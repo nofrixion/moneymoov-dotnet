@@ -12,8 +12,6 @@
 // MIT.
 // -----------------------------------------------------------------------------
 
-using NoFrixion.MoneyMoov.Enums;
-
 namespace NoFrixion.MoneyMoov.Models;
 
 public class UserInvite
