@@ -26,6 +26,8 @@ public interface IUserInviteClient
 
     Task<RestApiResponse<UserInvite>> GetUserInviteAsync(string accessToken, Guid userInviteID);
 
+    Task<RestApiResponse<UserInvite>> GetUserInviteDetailsAsync(string accessToken, Guid userInviteID);
+
     Task<RestApiResponse<UserInvite>> SendInviteAsync(string userAccessToken, Guid merchantID,
         string inviteeEmailAddress,
         string inviteRegistrationUrl,
@@ -39,6 +41,8 @@ public interface IUserInviteClient
     Task<RestApiResponse> ResendUserInviteAsync(string accessToken, Guid userInviteID);
     
     Task<RestApiResponse> DeleteUserInviteAsync(string accessToken, Guid inviteID);
+
+    Task<RestApiResponse> AuthoriseUserInviteAsync(string strongUserAccessToken, Guid inviteID);
 }
 
 public class UserInviteClient : IUserInviteClient
@@ -94,6 +98,25 @@ public class UserInviteClient : IUserInviteClient
         var url = MoneyMoovUrlBuilder.UserInvitesApi.UserInviteUrl(_apiClient.GetBaseUri().ToString(), userInviteID);
 
         var prob = _apiClient.CheckAccessToken(accessToken, nameof(GetUserInviteAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<UserInvite>(url, accessToken),
+            _ => Task.FromResult(new RestApiResponse<UserInvite>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov Merchant get user invite details endpoint to get a single user invite by ID.
+    /// </summary>
+    /// <param name="accessToken">A User scoped JWT access token.</param>
+    /// <param name="userInviteID">The ID of the user invite to retrieve.</param>
+    /// <returns>If successful, a user invite object.</returns>
+    public Task<RestApiResponse<UserInvite>> GetUserInviteDetailsAsync(string accessToken, Guid userInviteID)
+    {
+        var url = MoneyMoovUrlBuilder.UserInvitesApi.UserInviteDetailsUrl(_apiClient.GetBaseUri().ToString(), userInviteID);
+
+        var prob = _apiClient.CheckAccessToken(accessToken, nameof(GetUserInviteDetailsAsync));
 
         return prob switch
         {
@@ -189,6 +212,27 @@ public class UserInviteClient : IUserInviteClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.DeleteAsync(url, accessToken),
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov user invites endpoint to authorise a user invite.
+    /// </summary>
+    /// <param name="strongUserAccessToken">The strong user access token acquired to authorise the user invite. Strong
+    /// tokens can only be acquired from a strong customer authentication flow, are short lived (typically 5 minute expiry)
+    /// and are specific to the user invite.</param>
+    /// <param name="inviteID">The ID of the user invite to authorise.</param>
+    /// <returns>An API response indicating the result of the authorise attempt.</returns>
+    public Task<RestApiResponse> AuthoriseUserInviteAsync(string strongUserAccessToken, Guid inviteID)
+    {
+        var url = MoneyMoovUrlBuilder.UserInvitesApi.AuthoriseUserInviteUrl(_apiClient.GetBaseUri().ToString(), inviteID);
+
+        var prob = _apiClient.CheckAccessToken(strongUserAccessToken, nameof(AuthoriseUserInviteAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PostAsync(url, strongUserAccessToken),
             _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
