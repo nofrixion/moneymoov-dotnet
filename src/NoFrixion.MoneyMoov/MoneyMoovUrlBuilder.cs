@@ -199,6 +199,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string GetByOrderIDUrl(string moneyMoovBaseUrl, string orderID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}/getbyorderid/{orderID}";
+        
+        public static string BatchPaymentRequestsUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}/batchcreate";
     }
 
     /// <summary>
