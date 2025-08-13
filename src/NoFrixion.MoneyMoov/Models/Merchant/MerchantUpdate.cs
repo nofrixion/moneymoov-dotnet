@@ -13,6 +13,8 @@
 // MIT.
 // -----------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 public class MerchantUpdate
@@ -24,4 +26,7 @@ public class MerchantUpdate
     public string? LogoUrlPng { get; set; }
     
     public string? LogoUrlSvg { get; set; }
+
+    [MaxLength(2000, ErrorMessage = "Merchant notes must be 2000 characters or less.")]
+    public string? Notes { get; set; }
 }
