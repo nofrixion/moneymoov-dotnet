@@ -132,6 +132,11 @@ public class Merchant
     public string? LogoUrlSvg { get; set; }
 
     /// <summary>
+    /// The notes field is an optional free text field that can be used to store any additional information about the merchant.
+    /// </summary>
+    public string? Notes { get; set; }
+
+    /// <summary>
     /// An optional list of descriptive tags that can be used on merchant entities
     /// such as payment requests.
     /// </summary>
