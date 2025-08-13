@@ -348,6 +348,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string AuthoriseBeneficiaryUrl(string moneyMoovBaseUrl, Guid beneficiaryID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.beneficiaries}/authorise/{beneficiaryID}";
+        
+        public static string BatchBeneficiariesUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.beneficiaries}/batchcreate";
     }
 
     public static string AccountStatementApiUrl(string moneyMoovBaseUrl, string? accountId = null)
