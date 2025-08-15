@@ -27,6 +27,8 @@ public class RoleUser
 
     public DateTimeOffset LastUpdated { get; set; }
 
+    public bool IsEnabled { get; set; }
+
     public List<RoleUserAccount>? Accounts { get; set; }
 
     public List<RoleUserMerchant>? Merchants { get; set; }
