@@ -142,6 +142,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string MerchantRolesUserUrl(string moneyMoovBaseUrl, Guid merchantID, Guid userID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.users}/{userID}/{MoneyMoovResources.roles}";
+        
+        public static string MerchantRolesBatchCreateUrl(string moneyMoovBaseUrl, Guid merchantID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.roles}/batchcreate";
     }
 
     /// <summary>
