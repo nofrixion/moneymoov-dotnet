@@ -27,6 +27,11 @@ public class RoleUser
 
     public DateTimeOffset LastUpdated { get; set; }
 
+    /// <summary>
+    /// Indicates whether the role user is enabled. 
+    /// An enabled role user is authorized to perform actions associated with their assigned role.
+    /// If set to <c>false</c>, the user is considered disabled and will not be granted authorization for role-based actions.
+    /// </summary>
     public bool IsEnabled { get; set; }
 
     public List<RoleUserAccount>? Accounts { get; set; }
