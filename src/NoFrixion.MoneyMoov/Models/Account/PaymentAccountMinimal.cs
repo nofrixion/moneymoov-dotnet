@@ -66,4 +66,14 @@ public class PaymentAccountMinimal
     /// Externally connected account can be used to view account balances and transactions. 
     /// </summary>
     public bool IsConnectedAccount { get; set; }
+    
+    /// <summary>
+    /// Total of the payouts that have been submitted for processing.
+    /// </summary>
+    public decimal SubmittedPayoutsBalance { get; set; }
+    
+    /// <summary>
+    /// The current available balance of the account. Calculated by subtracting any submitted payments from the current balance.
+    /// </summary>
+    public decimal AvailableBalance => Balance - SubmittedPayoutsBalance;
 }

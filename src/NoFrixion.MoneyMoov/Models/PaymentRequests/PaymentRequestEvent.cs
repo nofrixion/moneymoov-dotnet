@@ -18,6 +18,7 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using NoFrixion.MoneyMoov.Extensions;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -211,4 +212,9 @@ public class PaymentRequestEvent
             _ => Math.Round(Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES)
         };
     }
+
+    /// <summary>
+    /// The type of payment method the event relates to, e.g. card, pisp, etc.
+    /// </summary>
+    public PaymentMethodTypeEnum PaymentMethodType => this.GetPaymentMethodType();
 }

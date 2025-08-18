@@ -31,5 +31,10 @@ public enum UserInviteStatusEnum
     /// <summary>
     /// User has accepted the invite but the role is pending.
     /// </summary>
-    Accepted = 2
+    Accepted = 2,
+
+    /// <summary>
+    /// The invite needs to be authorised before being activated.
+    /// </summary>
+    AuthorisationRequired = 3,
 }

@@ -56,6 +56,12 @@ public interface IMerchantClient
     Task<RestApiResponse<Merchant>> GetMerchantAsync(string userAccessToken, Guid merchantID);
     
     Task<RestApiResponse<Merchant>> UpdateMerchantAsync(string userAccessToken, Guid merchantID, MerchantUpdate merchantUpdate);
+
+    Task<RestApiResponse<MerchantPageResponse>> GetChildMerchantsAsync(string userAccessToken, Guid parentMerchantID,
+        int pageNumber = 1,
+        int pageSize = 20,
+        string? search = null,
+        string? sort = null);
 }
 
 public class MerchantClient : IMerchantClient
@@ -363,6 +369,38 @@ public class MerchantClient : IMerchantClient
         {
             var p when p.IsEmpty => _apiClient.PutAsync<Merchant>(url, userAccessToken, merchantUpdate.ToJsonContent()),
             _ => Task.FromResult(new RestApiResponse<Merchant>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov Merchant get child merchants endpoint to get a paged list of child merchants.
+    /// </summary>
+    /// <param name="userAccessToken">A user-scoped JWT access token.</param>
+    /// <param name="parentMerchantID">The unique identifier of the parent merchant.</param>
+    /// <param name="pageNumber">The page number of the result set to retrieve.</param>
+    /// <param name="pageSize">The number of records to return per page.</param>
+    /// <param name="search">A search filter to apply to the child merchant list. Typically searches against merchant name or ID.</param>
+    /// <param name="sort">The sort expression for the result set, e.g., "Name asc".</param>
+    /// <returns>A paged response containing a list of child merchants if successful.</returns>
+    public Task<RestApiResponse<MerchantPageResponse>> GetChildMerchantsAsync(string userAccessToken, Guid parentMerchantID,
+        int pageNumber = 1,
+        int pageSize = 20,
+        string? search = null,
+        string? sort = null)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.ChildMerchantsUrl(_apiClient.GetBaseUri().ToString(),
+            parentMerchantID,
+            pageNumber,
+            pageSize,
+            search,
+            sort);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetMerchantTokenAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<MerchantPageResponse>(url, userAccessToken),
+            _ => Task.FromResult(new RestApiResponse<MerchantPageResponse>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }

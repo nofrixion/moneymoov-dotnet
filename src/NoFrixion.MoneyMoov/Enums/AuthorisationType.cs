@@ -22,5 +22,6 @@ public enum AuthorisationType
     Rule = 2,
     Beneficiary = 3,
     Payrun = 4,
-    MerchantToken = 5
+    MerchantToken = 5,
+    UserInvite = 6
 }

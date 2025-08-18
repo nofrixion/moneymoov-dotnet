@@ -571,7 +571,7 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     }
 
     public string CsvHeader() =>
-        $"ID,PayrunID,AccountID,MerchantID,CreatedByUserID,ApproverID,TopupPayrunID,Type,Description,Currency,Amount,YourReference,TheirReference,CanProcess,BatchPayoutID,DestinationAccountID,DestinationIBAN,DestinationAccountNumber,DestinationSortCode,DestinationAccountName,MerchantTokenDescription,Status,ExportedByUserID,ExportedByUserRole,AuthoriseUrl,CreatedByUserName,CreatedByEmailAddress,Inserted,LastUpdated,SourceAccountName,SourceAccountIban,SourceAccountNumber,SourceAccountSortcode,SourceAccountAvailableBalance,InvoiceID,Tags,Scheduled,ScheduleDate,AuthorisersRequiredCount,AuthorisersCompletedCount,Authorisations,AuthenticationMethods,BeneficiaryID,PayrunName,PaymentProcessor,RuleID, RuleName,PaymentRail,Nonce,DocumentIDs,IsSubmitted,IsFailed,IsSettled";
+        $"ID,PayrunID,AccountID,MerchantID,CreatedByUserID,ApproverID,TopupPayrunID,Type,Description,Currency,Amount,YourReference,TheirReference,CanProcess,BatchPayoutID,DestinationAccountID,DestinationIBAN,DestinationAccountNumber,DestinationSortCode,DestinationAccountName,MerchantTokenDescription,Status,ExportedByUserID,AuthoriseUrl,CreatedByUserName,CreatedByEmailAddress,Inserted,LastUpdated,SourceAccountName,SourceAccountIban,SourceAccountNumber,SourceAccountSortcode,SourceAccountAvailableBalance,InvoiceID,Tags,Scheduled,ScheduleDate,AuthorisersRequiredCount,AuthorisersCompletedCount,Authorisations,AuthenticationMethods,BeneficiaryID,PayrunName,PaymentProcessor,RuleID, RuleName,PaymentRail,Nonce,DocumentIDs,IsSubmitted,IsFailed,IsSettled";
     
     public string ToCsvRow()
     {

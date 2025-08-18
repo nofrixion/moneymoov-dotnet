@@ -50,6 +50,17 @@ public class UserInvite
     /// </summary>
     public Guid? InitialRoleID { get; set; }
 
+    /// <summary>
+    /// Will be set to true once the invite has met the authorisation requirements.
+    /// </summary>
+    public bool IsAuthorised { get; set; }
+
+    /// <summary>
+    /// The authorisation status for the user invite. It is used for invites
+    /// that require authorisation before they can be activated.
+    /// </summary>
+    public AuthorisationStatus? AuthorisationStatus { get; set; }
+
     public UserInviteStatusEnum Status
     {
         get
@@ -58,8 +69,12 @@ public class UserInvite
             {
                 return UserInviteStatusEnum.Accepted;
             }
-            
-            if ((DateTimeOffset.Now - LastInvited) > new TimeSpan(USER_INVITE_EXPIRATION_HOURS, 0, 0))
+
+            if (!IsAuthorised)
+            {
+                return UserInviteStatusEnum.AuthorisationRequired;
+            }
+            else if ((DateTimeOffset.Now - LastInvited) > new TimeSpan(USER_INVITE_EXPIRATION_HOURS, 0, 0))
             {
                 return UserInviteStatusEnum.Expired;
             }
@@ -68,5 +83,23 @@ public class UserInvite
                 return UserInviteStatusEnum.Active;
             }
         }
+    }
+
+    /// <summary>
+    /// Gets a hash of the critical fields for the user invite. This hash is
+    /// used to ensure a user invite's details are not modified between the time the
+    /// authorisation is given and the time the user invite is enabled.
+    /// </summary>
+    /// <remarks>There is currently no need for a nonce as user invites cannot have their critical details updated 
+    /// once created.</remarks>
+    /// <returns>A hash of the user invite's critical fields.</returns>
+    public string GetApprovalHash()
+    {
+        var input =
+            InviteeEmailAddress +
+            MerchantID +
+            InitialRoleID?.ToString();
+
+        return HashHelper.CreateHash(input);
     }
 }

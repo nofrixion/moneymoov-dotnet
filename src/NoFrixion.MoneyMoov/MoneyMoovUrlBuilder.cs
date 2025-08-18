@@ -18,7 +18,7 @@ namespace NoFrixion.MoneyMoov;
 public enum MoneyMoovResources
 {
     accounts,
-    
+
     banksettings,
 
     batch,
@@ -54,7 +54,7 @@ public enum MoneyMoovResources
     userroles,
 
     webhooks,
-    
+
     roles,
 
     users,
@@ -80,13 +80,13 @@ public static class MoneyMoovUrlBuilder
 
         public static string AccountPayoutsUrl(string moneyMoovBaseUrl, Guid accountID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/{accountID}/{MoneyMoovResources.payouts}";
-        
+
         public static string StatementsUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/{MoneyMoovResources.statements}";
 
         public static string StatementsUrlWithAccountPlaceholder(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/##account##/{MoneyMoovResources.statements}";
-        
+
         public static string StatementsUrl(string moneyMoovBaseUrl, Guid accountID, Guid statementID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.accounts}/{accountID}/{MoneyMoovResources.statements}/{statementID}";
     }
@@ -114,26 +114,20 @@ public static class MoneyMoovUrlBuilder
         public static string MerchantBankSettings(string moneyMoovBaseUrl, Guid merchantID,
             CurrencyTypeEnum? currency = null)
         {
-            return currency.HasValue 
-                ? $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.banksettings}?currency={currency}" 
+            return currency.HasValue
+                ? $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.banksettings}?currency={currency}"
                 : $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.banksettings}";
         }
-        
+
         public static string MerchantTokensUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.tokens}";
 
         public static string MerchantUserInvitesUrl(string moneyMoovBaseUrl, Guid merchantID)
            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.userinvites}";
 
-        public static string MerchantUserRolesUrl(string moneyMoovBaseUrl, Guid merchantID)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.userroles}";
-
-        public static string MerchantUserRoleUrl(string moneyMoovBaseUrl)
-            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.userroles}";
-        
         public static string MerchantWebHooksUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.webhooks}";
-        
+
         public static string MerchantRolesUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.roles}";
 
@@ -142,12 +136,23 @@ public static class MoneyMoovUrlBuilder
 
         public static string MerchantRoleUsersUrl(string moneyMoovBaseUrl, Guid merchantID, Guid roleID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.roles}/{roleID}/{MoneyMoovResources.users}";
-        
+
         public static string MerchantRoleUsersUrl(string moneyMoovBaseUrl, Guid merchantID, Guid roleID, Guid userID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.roles}/{roleID}/{MoneyMoovResources.users}/{userID}";
 
         public static string MerchantRolesUserUrl(string moneyMoovBaseUrl, Guid merchantID, Guid userID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.users}/{userID}/{MoneyMoovResources.roles}";
+
+        public static string MerchantRolesBatchCreateUrl(string moneyMoovBaseUrl, Guid merchantID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.roles}/batchcreate";
+
+        public static string ChildMerchantsUrl(string moneyMoovBaseUrl, Guid parentMerchantID,
+            int? pageNumber,
+            int? pageSize,
+            string? search,
+            string? sort)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{parentMerchantID}/childmerchants" +
+               $"?pageNumber={pageNumber}&pageSize={pageSize}&search={search}&sort={sort}";
     }
 
     /// <summary>
@@ -205,6 +210,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string GetByOrderIDUrl(string moneyMoovBaseUrl, string orderID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}/getbyorderid/{orderID}";
+
+        public static string BatchPaymentRequestsUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.paymentrequests}/batchcreate";
     }
 
     /// <summary>
@@ -238,7 +246,7 @@ public static class MoneyMoovUrlBuilder
 
         public static string CancelScheduledPayoutUrl(string moneyMoovBaseUrl, Guid payoutID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/cancel/{payoutID}";
-        
+
         public static string RejectPayoutUrl(string moneyMoovBaseUrl, Guid payoutID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/reject/{payoutID}";
 
@@ -321,6 +329,15 @@ public static class MoneyMoovUrlBuilder
 
         public static string UserInviteUrl(string moneyMoovBaseUrl, Guid userInviteID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.userinvites}/{userInviteID}";
+
+        public static string AuthoriseUserInviteUrl(string moneyMoovBaseUrl, Guid userInviteID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.userinvites}/authorise/{userInviteID}";
+
+        public static string UserInviteDetailsUrl(string moneyMoovBaseUrl, Guid userInviteID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.userinvites}/{userInviteID}/details";
+
+        public static string BatchUserInvitesUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.userinvites}/batchcreate";
     }
 
     /// <summary>
@@ -348,6 +365,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string AuthoriseBeneficiaryUrl(string moneyMoovBaseUrl, Guid beneficiaryID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.beneficiaries}/authorise/{beneficiaryID}";
+
+        public static string BatchBeneficiariesUrl(string moneyMoovBaseUrl)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.beneficiaries}/batchcreate";
     }
 
     public static string AccountStatementApiUrl(string moneyMoovBaseUrl, string? accountId = null)
@@ -417,5 +437,5 @@ public static class MoneyMoovUrlBuilder
     public static string BusinessHubUrl(string moneyMoovBaseUrl)
     {
         return $"{moneyMoovBaseUrl}/signalr/business";
-    } 
+    }
 }
