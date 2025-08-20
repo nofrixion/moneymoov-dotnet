@@ -77,57 +77,49 @@ public enum MerchantPermissions : ulong
     CanApprovePayruns = 1L << 15,
     CanDeletePayruns = 1L << 16,
     
-    // User roles
-    [Obsolete]
-    CanViewUserRoles = 1L << 17,
-    [Obsolete]
-    CanDeleteUserRoles = 1L << 18,
-    [Obsolete]
-    CanAssignUserRoles = 1L << 19,
-    
     // Users
-    CanViewUsers = 1L << 20,
+    CanViewUsers = 1L << 17,
     
     // Webhooks
-    CanViewWebhooks = 1L << 21,
-    CanCreateWebhooks = 1L << 22,
-    CanDeleteWebhooks = 1L << 23,
+    CanViewWebhooks = 1L << 18,
+    CanCreateWebhooks = 1L << 19,
+    CanDeleteWebhooks = 1L << 20,
     
     // Merchants
-    CanUpdateMerchant = 1L << 24,
+    CanUpdateMerchant = 1L << 21,
     
     // Payment requests
-    CanCreatePaymentRequests = 1L << 25,
-    CanViewPaymentRequests = 1L << 26,
-    CanUpdatePaymentRequests = 1L << 27,
-    CanDeletePaymentRequests = 1L << 28,
+    CanCreatePaymentRequests = 1L << 22,
+    CanViewPaymentRequests = 1L << 23,
+    CanUpdatePaymentRequests = 1L << 24,
+    CanDeletePaymentRequests = 1L << 25,
     
     // Mandates
-    CanViewMandates = 1L << 29,
-    CanCreateMandates = 1L << 30,
+    CanViewMandates = 1L << 26,
+    CanCreateMandates = 1L << 27,
     
     // Permissions
-    CanViewRoles = 1L << 31,
-    CanCreateRoles = 1L << 32, 
-    CanEditRoles = 1L << 33,  
+    CanViewRoles = 1L << 28,
+    CanCreateRoles = 1L << 29, 
+    CanEditRoles = 1L << 30,  
     
     // Reports
-    CanCreateReports = 1L << 34,
-    CanViewReports = 1L << 35,
+    CanCreateReports = 1L << 31,
+    CanViewReports = 1L << 32,
     
     // Xero
-    CanCreateXeroConnection = 1L << 36,
-    CanViewXeroConnection = 1L << 37,
-    CanUpdateXeroConnection = 1L << 38,
-    CanDeleteXeroConnection = 1L << 39,
+    CanCreateXeroConnection = 1L << 33,
+    CanViewXeroConnection = 1L << 34,
+    CanUpdateXeroConnection = 1L << 35,
+    CanDeleteXeroConnection = 1L << 36,
     
-    InviteAccepted = 1L << 40,
+    InviteAccepted = 1L << 37,
     
     // Payment request templates
-    CanCreatePaymentRequestTemplates = 1L << 41,
-    CanViewPaymentRequestTemplates = 1L << 42,
-    CanUpdatePaymentRequestTemplates = 1L << 43,
-    CanDeletePaymentRequestTemplates = 1L << 44,
+    CanCreatePaymentRequestTemplates = 1L << 38,
+    CanViewPaymentRequestTemplates = 1L << 39,
+    CanUpdatePaymentRequestTemplates = 1L << 40,
+    CanDeletePaymentRequestTemplates = 1L << 41,
 }
 
 public static class ClaimTypePrefixes
