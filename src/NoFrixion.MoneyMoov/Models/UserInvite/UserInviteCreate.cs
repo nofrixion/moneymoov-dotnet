@@ -46,6 +46,8 @@ public class UserInviteCreate
     /// Optional URL to provide to the invited user to inform them where to
     /// visit to accept the invite.
     /// </summary>
+    [Obsolete("The registraion URL cannot be customised.")]
+    [Obsolete("The registration URL cannot be customised.")]
     public string? RegistrationUrl { get; set; } = string.Empty;
 
     /// <summary>
@@ -71,7 +73,6 @@ public class UserInviteCreate
         {
             { nameof(MerchantID), MerchantID.ToString() },
             { nameof(InviteeEmailAddress), InviteeEmailAddress },
-            { nameof(RegistrationUrl), RegistrationUrl ?? string.Empty },
             { nameof(SendInviteEmail), SendInviteEmail.ToString() },
             {nameof(InviteeFirstName), InviteeFirstName ?? string.Empty},
             {nameof(InviteeLastName), InviteeLastName ?? string.Empty},

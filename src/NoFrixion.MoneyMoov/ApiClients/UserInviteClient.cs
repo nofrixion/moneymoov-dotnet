@@ -30,7 +30,6 @@ public interface IUserInviteClient
 
     Task<RestApiResponse<UserInvite>> SendInviteAsync(string userAccessToken, Guid merchantID,
         string inviteeEmailAddress,
-        string inviteRegistrationUrl,
         bool sendInviteEmail,
         string inviteeFirstName,
         string inviteeLastName,
@@ -132,15 +131,12 @@ public class UserInviteClient : IUserInviteClient
     /// <param name="userAccessToken">A User scoped JWT access token.</param>
     /// <param name="merchantID">The ID of the merchant the user is being invited to join.</param>
     /// <param name="inviteeEmailAddress">The email address of the user to invite.</param>
-    /// <param name="inviteRegistrationUrl">The URL the invitee needs to visit to accept thhe invite and
-    /// register.</param>
     /// <param name="sendInviteEmail">True if an email should be sent to the invitee.</param>
     /// <param name="inviteeFirstName">The first name of the person being invited.</param>
     /// <param name="inviteeLastName">The last name of the person being invited.</param>
     /// <param name="initialRoleID">The role ID to automatically assign to the merchant’s very first user.</param>
     public Task<RestApiResponse<UserInvite>> SendInviteAsync(string userAccessToken, Guid merchantID, 
         string inviteeEmailAddress, 
-        string inviteRegistrationUrl, 
         bool sendInviteEmail,
         string inviteeFirstName,
         string inviteeLastName,
@@ -154,7 +150,6 @@ public class UserInviteClient : IUserInviteClient
         {
             MerchantID = merchantID,
             InviteeEmailAddress = inviteeEmailAddress,
-            RegistrationUrl = inviteRegistrationUrl,
             SendInviteEmail = sendInviteEmail,
             InviteeFirstName = inviteeFirstName,
             InviteeLastName = inviteeLastName,
