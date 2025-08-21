@@ -46,7 +46,6 @@ public class UserInviteCreate
     /// Optional URL to provide to the invited user to inform them where to
     /// visit to accept the invite.
     /// </summary>
-    [Obsolete("The registraion URL cannot be customised.")]
     [Obsolete("The registration URL cannot be customised.")]
     public string? RegistrationUrl { get; set; } = string.Empty;
 
