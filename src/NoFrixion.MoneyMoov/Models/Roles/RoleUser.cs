@@ -14,8 +14,6 @@
 //  Proprietary NoFrixion.
 // -----------------------------------------------------------------------------
 
-using System.Linq;
-
 namespace NoFrixion.MoneyMoov.Models.Roles;
 
 public class RoleUser
