@@ -14,6 +14,8 @@
 //  Proprietary NoFrixion.
 // -----------------------------------------------------------------------------
 
+using System.Linq;
+
 namespace NoFrixion.MoneyMoov.Models.Roles;
 
 public class RoleUser
@@ -55,9 +57,11 @@ public class RoleUser
     public string GetApprovalHash()
     {
         var input =
-            RoleID.ToString() +
-            UserID.ToString() +
-            Accounts?.OrderBy(a => a.AccountID).Select(a => a.AccountID.ToString()).Aggregate((a, b) => a + b);
+            RoleID.ToString("N") +
+            UserID.ToString("N") +
+            (Accounts != null
+                ? string.Join(",", Accounts.OrderBy(a => a.AccountID).Select(a => a.AccountID.ToString("N")))
+                : string.Empty);
 
         return HashHelper.CreateHash(input);
     }
