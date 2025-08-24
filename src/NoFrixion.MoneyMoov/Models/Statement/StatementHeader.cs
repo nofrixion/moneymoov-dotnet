@@ -88,4 +88,15 @@ public class StatementHeader
     public IEnumerable<Transaction> Transactions { get; set; }
     
     public bool IsTrustAccount { get; set; }
+    
+    /// <summary>
+    /// Date and time when the statement was generated.
+    /// This will take into account the merchant's timezone.
+    /// </summary>
+    public DateTime GeneratedOn { get; set; }
+    
+    /// <summary>
+    /// The timezone used to generate the statement.
+    /// </summary>
+    public TimeZoneInfo GeneratedOnTimeZone { get; set; }
 }
