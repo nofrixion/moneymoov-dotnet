@@ -38,4 +38,6 @@ public enum ApproveTypesEnum
     MerchantToken = 9,
 
     UserInvite = 10,
+
+    RoleUser = 11
 }
