@@ -180,6 +180,22 @@ public class AccountIdentifier : IValidatableObject
             : $"{SortCode} / {AccountNumber}";
 
     public string DisplayBicSummary => $"{BIC} / {AccountNumber}";
+    
+    public string IdentifierForVop =>
+        Type switch
+        {
+            AccountIdentifierType.IBAN => IBAN,
+            AccountIdentifierType.SCAN => SortCode + AccountNumber,
+            _ => string.Empty
+        };
+
+    public string SchemeNameForVop =>
+        Type switch
+        {
+            AccountIdentifierType.IBAN => "IBAN",
+            AccountIdentifierType.SCAN => "SortCodeAccountNumber",
+            _ => string.Empty
+        };
 
     public bool IsSameDestination(AccountIdentifier other)
     {
