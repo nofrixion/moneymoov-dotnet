@@ -42,6 +42,13 @@ public class RoleUser
     public Role? Role { get; set; }
 
     /// <summary>
+    /// The authorisation status for the role user assignment. It is used for assignments
+    /// that require authorisation before they can be enabled. It will not be populated in the 
+    /// case authorisation is not required.
+    /// </summary>
+    public AuthorisationStatus? AuthorisationStatus { get; set; }
+
+    /// <summary>
     /// Gets a hash of the critical fields for the role user. This hash is
     /// used to ensure a role user's details are not modified between the time the
     /// authorisation is given and the time the role user assignment is enabled.
