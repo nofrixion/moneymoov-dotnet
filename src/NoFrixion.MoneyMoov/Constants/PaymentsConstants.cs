@@ -24,6 +24,11 @@ public static class PaymentsConstants
     public const int FIAT_ROUNDING_DECIMAL_PLACES = 2;
 
     /// <summary>
+    /// Internal payotus and transactions can optionally be specified down to 4 decimal places.
+    /// </summary>
+    public const int FIAT_INTERNAL_ROUNDING_DECIMAL_PLACES = 4;
+
+    /// <summary>
     /// Bitcoin Satoshis use 8 decimal places.
     /// </summary>
     public const int BITCOIN_ROUNDING_DECIMAL_PLACES = 8;

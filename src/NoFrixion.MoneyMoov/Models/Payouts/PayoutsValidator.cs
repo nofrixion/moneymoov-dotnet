@@ -14,7 +14,6 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using LanguageExt;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -69,7 +68,6 @@ public static class PayoutsValidator
     /// </summary>
     [Obsolete("Modulr is no longer used.")]
     public const string THEIR_REFERENCE_NON_COUNTED_CHARS_MODULR_REGEX = @"[\.\-/&\s]";
-
 
     /// <summary>
     /// The External Reference, or Your reference, field is the one that gets set locally on the 
@@ -129,7 +127,7 @@ public static class PayoutsValidator
     /// <summary>
     /// Fiat currencies are only allowed to be specified to two decimal places.
     /// </summary>
-    public const decimal FIAT_CURRENCY_RESOLUTION = 0.01M;
+    public const decimal FIAT_CURRENCY_RESOLUTION = 0.0001M;
 
     /// <summary>
     /// The minimum amount that must be set for the source or destination amount when dong a multi-currency payout.
