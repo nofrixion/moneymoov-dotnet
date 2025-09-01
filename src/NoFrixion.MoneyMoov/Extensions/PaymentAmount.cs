@@ -34,8 +34,8 @@ public static class PaymentAmount
         }
 
         return decimal.Remainder(decimal.Abs(amount), 0.01m) != 0m
-            ? PaymentsConstants.FIAT_INTERNAL_ROUNDING_DECIMAL_PLACES
-            : PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES;
+            ? PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_INTERNAL   // 4 decimal places option for internal payouts.
+            : PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL;  // 2 decimal places for external payouts.
     }
 
     public static string GetDisplayAmount(CurrencyTypeEnum currency, decimal amount, IFormatProvider? culture = null)

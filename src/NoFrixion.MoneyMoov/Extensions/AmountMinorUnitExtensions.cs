@@ -22,7 +22,7 @@ public static class AmountMinorUnitExtensions
     {
         decimal units = currency switch
         {
-            var c when c.IsFiat() => amount * (int)Math.Pow(10, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+            var c when c.IsFiat() => amount * (int)Math.Pow(10, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL),
             CurrencyTypeEnum.BTC => amount * (int)Math.Pow(10, PaymentsConstants.BITCOIN_ROUNDING_DECIMAL_PLACES),
             _ => throw new ApplicationException($"Currency {currency} was not recognised in {nameof(ToAmountMinorUnits)}.")
         };

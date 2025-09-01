@@ -125,9 +125,14 @@ public static class PayoutsValidator
         "comma (,), single quote ('), plus (+) and space. The total length must not exceed {1} characters. The first character cannot be ':' or '-'.";
 
     /// <summary>
-    /// Fiat currencies are only allowed to be specified to two decimal places.
+    /// Fiat currencies are only allowed to be specified to two decimal places when being used for an external payout.
     /// </summary>
-    public const decimal FIAT_CURRENCY_RESOLUTION = 0.0001M;
+    public const decimal FIAT_CURRENCY_RESOLUTION_EXTERNAL = 0.01M;
+
+    /// <summary>
+    /// Fiat currencies can be specified to four decimal places when being used for an internal payout.
+    /// </summary>
+    public const decimal FIAT_CURRENCY_RESOLUTION_INTERNAL = 0.0001M;
 
     /// <summary>
     /// The minimum amount that must be set for the source or destination amount when dong a multi-currency payout.
@@ -309,12 +314,17 @@ public static class PayoutsValidator
             yield return new ValidationResult($"Amount must be supplied when FxUseDestinationAmount is false.", [ nameof(payout.Amount) ]);
         }
 
-        if (payout.Amount > 0 && payout.Currency.IsFiat() && payout.Amount % FIAT_CURRENCY_RESOLUTION != 0)
+        if (payout.Amount > 0 && payout.Currency.IsFiat() && payout.Destination?.AccountID == null && payout.Amount % FIAT_CURRENCY_RESOLUTION_EXTERNAL != 0)
         {
             yield return new ValidationResult($"The payout amount must only be specified to two decimal places for currency {payout.Currency}.", [ nameof(payout.Amount) ]);
         }
 
-        if (payout.FxDestinationAmount > 0 && payout.FxDestinationCurrency != null && payout.FxDestinationCurrency.Value.IsFiat() && payout.FxDestinationAmount % FIAT_CURRENCY_RESOLUTION != 0)
+        if (payout.Amount > 0 && payout.Currency.IsFiat() && payout.Destination?.AccountID != null && payout.Amount % FIAT_CURRENCY_RESOLUTION_INTERNAL != 0)
+        {
+            yield return new ValidationResult($"The payout amount must only be specified to four decimal places for currency {payout.Currency} and an internal destination.", [nameof(payout.Amount)]);
+        }
+
+        if (payout.FxDestinationAmount > 0 && payout.FxDestinationCurrency != null && payout.FxDestinationCurrency.Value.IsFiat() && payout.FxDestinationAmount % FIAT_CURRENCY_RESOLUTION_EXTERNAL != 0)
         {
             yield return new ValidationResult($"The payout FxDestinationAmount must only be specified to two decimal places for currency {payout.FxDestinationCurrency}.", [nameof(payout.FxDestinationAmount)]);
         }
