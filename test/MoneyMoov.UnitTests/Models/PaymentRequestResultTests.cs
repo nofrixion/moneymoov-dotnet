@@ -520,7 +520,7 @@ public class PaymentRequestResultTests
         entity.Events = new List<PaymentRequestEvent> { yapilyCompletedEvent, plaidExecutedEvent, yapilyCompletedWebhookEvent, pisSettleEvent };
         var result = new PaymentRequestResult(entity);
 
-        Assert.Equal(Math.Round(entity.Amount / 3, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES), result.Amount);
+        Assert.Equal(Math.Round(entity.Amount / 3, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL), result.Amount);
         Assert.Equal(entity.Currency, result.Currency);
         Assert.Equal(PaymentResultEnum.PartiallyPaid, result.Result);
     }
@@ -597,9 +597,9 @@ public class PaymentRequestResultTests
         entity.Events = new List<PaymentRequestEvent> { yapilyCompletedEvent, plaidExecutedEvent, yapilyCompletedWebhookEvent, pisSettleEvent };
         var result = new PaymentRequestResult(entity);
 
-        Assert.Equal(Math.Round(entity.Amount / 4, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES), result.Amount);
-        Assert.Equal(Math.Round(entity.Amount / 4, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES), result.PispAmountAuthorized());
-        Assert.Equal(Math.Round((entity.Amount / 4) * 2, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES), result.AmountOutstanding());
+        Assert.Equal(Math.Round(entity.Amount / 4, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL), result.Amount);
+        Assert.Equal(Math.Round(entity.Amount / 4, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL), result.PispAmountAuthorized());
+        Assert.Equal(Math.Round((entity.Amount / 4) * 2, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL), result.AmountOutstanding());
         Assert.Equal(entity.Currency, result.Currency);
         Assert.Equal(PaymentResultEnum.PartiallyPaid, result.Result);
     }
@@ -652,9 +652,9 @@ public class PaymentRequestResultTests
         entity.Events = new List<PaymentRequestEvent> { yapilyCompletedWebhookEvent, yapilyInitiatedEvent, yapilyCompletedEvent };
         var result = new PaymentRequestResult(entity);
 
-        Assert.Equal(Math.Round(decimal.Zero, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES), result.Amount);
-        Assert.Equal(Math.Round(entity.Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES), result.PispAmountAuthorized());
-        Assert.Equal(Math.Round(decimal.Zero, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES), result.AmountOutstanding());
+        Assert.Equal(Math.Round(decimal.Zero, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL), result.Amount);
+        Assert.Equal(Math.Round(entity.Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL), result.PispAmountAuthorized());
+        Assert.Equal(Math.Round(decimal.Zero, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL), result.AmountOutstanding());
         Assert.Equal(entity.Currency, result.Currency);
         Assert.Equal(PaymentResultEnum.Authorized, result.Result);
     }
@@ -721,9 +721,9 @@ public class PaymentRequestResultTests
         entity.Events = new List<PaymentRequestEvent> { plaidWebHookEvent, plaidInitiatedEvent, yapilyInitiatedEvent, yapilyAuthorisationErrorEvent };
         var result = new PaymentRequestResult(entity);
 
-        Assert.Equal(Math.Round(decimal.Zero, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES), result.Amount);
-        Assert.Equal(Math.Round(decimal.Zero, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES), result.PispAmountAuthorized());
-        Assert.Equal(Math.Round(entity.Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES), result.AmountOutstanding());
+        Assert.Equal(Math.Round(decimal.Zero, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL), result.Amount);
+        Assert.Equal(Math.Round(decimal.Zero, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL), result.PispAmountAuthorized());
+        Assert.Equal(Math.Round(entity.Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL), result.AmountOutstanding());
         Assert.Equal(entity.Currency, result.Currency);
         Assert.Equal(PaymentResultEnum.None, result.Result);
     }

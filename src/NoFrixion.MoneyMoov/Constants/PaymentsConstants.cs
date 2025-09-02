@@ -19,9 +19,14 @@ namespace NoFrixion.MoneyMoov;
 public static class PaymentsConstants
 {
     /// <summary>
-    /// Round fiat (EUR, GBP etc) amounts to this many decimal places.
+    /// Round fiat (EUR, GBP etc) amounts to this many decimal places for external payouts.
     /// </summary>
-    public const int FIAT_ROUNDING_DECIMAL_PLACES = 2;
+    public const int FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL = 2;
+
+    /// <summary>
+    /// Internal payouts and transactions can optionally be specified down to 4 decimal places.
+    /// </summary>
+    public const int FIAT_ROUNDING_DECIMAL_PLACES_INTERNAL = 4;
 
     /// <summary>
     /// Bitcoin Satoshis use 8 decimal places.
