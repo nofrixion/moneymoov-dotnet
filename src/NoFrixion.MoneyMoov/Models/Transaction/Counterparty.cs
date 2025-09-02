@@ -17,6 +17,7 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using NoFrixion.MoneyMoov.Enums;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -69,6 +70,11 @@ public class Counterparty
     /// to them, or for a pay in is the source of the payment.
     /// </summary>
     public AccountIdentifier? Identifier { get; set; }
+    
+    /// <summary>
+    /// The type of counter party - Individual or Business.
+    /// </summary>
+    public CounterpartyType Type { get; set; }
 
     /// <summary>
     /// Gets a convenient summary representation of the counterparty.
