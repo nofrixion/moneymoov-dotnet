@@ -209,7 +209,7 @@ public class PaymentRequestEvent
         return EventType switch
         {
             PaymentRequestEventTypesEnum.lightning_invoice_created => Math.Round(Amount, PaymentsConstants.BITCOIN_LIGHTNING_ROUNDING_DECIMAL_PLACES),
-            _ => Math.Round(Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES)
+            _ => Math.Round(Amount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL)
         };
     }
 

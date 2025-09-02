@@ -40,5 +40,10 @@ public enum MerchantTokenEventTypeEnum
     /// <summary>
     /// A merchant token was archived.
     /// </summary>
-    Archive = 4
+    Archive = 4,
+    
+    /// <summary>
+    /// A merchant token was edited.
+    /// </summary>
+    Edited = 5
 }
