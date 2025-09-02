@@ -91,6 +91,17 @@ public class MerchantPageResponse : ApiPageResponseBase<Merchant>
     { }
 }
 
+public class UserPageResponse : ApiPageResponseBase<User>
+{
+    public UserPageResponse(List<User> content,
+        int pageNumber = 1,
+        int pageSize = 10,
+        long totalPages = default,
+        long totalSize = default)
+        : base(content, pageNumber, pageSize, totalPages, totalSize)
+    { }
+}
+
 public abstract class ApiPageResponseBase<T> : PageResponse<T>
 {
     /// <summary>
