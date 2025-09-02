@@ -133,6 +133,8 @@ public class MerchantToken
     /// </summary>
     public bool IsArchived { get; set; }
 
+    public required string Nonce { get; set; }
+    
     /// <summary>
     /// Gets a hash of the critical fields for the merhcant token. This hash is
     /// used to ensure a merchant token's details are not modified between the time the
@@ -144,7 +146,8 @@ public class MerchantToken
         var input =
             Description +
             MerchantID +
-            GetPermissionListHash();
+            GetPermissionListHash() +
+            Nonce;
 
         return HashHelper.CreateHash(input);
     }
