@@ -102,6 +102,17 @@ public class UserPageResponse : ApiPageResponseBase<User>
     { }
 }
 
+public class UserInvitePageResponse : ApiPageResponseBase<UserInvite>
+{
+    public UserInvitePageResponse(List<UserInvite> content,
+        int pageNumber = 1,
+        int pageSize = 10,
+        long totalPages = default,
+        long totalSize = default)
+        : base(content, pageNumber, pageSize, totalPages, totalSize)
+    { }
+}
+
 public abstract class ApiPageResponseBase<T> : PageResponse<T>
 {
     /// <summary>
