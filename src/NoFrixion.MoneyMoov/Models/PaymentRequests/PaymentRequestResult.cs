@@ -181,15 +181,15 @@ public class PaymentRequestResult
                         OccurredAt = attempt.InitiatedAt,
                         PaymentMethod = PaymentMethodTypeEnum.card,
                         Amount = Math.Round(attempt.CardAuthorisedAmount,
-                            PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                            PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL),
                         Currency = attempt.Currency,
                         CardCapturedAmount = Math.Round(attempt.CaptureAttempts.Sum(x => x.CapturedAmount),
-                            PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                            PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL),
                         CardAuthorizationID = attempt.AttemptKey,
                         TokenisedCardID = attempt.TokenisedCardID,
                         PaymentProcessor = attempt.PaymentProcessor,
                         RefundedAmount = Math.Round(attempt.RefundAttempts.Sum(x => x.RefundSettledAmount),
-                            PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                            PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL),
                         CardIsVoided =
                             attempt.CardAuthorisedAmount - attempt.RefundAttempts.Sum(x => x.RefundSettledAmount) == 0
                     });
@@ -208,9 +208,9 @@ public class PaymentRequestResult
                             PaymentRequestID = PaymentRequestID,
                             OccurredAt = attempt.InitiatedAt,
                             PaymentMethod = PaymentMethodTypeEnum.pisp,
-                            Amount = Math.Round(attempt.SettledAmount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                            Amount = Math.Round(attempt.SettledAmount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL),
                             Currency = attempt.Currency,
-                            RefundedAmount = Math.Round(attempt.RefundAttempts.Sum(x => x.RefundSettledAmount), PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                            RefundedAmount = Math.Round(attempt.RefundAttempts.Sum(x => x.RefundSettledAmount), PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL),
                         });
                 }
                 else if (attempt.Status == PaymentResultEnum.Authorized)
@@ -221,7 +221,7 @@ public class PaymentRequestResult
                                 PaymentRequestID = PaymentRequestID,
                                 OccurredAt = attempt.InitiatedAt,
                                 PaymentMethod = PaymentMethodTypeEnum.pisp,
-                                Amount = Math.Round(attempt.AuthorisedAmount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                                Amount = Math.Round(attempt.AuthorisedAmount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL),
                                 Currency = attempt.Currency,
                                 PispPaymentInitiationID = attempt.AttemptKey
                             });
@@ -240,9 +240,9 @@ public class PaymentRequestResult
                             PaymentRequestID = PaymentRequestID,
                             OccurredAt = attempt.InitiatedAt,
                             PaymentMethod = PaymentMethodTypeEnum.directDebit,
-                            Amount = Math.Round(attempt.SettledAmount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                            Amount = Math.Round(attempt.SettledAmount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL),
                             Currency = attempt.Currency,
-                            RefundedAmount = Math.Round(attempt.RefundAttempts.Sum(x => x.RefundSettledAmount), PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                            RefundedAmount = Math.Round(attempt.RefundAttempts.Sum(x => x.RefundSettledAmount), PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL),
                         });
                 }
                 else if (attempt.Status == PaymentResultEnum.Authorized)
@@ -253,7 +253,7 @@ public class PaymentRequestResult
                             PaymentRequestID = PaymentRequestID,
                             OccurredAt = attempt.InitiatedAt,
                             PaymentMethod = PaymentMethodTypeEnum.directDebit,
-                            Amount = Math.Round(attempt.AuthorisedAmount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES),
+                            Amount = Math.Round(attempt.AuthorisedAmount, PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL),
                             Currency = attempt.Currency,
                         });
                 }
@@ -286,7 +286,7 @@ public class PaymentRequestResult
         var outstanding = Currency switch
         {
             CurrencyTypeEnum.BTC => RequestedAmount - Amount,
-            _ => Math.Round(RequestedAmount - (Amount + PispAmountAuthorized()), PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES)
+            _ => Math.Round(RequestedAmount - (Amount + PispAmountAuthorized()), PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES_EXTERNAL)
         };
 
         return outstanding >= 0 ? outstanding : 0;

@@ -82,10 +82,23 @@ public class WebhookCreate : IValidatableObject
     public string? FailedNotificationEmailAddress { get; set; }
 
     /// <summary>
-    /// The type of notification that will be sent.
+    /// Determines the delivery method for the notification. The default is Webhook.
     /// </summary>
+    /// <remarks>
+    /// This property dictates which other fields are required:
+    /// <list type="bullet">
+    /// <item>
+    ///   <term><b>Email</b></term>
+    ///   <description>Sends a notification to a specified email inbox. Requires the <c>EmailAddress</c> property to be set.</description>
+    /// </item>
+    /// <item>
+    ///   <term><b>Webhook</b></term>
+    ///   <description>Sends a notification via an HTTP POST request to a specified endpoint. Requires the <c>DestinationUrl</c> and <c>Secret</c> properties to be set.</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
     [Required]
-    public NotificationMethodTypesEnum NotificationMethod { get; set; } = NotificationMethodTypesEnum.Email;
+    public NotificationMethodTypesEnum NotificationMethod { get; set; } = NotificationMethodTypesEnum.Webhook;
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

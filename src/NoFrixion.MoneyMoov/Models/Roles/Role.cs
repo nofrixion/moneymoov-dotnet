@@ -27,6 +27,8 @@ public class Role
 
     public Guid MerchantID { get; set; }
 
+    public string? MerchantName { get; set; }
+
     public List<string> MerchantPermissions { get; set; } = null!;
 
     public List<string> AccountPermissions { get; set; } = null!;
