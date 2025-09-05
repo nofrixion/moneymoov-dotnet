@@ -243,6 +243,10 @@ public static class PaymentRequestExtensions
                     var settleFailedEvent = attempt.First(x => x.EventType is PaymentRequestEventTypesEnum.pisp_settle_failure);
 
                     paymentAttempt.SettleFailedAt = settleFailedEvent.Inserted;
+
+                    //Set authorised amount to zero when there is settlement failure for this attempt.
+                    paymentAttempt.AuthorisedAmount = 0;
+
                 }
 
                 pispPaymentAttempts.Add(paymentAttempt);
