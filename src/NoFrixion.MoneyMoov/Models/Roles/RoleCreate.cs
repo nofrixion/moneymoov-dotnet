@@ -24,10 +24,7 @@ public class RoleCreate : IValidatableObject
 
     [Required]
     public string Description { get; set; } = null!;
-
-    [Required]
-    public Guid MerchantID { get; set; }
-    
+   
     [Required]
     public List<string> MerchantPermissions { get; set; } = new();
 
