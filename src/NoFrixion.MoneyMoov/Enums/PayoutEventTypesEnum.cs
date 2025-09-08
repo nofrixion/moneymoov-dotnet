@@ -97,4 +97,10 @@ public enum PayoutEventTypesEnum
     /// A payout's associated beneficiary was enabled.
     /// </summary>
     BeneficiaryEnabled = 15,
+
+    /// <summary>
+    /// An error that occurred during an attempt to submit a payout for processing. This is not a terminal error
+    /// and the attempt can be tried again. Errors after the payout's IsSubmitted flag is set are terminal.
+    /// </summary>
+    SubmitAttemptError = 16
 }
