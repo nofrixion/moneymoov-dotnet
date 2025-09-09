@@ -97,4 +97,14 @@ public enum PayoutEventTypesEnum
     /// A payout's associated beneficiary was enabled.
     /// </summary>
     BeneficiaryEnabled = 15,
+    
+    /// <summary>
+    /// A payout's destination verification process has been initiated.
+    /// </summary>
+    PayeeVerificationInitiated = 16,
+    
+    /// <summary>
+    /// A payout's destination has been successfully verified.
+    /// </summary>
+    PayeeVerificationCompleted = 17
 }

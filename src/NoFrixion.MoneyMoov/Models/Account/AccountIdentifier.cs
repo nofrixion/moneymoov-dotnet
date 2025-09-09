@@ -181,7 +181,7 @@ public class AccountIdentifier : IValidatableObject
 
     public string DisplayBicSummary => $"{BIC} / {AccountNumber}";
     
-    public string IdentifierForVop =>
+    public string IdentifierForAccountHolderVerification =>
         Type switch
         {
             AccountIdentifierType.IBAN => IBAN,
