@@ -34,11 +34,4 @@ public static class CurrencyExtensions
             CurrencyTypeEnum.BTC => false,
             _ => true
         };
-
-    public static int GetDecimalPlaces(this CurrencyTypeEnum currency) =>
-        currency switch
-        {
-            CurrencyTypeEnum.BTC => PaymentsConstants.BITCOIN_ROUNDING_DECIMAL_PLACES,
-            _ => PaymentsConstants.FIAT_ROUNDING_DECIMAL_PLACES
-        };
 }

@@ -62,6 +62,10 @@ public interface IMerchantClient
         int pageSize = 20,
         string? search = null,
         string? sort = null);
+
+    Task<RestApiResponse<RoleUser>> GetRoleUserAssignmentAsync(string userAccessToken, Guid roleUserID);
+
+    Task<RestApiResponse> AuthoriseRoleUserAssignmentAsync(string strongUserAccessToken, Guid roleUserID);
 }
 
 public class MerchantClient : IMerchantClient
@@ -401,6 +405,46 @@ public class MerchantClient : IMerchantClient
         {
             var p when p.IsEmpty => _apiClient.GetAsync<MerchantPageResponse>(url, userAccessToken),
             _ => Task.FromResult(new RestApiResponse<MerchantPageResponse>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Gets a specific role user assignment by its ID.
+    /// </summary>
+    /// <param name="userAccessToken">A user scoped JWT access token.</param>
+    /// <param name="roleUserID">The ID of the role user assignment to get.</param>
+    /// <returns>If successful, the role user assignment.</returns>
+    public Task<RestApiResponse<RoleUser>> GetRoleUserAssignmentAsync(string userAccessToken, Guid roleUserID)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantRoleUserAssignmentsUrl(_apiClient.GetBaseUri().ToString(), roleUserID);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetRolesAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<RoleUser>(url, userAccessToken),
+            _ => Task.FromResult(new RestApiResponse<RoleUser>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov merchant endpoint to authorise a role user assignment.
+    /// </summary>
+    /// <param name="strongUserAccessToken">The strong user access token acquired to authorise the role suer assignment. Strong
+    /// tokens can only be acquired from a strong customer authentication flow, are short lived (typically 5 minute expiry)
+    /// and are specific to the role user assignment.</param>
+    /// <param name="roleUserID">The ID of the role user assignment to authorise.</param>
+    /// <returns>An API response indicating the result of the authorise attempt.</returns>
+    public Task<RestApiResponse> AuthoriseRoleUserAssignmentAsync(string strongUserAccessToken, Guid roleUserID)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantRoleUserAssignmentsUrl(_apiClient.GetBaseUri().ToString(), roleUserID);
+
+        var prob = _apiClient.CheckAccessToken(strongUserAccessToken, nameof(AuthoriseRoleUserAssignmentAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PostAsync(url, strongUserAccessToken),
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 }

@@ -485,6 +485,57 @@ public class PayoutsValidatorTests
     }
 
     /// <summary>
+    /// Tests that the currency resolution check is working as expected for an internal payout where 4 decimal places
+    /// of resolution are supported.
+    /// </summary>
+    [Theory]
+    [InlineData(CurrencyTypeEnum.EUR, 0.01, true)]
+    [InlineData(CurrencyTypeEnum.EUR, 0.001, true)]
+    [InlineData(CurrencyTypeEnum.EUR, 0.0001, true)]
+    [InlineData(CurrencyTypeEnum.EUR, 0.00001, false)]
+    [InlineData(CurrencyTypeEnum.GBP, 0.01, true)]
+    [InlineData(CurrencyTypeEnum.GBP, 0.001, true)]
+    [InlineData(CurrencyTypeEnum.GBP, 0.0001, true)]
+    [InlineData(CurrencyTypeEnum.GBP, 0.00001, false)]
+    [InlineData(CurrencyTypeEnum.USD, 0.01, true)]
+    [InlineData(CurrencyTypeEnum.USD, 0.001, true)]
+    [InlineData(CurrencyTypeEnum.USD, 0.0001, true)]
+    [InlineData(CurrencyTypeEnum.USD, 0.00001, false)]
+    public void Payout_Internal_Validator_Currency_Resolution(CurrencyTypeEnum currency, decimal amount, bool isValid)
+    {
+        var payout = new Payout
+        {
+            ID = Guid.NewGuid(),
+            AccountID = Guid.NewGuid(),
+            Type = AccountIdentifierType.IBAN,
+            Currency = currency,
+            Amount = amount,
+            YourReference = "your ref",
+            TheirReference = "their ref",
+            Status = PayoutStatus.PENDING_INPUT,
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            Destination =  new Counterparty
+            {
+                Name = "Joe Bloggs",
+                AccountID = Guid.NewGuid()
+            }
+        };
+
+        var result = payout.Validate();
+
+        _logger.LogDebug(result.ToTextErrorMessage());
+
+        if (isValid)
+        {
+            Assert.True(result.IsEmpty);
+        }
+        else
+        {
+            Assert.False(result.IsEmpty);
+        }
+    }
+
+    /// <summary>
     /// Tests that a USD SCAN destination is successfully validated.
     /// </summary>
     [Fact]

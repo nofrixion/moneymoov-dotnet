@@ -58,6 +58,8 @@ public enum MoneyMoovResources
     roles,
 
     users,
+
+    roleusers
 }
 
 
@@ -153,6 +155,9 @@ public static class MoneyMoovUrlBuilder
             string? sort)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{parentMerchantID}/childmerchants" +
                $"?pageNumber={pageNumber}&pageSize={pageSize}&search={search}&sort={sort}";
+
+        public static string MerchantRoleUserAssignmentsUrl(string moneyMoovBaseUrl, Guid roleUserID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.roleusers}/{roleUserID}";
     }
 
     /// <summary>

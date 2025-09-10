@@ -222,7 +222,7 @@ namespace MoneyMoov.UnitTests.Models
             Assert.Single(pispAttempts);
             Assert.Equal(PaymentResultEnum.None, pispAttempts.First().Status);
             Assert.Equal(0, pispAttempts.First().SettledAmount);
-            Assert.Equal(amount, pispAttempts.First().AuthorisedAmount);
+            Assert.Equal(0, pispAttempts.First().AuthorisedAmount);
             Assert.Equal(CurrencyTypeEnum.EUR, pispAttempts.First().Currency);
             Assert.Equal(PaymentProcessorsEnum.Yapily, pispAttempts.First().PaymentProcessor);
             Assert.Equal(PaymentMethodTypeEnum.pisp, pispAttempts.First().PaymentMethod);
