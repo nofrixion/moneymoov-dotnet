@@ -113,7 +113,7 @@ public class TokenAdd : IValidatableObject
 
         dict.Add(nameof(MerchantID), MerchantID.ToString());
         dict.Add(nameof(Description), Description.ToString());
-        dict.Add(nameof(IPAddressWhitelist), IPAddressWhitelist.ToString());
+        dict.Add(nameof(IPAddressWhitelist), IPAddressWhitelist?.ToString());
         
         if (PermissionTypes?.Count() > 0)
         {
