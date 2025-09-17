@@ -36,7 +36,7 @@ public class PayoutUpdate
 
     /// <summary>
     /// The Your reference field is an optional field that gets set locally on the payer's transaction record. It does not get 
-    /// sent out through the payment network. The maximum length for the field is 256 chracters. An empty value is also supported.
+    /// sent out through the payment network. The maximum length for the field is 256 characters. An empty value is also supported.
     /// Supported chracters:
     /// a b c d e f g h i j k l m n o p q r s t u v w x y z
     /// A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
@@ -48,7 +48,7 @@ public class PayoutUpdate
 
     /// <summary>
     /// The Their reference field gets sent to the payee and appears on their transaction record. 
-    /// The maximum length for the field varies depending on the payment network. For SEPA (Euro) it is 140 chracters. For Faster Payments (GBP) it is 18 characters.
+    /// The maximum length for the field varies depending on the payment network. For SEPA (Euro) it is 140 characters. For Faster Payments (GBP) it is 18 characters.
     /// a b c d e f g h i j k l m n o p q r s t u v w x y z
     /// A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
     /// 0 1 2 3 4 5 6 7 8 9
