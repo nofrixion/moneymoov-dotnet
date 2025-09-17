@@ -358,6 +358,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string AllWebhooksUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.webhooks}/{merchantID}";
+        
+        public static string WebhooksMerchantUrl(string moneyMoovBaseUrl, Guid merchantID, Guid webhookId)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.webhooks}/{webhookId}";
     }
 
     public static class BeneficiariesApi

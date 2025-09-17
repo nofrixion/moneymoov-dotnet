@@ -14,6 +14,8 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using NoFrixion.MoneyMoov.Attributes;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 #nullable disable
@@ -93,6 +95,13 @@ public class TokenAdd : IValidatableObject
     }
 
     /// <summary>
+    /// Optional. If set represents a comma separated list of IP addresses that this token is authorised to be used from.
+    /// Attempts to use the token from an IP address not in the list will be rejected.
+    /// </summary>
+    [IPAddress]
+    public string IPAddressWhitelist { get; set; }
+    
+    /// <summary>
     /// Places all the token add member's properties into a dictionary. Useful
     /// for testing when HTML form encoding is required.
     /// </summary>
@@ -104,7 +113,8 @@ public class TokenAdd : IValidatableObject
 
         dict.Add(nameof(MerchantID), MerchantID.ToString());
         dict.Add(nameof(Description), Description.ToString());
-
+        dict.Add(nameof(IPAddressWhitelist), IPAddressWhitelist?.ToString());
+        
         if (PermissionTypes?.Count() > 0)
         {
             int permissionTypeNumber = 0;

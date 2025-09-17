@@ -50,6 +50,8 @@ public class BeneficiaryEvent
     
     public string SortCode { get; set; }
     
+    public string Bic { get; set; }
+    
     public string BitcoinAddress { get; set; }
 
     public DateTimeOffset Inserted { get; set; }
