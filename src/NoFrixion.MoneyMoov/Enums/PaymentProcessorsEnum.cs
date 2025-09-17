@@ -102,5 +102,10 @@ public enum PaymentProcessorsEnum
     /// To pay with SEPA Direct Debit, handled by Banking Circle.
     /// </summary>
     BankingCircleDirectDebit,
+    
+    /// <summary>
+    /// Processor to verify account holder name using Technoxander.
+    /// </summary>
+    Technoxander
 }
 

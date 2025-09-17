@@ -102,5 +102,15 @@ public enum PayoutEventTypesEnum
     /// An error that occurred during an attempt to submit a payout for processing. This is not a terminal error
     /// and the attempt can be tried again. Errors after the payout's IsSubmitted flag is set are terminal.
     /// </summary>
-    SubmitAttemptError = 16
+    SubmitAttemptError = 16,
+    
+    /// <summary>
+    /// A payout's destination verification process has been initiated.
+    /// </summary>
+    PayeeVerificationInitiated = 17,
+    
+    /// <summary>
+    /// A payout's destination has been successfully verified.
+    /// </summary>
+    PayeeVerificationComplete = 18
 }
