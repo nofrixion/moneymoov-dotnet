@@ -17,8 +17,6 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
