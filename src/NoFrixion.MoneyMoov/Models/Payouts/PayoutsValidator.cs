@@ -89,7 +89,7 @@ public static class PayoutsValidator
     public const string FALLBACK_THEIR_REFERENCE = "NFXN {0}";
 
     /// <summary>
-    /// Validation reqex for the Name amd Reference (Your and Their) fields with Banking Circle. It must 
+    /// Validation regex for the Name and Reference (Your and Their) fields with Banking Circle. It must 
     /// have at least one non space character.  Total of all characters must be 140 or less.
     /// Banking Circle supported chars see https://docs.bankingcircleconnect.com/docs/initiate-payments:
     /// a b c d e f g h i j k l m n o p q r s t u v w x y z
