@@ -52,4 +52,9 @@ public class PayoutEvent
     /// Reason for the error, if any.
     /// </summary>
     public string? ErrorReason { get; set; }
+    
+    /// <summary>
+    /// If this event is a payee verification event, this contains the result of the verification.
+    /// </summary>
+    public string? SupplierPayeeVerificationResult { get; set; }
 }
