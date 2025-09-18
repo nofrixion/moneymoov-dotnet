@@ -69,6 +69,12 @@ public class BeneficiaryEvent
     public bool IsArchived { get; set; }
     
     public string SupplierPayeeVerificationResult { get; set; }
+    
+    /// <summary>
+    /// If this event is a payee verification complete event and the result is a close match,
+    /// this contains the actual verified name returned by the payee verification supplier.
+    /// </summary>
+    public string PayeeVerifiedAccountName { get; set; }
 
     public User User { get; set; }
 }
