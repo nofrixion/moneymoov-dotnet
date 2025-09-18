@@ -13,6 +13,7 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using JetBrains.Annotations;
 using NoFrixion.MoneyMoov.Enums;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -66,6 +67,8 @@ public class BeneficiaryEvent
     public bool IsEnabled { get; set; }
 
     public bool IsArchived { get; set; }
+    
+    public string SupplierPayeeVerificationResult { get; set; }
 
     public User User { get; set; }
 }
