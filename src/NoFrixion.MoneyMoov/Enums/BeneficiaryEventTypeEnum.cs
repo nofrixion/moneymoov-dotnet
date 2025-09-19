@@ -51,5 +51,20 @@ public enum BeneficiaryEventTypeEnum
     /// <summary>
     /// An archive is a soft delete. It removes the beneficiary from the active list.
     /// </summary>
-    Archive = 6
+    Archive = 6,
+    
+    /// <summary>
+    /// Indicates that payee verification has been initiated for the beneficiary.
+    /// </summary>
+    PayeeVerificationInitiated = 7,
+    
+    /// <summary>
+    /// Indicates that payee verification has been completed successfully for the beneficiary.
+    /// </summary>
+    PayeeVerificationComplete = 8,
+    
+    /// <summary>
+    /// Indicates that payee verification has failed for the beneficiary.
+    /// </summary>
+    PayeeVerificationFailed = 9
 }

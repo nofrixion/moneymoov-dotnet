@@ -112,5 +112,10 @@ public enum PayoutEventTypesEnum
     /// <summary>
     /// A payout's destination has been successfully verified.
     /// </summary>
-    PayeeVerificationComplete = 18
+    PayeeVerificationComplete = 18,
+    
+    /// <summary>
+    /// A payout's destination verification has failed.
+    /// </summary>
+    PayeeVerificationFailed = 19
 }
