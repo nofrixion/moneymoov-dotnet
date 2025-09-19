@@ -52,4 +52,15 @@ public class PayoutEvent
     /// Reason for the error, if any.
     /// </summary>
     public string? ErrorReason { get; set; }
+    
+    /// <summary>
+    /// If this event is a payee verification event, this contains the result of the verification.
+    /// </summary>
+    public string? SupplierPayeeVerificationResult { get; set; }
+    
+    /// <summary>
+    /// If this event is a payee verification complete event and the result is a close match,
+    /// this contains the actual verified name returned by the payee verification supplier.
+    /// </summary>
+    public string? PayeeVerifiedAccountName { get; set; }
 }

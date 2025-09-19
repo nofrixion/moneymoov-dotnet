@@ -13,6 +13,7 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using JetBrains.Annotations;
 using NoFrixion.MoneyMoov.Enums;
 
 namespace NoFrixion.MoneyMoov.Models;
@@ -66,6 +67,14 @@ public class BeneficiaryEvent
     public bool IsEnabled { get; set; }
 
     public bool IsArchived { get; set; }
+    
+    public string SupplierPayeeVerificationResult { get; set; }
+    
+    /// <summary>
+    /// If this event is a payee verification complete event and the result is a close match,
+    /// this contains the actual verified name returned by the payee verification supplier.
+    /// </summary>
+    public string PayeeVerifiedAccountName { get; set; }
 
     public User User { get; set; }
 }

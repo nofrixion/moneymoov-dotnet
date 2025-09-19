@@ -36,6 +36,10 @@ public static class HttpClientConstants
     public static string HTTP_BANKINGCIRCLE_DIRECTDEBIT_API_CLIENT_NAME = "BankingCircleDirectDebitApiClient";
 
     public static string HTTP_BANKINGCIRCLE_FX_API_CLIENT_NAME = "BankingCircleFxClient";
+    
+    public static string HTTP_TECHNOXANDER_TOKEN_CLIENT_NAME = "TechnoXanderTokenClient";
+    
+    public static string HTTP_TECHNOXANDER_API_CLIENT_NAME = "TechnoXanderApiClient";
 
     /// <summary>
     /// The minimum value the timeout for the HTTP client timeout can be set to. The HTTP client
