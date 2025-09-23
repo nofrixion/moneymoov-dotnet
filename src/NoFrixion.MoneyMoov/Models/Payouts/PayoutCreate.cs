@@ -240,7 +240,6 @@ public class PayoutCreate
     /// Optional but one of Amount or FxDestinationAmount must be set. If specified this will be the amount sent to the payee.
     /// The payout's Amount will be dynamically adjusted based on this amount and the FX rate.
     /// </summary>
-    [Range(1.00, double.MaxValue, ErrorMessage = "Minimum value of 1.00 is required for FxDestinationAmount.")]
     public decimal? FxDestinationAmount { get; set; }
 
     /// <summary>

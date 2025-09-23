@@ -59,14 +59,9 @@ public class PaymentAccountCreate
     public AccountTypeEnum? AccountType { get; set; }
     
     /// <summary>
-    /// If creating a Tribe account type, then this is the tribe account id
-    /// </summary>
-    public string? TribeAccountId { get; set; }
-
-    /// <summary>
     /// For EUR accounts this can be set to the ID of another account that will act as the
-    /// backing phyiscal account. The new account will then act as a Virtual account, able to 
-    /// receive funds but the transactions will be recorded aginst the backing physical account.
+    /// backing physical account. The new account will then act as a Virtual account, able to 
+    /// receive funds but the transactions will be recorded against the backing physical account.
     /// </summary>
     public Guid? PhysicalAccountID { get; set; }
     
@@ -98,7 +93,6 @@ public class PaymentAccountCreate
             { nameof(AccountName), AccountName ?? string.Empty },
             { nameof(SupplierPhysicalAccountID), SupplierPhysicalAccountID.ToString() },
             { nameof(AccountType), AccountType?.ToString() ?? string.Empty },
-            { nameof(TribeAccountId), TribeAccountId ?? string.Empty },
             { nameof(PhysicalAccountID), PhysicalAccountID?.ToString() ?? string.Empty },
             {nameof(IsTrustAccount), IsTrustAccount.ToString()}
         };
