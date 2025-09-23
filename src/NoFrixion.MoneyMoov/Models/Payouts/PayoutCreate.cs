@@ -213,7 +213,7 @@ public class PayoutCreate
     public Guid? TopupPayrunID { get; set; }
 
     /// <summary>
-    /// Optional field to indicate the payment rail to use for the payout. Currrently only
+    /// Optional field to indicate the payment rail to use for the payout. Currently only
     /// supports choosing between SEPA-CT and SEPA-INST for EUR payments. If not set, for a EUR
     /// payment, the default behaviour is to attempt SEPA-INST and fallback to SEPA-CT if rejected.
     /// </summary>
@@ -243,7 +243,7 @@ public class PayoutCreate
     public decimal? FxDestinationAmount { get; set; }
 
     /// <summary>
-    /// For a multi-currency payout this indicates how the Amount and FxDestinaationAmount are treated.
+    /// For a multi-currency payout this indicates how the Amount and FxDestinationAmount are treated.
     /// If true the FxDestinationAmount is authoritative and the Amount is set based on the FxRate. If false then the Amount is authoritative
     /// and the FxDestinationAmount is set based on the Amount and FxRate.
     /// </summary>

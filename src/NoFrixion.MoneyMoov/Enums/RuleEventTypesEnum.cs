@@ -49,5 +49,18 @@ public enum RuleEventTypesEnum
     /// </summary>
     ExecutionError,
 
+    /// <summary>
+    /// Indicates that payee verification has been initiated for a rule destination.
+    /// </summary>
+    PayeeVerificationInitiated = 7,
     
+    /// <summary>
+    /// Indicates that payee verification has been completed successfully for a rule destination.
+    /// </summary>
+    PayeeVerificationComplete = 8,
+    
+    /// <summary>
+    /// Indicates that payee verification has failed for a rule destination.
+    /// </summary>
+    PayeeVerificationFailed = 9
 }
