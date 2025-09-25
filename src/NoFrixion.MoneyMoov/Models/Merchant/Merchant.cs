@@ -137,6 +137,36 @@ public class Merchant
     public string? Notes { get; set; }
 
     /// <summary>
+    /// The merchant is blocked from making payments (payouts).
+    /// </summary>
+    public bool IsBlocked { get; set; }
+
+    /// <summary>
+    /// The merchant has formally terminated their relationship
+    /// and is no longer a customer.
+    /// </summary>
+    public bool IsExited { get; set; }
+
+    /// <summary>
+    /// The merchant has temporarily suspended their own account.
+    /// This is a merchant-initiated action to temporarily pause services.
+    /// </summary>
+    public bool IsSuspended { get; set; }
+
+    /// <summary>
+    /// The reason for the suspension, provided by the merchant.
+    /// This should provide a clear explanation as to why the account was suspended.
+    /// </summary>
+    public string? SuspensionReason { get; set; }
+
+    /// <summary>
+    /// The IANA (Internet Assigned Numbers Authority) time zone identifier of the merchant.
+    /// For example, "Europe/Dublin" or "America/New_York". This is used to ensure that timestamps
+    /// and events are displayed and processed in the merchant's local time.
+    /// </summary>
+    public string? TimeZoneId { get; set; }
+
+    /// <summary>
     /// An optional list of descriptive tags that can be used on merchant entities
     /// such as payment requests.
     /// </summary>

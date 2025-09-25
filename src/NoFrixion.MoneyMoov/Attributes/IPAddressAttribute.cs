@@ -37,7 +37,7 @@ public class IPAddressAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
 
-        var ipAddresses = ipAddressesValue.Split([','], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var ipAddresses = ipAddressesValue.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
         foreach (var ipAddress in ipAddresses)
         {
