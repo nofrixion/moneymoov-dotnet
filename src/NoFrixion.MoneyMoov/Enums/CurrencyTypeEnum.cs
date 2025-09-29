@@ -42,6 +42,72 @@ public enum CurrencyTypeEnum
     [EnumMember(Value = "USD")]
     USD = 3,
 
+    /// <summary>
+    /// Australian Dollar (Fiat).
+    /// </summary>
+    [EnumMember(Value = "AUD")]
+    AUD = 4,
+    
+    /// <summary>
+    /// Bulgarian Lev (Fiat).
+    /// </summary>
+    [EnumMember(Value = "BGN")]
+    BGN = 5,
+    
+    /// <summary>
+    /// Canadian Dollar (Fiat).
+    /// </summary>
+    [EnumMember(Value = "CAD")]
+    CAD = 6,
+    
+    /// <summary>
+    /// Czech Koruna (Fiat).
+    /// </summary>
+    [EnumMember(Value = "CZK")]
+    CZK = 7,
+    
+    /// <summary>
+    /// Danish Krone (Fiat).
+    /// </summary>
+    [EnumMember(Value = "DKK")]
+    DKK = 8,
+    
+    /// <summary>
+    /// Hungarian Forint (Fiat).
+    /// </summary>
+    [EnumMember(Value = "HUF")]
+    HUF = 9,
+    
+    /// <summary>
+    /// Icelandic Krona (Fiat).
+    /// </summary>
+    [EnumMember(Value = "ISK")]
+    ISK = 10,
+    
+    /// <summary>
+    /// Swiss Franc (Fiat).
+    /// </summary>
+    [EnumMember(Value = "CHF")]
+    CHF = 11,
+    
+    /// <summary>
+    /// Norwegian Krone (Fiat).
+    /// </summary>
+    [EnumMember(Value = "NOK")]
+    NOK = 12,
+    
+    /// <summary>
+    /// Polish Zloty (Fiat).
+    /// </summary>
+    [EnumMember(Value = "PLN")]
+    PLN = 13,
+    
+    /// <summary>
+    /// Romanian Leu (Fiat).
+    /// </summary>
+    [EnumMember(Value = "RON")]
+    RON = 14,
+    
     // Start non-fiat currencies from 1000 to avoid conflicting with supplier mappings.
 
     /// <summary>
