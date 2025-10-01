@@ -63,4 +63,9 @@ public class PayoutEvent
     /// this contains the actual verified name returned by the payee verification supplier.
     /// </summary>
     public string? PayeeVerifiedAccountName { get; set; }
+    
+    /// <summary>
+    /// The payout ID the event is for.
+    /// </summary>
+    public Guid PayoutID { get; set; }
 }

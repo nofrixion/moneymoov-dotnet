@@ -18,7 +18,7 @@ using NoFrixion.MoneyMoov.Enums;
 using NoFrixion.MoneyMoov.Models.Approve;
 using System.ComponentModel.DataAnnotations;
 using NoFrixion.MoneyMoov.Extensions;
-using LanguageExt;
+using NoFrixion.MoneyMoov.Models.PayeeVerification;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -513,6 +513,16 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// </summary>
     public DateTimeOffset? FxQuoteExpiresAt { get; set; }
 
+    /// <summary>
+    /// Current status of the payee verification check
+    /// </summary>
+    public PayeeVerificationStatusEnum PayeeVerificationStatus { get; set; }
+
+    /// <summary>
+    /// The payee verification result, if verification has been completed
+    /// </summary>
+    public PayeeVerificationResult? PayeeVerificationResult { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
@@ -578,3 +588,5 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
         return this.ToCsvRowString();
     }
 }
+
+
