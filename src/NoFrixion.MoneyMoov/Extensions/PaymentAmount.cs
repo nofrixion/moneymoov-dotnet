@@ -23,7 +23,7 @@ public static class PaymentAmount
     /// Combines the display currency symbol and amount.
     /// </summary>
     public static string DisplayCurrencyAndAmount(CurrencyTypeEnum currency, decimal amount) =>
-        currency.GetCurrencySymbol() + " " + GetDisplayAmount(currency, amount);
+        currency.GetCurrencySymbol() + GetDisplayAmount(currency, amount);
 
     // Decide decimals once, reuse everywhere.
     private static int GetDecimalPlaces(CurrencyTypeEnum currency, decimal amount)
