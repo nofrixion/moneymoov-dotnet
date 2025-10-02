@@ -29,6 +29,8 @@ public static class HttpClientConstants
 
     public static string HTTP_YAPILY_CLIENT_NAME = "YapilyClient";
 
+    public static string HTTP_YAPILY_BENEFICIARY_CLIENT_NAME = "YapilyBeneficiaryClient";
+
     public static string HTTP_BANKINGCIRCLE_API_CLIENT_NAME = "BankingCircleApiClient";
 
     public static string HTTP_BANKINGCIRCLE_AUTHORISATION_CLIENT_NAME = "BankingCircleAuthorisationClient";
