@@ -15,6 +15,8 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using NoFrixion.MoneyMoov.Enums;
+using NoFrixion.MoneyMoov.Models.PayeeVerification;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -64,6 +66,11 @@ public class SweepDestination : Counterparty, IValidatableObject
             Priority.ToString() +
             base.GetApprovalHash();
         return HashHelper.CreateHash(input);
+    }
+    
+    public string GetBaseApprovalHash()
+    {
+        return base.GetApprovalHash();
     }
 
     public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

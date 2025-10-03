@@ -17,6 +17,8 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using NoFrixion.MoneyMoov.Enums;
+using NoFrixion.MoneyMoov.Models.PayeeVerification;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -69,6 +71,16 @@ public class Counterparty
     /// to them, or for a pay in is the source of the payment.
     /// </summary>
     public AccountIdentifier? Identifier { get; set; }
+    
+    /// <summary>
+    /// Current status of the payee verification check
+    /// </summary>
+    public PayeeVerificationStatusEnum PayeeVerificationStatus { get; set; }
+
+    /// <summary>
+    /// The payee verification result, if verification has been completed
+    /// </summary>
+    public PayeeVerificationResult? PayeeVerificationResult { get; set; }
 
     /// <summary>
     /// Gets a convenient summary representation of the counterparty.
