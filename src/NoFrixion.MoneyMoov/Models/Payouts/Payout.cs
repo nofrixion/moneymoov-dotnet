@@ -18,7 +18,7 @@ using NoFrixion.MoneyMoov.Enums;
 using NoFrixion.MoneyMoov.Models.Approve;
 using System.ComponentModel.DataAnnotations;
 using NoFrixion.MoneyMoov.Extensions;
-using LanguageExt;
+using NoFrixion.MoneyMoov.Models.PayeeVerification;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -578,3 +578,5 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
         return this.ToCsvRowString();
     }
 }
+
+

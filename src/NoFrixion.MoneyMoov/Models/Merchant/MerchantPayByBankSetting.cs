@@ -74,4 +74,14 @@ public class MerchantPayByBankSetting
     /// The list of country codes representing the banks the country supports.
     /// </summary>
     public List<string> BankCountryCodes { get; set; } = new List<string>();
+
+    /// <summary>
+    /// The heading for a warning message related to the bank institution to be displayed to the user.
+    /// </summary>
+    public string? WarningHeading { get; set; }
+
+    /// <summary>
+    /// The warning message related to the bank institution to be displayed to the user.
+    /// </summary>
+    public string? WarningMessage { get; set; }
 }
