@@ -20,11 +20,6 @@ namespace NoFrixion.MoneyMoov.Models.PayeeVerification;
 public class PayeeVerificationResult
 {
     /// <summary>
-    /// The payee that was verified
-    /// </summary>
-    public required Counterparty Payee { get; init; }
-    
-    /// <summary>
     /// An optional reference that was passed in with the verification request
     /// </summary>
     public string? Reference { get; init; }
