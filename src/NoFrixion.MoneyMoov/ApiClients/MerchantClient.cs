@@ -66,6 +66,14 @@ public interface IMerchantClient
     Task<RestApiResponse<RoleUser>> GetRoleUserAssignmentAsync(string userAccessToken, Guid roleUserID);
 
     Task<RestApiResponse> AuthoriseRoleUserAssignmentAsync(string strongUserAccessToken, Guid roleUserID);
+    
+    Task<RestApiResponse<MerchantPageResponse>> GetMerchantsAsync(string userAccessToken,
+        int pageNumber = 1,
+        int pageSize = 20,
+        string? search = null,
+        string? sort = null);
+
+    Task<RestApiResponse> SetParentMerchantAsync(string userAccessToken, Guid merchantId, Guid parentMerchantId);
 }
 
 public class MerchantClient : IMerchantClient
@@ -444,6 +452,59 @@ public class MerchantClient : IMerchantClient
         return prob switch
         {
             var p when p.IsEmpty => _apiClient.PostAsync(url, strongUserAccessToken),
+            _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov merchant endpoint to get a paged list of merchants.
+    /// </summary>
+    /// <param name="userAccessToken">A user scoped JWT access token.</param>
+    /// <param name="pageNumber">The page number of the result set to retrieve.</param>
+    /// <param name="pageSize">The number of records to return per page.</param>
+    /// <param name="search">A search filter to apply to the child merchant list. Typically searches against merchant name or ID.</param>
+    /// <param name="sort">The sort expression for the result set, e.g., "Name asc".</param>
+    /// <returns>A paged response containing a list of child merchants if successful.</returns>
+    public Task<RestApiResponse<MerchantPageResponse>> GetMerchantsAsync(string userAccessToken, 
+        int pageNumber = 1, 
+        int pageSize = Int32.MaxValue, 
+        string? search = null,
+        string? sort = null)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.MerchantsPagedUrl(_apiClient.GetBaseUri().ToString(), 
+            pageNumber,
+            pageSize,
+            search,
+            sort);
+        
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetMerchantsAsync));
+        
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<MerchantPageResponse>(url, userAccessToken),
+            _ => Task.FromResult(new RestApiResponse<MerchantPageResponse>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Sets the parent merchant for a merchant.
+    /// This will make the merchant a child merchant of the specified parent merchant.
+    /// </summary>
+    /// <param name="userAccessToken">A user scoped JWT access token.</param>
+    /// <param name="merchantId">The id of the merchant to set the parent for. </param>
+    /// <param name="parentMerchantId">The parent merchant id</param>
+    /// <returns></returns>
+    public Task<RestApiResponse> SetParentMerchantAsync(string userAccessToken, Guid merchantId, Guid parentMerchantId)
+    {
+        var url = MoneyMoovUrlBuilder.MerchantsApi.SetParentMerchantUrl(_apiClient.GetBaseUri().ToString(), 
+            merchantId,
+            parentMerchantId);
+        
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetMerchantsAsync));
+        
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.PutAsync(url, userAccessToken),
             _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }

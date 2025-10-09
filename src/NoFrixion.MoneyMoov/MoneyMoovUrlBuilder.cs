@@ -158,6 +158,17 @@ public static class MoneyMoovUrlBuilder
 
         public static string MerchantRoleUserAssignmentsUrl(string moneyMoovBaseUrl, Guid roleUserID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.roleusers}/{roleUserID}";
+        
+        public static string MerchantsPagedUrl(string moneyMoovBaseUrl,
+            int? pageNumber,
+            int? pageSize,
+            string? search,
+            string? sort)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/paged" +
+               $"?pageNumber={pageNumber}&pageSize={pageSize}&search={search}&sort={sort}";
+        
+        public static string SetParentMerchantUrl(string moneyMoovBaseUrl, Guid merchantID, Guid parentMerchantID)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/parent/{parentMerchantID}";
     }
 
     /// <summary>
