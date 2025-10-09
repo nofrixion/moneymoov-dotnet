@@ -180,6 +180,11 @@ public class Merchant
     public List<CurrencyTypeEnum> AccountCurrencies { get; set; } = [];
 
     /// <summary>
+    /// If the merchant is a child merchant, this property contains information about the parent merchant.
+    /// </summary>
+    public ParentMerchant? ParentMerchant { get; set; }
+    
+    /// <summary>
     /// Gets the most appropriate display name for the merchant which
     /// means use the trading name if set and if not, default to the business name.
     /// </summary>
