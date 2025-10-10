@@ -25,5 +25,10 @@ public enum PayeeVerificationStatusEnum
     /// <summary>
     /// Indicates that payee verification failed.
     /// </summary>
-    Failed = 4
+    Failed = 4,
+    
+    /// <summary>
+    /// Indicates that payee verification encountered an issue and requires a retry.
+    /// </summary>
+    TimedOut = 5
 }
