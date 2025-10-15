@@ -13,6 +13,7 @@
 // -----------------------------------------------------------------------------
 
 using NoFrixion.MoneyMoov.Models;
+using NoFrixion.MoneyMoov.Models.PayeeVerification;
 
 namespace NoFrixion.MoneyMoov;
 
@@ -43,6 +44,21 @@ public static class CounterpartyMapper
             BeneficiaryID = counterparty.BeneficiaryID,
             CountryCode = counterparty.CountryCode,
             Identifier = counterparty.Identifier?.ToAccountIdentifierCreate()
+        };
+    }
+    
+    public static Counterparty ToCounterparty(this VerifyPayeeRequest verifyPayeeRequest)
+    {
+        return new Counterparty
+        {
+            Name = verifyPayeeRequest.AccountName,
+            Identifier = new AccountIdentifier()
+            {
+                Currency = CurrencyTypeEnum.None,
+                IBAN = verifyPayeeRequest.IBAN,
+                SortCode = verifyPayeeRequest.SortCode,
+                AccountNumber = verifyPayeeRequest.AccountNumber
+            }
         };
     }
 }

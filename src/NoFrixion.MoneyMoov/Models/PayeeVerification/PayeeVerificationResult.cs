@@ -13,17 +13,13 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using Newtonsoft.Json;
 using NoFrixion.MoneyMoov.Enums;
 
 namespace NoFrixion.MoneyMoov.Models.PayeeVerification;
 
 public class PayeeVerificationResult
 {
-    /// <summary>
-    /// An optional reference that was passed in with the verification request
-    /// </summary>
-    public string? Reference { get; init; }
-    
     /// <summary>
     /// The result of the payee verification
     /// </summary>
@@ -37,7 +33,11 @@ public class PayeeVerificationResult
     /// <summary>
     /// The raw response from the supplier (e.g. Technoxander) as a JSON string, if available
     /// </summary>
+    [System.Text.Json.Serialization.JsonIgnore]
+    [JsonIgnore]
     public string? SupplierRawResponse { get; set; }
     
+    [System.Text.Json.Serialization.JsonIgnore]
+    [JsonIgnore]
     public string? SupplierStatus { get; set; }
 }
