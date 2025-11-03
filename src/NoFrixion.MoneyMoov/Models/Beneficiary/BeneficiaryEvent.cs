@@ -70,6 +70,8 @@ public class BeneficiaryEvent
     
     public string SupplierPayeeVerificationResult { get; set; }
     
+    [CanBeNull] public string CountryCode { get; set; }
+    
     /// <summary>
     /// If this event is a payee verification complete event and the result is a close match,
     /// this contains the actual verified name returned by the payee verification supplier.
