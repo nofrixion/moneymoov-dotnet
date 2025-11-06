@@ -18,7 +18,7 @@ using NoFrixion.MoneyMoov.Enums;
 
 namespace NoFrixion.MoneyMoov.Models.PayeeVerification;
 
-public class PayeeVerificationResult
+public class PayeeVerificationResultBase
 {
     /// <summary>
     /// The result of the payee verification
@@ -29,15 +29,14 @@ public class PayeeVerificationResult
     /// The verified account name of the payee, if available (in case of a close match)
     /// </summary>
     public string? PayeeVerifiedAccountName { get; init; }
-    
+}
+
+public class PayeeVerificationResult: PayeeVerificationResultBase
+{
     /// <summary>
     /// The raw response from the supplier (e.g. Technoxander) as a JSON string, if available
     /// </summary>
-    [System.Text.Json.Serialization.JsonIgnore]
-    [JsonIgnore]
     public string? SupplierRawResponse { get; set; }
     
-    [System.Text.Json.Serialization.JsonIgnore]
-    [JsonIgnore]
     public string? SupplierStatus { get; set; }
 }
