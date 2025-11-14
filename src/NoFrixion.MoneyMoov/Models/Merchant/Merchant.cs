@@ -193,7 +193,8 @@ public class Merchant
         => !string.IsNullOrEmpty(TradingName) ? TradingName : Name ?? string.Empty;
     
     /// <summary>
-    /// Trust accounts are a special type of account that allow the account name to be trusted for use in statements and verification of payee checks.
+    /// Trust accounts are a special type of account that allow the account name
+    /// to be trusted for use in statements and verification of payee checks.
     /// </summary>
     public bool CanHaveTrustAccounts { get; set; }
 }
