@@ -65,4 +65,9 @@ public class DirectDebitPayment
     /// The merchant mandate used for the payment attempt.
     /// </summary>
     public Mandates.Mandate? MerchantMandate { get; set; }
+
+    /// <summary>
+    /// IBAN of the account that received the payment.
+    /// </summary>
+    public string? DestinationIBAN { get; set; }
 }
