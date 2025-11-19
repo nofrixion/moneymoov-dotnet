@@ -388,6 +388,11 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload, IExportableToCsv
     /// </summary>
     public List<Guid>? NotificationRoleIDs { get; set; }
 
+    /// <summary>
+    /// Details of the Direct Debit payment attempt for this payment request, if any.
+    /// </summary>
+    public DirectDebit.DirectDebitPayment? DirectDebitPayment { get; set; }
+
     public string CustomerName =>
         Addresses.Any() ? $"{Addresses.First().FirstName} {Addresses.First().LastName}" : string.Empty;
 
