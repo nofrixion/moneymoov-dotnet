@@ -60,6 +60,12 @@ public class DirectDebitPayment
     /// Date and time of the last failure reported by the processor.
     /// </summary>
     public DateTimeOffset? FailedAt { get; set; }
+
+    /// <summary>
+    /// Original date and time requested by the user for the payment to be collected.
+    /// Might differ from the actual payment date. See <see cref="CompletedAt"/>. 
+    /// </summary>
+    public DateTimeOffset? CollectionDate { get; set; }
     
     /// <summary>
     /// The merchant mandate used for the payment attempt.
