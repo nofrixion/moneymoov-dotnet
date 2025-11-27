@@ -445,13 +445,13 @@ public static class PayoutsValidator
             }
             
             if (payout.Type == AccountIdentifierType.BIC && payout.Destination?.Identifier != null &&
-                string.IsNullOrEmpty(payout.Destination?.Identifier?.BIC))
+                string.IsNullOrWhiteSpace(payout.Destination?.Identifier?.BIC))
             {
                 yield return new ValidationResult("Destination BIC required for a BIC payout type.", [ nameof(payout.Destination.Identifier.BIC) ]);
             }
             
             if (payout.Type == AccountIdentifierType.BIC && payout.Destination?.Identifier != null &&
-                string.IsNullOrEmpty(payout.Destination?.Identifier.AccountNumber))
+                string.IsNullOrWhiteSpace(payout.Destination?.Identifier.AccountNumber))
             {
                 yield return new ValidationResult("Destination account number required for a BIC payout type.", [ nameof(payout.Destination.Identifier.AccountNumber) ]);
             }
