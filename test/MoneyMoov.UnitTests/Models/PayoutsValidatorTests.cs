@@ -650,4 +650,75 @@ public class PayoutsValidatorTests
 
         Assert.False(result.IsEmpty);
     }
+    
+    [Fact]
+    public void PayoutsValidator_Validate_BIC_Payout_Type_BIC_Missing_Fail()
+    {
+        var destination = new Counterparty
+        {
+            Name = "Joe Bloggs",
+            Identifier = new AccountIdentifier
+            {
+                IBAN = "IE81MOCK91012332532297",
+                Currency = CurrencyTypeEnum.USD
+            }
+        };
+
+        var payout = new Payout
+        {
+            ID = Guid.NewGuid(),
+            AccountID = Guid.Parse("B2DBB4E1-5F8A-4B07-82A0-EB033E6F3421"),
+            Type = AccountIdentifierType.BIC,
+            Description = "Xero Invoice fgfg from Demo Company (Global).",
+            Currency = CurrencyTypeEnum.USD,
+            Amount = 11.00M,
+            YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            TheirReference = "Placeholder",
+            Status = PayoutStatus.PENDING_INPUT,
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            Destination = destination
+        };
+
+        var result = payout.Validate();
+
+        _logger.LogDebug(result.ToTextErrorMessage());
+
+        Assert.False(result.IsEmpty);
+    }
+
+    [Fact]
+    public void PayoutsValidator_Validate_BIC_Payout_Type_BIC_And_AccountNumber_Success()
+    {
+        var destination = new Counterparty
+        {
+            Name = "Joe Bloggs",
+            Identifier = new AccountIdentifier
+            {
+                AccountNumber = "123456789",
+                BIC = "MOCKIE2D",
+                Currency = CurrencyTypeEnum.USD
+            }
+        };
+
+        var payout = new Payout
+        {
+            ID = Guid.NewGuid(),
+            AccountID = Guid.Parse("B2DBB4E1-5F8A-4B07-82A0-EB033E6F3421"),
+            Type = AccountIdentifierType.BIC,
+            Description = "Xero Invoice fgfg from Demo Company (Global).",
+            Currency = CurrencyTypeEnum.USD,
+            Amount = 11.00M,
+            YourReference = "xero-18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            TheirReference = "Placeholder",
+            Status = PayoutStatus.PENDING_INPUT,
+            InvoiceID = "18ead957-e3bc-4b12-b5c6-d12e4bef9d24",
+            Destination = destination
+        };
+
+        var result = payout.Validate();
+
+        _logger.LogDebug(result.ToTextErrorMessage());
+
+        Assert.True(result.IsEmpty);
+    }
 }
