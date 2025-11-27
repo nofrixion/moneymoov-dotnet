@@ -376,7 +376,7 @@ public static class PayoutsValidator
             if (payout.Destination != null &&
                 !(payout.Type == AccountIdentifierType.IBAN || payout.Type == AccountIdentifierType.SCAN || payout.Type == AccountIdentifierType.BIC))
             {
-                yield return new ValidationResult("Only destination types of IBAN and SCAN are supported.", [ nameof(payout.Type) ]);
+                yield return new ValidationResult("Only destination types of IBAN, SCAN and BIC are supported.", [ nameof(payout.Type) ]);
             }
 
             if(!string.IsNullOrWhiteSpace(payout.Destination?.Identifier?.IBAN) &&
@@ -442,6 +442,18 @@ public static class PayoutsValidator
                 !string.IsNullOrEmpty(payout.Destination?.Identifier?.SortCode) && payout.Destination.Identifier.SortCode.Length != USD_SCAN_REQUIRED_SORT_CODE_LENGTH)
             {
                 yield return new ValidationResult("Destination sort code must be nine digits for a USD SCAN payout type.", [nameof(payout.Destination.Identifier.SortCode)]);
+            }
+            
+            if (payout.Type == AccountIdentifierType.BIC && payout.Destination?.Identifier != null &&
+                string.IsNullOrWhiteSpace(payout.Destination?.Identifier?.BIC))
+            {
+                yield return new ValidationResult("Destination BIC required for a BIC payout type.", [ nameof(payout.Destination.Identifier.BIC) ]);
+            }
+            
+            if (payout.Type == AccountIdentifierType.BIC && payout.Destination?.Identifier != null &&
+                string.IsNullOrWhiteSpace(payout.Destination?.Identifier.AccountNumber))
+            {
+                yield return new ValidationResult("Destination account number required for a BIC payout type.", [ nameof(payout.Destination.Identifier.AccountNumber) ]);
             }
 
             if (payout.Destination?.Identifier != null)
