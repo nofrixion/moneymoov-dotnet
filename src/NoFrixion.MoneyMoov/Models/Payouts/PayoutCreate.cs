@@ -254,6 +254,11 @@ public class PayoutCreate
     /// empty the mid-market FX rate will be used.
     /// </summary>
     public string? FxQuoteID { get; set; }
+    
+    /// <summary>
+    /// Optional list of tag names to add to the payout.
+    /// </summary>
+    public List<string>? Tags { get; set; }
 
     /// <summary>
     /// Places all the payout's properties into a dictionary.
