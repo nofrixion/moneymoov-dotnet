@@ -37,6 +37,11 @@ public class PaymentAccount: IExportableToCsv
     public Guid MerchantID { get; set; }
 
     /// <summary>
+    /// The name of the merchant that owns the account.
+    /// </summary>
+    [CanBeNull] public string MerchantName { get; set; }
+
+    /// <summary>
     /// Balance of the account.
     /// </summary>
     public decimal Balance { get; set; }
