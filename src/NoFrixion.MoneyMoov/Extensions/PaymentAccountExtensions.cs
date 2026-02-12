@@ -26,7 +26,6 @@ public static class PaymentAccountExtensions
         var values = new List<string>
         {
             account.ID.ToString(),
-            account.MerchantName ?? "",
             account.AccountName,
             account.AccountSupplierName.ToString(),
             account.IsConnectedAccount.ToString(),
@@ -51,7 +50,8 @@ public static class PaymentAccountExtensions
             account.XeroUnsynchronisedTransactionsCount?.ToString() ?? "",
             account.DefaultPaymentRail.ToString(),
             account.IsArchived.ToString(),
-            account.SupplierSepaInstantStatus?.ToString() ?? ""
+            account.SupplierSepaInstantStatus?.ToString() ?? "",
+            account.MerchantName ?? ""
         };
 
         // Quote values to handle commas in the data
