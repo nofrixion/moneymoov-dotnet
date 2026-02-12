@@ -26,6 +26,7 @@ public static class PaymentAccountExtensions
         var values = new List<string>
         {
             account.ID.ToString(),
+            account.MerchantName ?? "",
             account.AccountName,
             account.AccountSupplierName.ToString(),
             account.IsConnectedAccount.ToString(),

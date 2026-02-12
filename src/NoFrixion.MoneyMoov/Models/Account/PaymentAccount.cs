@@ -255,7 +255,7 @@ public class PaymentAccount: IExportableToCsv
     public AccountSepaInstantStatusEnum? SupplierSepaInstantStatus { get; set; }
 
     public string CsvHeader() =>
-        "ID,AccountName,AccountSupplierName,IsConnectedAccount,Balance,SubmittedPayoutsBalance,AvailableBalance,Currency,IBAN,SortCode,AccountNumber,Bic,Inserted,LastUpdated,IsDefault,BankName,ExpiryDate,XeroBankFeedConnectionStatus,XeroBankFeedSyncStatus,XeroBankFeedLastSyncedAt,XeroBankFeedSyncLastFailedAt,XeroBankFeedSyncLastFailureReason,XeroUnsynchronisedTransactionsCount,DefaultPaymentRail,IsArchived,SupplierSepaInstantStatus";
+        "ID,MerchantName,AccountName,AccountSupplierName,IsConnectedAccount,Balance,SubmittedPayoutsBalance,AvailableBalance,Currency,IBAN,SortCode,AccountNumber,Bic,Inserted,LastUpdated,IsDefault,BankName,ExpiryDate,XeroBankFeedConnectionStatus,XeroBankFeedSyncStatus,XeroBankFeedLastSyncedAt,XeroBankFeedSyncLastFailedAt,XeroBankFeedSyncLastFailureReason,XeroUnsynchronisedTransactionsCount,DefaultPaymentRail,IsArchived,SupplierSepaInstantStatus";
 
     /// <summary>
     /// For virtual accounts this is the ID of the physical account that the virtual account is linked to.
