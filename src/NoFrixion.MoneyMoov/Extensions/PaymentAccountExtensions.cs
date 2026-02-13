@@ -50,7 +50,8 @@ public static class PaymentAccountExtensions
             account.XeroUnsynchronisedTransactionsCount?.ToString() ?? "",
             account.DefaultPaymentRail.ToString(),
             account.IsArchived.ToString(),
-            account.SupplierSepaInstantStatus?.ToString() ?? ""
+            account.SupplierSepaInstantStatus?.ToString() ?? "",
+            account.MerchantName ?? ""
         };
 
         // Quote values to handle commas in the data
