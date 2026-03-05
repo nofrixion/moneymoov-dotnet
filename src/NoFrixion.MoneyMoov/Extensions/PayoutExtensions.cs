@@ -5,10 +5,12 @@
 // 
 //   Author(s):
 //   Saurav Maiti (saurav@nofrixion.com)
+//   Constantine Nalimov
 // 
 //   History:
 //   18 Feb 2025  Saurav Maiti  Created, Hamilton gardens,
 //   Dublin, Ireland.
+//   05 Mar 2026  Constantine Nalimov  Added DestinationBIC to CSV export and refactored CSV header.
 // 
 //   License:
 //   MIT.
@@ -21,10 +23,69 @@ namespace NoFrixion.MoneyMoov.Extensions;
 
 public static class PayoutExtensions
 {
+    private static readonly string[] PayoutCsvColumns =
+    [
+        "ID",
+        "PayrunID",
+        "AccountID",
+        "MerchantID",
+        "CreatedByUserID",
+        "ApproverID",
+        "TopupPayrunID",
+        "Type",
+        "Description",
+        "Currency",
+        "Amount",
+        "YourReference",
+        "TheirReference",
+        "CanProcess",
+        "BatchPayoutID",
+        "DestinationAccountID",
+        "DestinationIBAN",
+        "DestinationAccountNumber",
+        "DestinationSortCode",
+        "DestinationBIC",
+        "DestinationAccountName",
+        "MerchantTokenDescription",
+        "Status",
+        "ExportedByUserID",
+        "AuthoriseUrl",
+        "CreatedByUserName",
+        "CreatedByEmailAddress",
+        "Inserted",
+        "LastUpdated",
+        "SourceAccountName",
+        "SourceAccountIban",
+        "SourceAccountNumber",
+        "SourceAccountSortcode",
+        "SourceAccountAvailableBalance",
+        "InvoiceID",
+        "Tags",
+        "Scheduled",
+        "ScheduleDate",
+        "AuthorisersRequiredCount",
+        "AuthorisersCompletedCount",
+        "Authorisations",
+        "AuthenticationMethods",
+        "BeneficiaryID",
+        "PayrunName",
+        "PaymentProcessor",
+        "RuleID",
+        "RuleName",
+        "PaymentRail",
+        "Nonce",
+        "DocumentIDs",
+        "IsSubmitted",
+        "IsFailed",
+        "IsSettled"
+    ];
+
+    public static string GetCsvHeader() => string.Join(",", PayoutCsvColumns);
+
     public static string ToCsvRowString(this Payout payout)
     {
-        var values = new List<string>
-        {
+        string[] values =
+        [
             payout.ID.ToString(),
             payout.PayrunID?.ToString() ?? "",
             payout.AccountID.ToString(),
@@ -44,6 +105,7 @@ public static class PayoutExtensions
             payout.Destination?.Identifier?.IBAN ?? "",
             payout.Destination?.Identifier?.AccountNumber ?? "",
             payout.Destination?.Identifier?.SortCode ?? "",
+            payout.Destination?.Identifier?.BIC ?? "",
             payout.Destination?.Name ?? "",
             payout.MerchantTokenDescription ?? "",
             payout.Status.ToString(),
@@ -81,7 +143,7 @@ public static class PayoutExtensions
             payout.IsSubmitted.ToString(),
             payout.IsFailed.ToString(),
             payout.IsSettled.ToString()
-        };
+        ];
 
         // Quote values to handle commas in the data
         return string.Join(",", values.Select(x => x.ToSafeCsvString()));

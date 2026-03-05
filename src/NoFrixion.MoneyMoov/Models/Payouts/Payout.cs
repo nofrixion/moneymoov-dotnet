@@ -9,6 +9,7 @@
 //  22 Nov 2021  Arif Matin     Created, Carmichael House, Dublin, Ireland.
 //  12 Dec 2022  Aaron Clauson  Renamed from PortalPayout to Payout.
 //  17 Jun 2025  Aaron Clauson  Added support for implicite FX payouts. 
+//  05 Mar 2026  Constantine Nalimov  Updated CSV header to call PayoutExtensions.GetCsvHeader().
 // 
 //  License:
 //  MIT.
@@ -570,13 +571,9 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
         }
     }
 
-    public string CsvHeader() =>
-        $"ID,PayrunID,AccountID,MerchantID,CreatedByUserID,ApproverID,TopupPayrunID,Type,Description,Currency,Amount,YourReference,TheirReference,CanProcess,BatchPayoutID,DestinationAccountID,DestinationIBAN,DestinationAccountNumber,DestinationSortCode,DestinationAccountName,MerchantTokenDescription,Status,ExportedByUserID,AuthoriseUrl,CreatedByUserName,CreatedByEmailAddress,Inserted,LastUpdated,SourceAccountName,SourceAccountIban,SourceAccountNumber,SourceAccountSortcode,SourceAccountAvailableBalance,InvoiceID,Tags,Scheduled,ScheduleDate,AuthorisersRequiredCount,AuthorisersCompletedCount,Authorisations,AuthenticationMethods,BeneficiaryID,PayrunName,PaymentProcessor,RuleID, RuleName,PaymentRail,Nonce,DocumentIDs,IsSubmitted,IsFailed,IsSettled";
+    public string CsvHeader() => PayoutExtensions.GetCsvHeader();
     
-    public string ToCsvRow()
-    {
-        return this.ToCsvRowString();
-    }
+    public string ToCsvRow() => this.ToCsvRowString();
 }
 
 
