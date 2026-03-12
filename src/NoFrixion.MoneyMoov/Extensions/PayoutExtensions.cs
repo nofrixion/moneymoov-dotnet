@@ -44,7 +44,6 @@ public static class PayoutExtensions
         "DestinationIBAN",
         "DestinationAccountNumber",
         "DestinationSortCode",
-        "DestinationBIC",
         "DestinationAccountName",
         "MerchantTokenDescription",
         "Status",
@@ -77,7 +76,8 @@ public static class PayoutExtensions
         "DocumentIDs",
         "IsSubmitted",
         "IsFailed",
-        "IsSettled"
+        "IsSettled",
+        "DestinationBIC"
     ];
 
     public static string GetCsvHeader() => string.Join(",", PayoutCsvColumns);
@@ -105,7 +105,6 @@ public static class PayoutExtensions
             payout.Destination?.Identifier?.IBAN ?? "",
             payout.Destination?.Identifier?.AccountNumber ?? "",
             payout.Destination?.Identifier?.SortCode ?? "",
-            payout.Destination?.Identifier?.BIC ?? "",
             payout.Destination?.Name ?? "",
             payout.MerchantTokenDescription ?? "",
             payout.Status.ToString(),
@@ -142,7 +141,8 @@ public static class PayoutExtensions
             payout.Documents != null ? string.Join(",", payout.Documents.Select(doc => doc.ID)) : "",
             payout.IsSubmitted.ToString(),
             payout.IsFailed.ToString(),
-            payout.IsSettled.ToString()
+            payout.IsSettled.ToString(),
+            payout.Destination?.Identifier?.BIC ?? ""
         ];
 
         // Quote values to handle commas in the data
