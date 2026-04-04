@@ -391,6 +391,13 @@ public class PaymentRequestCreate : IValidatableObject, IPaymentRequest
     /// about payment request events.
     /// </summary>
     public List<Guid>? NotificationRoleIDs { get; set; }
+    
+    /// <summary>
+    /// Optional ID of an existing direct debit mandate to associate with this payment request.
+    /// Only applicable when the payment method is direct debit.
+    /// </summary>
+    public Guid? MerchantDirectDebitMandateID { get; set; }
+
 
     public NoFrixionProblem Validate()
     {
