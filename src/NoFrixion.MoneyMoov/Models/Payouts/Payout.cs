@@ -514,6 +514,12 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// </summary>
     public DateTimeOffset? FxQuoteExpiresAt { get; set; }
 
+    /// <summary>
+    /// The actual FX rate applied during settlement, as recorded on the associated transaction.
+    /// Null if the payout has no settled FX transaction.
+    /// </summary>
+    public decimal? TransactedFxRate { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
