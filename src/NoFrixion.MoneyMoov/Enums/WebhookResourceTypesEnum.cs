@@ -62,5 +62,10 @@ public enum WebhookResourceTypesEnum
     /// Will trigger notifications for payrun events
     /// </summary>
     Payrun = 128,
+
+    /// <summary>
+    /// Will trigger notifications for payment account related events.
+    /// </summary>
+    PaymentAccount = 256,
 }
 

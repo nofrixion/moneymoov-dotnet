@@ -24,7 +24,7 @@ namespace NoFrixion.MoneyMoov.Models;
 
 #nullable disable
 
-public class PaymentAccount: IExportableToCsv
+public class PaymentAccount: IExportableToCsv, IWebhookPayload
 {
     /// <summary>
     /// Unique id for the account.
