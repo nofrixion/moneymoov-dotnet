@@ -392,6 +392,12 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload, IExportableToCsv
     /// Details of the Direct Debit payment attempt for this payment request, if any.
     /// </summary>
     public DirectDebit.DirectDebitPayment? DirectDebitPayment { get; set; }
+    
+    /// <summary>
+    /// Optional ID of the direct debit mandate associated with this payment request.
+    /// </summary>
+    public Guid? MerchantDirectDebitMandateID { get; set; }
+
 
     public string CustomerName =>
         Addresses.Any() ? $"{Addresses.First().FirstName} {Addresses.First().LastName}" : string.Empty;
