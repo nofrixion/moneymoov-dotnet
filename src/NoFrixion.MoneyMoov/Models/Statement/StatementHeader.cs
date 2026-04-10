@@ -46,6 +46,11 @@ public class StatementHeader
     /// Sort code of the merchant's account.
     /// </summary>
     public string SortCode { get; set; }
+
+    /// <summary>
+    /// BIC of the merchant's account.
+    /// </summary>
+    public string Bic { get; set; }
     
     /// <summary>
     /// NoFrixion's name and address.
@@ -88,6 +93,11 @@ public class StatementHeader
     public IEnumerable<Transaction> Transactions { get; set; }
     
     public bool IsTrustAccount { get; set; }
+
+    /// <summary>
+    /// Indicates if the merchant's account is in agency mode.
+    /// </summary>
+    public bool IsPoboAccount { get; set; }
     
     /// <summary>
     /// Date and time when the statement was generated.
