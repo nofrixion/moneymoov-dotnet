@@ -154,6 +154,10 @@ public class Counterparty
              { keyPrefix + nameof(EmailAddress), EmailAddress ?? string.Empty },
              { keyPrefix + nameof(PhoneNumber), PhoneNumber ?? string.Empty },
              { keyPrefix + nameof(CountryCode), CountryCode ?? string.Empty },
+             { keyPrefix + nameof(AddressLine1), AddressLine1 ?? string.Empty },
+             { keyPrefix + nameof(AddressLine2), AddressLine2 ?? string.Empty },
+             { keyPrefix + nameof(PostTown), PostTown ?? string.Empty },
+             { keyPrefix + nameof(PostCode), PostCode ?? string.Empty },
         };
 
         if(Identifier != null)
@@ -177,6 +181,10 @@ public class Counterparty
             (!string.IsNullOrEmpty(EmailAddress) ? EmailAddress : string.Empty) +
             (!string.IsNullOrEmpty(PhoneNumber) ? PhoneNumber : string.Empty) +
             (!string.IsNullOrEmpty(CountryCode) ? CountryCode : string.Empty) +
+            (!string.IsNullOrEmpty(AddressLine1) ? AddressLine1 : string.Empty) +
+            (!string.IsNullOrEmpty(AddressLine2) ? AddressLine2 : string.Empty) +
+            (!string.IsNullOrEmpty(PostTown) ? PostTown : string.Empty) +
+            (!string.IsNullOrEmpty(PostCode) ? PostCode : string.Empty) +
             (Identifier != null ? Identifier.GetApprovalHash() : string.Empty);
         return HashHelper.CreateHash(input);
     }

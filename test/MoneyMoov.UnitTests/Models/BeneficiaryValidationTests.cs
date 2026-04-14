@@ -59,6 +59,141 @@ public class BeneficairyValidationTests : MoneyMoovUnitTestBase<BeneficairyValid
     }
 
     /// <summary>
+    /// Tests that changing TheirReference on a beneficiary changes the approval hash.
+    /// </summary>
+    [Fact]
+    public void Beneficiary_GetApprovalHash_TheirReference_ChangesHash()
+    {
+        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
+
+        var beneficiary = new Beneficiary
+        {
+            ID = Guid.NewGuid(),
+            MerchantID = Guid.NewGuid(),
+            Name = "Test",
+            Currency = CurrencyTypeEnum.EUR,
+            Destination = new Counterparty
+            {
+                Name = "Test Dest",
+                Identifier = new AccountIdentifier
+                {
+                    IBAN = "GB42MOCK00000070629907",
+                    Currency = CurrencyTypeEnum.EUR
+                }
+            }
+        };
+
+        var hashBefore = beneficiary.GetApprovalHash();
+
+        beneficiary.TheirReference = "NEWREF";
+
+        var hashAfter = beneficiary.GetApprovalHash();
+
+        Assert.NotEqual(hashBefore, hashAfter);
+    }
+
+    /// <summary>
+    /// Tests that changing address fields on a beneficiary's destination changes the approval hash.
+    /// </summary>
+    [Fact]
+    public void Beneficiary_GetApprovalHash_AddressFields_ChangesHash()
+    {
+        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
+
+        var beneficiary = new Beneficiary
+        {
+            ID = Guid.NewGuid(),
+            MerchantID = Guid.NewGuid(),
+            Name = "Test",
+            Currency = CurrencyTypeEnum.EUR,
+            Destination = new Counterparty
+            {
+                Name = "Test Dest",
+                Identifier = new AccountIdentifier
+                {
+                    IBAN = "GB42MOCK00000070629907",
+                    Currency = CurrencyTypeEnum.EUR
+                }
+            }
+        };
+
+        var hashBefore = beneficiary.GetApprovalHash();
+
+        beneficiary.Destination.AddressLine1 = "123 Test Street";
+        var hashAfterLine1 = beneficiary.GetApprovalHash();
+        Assert.NotEqual(hashBefore, hashAfterLine1);
+
+        beneficiary.Destination.AddressLine2 = "Apartment 4";
+        var hashAfterLine2 = beneficiary.GetApprovalHash();
+        Assert.NotEqual(hashAfterLine1, hashAfterLine2);
+
+        beneficiary.Destination.PostTown = "Dublin";
+        var hashAfterPostTown = beneficiary.GetApprovalHash();
+        Assert.NotEqual(hashAfterLine2, hashAfterPostTown);
+
+        beneficiary.Destination.PostCode = "D01 AB12";
+        var hashAfterPostCode = beneficiary.GetApprovalHash();
+        Assert.NotEqual(hashAfterPostTown, hashAfterPostCode);
+    }
+
+    /// <summary>
+    /// Tests that two identical beneficiaries produce the same approval hash.
+    /// </summary>
+    [Fact]
+    public void Beneficiary_GetApprovalHash_SameData_SameHash()
+    {
+        Logger.LogDebug($"--> {TypeExtensions.GetCaller()}.");
+
+        var merchantId = Guid.NewGuid();
+
+        var beneficiary1 = new Beneficiary
+        {
+            ID = Guid.NewGuid(),
+            MerchantID = merchantId,
+            Name = "Test",
+            Currency = CurrencyTypeEnum.EUR,
+            TheirReference = "REF001",
+            Destination = new Counterparty
+            {
+                Name = "Test Dest",
+                AddressLine1 = "123 Main St",
+                AddressLine2 = "Suite 1",
+                PostTown = "London",
+                PostCode = "SW1A 1AA",
+                Identifier = new AccountIdentifier
+                {
+                    IBAN = "GB42MOCK00000070629907",
+                    Currency = CurrencyTypeEnum.EUR
+                }
+            }
+        };
+
+        var beneficiary2 = new Beneficiary
+        {
+            ID = Guid.NewGuid(),
+            MerchantID = merchantId,
+            Name = "Test",
+            Currency = CurrencyTypeEnum.EUR,
+            TheirReference = "REF001",
+            Destination = new Counterparty
+            {
+                Name = "Test Dest",
+                AddressLine1 = "123 Main St",
+                AddressLine2 = "Suite 1",
+                PostTown = "London",
+                PostCode = "SW1A 1AA",
+                Identifier = new AccountIdentifier
+                {
+                    IBAN = "GB42MOCK00000070629907",
+                    Currency = CurrencyTypeEnum.EUR
+                }
+            }
+        };
+
+        Assert.Equal(beneficiary1.GetApprovalHash(), beneficiary2.GetApprovalHash());
+    }
+
+    /// <summary>
     /// Tests that an empty beneficiary model returns the expected number of validation errors.
     /// </summary>
     [Fact]
