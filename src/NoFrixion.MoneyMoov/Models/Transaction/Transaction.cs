@@ -174,6 +174,14 @@ public class Transaction : IWebhookPayload, IExportableToCsv
     [CanBeNull]
     public Dictionary<string, string> PaymentRequestCustomFields { get; set; }
 
+    /// <summary>
+    /// The raw payment reference details as received from the payment processor. For Banking Circle
+    /// transactions this contains the concatenated payment details fields from which the payment
+    /// lifecycle ID can be derived.
+    /// </summary>
+    [CanBeNull]
+    public string RawReference { get; set; }
+
     public string CsvHeader() => "ID,AccountID,AccountName,MerchantID,Type,Amount,Currency,Description,TransactionDate,Inserted,YourReference,TheirReference,Counterparty,Balance,RuleID,PayoutID,VirtualIBAN,Tags,AccountSequenceNumber,PaymentRequestID,PaymentRequestCustomFields";
     
     public string ToCsvRow()
