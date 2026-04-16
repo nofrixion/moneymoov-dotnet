@@ -29,6 +29,10 @@ public static class CounterpartyMapper
             PhoneNumber = counterpartyCreate.PhoneNumber,
             BeneficiaryID = counterpartyCreate.BeneficiaryID,
             CountryCode = counterpartyCreate.CountryCode,
+            AddressLine1 = counterpartyCreate.AddressLine1,
+            AddressLine2 = counterpartyCreate.AddressLine2,
+            PostCode = counterpartyCreate.PostCode,
+            PostTown = counterpartyCreate.PostTown,
             Identifier = counterpartyCreate.Identifier?.ToAccountIdentifier(currency),  
         };
     }
@@ -43,6 +47,10 @@ public static class CounterpartyMapper
             PhoneNumber = counterparty.PhoneNumber,
             BeneficiaryID = counterparty.BeneficiaryID,
             CountryCode = counterparty.CountryCode,
+            AddressLine1 = counterparty.AddressLine1,
+            AddressLine2 = counterparty.AddressLine2,
+            PostCode = counterparty.PostCode,
+            PostTown = counterparty.PostTown,
             Identifier = counterparty.Identifier?.ToAccountIdentifierCreate()
         };
     }

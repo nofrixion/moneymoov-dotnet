@@ -140,12 +140,13 @@ public class Beneficiary : IValidatableObject, IExportableToCsv
     public string GetApprovalHash()
     {
         var input =
-            Name + 
-            MerchantID + 
+            Name +
+            MerchantID +
             GetSourceAccountsHash() +
             Currency +
-            Destination.GetApprovalHash()
-            + (string.IsNullOrEmpty(Nonce) ? string.Empty : Nonce);
+            Destination.GetApprovalHash() +
+            (!string.IsNullOrEmpty(TheirReference) ? TheirReference : string.Empty) +
+            (string.IsNullOrEmpty(Nonce) ? string.Empty : Nonce);
 
         return HashHelper.CreateHash(input);
     }

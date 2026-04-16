@@ -71,7 +71,17 @@ public class BeneficiaryEvent
     public string SupplierPayeeVerificationResult { get; set; }
     
     [CanBeNull] public string CountryCode { get; set; }
-    
+
+    public string AddressLine1 { get; set; }
+
+    public string AddressLine2 { get; set; }
+
+    public string PostTown { get; set; }
+
+    public string PostCode { get; set; }
+
+    public string TheirReference { get; set; }
+
     /// <summary>
     /// If this event is a payee verification complete event and the result is a close match,
     /// this contains the actual verified name returned by the payee verification supplier.
