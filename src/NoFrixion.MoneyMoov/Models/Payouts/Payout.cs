@@ -522,8 +522,8 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
 
     /// <summary>
     /// The actual amount received by the beneficiary in <see cref="FxDestinationCurrency"/>, as recorded
-    /// on the settled transaction. When <see cref="FxUseDestinationAmount"/> is <c>true</c> the beneficiary
-    /// receive amount was fixed at creation, so this should closely match <see cref="FxDestinationAmount"/>.
+    /// on the settled transaction. When <see cref="FxUseDestinationAmount"/> is <c>true</c> the beneficiary's
+    /// received amount was fixed at creation, so this should closely match <see cref="FxDestinationAmount"/>.
     /// When <see cref="FxUseDestinationAmount"/> is <c>false</c> the debit amount was fixed, so this may
     /// differ from the estimated <see cref="FxDestinationAmount"/> due to rate movement between quote and settlement.
     /// Null if the payout has no settled FX transaction.
@@ -534,7 +534,7 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// The actual amount debited from the account in <see cref="Currency"/>, as recorded on the settled
     /// transaction. When <see cref="FxUseDestinationAmount"/> is <c>false</c> the debit amount was fixed
     /// at creation, so this should closely match <see cref="Amount"/>. When <see cref="FxUseDestinationAmount"/>
-    /// is <c>true</c> the beneficiary receive amount was fixed, so this may differ from the estimated
+    /// is <c>true</c> the beneficiary's received amount was fixed, so this may differ from the estimated
     /// <see cref="Amount"/> due to rate movement between quote and settlement.
     /// Null for non-FX payouts and payouts with no settled transaction.
     /// </summary>
