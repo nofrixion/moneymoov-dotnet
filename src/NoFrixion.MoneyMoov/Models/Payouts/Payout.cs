@@ -520,6 +520,26 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// </summary>
     public decimal? TransactedFxRate { get; set; }
 
+    /// <summary>
+    /// The actual amount received by the beneficiary in <see cref="FxDestinationCurrency"/>, as recorded
+    /// on the settled transaction. When <see cref="FxUseDestinationAmount"/> is <c>true</c> the beneficiary
+    /// receive amount was fixed at creation, so this should closely match <see cref="FxDestinationAmount"/>.
+    /// When <see cref="FxUseDestinationAmount"/> is <c>false</c> the debit amount was fixed, so this may
+    /// differ from the estimated <see cref="FxDestinationAmount"/> due to rate movement between quote and settlement.
+    /// Null if the payout has no settled FX transaction.
+    /// </summary>
+    public decimal? TransactedFxAmount { get; set; }
+
+    /// <summary>
+    /// The actual amount debited from the account in <see cref="Currency"/>, as recorded on the settled
+    /// transaction. When <see cref="FxUseDestinationAmount"/> is <c>false</c> the debit amount was fixed
+    /// at creation, so this should closely match <see cref="Amount"/>. When <see cref="FxUseDestinationAmount"/>
+    /// is <c>true</c> the beneficiary receive amount was fixed, so this may differ from the estimated
+    /// <see cref="Amount"/> due to rate movement between quote and settlement.
+    /// Null for non-FX payouts and payouts with no settled transaction.
+    /// </summary>
+    public decimal? TransactedAmount { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
