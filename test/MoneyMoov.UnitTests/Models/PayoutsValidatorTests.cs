@@ -14,6 +14,9 @@
 //-----------------------------------------------------------------------------
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using NoFrixion.MoneyMoov.Models.Currency;
+using NoFrixion.MoneyMoov.Services.Currency;
 using NoFrixion.MoneyMoov.Models;
 using Xunit;
 using Xunit.Abstractions;
@@ -30,6 +33,13 @@ public class PayoutsValidatorTests
         _loggerFactory = new LoggerFactory();
         _loggerFactory.AddProvider(new XunitLoggerProvider(testOutputHelper));
         _logger = _loggerFactory.CreateLogger<PayoutsValidatorTests>();
+
+        CurrencyCatalogAccessor.Set(new CurrencyCatalog(Options.Create(new CurrenciesConfiguration
+        {
+            Holding = [CurrencyTypeEnum.EUR, CurrencyTypeEnum.GBP, CurrencyTypeEnum.USD],
+            IncomingBc = [CurrencyTypeEnum.AUD, CurrencyTypeEnum.CAD, CurrencyTypeEnum.CHF, CurrencyTypeEnum.CZK, CurrencyTypeEnum.DKK, CurrencyTypeEnum.EUR, CurrencyTypeEnum.GBP, CurrencyTypeEnum.HUF, CurrencyTypeEnum.NOK, CurrencyTypeEnum.PLN, CurrencyTypeEnum.RON, CurrencyTypeEnum.USD],
+            FxBc = [CurrencyTypeEnum.EUR, CurrencyTypeEnum.GBP, CurrencyTypeEnum.USD, CurrencyTypeEnum.DKK]
+        })));
     }
 
     /// <summary>
@@ -533,6 +543,59 @@ public class PayoutsValidatorTests
         {
             Assert.False(result.IsEmpty);
         }
+    }
+
+    [Fact]
+    public void PayoutsValidator_Validate_Unsupported_Holding_Currency_Fails()
+    {
+        var payout = CreateValidPayout(CurrencyTypeEnum.CAD);
+
+        var result = payout.Validate();
+
+        Assert.False(result.IsEmpty);
+        Assert.Contains(nameof(Payout.Currency), result.Errors.Keys);
+    }
+
+    [Fact]
+    public void PayoutsValidator_Validate_Unsupported_Fx_Destination_Currency_Fails()
+    {
+        var payout = CreateValidPayout(CurrencyTypeEnum.EUR);
+        payout.FxUseDestinationAmount = true;
+        payout.FxDestinationAmount = 10.00M;
+        payout.FxDestinationCurrency = CurrencyTypeEnum.AUD;
+
+        var result = payout.Validate();
+
+        Assert.False(result.IsEmpty);
+        Assert.Contains(nameof(Payout.FxDestinationCurrency), result.Errors.Keys);
+    }
+
+    private static Payout CreateValidPayout(CurrencyTypeEnum currency)
+    {
+        var destination = new Counterparty
+        {
+            Name = "Joe Bloggs",
+            Identifier = new AccountIdentifier
+            {
+                IBAN = "IE78MOCK91012352877713",
+                Currency = currency
+            }
+        };
+
+        return new Payout
+        {
+            ID = Guid.NewGuid(),
+            AccountID = Guid.NewGuid(),
+            Type = AccountIdentifierType.IBAN,
+            Description = "Test payout",
+            Currency = currency,
+            Amount = 11.00M,
+            YourReference = "your ref",
+            TheirReference = "their ref",
+            Status = PayoutStatus.PENDING_INPUT,
+            InvoiceID = Guid.NewGuid().ToString(),
+            Destination = destination
+        };
     }
 
     /// <summary>

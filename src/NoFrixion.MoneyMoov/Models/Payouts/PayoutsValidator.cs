@@ -15,8 +15,10 @@
 // -----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using NoFrixion.MoneyMoov.Services.Currency;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -291,6 +293,47 @@ public static class PayoutsValidator
         if (payout == null)
         {
             yield break;
+        }
+        var currencyCatalog =
+            validationContext.GetService(typeof(ICurrencyCatalog)) as ICurrencyCatalog ??
+            CurrencyCatalogAccessor.Catalog;
+
+        if (currencyCatalog != null)
+        {
+            if (!currencyCatalog.IsSupportedFor(payout.Currency, CurrencyCapability.Holding))
+            {
+                var supportedCurrencies = currencyCatalog
+                    .GetSupported(CurrencyCapability.Holding)
+                    .Select(info => info.Code)
+                    .OrderBy(code => code.ToString())
+                    .ToList();
+
+                var supported = supportedCurrencies.Count > 0
+                    ? string.Join(", ", supportedCurrencies)
+                    : "none";
+
+                yield return new ValidationResult(
+                    $"Currency {payout.Currency} is not supported for payouts. Supported currencies: {supported}.",
+                    [nameof(payout.Currency)]);
+            }
+
+            if (payout.FxDestinationCurrency != null &&
+                !currencyCatalog.IsSupportedFor(payout.FxDestinationCurrency.Value, CurrencyCapability.FxBc))
+            {
+                var supportedCurrencies = currencyCatalog
+                    .GetSupported(CurrencyCapability.FxBc)
+                    .Select(info => info.Code)
+                    .OrderBy(code => code.ToString())
+                    .ToList();
+
+                var supported = supportedCurrencies.Count > 0
+                    ? string.Join(", ", supportedCurrencies)
+                    : "none";
+
+                yield return new ValidationResult(
+                    $"FxDestinationCurrency {payout.FxDestinationCurrency} is not supported for FX payouts. Supported FX currencies: {supported}.",
+                    [nameof(payout.FxDestinationCurrency)]);
+            }
         }
 
         if (payout.Amount <= decimal.Zero && payout.FxDestinationAmount <= 0)
