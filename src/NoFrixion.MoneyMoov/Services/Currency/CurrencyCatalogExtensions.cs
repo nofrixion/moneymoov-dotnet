@@ -4,10 +4,10 @@
 // Description: Formatting helpers for currency capability lookups.
 // 
 // Author(s):
-// Oz (oz-agent@warp.dev)
+// Constantine Nalimov (constantine.nalimov@nofrixion.com)
 // 
 // History:
-// 29 Apr 2026  Oz Created, Warp.
+// 29 Apr 2026  Constantine Nalimov   Created, Prague, CZ.
 // 
 // License:
 // MIT.

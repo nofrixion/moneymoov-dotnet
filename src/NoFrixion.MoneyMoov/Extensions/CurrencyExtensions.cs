@@ -8,6 +8,7 @@
 // 
 // History:
 // 23 Oct 2024  Aaron Clauson   Created, Carne, Wexford, Ireland.
+// 29 Apr 2026  Constantine Nalimov   Updated for supported currencies.
 // 
 // License:
 // MIT
