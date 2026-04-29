@@ -91,6 +91,16 @@ public class CurrencyCatalogTests
     }
 
     [Fact]
+    public void GetSupportedCodesText_Returns_Sorted_Codes_Or_None()
+    {
+        var sut = CreateCatalog(
+            holding: [CurrencyTypeEnum.USD, CurrencyTypeEnum.EUR, CurrencyTypeEnum.USD]);
+
+        Assert.Equal("EUR, USD", sut.GetSupportedCodesText(CurrencyCapability.Holding));
+        Assert.Equal("none", sut.GetSupportedCodesText(CurrencyCapability.FxBc));
+    }
+
+    [Fact]
     public void GetAll_Returns_All_Currencies_Except_None()
     {
         var sut = CreateCatalog();
