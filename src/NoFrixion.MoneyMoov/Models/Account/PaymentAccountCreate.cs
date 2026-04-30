@@ -26,7 +26,9 @@ public class PaymentAccountCreate
     public Guid MerchantID { get; set;}
 
     /// <summary>
-    /// Currency for the account, only EUR, GBP, USD and in sandbox BTC are supported.
+    /// Currency for the account. Swagger narrows this property to the currencies
+    /// currently configured for holding accounts. The authoritative list for the
+    /// current environment is exposed by GET /api/v1/currencies?capability=Holding.
     /// </summary>
     public CurrencyTypeEnum Currency { get; set; } = CurrencyTypeEnum.EUR;
 

@@ -8,6 +8,7 @@
 // 
 // History:
 // 12 Jun 2022  Arif Matin  Created, Harcourt Street, Dublin, Ireland.
+// 29 Apr 2026  Constantine Nalimov   Updated for supported currencies.
 //
 // License: 
 // MIT.
@@ -534,6 +535,7 @@ public class PayoutsValidatorTests
             Assert.False(result.IsEmpty);
         }
     }
+
 
     /// <summary>
     /// Tests that a USD SCAN destination is successfully validated.
