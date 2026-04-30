@@ -35,6 +35,11 @@ public class PayoutCreate
 
     public string? Description { get; set; }
 
+    /// <summary>
+    /// Source payout currency. Swagger narrows this property to the currencies
+    /// currently configured for holding accounts. The authoritative list for the
+    /// current environment is exposed by GET /api/v1/currencies?capability=Holding.
+    /// </summary>
     [Required(ErrorMessage = "Currency is required.")]
     public CurrencyTypeEnum Currency { get; set; }
 
@@ -233,6 +238,9 @@ public class PayoutCreate
 
     /// <summary>
     /// Optional. For an FX payout this is the currency that the beneficiary should be sent.
+    /// Swagger narrows this property to the currencies currently configured for
+    /// Banking Circle FX support. The authoritative list for the current environment
+    /// is exposed by GET /api/v1/currencies?capability=FxBc.
     /// </summary>
     public CurrencyTypeEnum? FxDestinationCurrency { get; set; }
 
