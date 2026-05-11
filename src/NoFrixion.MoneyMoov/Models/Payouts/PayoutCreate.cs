@@ -239,8 +239,8 @@ public class PayoutCreate
     /// <summary>
     /// Optional. For an FX payout this is the currency that the beneficiary should be sent.
     /// Swagger narrows this property to the currencies currently configured for
-    /// Banking Circle FX support. The authoritative list for the current environment
-    /// is exposed by GET /api/v1/currencies?capability=FxBc.
+    /// FX conversion support. The authoritative list for the current environment
+    /// is exposed by GET /api/v1/currencies?capability=FxConversion.
     /// </summary>
     public CurrencyTypeEnum? FxDestinationCurrency { get; set; }
 

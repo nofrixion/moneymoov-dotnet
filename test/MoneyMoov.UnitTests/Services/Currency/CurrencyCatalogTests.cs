@@ -49,13 +49,13 @@ public class CurrencyCatalogTests
     {
         var sut = CreateCatalog(
             holding: [CurrencyTypeEnum.EUR, CurrencyTypeEnum.USD],
-            incomingBc: [CurrencyTypeEnum.EUR, CurrencyTypeEnum.DKK],
-            fxBc: [CurrencyTypeEnum.EUR, CurrencyTypeEnum.DKK]);
+            inbound: [CurrencyTypeEnum.EUR, CurrencyTypeEnum.DKK],
+            fxConversion: [CurrencyTypeEnum.EUR, CurrencyTypeEnum.DKK]);
 
         Assert.True(sut.IsSupportedFor(CurrencyTypeEnum.EUR, CurrencyCapability.Holding));
-        Assert.True(sut.IsSupportedFor(CurrencyTypeEnum.EUR, CurrencyCapability.Holding | CurrencyCapability.FxBc));
+        Assert.True(sut.IsSupportedFor(CurrencyTypeEnum.EUR, CurrencyCapability.Holding | CurrencyCapability.FxConversion));
         Assert.False(sut.IsSupportedFor(CurrencyTypeEnum.DKK, CurrencyCapability.Holding));
-        Assert.False(sut.IsSupportedFor(CurrencyTypeEnum.DKK, CurrencyCapability.Holding | CurrencyCapability.FxBc));
+        Assert.False(sut.IsSupportedFor(CurrencyTypeEnum.DKK, CurrencyCapability.Holding | CurrencyCapability.FxConversion));
         Assert.False(sut.IsSupportedFor(CurrencyTypeEnum.EUR, CurrencyCapability.None));
     }
 
@@ -78,14 +78,14 @@ public class CurrencyCatalogTests
     {
         var sut = CreateCatalog(
             holding: [CurrencyTypeEnum.EUR, CurrencyTypeEnum.USD, CurrencyTypeEnum.GBP],
-            fxBc: [CurrencyTypeEnum.EUR, CurrencyTypeEnum.GBP, CurrencyTypeEnum.DKK]);
+            fxConversion: [CurrencyTypeEnum.EUR, CurrencyTypeEnum.GBP, CurrencyTypeEnum.DKK]);
 
-        var supported = sut.GetSupported(CurrencyCapability.Holding | CurrencyCapability.FxBc);
+        var supported = sut.GetSupported(CurrencyCapability.Holding | CurrencyCapability.FxConversion);
 
-        // EUR is in both Holding and FxBc (duplicated in both).
-        // GBP is in both Holding and FxBc.
+        // EUR is in both Holding and FxConversion (duplicated in both).
+        // GBP is in both Holding and FxConversion.
         // USD is only in Holding.
-        // DKK is only in FxBc.
+        // DKK is only in FxConversion.
         IReadOnlyList<CurrencyInfo> expected = [sut.GetInfo(CurrencyTypeEnum.EUR), sut.GetInfo(CurrencyTypeEnum.GBP)];
         Assert.Equal(expected.OrderBy(x => x.Code), supported.OrderBy(x => x.Code));
     }
@@ -97,7 +97,7 @@ public class CurrencyCatalogTests
             holding: [CurrencyTypeEnum.USD, CurrencyTypeEnum.EUR, CurrencyTypeEnum.USD]);
 
         Assert.Equal("EUR, USD", sut.GetSupportedCodesText(CurrencyCapability.Holding));
-        Assert.Equal("none", sut.GetSupportedCodesText(CurrencyCapability.FxBc));
+        Assert.Equal("none", sut.GetSupportedCodesText(CurrencyCapability.FxConversion));
     }
 
     [Fact]
@@ -114,14 +114,14 @@ public class CurrencyCatalogTests
 
     private static CurrencyCatalog CreateCatalog(
         IReadOnlyList<CurrencyTypeEnum>? holding = null,
-        IReadOnlyList<CurrencyTypeEnum>? incomingBc = null,
-        IReadOnlyList<CurrencyTypeEnum>? fxBc = null)
+        IReadOnlyList<CurrencyTypeEnum>? inbound = null,
+        IReadOnlyList<CurrencyTypeEnum>? fxConversion = null)
     {
         var config = new CurrenciesConfiguration
         {
             Holding = holding ?? [],
-            IncomingBc = incomingBc ?? [],
-            FxBc = fxBc ?? []
+            Inbound = inbound ?? [],
+            FxConversion = fxConversion ?? []
         };
 
         return new CurrencyCatalog(Options.Create(config));

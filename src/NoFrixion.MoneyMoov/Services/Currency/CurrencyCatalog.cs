@@ -22,24 +22,24 @@ namespace NoFrixion.MoneyMoov.Services.Currency;
 public class CurrencyCatalog : ICurrencyCatalog
 {
     private readonly IReadOnlyList<CurrencyTypeEnum> _holding;
-    private readonly IReadOnlyList<CurrencyTypeEnum> _incomingBc;
-    private readonly IReadOnlyList<CurrencyTypeEnum> _fxBc;
+    private readonly IReadOnlyList<CurrencyTypeEnum> _inbound;
+    private readonly IReadOnlyList<CurrencyTypeEnum> _fxConversion;
 
     private readonly HashSet<CurrencyTypeEnum> _holdingSet;
-    private readonly HashSet<CurrencyTypeEnum> _incomingBcSet;
-    private readonly HashSet<CurrencyTypeEnum> _fxBcSet;
+    private readonly HashSet<CurrencyTypeEnum> _inboundSet;
+    private readonly HashSet<CurrencyTypeEnum> _fxConversionSet;
 
     public CurrencyCatalog(IOptions<CurrenciesConfiguration> options)
     {
         var config = options?.Value ?? new CurrenciesConfiguration();
 
         _holding = BuildUniqueList(nameof(config.Holding), config.Holding);
-        _incomingBc = BuildUniqueList(nameof(config.IncomingBc), config.IncomingBc);
-        _fxBc = BuildUniqueList(nameof(config.FxBc), config.FxBc);
+        _inbound = BuildUniqueList(nameof(config.Inbound), config.Inbound);
+        _fxConversion = BuildUniqueList(nameof(config.FxConversion), config.FxConversion);
 
         _holdingSet = _holding.ToHashSet();
-        _incomingBcSet = _incomingBc.ToHashSet();
-        _fxBcSet = _fxBc.ToHashSet();
+        _inboundSet = _inbound.ToHashSet();
+        _fxConversionSet = _fxConversion.ToHashSet();
     }
 
     /// <summary>
@@ -55,8 +55,8 @@ public class CurrencyCatalog : ICurrencyCatalog
 
         var supported = true;
         if (capability.HasFlag(CurrencyCapability.Holding)) supported &= _holdingSet.Contains(currency);
-        if (capability.HasFlag(CurrencyCapability.IncomingBc)) supported &= _incomingBcSet.Contains(currency);
-        if (capability.HasFlag(CurrencyCapability.FxBc)) supported &= _fxBcSet.Contains(currency);
+        if (capability.HasFlag(CurrencyCapability.Inbound)) supported &= _inboundSet.Contains(currency);
+        if (capability.HasFlag(CurrencyCapability.FxConversion)) supported &= _fxConversionSet.Contains(currency);
 
         return supported;
     }
@@ -73,8 +73,8 @@ public class CurrencyCatalog : ICurrencyCatalog
         {
             CurrencyCapability.None => (IEnumerable<CurrencyTypeEnum>) [],
             CurrencyCapability.Holding => _holding,
-            CurrencyCapability.IncomingBc => _incomingBc,
-            CurrencyCapability.FxBc => _fxBc,
+            CurrencyCapability.Inbound => _inbound,
+            CurrencyCapability.FxConversion => _fxConversion,
             _ => GetIntersectedCodes(capability)
         };
 
@@ -90,11 +90,11 @@ public class CurrencyCatalog : ICurrencyCatalog
         if (capability.HasFlag(CurrencyCapability.Holding))
             result = result?.Intersect(_holdingSet) ?? _holding;
 
-        if (capability.HasFlag(CurrencyCapability.IncomingBc))
-            result = result?.Intersect(_incomingBcSet) ?? _incomingBc;
+        if (capability.HasFlag(CurrencyCapability.Inbound))
+            result = result?.Intersect(_inboundSet) ?? _inbound;
 
-        if (capability.HasFlag(CurrencyCapability.FxBc))
-            result = result?.Intersect(_fxBcSet) ?? _fxBc;
+        if (capability.HasFlag(CurrencyCapability.FxConversion))
+            result = result?.Intersect(_fxConversionSet) ?? _fxConversion;
 
         return result ?? [];
     }

@@ -19,7 +19,7 @@ public class CurrenciesConfiguration
 {
     public IReadOnlyList<CurrencyTypeEnum> Holding { get; set; } = [];
 
-    public IReadOnlyList<CurrencyTypeEnum> IncomingBc { get; set; } = [];
+    public IReadOnlyList<CurrencyTypeEnum> Inbound { get; set; } = [];
 
-    public IReadOnlyList<CurrencyTypeEnum> FxBc { get; set; } = [];
+    public IReadOnlyList<CurrencyTypeEnum> FxConversion { get; set; } = [];
 }
