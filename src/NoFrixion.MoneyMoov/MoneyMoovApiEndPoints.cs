@@ -5,11 +5,11 @@
 //
 // Author(s):
 // Aaron Clauson (aaron@nofrixion.com)
-// 
+//
 // History:
 // 06 May 2022  Aaron Clauson   Created, Carmichael House, Dublin, Ireland.
 //
-// License: 
+// License:
 // MIT.
 //-----------------------------------------------------------------------------
 
@@ -43,6 +43,11 @@ public static class MoneyMoovApiEndPoints
     /// The URL to access the main NoFrixion MoneyMoov Customer API.
     /// </summary>
     public const string CUSTOMER_ENDPOINT = "customer";
+
+    /// <summary>
+    /// The URL to access the supported currencies API.
+    /// </summary>
+    public const string CURRENCIES_ENDPOINT = "currencies";
 
     /// <summary>
     /// The URL to access the main NoFrixion MoneyMoov Merchants API.
