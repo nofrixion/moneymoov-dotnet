@@ -5,11 +5,11 @@
 //
 // Author(s):
 // Donal O'Connor (donal@nofrixion.com)
-// 
+//
 // History:
 // 15 Oct 2021  Donal O'Connor   Created, Carmichael House, Dublin, Ireland.
 //
-// License: 
+// License:
 // MIT.
 //-----------------------------------------------------------------------------
 
@@ -158,7 +158,7 @@ public static class MoneyMoovUrlBuilder
 
         public static string MerchantRoleUserAssignmentsUrl(string moneyMoovBaseUrl, Guid roleUserID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{MoneyMoovResources.roleusers}/{roleUserID}";
-        
+
         public static string MerchantsPagedUrl(string moneyMoovBaseUrl,
             int? pageNumber,
             int? pageSize,
@@ -166,7 +166,7 @@ public static class MoneyMoovUrlBuilder
             string? sort)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/paged" +
                $"?pageNumber={pageNumber}&pageSize={pageSize}&search={search}&sort={sort}";
-        
+
         public static string SetParentMerchantUrl(string moneyMoovBaseUrl, Guid merchantID, Guid parentMerchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/parent/{parentMerchantID}";
     }
@@ -369,7 +369,7 @@ public static class MoneyMoovUrlBuilder
 
         public static string AllWebhooksUrl(string moneyMoovBaseUrl, Guid merchantID)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.webhooks}/{merchantID}";
-        
+
         public static string WebhooksMerchantUrl(string moneyMoovBaseUrl, Guid merchantID, Guid webhookId)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.merchants}/{merchantID}/{MoneyMoovResources.webhooks}/{webhookId}";
     }
@@ -417,6 +417,11 @@ public static class MoneyMoovUrlBuilder
     public static string CustomerApiUrl(string moneyMoovBaseUrl)
     {
         return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.CUSTOMER_ENDPOINT}";
+    }
+
+    public static string CurrenciesApiUrl(string moneyMoovBaseUrl)
+    {
+        return $"{moneyMoovBaseUrl}/{MoneyMoovApiEndPoints.CURRENCIES_ENDPOINT}";
     }
 
     public static string PaymentRequestsApiUrl(string moneyMoovBaseUrl)
