@@ -268,6 +268,9 @@ public static class MoneyMoovUrlBuilder
 
         public static string SendPayoutUrl(string moneyMoovBaseUrl)
             => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/send";
+
+        public static string FxQuoteUrl(string moneyMoovBaseUrl, CurrencyTypeEnum source, CurrencyTypeEnum destination, decimal amount)
+            => $"{moneyMoovBaseUrl}/{MoneyMoovResources.payouts}/fxquote/{source}/{destination}/{amount}";
     }
 
     /// <summary>

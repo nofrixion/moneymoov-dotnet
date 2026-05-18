@@ -43,6 +43,8 @@ public interface IPayoutClient
     Task<RestApiResponse> DeletePayoutAsync(string accessToken, Guid payoutID);
 
     Task<RestApiResponse<Payout>> SendPayoutAsync(Guid appID, string secret, Guid merchantID, PayoutCreate payoutCreate);
+
+    Task<RestApiResponse<decimal>> GetFxQuoteAsync(string userAccessToken, CurrencyTypeEnum source, CurrencyTypeEnum destination, decimal amount);
 }
 
 public class PayoutClient : IPayoutClient
@@ -242,6 +244,22 @@ public class PayoutClient : IPayoutClient
         {
             var p when p.IsEmpty => _apiClient.DeleteAsync(url, accessToken),
             _ => Task.FromResult(new RestApiResponse(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
+        };
+    }
+
+    /// <summary>
+    /// Calls the MoneyMoov Payout endpoint to get an indicative FX quote for the given source/destination currency pair and amount.
+    /// </summary>
+    public Task<RestApiResponse<decimal>> GetFxQuoteAsync(string userAccessToken, CurrencyTypeEnum source, CurrencyTypeEnum destination, decimal amount)
+    {
+        var url = MoneyMoovUrlBuilder.PayoutsApi.FxQuoteUrl(_apiClient.GetBaseUri().ToString(), source, destination, amount);
+
+        var prob = _apiClient.CheckAccessToken(userAccessToken, nameof(GetFxQuoteAsync));
+
+        return prob switch
+        {
+            var p when p.IsEmpty => _apiClient.GetAsync<decimal>(url, userAccessToken),
+            _ => Task.FromResult(new RestApiResponse<decimal>(HttpStatusCode.PreconditionFailed, new Uri(url), prob))
         };
     }
 
