@@ -77,7 +77,13 @@ public static class PayoutExtensions
         "IsSubmitted",
         "IsFailed",
         "IsSettled",
-        "DestinationBIC"
+        "DestinationBIC",
+        "FxDestinationCurrency",
+        "IndicativeFxRate",
+        "IndicativeFxDestinationAmount",
+        "TransactedFxRate",
+        "TransactedFxDestinationAmount",
+        "TransactedFxSourceAmount"
     ];
 
     public static string GetCsvHeader() => string.Join(",", PayoutCsvColumns);
@@ -126,7 +132,9 @@ public static class PayoutExtensions
             payout.AuthorisersRequiredCount.ToString(),
             payout.AuthorisersCompletedCount.ToString(),
             payout.Authorisations != null
-                ? string.Join(",", payout.Authorisations.Where(x=>x.User != null).Select(auth => $"{auth.User.FirstName} {auth.User.LastName}"))
+                ? string.Join(",",
+                    payout.Authorisations.Where(x => x.User != null)
+                        .Select(auth => $"{auth.User.FirstName} {auth.User.LastName}"))
                 : "",
             payout.AuthenticationMethods != null
                 ? string.Join(",", payout.AuthenticationMethods.Select(auth => auth.ToString()))
@@ -142,7 +150,22 @@ public static class PayoutExtensions
             payout.IsSubmitted.ToString(),
             payout.IsFailed.ToString(),
             payout.IsSettled.ToString(),
-            payout.Destination?.Identifier?.BIC ?? ""
+            payout.Destination?.Identifier?.BIC ?? "",
+            payout.FxDestinationCurrency?.ToString() ?? "",
+            payout.FxRate?.ToString(CultureInfo.InvariantCulture) ?? "",
+            payout is { FxDestinationAmount: not null, FxDestinationCurrency: not null }
+                ? PaymentAmount.GetRoundedAmount(payout.FxDestinationCurrency.Value, payout.FxDestinationAmount.Value)
+                    .ToString(CultureInfo.InvariantCulture)
+                : "",
+            payout.TransactedFxRate?.ToString(CultureInfo.InvariantCulture) ?? "",
+            payout is { TransactedFxAmount: not null, FxDestinationCurrency: not null }
+                ? PaymentAmount.GetRoundedAmount(payout.FxDestinationCurrency.Value, payout.TransactedFxAmount.Value)
+                    .ToString(CultureInfo.InvariantCulture)
+                : "",
+            payout.TransactedAmount.HasValue
+                ? PaymentAmount.GetRoundedAmount(payout.Currency, Math.Abs(payout.TransactedAmount.Value))
+                    .ToString(CultureInfo.InvariantCulture)
+                : ""
         ];
 
         // Quote values to handle commas in the data

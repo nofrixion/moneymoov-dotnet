@@ -30,7 +30,8 @@ public static class TransactionExtensions
             transaction.AccountName ?? "",
             transaction.MerchantID.ToString(),
             transaction.Type.ToString(),
-            PaymentAmount.GetRoundedAmount(transaction.Currency, transaction.Amount).ToString(CultureInfo.InvariantCulture),
+            PaymentAmount.GetRoundedAmount(transaction.Currency, transaction.Amount)
+                .ToString(CultureInfo.InvariantCulture),
             transaction.Currency.ToString(),
             transaction.Description,
             transaction.TransactionDate.ToString("o"),
@@ -38,14 +39,22 @@ public static class TransactionExtensions
             transaction.YourReference ?? "",
             transaction.TheirReference ?? "",
             transaction.CounterpartySummary ?? "",
-            PaymentAmount.GetRoundedAmount(transaction.Currency, transaction.Balance).ToString(CultureInfo.InvariantCulture),
+            PaymentAmount.GetRoundedAmount(transaction.Currency, transaction.Balance)
+                .ToString(CultureInfo.InvariantCulture),
             transaction.RuleID?.ToString() ?? "",
             transaction.PayoutID?.ToString() ?? "",
             transaction.VirtualIBAN ?? "",
             transaction.Tags != null ? string.Join(",", transaction.Tags.Select(tag => tag.Name)) : "",
             transaction.AccountSequenceNumber.ToString(),
             transaction.PaymentRequestID?.ToString() ?? "",
-            transaction.PaymentRequestCustomFields?.Select(kv => $"{kv.Key}: {kv.Value}").Aggregate((a, b) => $"{a}, {b}") ?? string.Empty
+            transaction.PaymentRequestCustomFields?.Select(kv => $"{kv.Key}: {kv.Value}")
+                .Aggregate((a, b) => $"{a}, {b}") ?? string.Empty,
+            transaction.FxRate?.ToString(CultureInfo.InvariantCulture) ?? "",
+            transaction is { FxAmount: not null, FxCurrency: not null }
+                ? PaymentAmount.GetRoundedAmount(transaction.FxCurrency.Value, transaction.FxAmount.Value)
+                    .ToString(CultureInfo.InvariantCulture)
+                : "",
+            transaction.FxCurrency?.ToString() ?? ""
         };
         
         // Quote values to handle commas in the data

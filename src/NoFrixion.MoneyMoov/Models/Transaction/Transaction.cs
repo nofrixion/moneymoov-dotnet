@@ -182,7 +182,7 @@ public class Transaction : IWebhookPayload, IExportableToCsv
     [CanBeNull]
     public string RawReference { get; set; }
 
-    public string CsvHeader() => "ID,AccountID,AccountName,MerchantID,Type,Amount,Currency,Description,TransactionDate,Inserted,YourReference,TheirReference,Counterparty,Balance,RuleID,PayoutID,VirtualIBAN,Tags,AccountSequenceNumber,PaymentRequestID,PaymentRequestCustomFields";
+    public string CsvHeader() => "ID,AccountID,AccountName,MerchantID,Type,Amount,Currency,Description,TransactionDate,Inserted,YourReference,TheirReference,Counterparty,Balance,RuleID,PayoutID,VirtualIBAN,Tags,AccountSequenceNumber,PaymentRequestID,PaymentRequestCustomFields,FxRate,FxAmount,FxCurrency";
     
     public string ToCsvRow()
     {
