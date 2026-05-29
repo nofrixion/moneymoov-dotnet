@@ -21,6 +21,53 @@ namespace NoFrixion.MoneyMoov.Extensions;
 
 public static class PaymentRequestExtensions
 {
+    private static readonly string[] PaymentRequestCsvColumns =
+    [
+        "ID",
+        "MerchantID",
+        "Amount",
+        "Currency",
+        "PaymentMethods",
+        "Description",
+        "CustomerID",
+        "OrderID",
+        "Inserted",
+        "LastUpdated",
+        "PispAccountID",
+        "PispAccountName",
+        "BaseOriginUrl",
+        "CardAuthorizeOnly",
+        "CardCreateToken",
+        "CardCreateTokenMode",
+        "Status",
+        "PartialPaymentMethod",
+        "CustomerEmailAddress",
+        "CardStripePaymentIntentID",
+        "CardStripePaymentIntentSecret",
+        "NotificationEmailAddresses",
+        "PriorityBankID",
+        "Title",
+        "PartialPaymentSteps",
+        "AmountReceived",
+        "AmountRefunded",
+        "AmountPending",
+        "CreatedByUserID",
+        "CreatedByUserName",
+        "MerchantTokenDescription",
+        "TransactionIDs",
+        "PayrunID",
+        "ShippingAddress",
+        "BillingAddress",
+        "CustomerName",
+        "PaymentProcessor",
+        "Tags",
+        "DueDate",
+        "CustomFields",
+        "HostedPayCheckoutUrl"
+    ];
+
+    public static string GetCsvHeader() => string.Join(",", PaymentRequestCsvColumns);
+
     public static List<PaymentRequestPaymentAttempt> GetPaymentAttempts(this IEnumerable<PaymentRequestEvent> events)
     {
         if (events == null || !events.Any())
@@ -512,6 +559,7 @@ public static class PaymentRequestExtensions
             paymentRequest.DueDate?.ToString("o") ?? "",
             paymentRequest.CustomFields?.Select(cf => $"{cf.Name}: {cf.Value}")
                 .Aggregate((current, next) => $"{current}, {next}") ?? "",
+            paymentRequest.HostedPayCheckoutUrl ?? "",
         };
 
 
