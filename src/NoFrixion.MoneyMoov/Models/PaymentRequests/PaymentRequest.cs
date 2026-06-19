@@ -398,6 +398,11 @@ public class PaymentRequest : IPaymentRequest, IWebhookPayload, IExportableToCsv
     /// </summary>
     public Guid? MerchantDirectDebitMandateID { get; set; }
 
+    /// <summary>
+    /// Indicates whether the payment request is archived.
+    /// </summary>
+    public bool IsArchived { get; set; }
+
 
     public string CustomerName =>
         Addresses.Any() ? $"{Addresses.First().FirstName} {Addresses.First().LastName}" : string.Empty;

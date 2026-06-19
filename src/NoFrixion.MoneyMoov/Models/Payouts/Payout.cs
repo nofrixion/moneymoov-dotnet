@@ -540,6 +540,11 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     /// </summary>
     public decimal? TransactedAmount { get; set; }
 
+    /// <summary>
+    /// Indicates whether the payout is archived.
+    /// </summary>
+    public bool IsArchived { get; set; }
+
     public NoFrixionProblem Validate()
     {
         var context = new ValidationContext(this, serviceProvider: null, items: null);
