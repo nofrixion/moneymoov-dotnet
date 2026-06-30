@@ -45,9 +45,9 @@ public class Iso4217CurrencyTableTests
     }
 
     [Fact]
-    public void GetInfo_Returns_Expected_Decimals_For_Isk_And_Btc()
+    public void GetInfo_Returns_Expected_Decimals_For_Jpy_And_Btc()
     {
-        Assert.Equal(0, Iso4217CurrencyTable.GetInfo(CurrencyTypeEnum.ISK).Decimals);
+        Assert.Equal(0, Iso4217CurrencyTable.GetInfo(CurrencyTypeEnum.JPY).Decimals);
         Assert.Equal(PaymentsConstants.BITCOIN_ROUNDING_DECIMAL_PLACES, Iso4217CurrencyTable.GetInfo(CurrencyTypeEnum.BTC).Decimals);
     }
 }

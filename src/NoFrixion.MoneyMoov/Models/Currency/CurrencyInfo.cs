@@ -20,5 +20,6 @@ public record CurrencyInfo(
     string Iso4217AlphaCode,
     string Iso4217NumericCode,
     int Decimals,
-    string Symbol
+    string Symbol,
+    bool IsFiat
 );

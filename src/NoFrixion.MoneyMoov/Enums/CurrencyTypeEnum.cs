@@ -10,6 +10,7 @@
 // 26 10 2021  Donal O'Connor   Created, Carmichael House, Dublin, Ireland.
 // 03 Dec 2021  Aaron Clauson   Renamed from Currency to CurrencyTypeEnum.
 // 13 Feb 2025  Aaron Clauson   Added USD.
+// 23 Jun 2026  Axel Granillo   Added support for additional currencies and marked BGN and ISK as obsolete.
 // 
 //  License:
 //  MIT.
@@ -51,6 +52,7 @@ public enum CurrencyTypeEnum
     /// <summary>
     /// Bulgarian Lev (Fiat).
     /// </summary>
+    [Obsolete("Unsupported currency", false)]
     [EnumMember(Value = "BGN")]
     BGN = 5,
     
@@ -81,6 +83,7 @@ public enum CurrencyTypeEnum
     /// <summary>
     /// Icelandic Krona (Fiat).
     /// </summary>
+    [Obsolete("Unsupported currency", false)]
     [EnumMember(Value = "ISK")]
     ISK = 10,
     
@@ -107,6 +110,78 @@ public enum CurrencyTypeEnum
     /// </summary>
     [EnumMember(Value = "RON")]
     RON = 14,
+    
+    /// <summary>
+    /// United Arab Emirates Dirham (Fiat).
+    /// </summary>
+    [EnumMember(Value = "AED")]
+    AED = 15,
+    
+    /// <summary>
+    /// Chinese Yuan (Renminbi) (Fiat).
+    /// </summary>
+    [EnumMember(Value = "CNH")]
+    CNH = 16,
+    
+    /// <summary>
+    /// Hong Kong Dollar (Fiat).
+    /// </summary>
+    [EnumMember(Value = "HKD")]
+    HKD = 17,
+    
+    /// <summary>
+    /// Israeli Shekel (Fiat).
+    /// </summary>
+    [EnumMember(Value = "ILS")]
+    ILS = 18,
+    
+    /// <summary>
+    /// Japanese Yen (Fiat).
+    /// </summary>
+    [EnumMember(Value = "JPY")]
+    JPY = 19,
+    
+    /// <summary>
+    /// Mexican Peso (Fiat).
+    /// </summary>
+    [EnumMember(Value = "MXN")]
+    MXN = 20,
+    
+    /// <summary>
+    /// New Zealand Dollar (Fiat).
+    /// </summary>
+    [EnumMember(Value = "NZD")]
+    NZD = 21,
+    
+    /// <summary>
+    /// Saudi Riyal (Fiat).
+    /// </summary>
+    [EnumMember(Value = "SAR")]
+    SAR = 22,
+    
+    /// <summary>
+    /// Swedish Krona (Fiat).
+    /// </summary>
+    [EnumMember(Value = "SEK")]
+    SEK = 23,
+    
+    /// <summary>
+    /// Singapore Dollar (Fiat).
+    /// </summary>
+    [EnumMember(Value = "SGD")]
+    SGD = 24,
+    
+    /// <summary>
+    /// Turkish Lira (Fiat).
+    /// </summary>
+    [EnumMember(Value = "TRY")]
+    TRY = 25,
+    
+    /// <summary>
+    /// South African Rand (Fiat).
+    /// </summary>
+    [EnumMember(Value = "ZAR")]
+    ZAR = 26,
     
     // Start non-fiat currencies from 1000 to avoid conflicting with supplier mappings.
 
