@@ -197,4 +197,9 @@ public class Merchant
     /// to be trusted for use in statements and verification of payee checks.
     /// </summary>
     public bool CanHaveTrustAccounts { get; set; }
+
+    /// <summary>
+    /// Name of the card payment processor. Can be "Checkout", "Stripe" or none.
+    /// </summary>
+    public string? CardPaymentProcessor { get; set; }
 }
