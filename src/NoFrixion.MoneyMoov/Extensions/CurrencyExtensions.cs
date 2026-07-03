@@ -21,22 +21,10 @@ namespace NoFrixion.MoneyMoov;
 public static class CurrencyExtensions
 {
     public static string GetCurrencySymbol(this CurrencyTypeEnum currency) =>
-    currency switch
-    {
-        CurrencyTypeEnum.BTC => Iso4217CurrencyTable.GetInfo(currency).Symbol,
-        CurrencyTypeEnum.GBP => Iso4217CurrencyTable.GetInfo(currency).Symbol,
-        CurrencyTypeEnum.EUR => Iso4217CurrencyTable.GetInfo(currency).Symbol,
-        CurrencyTypeEnum.USD => Iso4217CurrencyTable.GetInfo(currency).Symbol,
-        CurrencyTypeEnum.None => Iso4217CurrencyTable.GetInfo(currency).Symbol,
-        _ => "€"
-    };
+        Iso4217CurrencyTable.GetInfo(currency).Symbol ;
 
     public static bool IsFiat(this CurrencyTypeEnum currency) =>
-        currency switch
-        {
-            CurrencyTypeEnum.BTC => false,
-            _ => true
-        };
+        Iso4217CurrencyTable.GetInfo(currency).IsFiat;
 
     public static string Iso4217AlphaCode(this CurrencyTypeEnum currency) =>
         Iso4217CurrencyTable.GetInfo(currency).Iso4217AlphaCode;
