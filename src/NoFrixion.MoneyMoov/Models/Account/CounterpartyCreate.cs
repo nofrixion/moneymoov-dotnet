@@ -33,6 +33,27 @@ public class CounterpartyCreate
     /// <summary>
     /// The name of the counterparty. For a person this should be their full name. For a 
     /// company this should be their registered or trading name.
+    /// <para>
+    /// When used to create a payout, the following validations might be applied upon submission depending on the processor:
+    /// </para>
+    /// <para>
+    /// **Length**: 1 - 35 characters
+    /// </para>
+    /// <para>
+    /// **Allowed characters**: 
+    /// </para>
+    /// <code>
+    /// a b c d e f g h i j k l m n o p q r s t u v w x y z
+    /// A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+    /// 0 1 2 3 4 5 6 7 8 9
+    /// / - ? : ( ) . , ' + _
+    /// Space
+    /// </code>
+    /// <para>
+    /// **Illegal characters**:
+    /// - Fields composed of only blank characters.
+    /// - Fields starting with colon (:) or hyphen (-).
+    /// </para>
     /// </summary>
     public string? Name { get; set; }
 
