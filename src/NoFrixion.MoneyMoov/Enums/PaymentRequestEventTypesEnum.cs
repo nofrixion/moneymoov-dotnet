@@ -156,5 +156,23 @@ public enum PaymentRequestEventTypesEnum
     /// <summary>
     /// Received a final negative status update from a Banking Circle direct debit payment.
     /// </summary>
-    direct_debit_failed = 25
+    direct_debit_failed = 25,
+
+    /// <summary>
+    /// A card refund has been submitted to the processor and is awaiting confirmation.
+    /// The refund is not yet complete — a webhook callback will confirm the outcome.
+    /// </summary>
+    card_refund_pending = 26,
+
+    /// <summary>
+    /// A card refund has been confirmed as successful by the processor webhook.
+    /// The funds have been returned to the cardholder.
+    /// </summary>
+    card_refund_settled = 27,
+
+    /// <summary>
+    /// A card refund has been declined by the processor (e.g., insufficient merchant balance).
+    /// The refund did not go through and the original payment amount remains unchanged.
+    /// </summary>
+    card_refund_declined = 28
 }
