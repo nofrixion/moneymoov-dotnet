@@ -1942,6 +1942,250 @@ public class PaymentRequestResultTests
     }
 
     /// <summary>
+    /// Tests that a card_refund_pending event does NOT reduce the paid amount or change
+    /// the payment result. A pending refund that has not yet settled must be ignored by
+    /// GetTotalAmountRefunded() so the result stays FullyPaid.
+    /// </summary>
+    [Fact]
+    public void Card_Refund_Pending_DoesNotAffect_PaymentResult()
+    {
+        var entity = GetTestPaymentRequest();
+        entity.Amount = 100M;
+
+        var cardAuthorizationResponseID = Guid.NewGuid().ToString();
+        var refundActionID = "act_pending001";
+
+        var saleEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow.AddMinutes(-5),
+            EventType = PaymentRequestEventTypesEnum.card_sale,
+            Status = CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS,
+            CardAuthorizationResponseID = cardAuthorizationResponseID,
+            PaymentProcessorName = PaymentProcessorsEnum.Checkout
+        };
+
+        var refundPendingEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.card_refund_pending,
+            Status = CardPaymentResponseStatus.CARD_CHECKOUT_REFUND_PENDING_STATUS,
+            CardAuthorizationResponseID = cardAuthorizationResponseID,
+            CardRequestID = refundActionID,
+            PaymentProcessorName = PaymentProcessorsEnum.Checkout
+        };
+
+        entity.Events = new List<PaymentRequestEvent> { saleEvent, refundPendingEvent };
+
+        var result = new PaymentRequestResult(entity);
+
+        // Pending refund must not reduce the paid amount or change result to PartiallyPaid/None.
+        Assert.Equal(entity.Amount, result.Amount);
+        Assert.Equal(PaymentResultEnum.FullyPaid, result.Result);
+        // GetTotalAmountRefunded sums RefundSettledAmount only — must be zero for a pending refund.
+        Assert.Equal(0M, result.Payments.Sum(p => p.RefundedAmount));
+    }
+
+    /// <summary>
+    /// Tests that a card_refund_settled event for the full amount reduces the paid amount
+    /// to zero and transitions the result to Voided (same behaviour as a full card void).
+    /// </summary>
+    [Fact]
+    public void Card_Refund_Settled_FullAmount_ChangesResult_To_Voided()
+    {
+        var entity = GetTestPaymentRequest();
+        entity.Amount = 100M;
+
+        var cardAuthorizationResponseID = Guid.NewGuid().ToString();
+        var refundActionID = "act_settle001";
+
+        var saleEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow.AddMinutes(-10),
+            EventType = PaymentRequestEventTypesEnum.card_sale,
+            Status = CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS,
+            CardAuthorizationResponseID = cardAuthorizationResponseID,
+            PaymentProcessorName = PaymentProcessorsEnum.Checkout
+        };
+
+        var refundPendingEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow.AddMinutes(-5),
+            EventType = PaymentRequestEventTypesEnum.card_refund_pending,
+            Status = CardPaymentResponseStatus.CARD_CHECKOUT_REFUND_PENDING_STATUS,
+            CardAuthorizationResponseID = cardAuthorizationResponseID,
+            CardRequestID = refundActionID,
+            PaymentProcessorName = PaymentProcessorsEnum.Checkout
+        };
+
+        var refundSettledEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.card_refund_settled,
+            Status = CardPaymentResponseStatus.CARD_CHECKOUT_REFUND_SETTLED_STATUS,
+            CardAuthorizationResponseID = cardAuthorizationResponseID,
+            CardRequestID = refundActionID,
+            PaymentProcessorName = PaymentProcessorsEnum.Checkout
+        };
+
+        entity.Events = new List<PaymentRequestEvent> { saleEvent, refundPendingEvent, refundSettledEvent };
+
+        var result = new PaymentRequestResult(entity);
+
+        // Full settled refund means 0 net amount received — result is Voided (same as a full card void).
+        Assert.Equal(0M, result.Amount);
+        Assert.Equal(PaymentResultEnum.Voided, result.Result);
+        Assert.Equal(entity.Amount, result.Payments.Sum(p => p.RefundedAmount));
+    }
+
+    /// <summary>
+    /// Tests that a card_refund_settled for a partial amount transitions the result
+    /// to PartiallyPaid and reports the correct net paid amount.
+    /// </summary>
+    [Fact]
+    public void Card_Refund_Settled_PartialAmount_ChangesResult_To_PartiallyPaid()
+    {
+        var entity = GetTestPaymentRequest();
+        entity.Amount = 100M;
+
+        var cardAuthorizationResponseID = Guid.NewGuid().ToString();
+        var refundActionID = "act_settle002";
+
+        var saleEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow.AddMinutes(-10),
+            EventType = PaymentRequestEventTypesEnum.card_sale,
+            Status = CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS,
+            CardAuthorizationResponseID = cardAuthorizationResponseID,
+            PaymentProcessorName = PaymentProcessorsEnum.Checkout
+        };
+
+        var refundPendingEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = 50M,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow.AddMinutes(-5),
+            EventType = PaymentRequestEventTypesEnum.card_refund_pending,
+            Status = CardPaymentResponseStatus.CARD_CHECKOUT_REFUND_PENDING_STATUS,
+            CardAuthorizationResponseID = cardAuthorizationResponseID,
+            CardRequestID = refundActionID,
+            PaymentProcessorName = PaymentProcessorsEnum.Checkout
+        };
+
+        var refundSettledEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = 50M,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.card_refund_settled,
+            Status = CardPaymentResponseStatus.CARD_CHECKOUT_REFUND_SETTLED_STATUS,
+            CardAuthorizationResponseID = cardAuthorizationResponseID,
+            CardRequestID = refundActionID,
+            PaymentProcessorName = PaymentProcessorsEnum.Checkout
+        };
+
+        entity.Events = new List<PaymentRequestEvent> { saleEvent, refundPendingEvent, refundSettledEvent };
+
+        var result = new PaymentRequestResult(entity);
+
+        // 100 paid - 50 refunded = 50 net, which is less than the 100 requested → PartiallyPaid.
+        Assert.Equal(50M, result.Amount);
+        Assert.Equal(PaymentResultEnum.PartiallyPaid, result.Result);
+        Assert.Equal(50M, result.Payments.Sum(p => p.RefundedAmount));
+    }
+
+    /// <summary>
+    /// Tests that a card_refund_declined event does NOT change the payment result — the
+    /// declined refund amount is not subtracted, so the result stays FullyPaid.
+    /// </summary>
+    [Fact]
+    public void Card_Refund_Declined_DoesNotAffect_PaymentResult()
+    {
+        var entity = GetTestPaymentRequest();
+        entity.Amount = 100M;
+
+        var cardAuthorizationResponseID = Guid.NewGuid().ToString();
+        var refundActionID = "act_decline001";
+
+        var saleEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow.AddMinutes(-10),
+            EventType = PaymentRequestEventTypesEnum.card_sale,
+            Status = CardPaymentResponseStatus.CARD_AUTHORIZED_SUCCESS_STATUS,
+            CardAuthorizationResponseID = cardAuthorizationResponseID,
+            PaymentProcessorName = PaymentProcessorsEnum.Checkout
+        };
+
+        var refundPendingEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow.AddMinutes(-5),
+            EventType = PaymentRequestEventTypesEnum.card_refund_pending,
+            Status = CardPaymentResponseStatus.CARD_CHECKOUT_REFUND_PENDING_STATUS,
+            CardAuthorizationResponseID = cardAuthorizationResponseID,
+            CardRequestID = refundActionID,
+            PaymentProcessorName = PaymentProcessorsEnum.Checkout
+        };
+
+        var refundDeclinedEvent = new PaymentRequestEvent
+        {
+            ID = Guid.NewGuid(),
+            PaymentRequestID = entity.ID,
+            Amount = entity.Amount,
+            Currency = entity.Currency,
+            Inserted = DateTime.UtcNow,
+            EventType = PaymentRequestEventTypesEnum.card_refund_declined,
+            Status = CardPaymentResponseStatus.CARD_CHECKOUT_REFUND_DECLINED_STATUS,
+            CardAuthorizationResponseID = cardAuthorizationResponseID,
+            CardRequestID = refundActionID,
+            PaymentProcessorName = PaymentProcessorsEnum.Checkout
+        };
+
+        entity.Events = new List<PaymentRequestEvent> { saleEvent, refundPendingEvent, refundDeclinedEvent };
+
+        var result = new PaymentRequestResult(entity);
+
+        // Declined refund means no money was returned — result stays FullyPaid.
+        Assert.Equal(entity.Amount, result.Amount);
+        Assert.Equal(PaymentResultEnum.FullyPaid, result.Result);
+        Assert.Equal(0M, result.Payments.Sum(p => p.RefundedAmount));
+    }
+
+    /// <summary>
     /// Checks that a paid DD correctly transitions to FullyPaid.
     /// </summary>
     [Fact]
