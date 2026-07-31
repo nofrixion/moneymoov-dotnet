@@ -218,9 +218,8 @@ public class PayoutCreate
     public Guid? TopupPayrunID { get; set; }
 
     /// <summary>
-    /// Optional field to indicate the payment rail to use for the payout. Currently only
-    /// supports choosing between SEPA-CT and SEPA-INST for EUR payments. If not set, for a EUR
-    /// payment, the default behaviour is to attempt SEPA-INST and fallback to SEPA-CT if rejected.
+    /// Optional field to indicate the preferred payment rail intent for the payout.
+    /// If not set, provider default routing logic is applied.
     /// </summary>
     public PaymentRailEnum PaymentRail { get; set; }
     
