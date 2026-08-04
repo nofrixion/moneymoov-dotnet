@@ -211,30 +211,106 @@ public static class PaymentRequestEventExtensions
         paymentAttempt.RefundAttempts = refundAttempts;
     }
     
+    /// <summary>
+    /// Handles card refund events and builds refund attempts for a payment attempt.
+    /// Supports both the legacy flow (card_refund with immediate success) and the new
+    /// async flow (card_refund_pending -> card_refund_settled/card_refund_declined).
+    /// </summary>
+    /// <param name="groupedCardEvent">Card events grouped by CardAuthorizationResponseID.</param>
+    /// <param name="paymentAttempt">The payment attempt to populate with refund attempts.</param>
     public static void HandleCardRefundEvents(this IGrouping<string?, PaymentRequestEvent> groupedCardEvent,
         PaymentRequestPaymentAttempt paymentAttempt)
     {
-        var cardRefundEvents =
-            groupedCardEvent.Where(x => x.EventType == PaymentRequestEventTypesEnum.card_refund).ToList();
+        var refundAttempts = new List<PaymentRequestRefundAttempt>();
 
-        if (!cardRefundEvents.Any())
+        refundAttempts.AddRange(BuildLegacyRefundAttempts(groupedCardEvent));
+        refundAttempts.AddRange(BuildAsyncRefundAttempts(groupedCardEvent));
+
+        if (refundAttempts.Any())
         {
-            return;
+            paymentAttempt.RefundAttempts.AddRange(refundAttempts);
+        }
+    }
+
+    /// <summary>
+    /// Builds refund attempts from legacy card_refund events (pre-rework: immediate success).
+    /// These events have no CardRequestID grouping - each event is its own refund attempt.
+    /// </summary>
+    private static List<PaymentRequestRefundAttempt> BuildLegacyRefundAttempts(
+        IGrouping<string?, PaymentRequestEvent> groupedCardEvent)
+    {
+        return groupedCardEvent
+            .Where(x => x.EventType == PaymentRequestEventTypesEnum.card_refund &&
+                       (x.Status == CardPaymentResponseStatus.CARD_CHECKOUT_REFUNDED_SUCCESS_STATUS ||
+                        x.Status == CardPaymentResponseStatus.CARD_CYBERSOURCE_REFUNDED_SUCCESS_STATUS))
+            .Select(legacyEvent => new PaymentRequestRefundAttempt
+            {
+                RefundInitiatedAt = legacyEvent.Inserted,
+                RefundInitiatedAmount = legacyEvent.Amount,
+                RefundSettledAt = legacyEvent.Inserted,
+                RefundSettledAmount = legacyEvent.Amount,
+                IsCardVoid = false
+            })
+            .ToList();
+    }
+
+    /// <summary>
+    /// Builds refund attempts from the async refund flow
+    /// (card_refund_pending -> card_refund_settled/card_refund_declined).
+    /// Events are grouped by CardRequestID (the Checkout action_id / act_xxx) to track each refund's lifecycle.
+    /// </summary>
+    private static List<PaymentRequestRefundAttempt> BuildAsyncRefundAttempts(
+        IGrouping<string?, PaymentRequestEvent> groupedCardEvent)
+    {
+        var refundAttempts = new List<PaymentRequestRefundAttempt>();
+
+        var refundEventGroups = groupedCardEvent
+            .Where(x => x.EventType == PaymentRequestEventTypesEnum.card_refund_pending ||
+                       x.EventType == PaymentRequestEventTypesEnum.card_refund_settled ||
+                       x.EventType == PaymentRequestEventTypesEnum.card_refund_declined)
+            .Where(x => !string.IsNullOrEmpty(x.CardRequestID))
+            .OrderBy(x => x.Inserted)
+            .GroupBy(x => x.CardRequestID)
+            .ToList();
+
+        foreach (var refundEventGroup in refundEventGroups)
+        {
+            var pendingEvent = refundEventGroup
+                .FirstOrDefault(x => x.EventType == PaymentRequestEventTypesEnum.card_refund_pending);
+
+            if (pendingEvent == null)
+            {
+                continue;
+            }
+
+            var refundAttempt = new PaymentRequestRefundAttempt
+            {
+                RefundInitiatedAt = pendingEvent.Inserted,
+                RefundInitiatedAmount = pendingEvent.Amount,
+                IsCardVoid = false
+            };
+
+            var declinedEvent = refundEventGroup
+                .FirstOrDefault(x => x.EventType == PaymentRequestEventTypesEnum.card_refund_declined);
+
+            var settledEvent = refundEventGroup
+                .FirstOrDefault(x => x.EventType == PaymentRequestEventTypesEnum.card_refund_settled);
+
+            if (declinedEvent != null)
+            {
+                refundAttempt.RefundCancelledAt = declinedEvent.Inserted;
+                refundAttempt.RefundCancelledAmount = declinedEvent.Amount;
+            }
+            else if (settledEvent != null)
+            {
+                refundAttempt.RefundSettledAt = settledEvent.Inserted;
+                refundAttempt.RefundSettledAmount = settledEvent.Amount;
+            }
+
+            refundAttempts.Add(refundAttempt);
         }
 
-        var refundAttempts = (from cardRefundEvent in cardRefundEvents
-            where cardRefundEvent.Status == CardPaymentResponseStatus.CARD_CHECKOUT_REFUNDED_SUCCESS_STATUS ||
-                  cardRefundEvent.Status == CardPaymentResponseStatus.CARD_CYBERSOURCE_REFUNDED_SUCCESS_STATUS
-            select new PaymentRequestRefundAttempt
-            {
-                RefundInitiatedAt = cardRefundEvent.Inserted,
-                RefundInitiatedAmount = cardRefundEvent.Amount,
-                RefundSettledAt = cardRefundEvent.Inserted,
-                RefundSettledAmount = cardRefundEvent.Amount,
-                IsCardVoid = false
-            }).ToList();
-
-        paymentAttempt.RefundAttempts = refundAttempts;
+        return refundAttempts;
     }
 
     public static void HandleCardWebhookEvents(this IGrouping<string?, PaymentRequestEvent> groupedCardEvent,
@@ -312,7 +388,10 @@ public static class PaymentRequestEventExtensions
                 || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_capture
                 || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_void
                 || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_webhook
-                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_refund;
+                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_refund
+                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_refund_pending
+                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_refund_settled
+                || paymentRequestEvent.EventType == PaymentRequestEventTypesEnum.card_refund_declined;
     }
 
     public static List<IGrouping<string?, PaymentRequestEvent>> GetGroupedCardEvents(

@@ -166,6 +166,123 @@ public class PaymentRequestPaymentAttemptExtensionsTests
         Assert.Equal(result, amountAvailableToRefund);
     }
     
+    /// <summary>
+    /// Tests that a pending refund (initiated but not yet settled or declined) blocks the
+    /// initiated amount from being refunded again, preventing double-refunds.
+    /// </summary>
+    [Fact]
+    public void GetAmountAvailableToRefund_PendingRefund_BlocksAmount()
+    {
+        // Arrange: captured 100, one pending refund of 40 in flight
+        var attempt = new PaymentRequestPaymentAttempt
+        {
+            PaymentMethod = PaymentMethodTypeEnum.card,
+            CardAuthorisedAmount = 200M,
+            CardAuthorisedAt = DateTime.UtcNow,
+            CaptureAttempts = new List<PaymentRequestCaptureAttempt> { new() { CapturedAmount = 100M } },
+            AttemptedAmount = 200M,
+            RefundAttempts = new List<PaymentRequestRefundAttempt>
+            {
+                new()
+                {
+                    RefundInitiatedAt = DateTime.UtcNow,
+                    RefundInitiatedAmount = 40M,
+                    RefundSettledAmount = 0M,
+                    RefundCancelledAmount = 0M,
+                    IsCardVoid = false
+                }
+            }
+        };
+
+        // Act
+        var available = attempt.GetAmountAvailableToRefund();
+
+        // Assert: 100 captured - 40 pending = 60 available
+        Assert.Equal(60M, available);
+    }
+
+    /// <summary>
+    /// Tests that a pending refund that was subsequently declined releases its amount back,
+    /// making the full captured amount available to refund again.
+    /// </summary>
+    [Fact]
+    public void GetAmountAvailableToRefund_DeclinedRefund_ReleasesAmount()
+    {
+        // Arrange: captured 100, refund of 40 was initiated then declined
+        var attempt = new PaymentRequestPaymentAttempt
+        {
+            PaymentMethod = PaymentMethodTypeEnum.card,
+            CardAuthorisedAmount = 200M,
+            CardAuthorisedAt = DateTime.UtcNow,
+            CaptureAttempts = new List<PaymentRequestCaptureAttempt> { new() { CapturedAmount = 100M } },
+            AttemptedAmount = 200M,
+            RefundAttempts = new List<PaymentRequestRefundAttempt>
+            {
+                new()
+                {
+                    RefundInitiatedAt = DateTime.UtcNow,
+                    RefundInitiatedAmount = 40M,
+                    RefundSettledAmount = 0M,
+                    RefundCancelledAt = DateTime.UtcNow,
+                    RefundCancelledAmount = 40M,
+                    IsCardVoid = false
+                }
+            }
+        };
+
+        // Act
+        var available = attempt.GetAmountAvailableToRefund();
+
+        // Assert: declined refund does not block — full 100 captured is available
+        Assert.Equal(100M, available);
+    }
+
+    /// <summary>
+    /// Tests that a combination of a settled refund and a pending refund both reduce
+    /// the available amount to refund correctly.
+    /// </summary>
+    [Fact]
+    public void GetAmountAvailableToRefund_PendingAndSettledCombined_BothReduce()
+    {
+        // Arrange: captured 100, 30 already settled, 20 pending
+        var attempt = new PaymentRequestPaymentAttempt
+        {
+            PaymentMethod = PaymentMethodTypeEnum.card,
+            CardAuthorisedAmount = 200M,
+            CardAuthorisedAt = DateTime.UtcNow,
+            CaptureAttempts = new List<PaymentRequestCaptureAttempt> { new() { CapturedAmount = 100M } },
+            AttemptedAmount = 200M,
+            RefundAttempts = new List<PaymentRequestRefundAttempt>
+            {
+                // settled refund
+                new()
+                {
+                    RefundInitiatedAt = DateTime.UtcNow.AddMinutes(-10),
+                    RefundInitiatedAmount = 30M,
+                    RefundSettledAt = DateTime.UtcNow.AddMinutes(-5),
+                    RefundSettledAmount = 30M,
+                    RefundCancelledAmount = 0M,
+                    IsCardVoid = false
+                },
+                // pending refund
+                new()
+                {
+                    RefundInitiatedAt = DateTime.UtcNow,
+                    RefundInitiatedAmount = 20M,
+                    RefundSettledAmount = 0M,
+                    RefundCancelledAmount = 0M,
+                    IsCardVoid = false
+                }
+            }
+        };
+
+        // Act
+        var available = attempt.GetAmountAvailableToRefund();
+
+        // Assert: 100 - 30 settled - 20 pending = 50 available
+        Assert.Equal(50M, available);
+    }
+
     [Theory]
     [InlineData(200.45,100.55,  0, 99.90)]
     [InlineData(200.45, 100.55,  99.90, 0)]
