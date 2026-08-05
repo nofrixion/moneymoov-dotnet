@@ -88,4 +88,19 @@ public static class CardPaymentResponseStatus
     /// The successful status result returned for a refund card payment request.
     /// </summary>
     public const string CARD_CHECKOUT_REFUNDED_SUCCESS_STATUS = "REFUNDED";
+
+    /// <summary>
+    /// Status indicating a card refund has been submitted to Checkout.com and is pending confirmation.
+    /// </summary>
+    public const string CARD_CHECKOUT_REFUND_PENDING_STATUS = "REFUND_PENDING";
+
+    /// <summary>
+    /// Status indicating a card refund has been confirmed as successful by the Checkout.com webhook.
+    /// </summary>
+    public const string CARD_CHECKOUT_REFUND_SETTLED_STATUS = "REFUND_SETTLED";
+
+    /// <summary>
+    /// Status indicating a card refund has been declined by Checkout.com (e.g., insufficient funds).
+    /// </summary>
+    public const string CARD_CHECKOUT_REFUND_DECLINED_STATUS = "REFUND_DECLINED";
 }
