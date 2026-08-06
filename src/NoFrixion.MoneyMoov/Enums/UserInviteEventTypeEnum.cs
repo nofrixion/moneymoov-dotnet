@@ -24,14 +24,14 @@ public enum UserInviteEventTypeEnum
     Unknown = 0,
 
     /// <summary>
-    /// A user invite was created and stored.
-    /// </summary>
-    Created = 1,
-
-    /// <summary>
     /// A user invite was authorised by an approver.
     /// </summary>
-    Authorise = 2,
+    Authorise = 1,
+
+    /// <summary>
+    /// A user invite was created and stored.
+    /// </summary>
+    Created = 2,
 
     /// <summary>
     /// The invite email was sent or resent to the invitee.

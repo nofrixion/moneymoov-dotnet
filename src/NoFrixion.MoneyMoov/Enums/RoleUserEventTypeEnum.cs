@@ -24,14 +24,14 @@ public enum RoleUserEventTypeEnum
     Unknown = 0,
 
     /// <summary>
-    /// A user was assigned to a role — the RoleUser record was created.
-    /// </summary>
-    Created = 1,
-
-    /// <summary>
     /// A role-user assignment was authorised by an approver.
     /// </summary>
-    Authorise = 2,
+    Authorise = 1,
+
+    /// <summary>
+    /// A user was assigned to a role — the RoleUser record was created.
+    /// </summary>
+    Created = 2,
 
     /// <summary>
     /// The account-level permissions on this role-user assignment were updated.
