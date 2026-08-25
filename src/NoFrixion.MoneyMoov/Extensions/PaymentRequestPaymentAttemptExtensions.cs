@@ -63,11 +63,32 @@ public static class PaymentRequestPaymentAttemptExtensions
                     .Sum(z => z.RefundSettledAmount)) == 0;
     }
 
+    /// <summary>
+    /// Calculates the amount available to refund for a card payment attempt.
+    /// This subtracts both settled refunds AND pending refunds (initiated but not cancelled/declined)
+    /// to prevent double-refunding while a refund is in progress.
+    /// </summary>
+    /// <param name="attempt">The payment attempt to calculate available refund amount for.</param>
+    /// <returns>The amount available to refund.</returns>
     public static decimal GetAmountAvailableToRefund(this PaymentRequestPaymentAttempt attempt)
     {
-        return attempt.CaptureAttempts.Sum(x => x.CapturedAmount) -
-                                       attempt.RefundAttempts.Where(x => x.IsCardVoid == false)
-                                           .Sum(y => y.RefundSettledAmount);
+        var capturedAmount = attempt.CaptureAttempts.Sum(x => x.CapturedAmount);
+        
+        // Sum of all settled refunds (excluding voids which are handled separately)
+        var settledRefunds = attempt.RefundAttempts
+            .Where(x => x.IsCardVoid == false)
+            .Sum(y => y.RefundSettledAmount);
+        
+        // Sum of pending refunds: initiated but NOT cancelled/declined
+        // A refund is pending if RefundInitiatedAmount > 0 AND RefundSettledAmount == 0 AND RefundCancelledAmount == 0
+        var pendingRefunds = attempt.RefundAttempts
+            .Where(x => x.IsCardVoid == false && 
+                       x.RefundInitiatedAmount > 0 && 
+                       x.RefundSettledAmount == 0 && 
+                       x.RefundCancelledAmount == 0)
+            .Sum(y => y.RefundInitiatedAmount);
+        
+        return capturedAmount - settledRefunds - pendingRefunds;
     }
     
     public static decimal GetAmountAvailableToVoid(this PaymentRequestPaymentAttempt attempt)
