@@ -22,9 +22,24 @@ public enum RoleUserEventTypeEnum
     /// Something went wrong and the event type is unknown.
     /// </summary>
     Unknown = 0,
-    
+
     /// <summary>
-    /// A user invite was authorised.
+    /// A role-user assignment was authorised by an approver.
     /// </summary>
-    Authorise = 1
+    Authorise = 1,
+
+    /// <summary>
+    /// A user was assigned to a role — the RoleUser record was created.
+    /// </summary>
+    Created = 2,
+
+    /// <summary>
+    /// The account-level permissions on this role-user assignment were updated.
+    /// </summary>
+    Updated = 3,
+
+    /// <summary>
+    /// The user was removed from the role — the RoleUser record was deleted.
+    /// </summary>
+    Deleted = 4
 }
