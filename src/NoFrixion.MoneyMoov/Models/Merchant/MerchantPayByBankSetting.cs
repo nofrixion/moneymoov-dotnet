@@ -13,6 +13,8 @@
 //  MIT.
 // -----------------------------------------------------------------------------
 
+using NoFrixion.MoneyMoov.Enums;
+
 namespace NoFrixion.MoneyMoov.Models;
 
 /// <summary>
@@ -84,4 +86,9 @@ public class MerchantPayByBankSetting
     /// The warning message related to the bank institution to be displayed to the user.
     /// </summary>
     public string? WarningMessage { get; set; }
+
+    /// <summary>
+    /// Optional display mode controlling whether warning or standard message is shown.
+    /// </summary>
+    public BankMessagePresentationModeEnum? MessagePresentationMode { get; set; }
 }
