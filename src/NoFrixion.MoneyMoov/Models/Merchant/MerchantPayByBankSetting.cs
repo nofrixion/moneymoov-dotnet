@@ -88,7 +88,8 @@ public class MerchantPayByBankSetting
     public string? WarningMessage { get; set; }
 
     /// <summary>
-    /// Optional display mode controlling whether warning or standard message is shown.
+    /// Display mode controlling whether warning or standard message is shown.
     /// </summary>
-    public BankMessagePresentationModeEnum? MessagePresentationMode { get; set; }
+    public BankMessagePresentationModeEnum MessagePresentationMode { get; set; } =
+        BankMessagePresentationModeEnum.Standard;
 }

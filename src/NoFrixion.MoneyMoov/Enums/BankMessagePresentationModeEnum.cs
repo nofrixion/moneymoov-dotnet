@@ -26,12 +26,7 @@ public enum BankMessagePresentationModeEnum
     Standard = 1,
 
     /// <summary>
-    /// Show the warning message.
-    /// </summary>
-    Warning = 2,
-
-    /// <summary>
     /// Show warning on tablet/desktop viewports and standard message on mobile.
     /// </summary>
-    WarningOnTabletAndDesktop = 3
+    WarningOnTabletAndDesktop = 2
 }
