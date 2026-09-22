@@ -9,6 +9,7 @@
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	<NoWarn>$(NoWarn);1591;NU1902;NU1903;</NoWarn>
+	<WarningsNotAsErrors>$(WarningsNotAsErrors);NU1904</WarningsNotAsErrors>
   </PropertyGroup>
 
     <ItemGroup>
