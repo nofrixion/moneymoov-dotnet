@@ -2,35 +2,66 @@ using System.Text;
 
 namespace NoFrixion.MoneyMoov.Models.Payouts;
 
+/// <summary>
+/// Builds and compares payout approval hashes.
+/// New approvals use a canonical hash that stays stable for destination-authoritative FX payouts,
+/// while matching still accepts the legacy source-amount hash shape where compatibility is required.
+/// </summary>
 public static class PayoutApprovalHash
 {
     private const string DESTINATION_AUTHORITATIVE_AMOUNT_PREFIX = "FXDEST";
 
+    /// <summary>
+    /// Creates the canonical approval hash for the supplied payout.
+    /// For destination-authoritative FX payouts the destination amount/currency is used as the stable
+    /// identity component so FX re-quotes do not change the approval hash.
+    /// </summary>
     public static string Create(Payout? payout)
     {
         return CreateCore(payout, GetCanonicalAmountComponent(payout));
     }
 
-    public static bool MatchesCurrent(Payout? payout, string? candidateHash)
+    /// <summary>
+    /// Checks whether a candidate hash matches the payout approval hash as the payout exists now.
+    /// This accepts both the current canonical hash and the legacy source-amount hash recreated from
+    /// the payout's current state so existing approval tokens remain valid during the transition.
+    /// </summary>
+    public static bool MatchesApprovalHash(Payout? payout, string? candidateHash)
     {
         if (payout == null || string.IsNullOrEmpty(candidateHash))
         {
             return false;
         }
 
-        return candidateHash == Create(payout) || candidateHash == CreateOriginalFromCurrentState(payout);
+        var canonicalHash = Create(payout);
+        var legacyHashFromCurrentState = CreateLegacyFromCurrentState(payout);
+
+        return candidateHash == canonicalHash || candidateHash == legacyHashFromCurrentState;
     }
 
-    public static bool MatchesRecorded(Payout? payout, string? candidateHash, decimal recordedSourceAmount)
+    /// <summary>
+    /// Checks whether a candidate hash matches the legacy approval hash for a fixed-destination FX payout
+    /// using the source amount recorded on a historical event. This compatibility path is intentionally
+    /// limited to destination-authoritative FX payouts so normal payouts still fail if the source amount
+    /// changes after authorisation or signing.
+    /// </summary>
+    public static bool MatchesLegacyFixedDestinationFxApprovalHash(
+        Payout? payout,
+        string? candidateHash,
+        decimal recordedSourceAmount)
     {
-        if (payout == null || string.IsNullOrEmpty(candidateHash))
+        if (!IsDestinationAuthoritativeFxPayout(payout) || string.IsNullOrEmpty(candidateHash))
         {
             return false;
         }
 
-        return candidateHash == Create(payout) || candidateHash == CreateOriginal(payout, recordedSourceAmount);
+        var legacyHashFromRecordedState = CreateLegacy(payout!, recordedSourceAmount);
+        return candidateHash == legacyHashFromRecordedState;
     }
 
+    /// <summary>
+    /// Creates the canonical approval hash for a batch payout by hashing the canonical hash of each child payout.
+    /// </summary>
     public static string Create(BatchPayout? batchPayout)
     {
         var batchInput = new StringBuilder();
@@ -43,33 +74,40 @@ public static class PayoutApprovalHash
         return HashHelper.CreateHash(batchInput.ToString());
     }
 
-    public static bool MatchesCurrent(BatchPayout? batchPayout, string? candidateHash)
+    /// <summary>
+    /// Checks whether a candidate hash matches the batch payout approval hash as the batch exists now, accepting either the
+    /// current canonical batch hash or the legacy batch hash rebuilt from the current child payouts.
+    /// </summary>
+    public static bool MatchesApprovalHash(BatchPayout? batchPayout, string? candidateHash)
     {
         if (batchPayout == null || string.IsNullOrEmpty(candidateHash))
         {
             return false;
         }
 
-        return candidateHash == Create(batchPayout) || candidateHash == CreateOriginal(batchPayout);
+        var canonicalHash = Create(batchPayout);
+        var legacyHashFromCurrentState = CreateLegacy(batchPayout);
+
+        return candidateHash == canonicalHash || candidateHash == legacyHashFromCurrentState;
     }
 
-    private static string CreateOriginalFromCurrentState(Payout payout)
+    private static string CreateLegacyFromCurrentState(Payout payout)
     {
-        return CreateOriginal(payout, payout.Amount);
+        return CreateLegacy(payout, payout.Amount);
     }
 
-    private static string CreateOriginal(Payout payout, decimal sourceAmount)
+    private static string CreateLegacy(Payout payout, decimal sourceAmount)
     {
         return CreateCore(payout, sourceAmount.ToAmountMinorUnits(payout.Currency).ToString());
     }
 
-    private static string CreateOriginal(BatchPayout batchPayout)
+    private static string CreateLegacy(BatchPayout batchPayout)
     {
         var batchInput = new StringBuilder();
 
         foreach (var payout in batchPayout.Payouts)
         {
-            batchInput.Append(CreateOriginalFromCurrentState(payout));
+            batchInput.Append(CreateLegacyFromCurrentState(payout));
         }
 
         return HashHelper.CreateHash(batchInput.ToString());
@@ -82,7 +120,7 @@ public static class PayoutApprovalHash
             return string.Empty;
         }
 
-        string input =
+        var input =
             payout.ID.ToString() +
             payout.AccountID.ToString() +
             payout.Currency +
@@ -97,14 +135,21 @@ public static class PayoutApprovalHash
 
     private static string GetCanonicalAmountComponent(Payout? payout)
     {
-        if (payout is { FxUseDestinationAmount: true, FxDestinationCurrency: not null, FxDestinationAmount: not null })
+        if (IsDestinationAuthoritativeFxPayout(payout))
         {
+            // Prefix the destination-based component so canonical FX hashes cannot collide with the
+            // legacy source-minor-units representation for a non-FX or source-authoritative payout.
             var destinationAmountMinorUnits =
-                payout.FxDestinationAmount.Value.ToAmountMinorUnits(payout.FxDestinationCurrency.Value);
+                payout!.FxDestinationAmount!.Value.ToAmountMinorUnits(payout.FxDestinationCurrency!.Value);
 
             return $"{DESTINATION_AUTHORITATIVE_AMOUNT_PREFIX}{payout.FxDestinationCurrency}{destinationAmountMinorUnits}";
         }
 
         return payout?.AmountMinorUnits.ToString() ?? string.Empty;
+    }
+
+    private static bool IsDestinationAuthoritativeFxPayout(Payout? payout)
+    {
+        return payout is { FxUseDestinationAmount: true, FxDestinationCurrency: not null, FxDestinationAmount: not null };
     }
 }

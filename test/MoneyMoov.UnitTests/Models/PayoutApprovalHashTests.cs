@@ -22,7 +22,7 @@ public class PayoutApprovalHashTests
         var legacyApprovalHash = CreateOriginalApprovalHash(payout);
 
         Assert.Equal("s-OwFKnDubOL1YwboQDJ_WgCozElZepOIpXSeIexnPA", legacyApprovalHash);
-        Assert.True(PayoutApprovalHash.MatchesCurrent(payout, legacyApprovalHash));
+        Assert.True(PayoutApprovalHash.MatchesApprovalHash(payout, legacyApprovalHash));
     }
 
     [Fact]
@@ -30,46 +30,44 @@ public class PayoutApprovalHashTests
     {
         var payout = BuildPayout(fxUseDestinationAmount: true);
 
-        var approvalHash = PayoutApprovalHash.Create(payout);
+        var approvalHash = payout.ToApprovalHash();
         var legacyApprovalHash = CreateOriginalApprovalHash(payout);
 
         payout.Amount = 91.23m;
 
-        Assert.Equal(approvalHash, PayoutApprovalHash.Create(payout));
+        Assert.Equal(approvalHash, payout.ToApprovalHash());
         Assert.NotEqual(legacyApprovalHash, CreateOriginalApprovalHash(payout));
     }
 
     [Fact]
-    public void MatchesCurrent_AcceptsOriginalHash_ForUnchangedFixedDestinationFxPayout()
+    public void MatchesApprovalHash_AcceptsOriginalHash_ForUnchangedFixedDestinationFxPayout()
     {
         var payout = BuildPayout(fxUseDestinationAmount: true);
 
         var legacyApprovalHash = CreateOriginalApprovalHash(payout);
 
-        Assert.True(PayoutApprovalHash.MatchesCurrent(payout, legacyApprovalHash));
+        Assert.True(PayoutApprovalHash.MatchesApprovalHash(payout, legacyApprovalHash));
     }
 
     [Fact]
-    public void MatchesRecorded_AcceptsOriginalHash_AfterSourceOnlyRequote()
+    public void MatchesLegacyFixedDestinationFxApprovalHash_AcceptsOriginalHash_AfterSourceOnlyRequote()
     {
         var payout = BuildPayout(fxUseDestinationAmount: true);
         var legacyApprovalHash = CreateOriginalApprovalHash(payout);
 
         payout.Amount = 91.23m;
-
-        Assert.True(PayoutApprovalHash.MatchesRecorded(payout, legacyApprovalHash, 90m));
+        Assert.True(PayoutApprovalHash.MatchesLegacyFixedDestinationFxApprovalHash(payout, legacyApprovalHash, 90m));
     }
 
     [Fact]
-    public void MatchesRecorded_RejectsOriginalHash_AfterNonceChange()
+    public void MatchesLegacyFixedDestinationFxApprovalHash_RejectsOriginalHash_AfterNonceChange()
     {
         var payout = BuildPayout(fxUseDestinationAmount: true);
         var legacyApprovalHash = CreateOriginalApprovalHash(payout);
 
         payout.Amount = 91.23m;
         payout.Nonce = "updated-nonce";
-
-        Assert.False(PayoutApprovalHash.MatchesRecorded(payout, legacyApprovalHash, 90m));
+        Assert.False(PayoutApprovalHash.MatchesLegacyFixedDestinationFxApprovalHash(payout, legacyApprovalHash, 90m));
     }
 
     [Fact]
@@ -77,15 +75,40 @@ public class PayoutApprovalHashTests
     {
         var payout = BuildPayout(fxUseDestinationAmount: false);
 
-        var approvalHash = PayoutApprovalHash.Create(payout);
+        var approvalHash = payout.ToApprovalHash();
 
         payout.Amount = 91.23m;
 
-        Assert.NotEqual(approvalHash, PayoutApprovalHash.Create(payout));
+        Assert.NotEqual(approvalHash, payout.ToApprovalHash());
     }
 
     [Fact]
-    public void MatchesCurrent_BatchPayout_AcceptsOriginalCompositeHash_ForUnchangedCurrentState()
+    public void MatchesLegacyFixedDestinationFxApprovalHash_RejectsOriginalHash_ForSourceAuthoritativeFx_AfterSourceAmountChange()
+    {
+        var payout = BuildPayout(fxUseDestinationAmount: false);
+        var legacyApprovalHash = CreateOriginalApprovalHash(payout);
+
+        payout.Amount = 91.23m;
+
+        Assert.False(PayoutApprovalHash.MatchesLegacyFixedDestinationFxApprovalHash(payout, legacyApprovalHash, 90m));
+    }
+
+    [Fact]
+    public void MatchesLegacyFixedDestinationFxApprovalHash_RejectsOriginalHash_ForNonFx_AfterAmountChange()
+    {
+        var payout = BuildPayout(fxUseDestinationAmount: false);
+        payout.FxDestinationCurrency = null;
+        payout.FxDestinationAmount = null;
+
+        var legacyApprovalHash = CreateOriginalApprovalHash(payout);
+
+        payout.Amount = 91.23m;
+
+        Assert.False(PayoutApprovalHash.MatchesLegacyFixedDestinationFxApprovalHash(payout, legacyApprovalHash, 90m));
+    }
+
+    [Fact]
+    public void MatchesApprovalHash_BatchPayout_AcceptsOriginalCompositeHash_ForUnchangedCurrentState()
     {
         var batchPayout = new BatchPayout
         {
@@ -99,11 +122,11 @@ public class PayoutApprovalHashTests
 
         var legacyApprovalHash = CreateOriginalBatchApprovalHash(batchPayout);
 
-        Assert.True(PayoutApprovalHash.MatchesCurrent(batchPayout, legacyApprovalHash));
+        Assert.True(PayoutApprovalHash.MatchesApprovalHash(batchPayout, legacyApprovalHash));
     }
 
     [Fact]
-    public void MatchesCurrent_BatchPayout_RejectsOriginalCompositeHash_AfterNonceChange()
+    public void MatchesApprovalHash_BatchPayout_RejectsOriginalCompositeHash_AfterNonceChange()
     {
         var batchPayout = new BatchPayout
         {
@@ -118,7 +141,7 @@ public class PayoutApprovalHashTests
         var legacyApprovalHash = CreateOriginalBatchApprovalHash(batchPayout);
         batchPayout.Payouts[0].Nonce = "updated-nonce";
 
-        Assert.False(PayoutApprovalHash.MatchesCurrent(batchPayout, legacyApprovalHash));
+        Assert.False(PayoutApprovalHash.MatchesApprovalHash(batchPayout, legacyApprovalHash));
     }
 
     private static Payout BuildPayout(
