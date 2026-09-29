@@ -16,9 +16,11 @@
 //  -----------------------------------------------------------------------------
 
 using System.Globalization;
+using Microsoft.VisualBasic.FileIO;
 using NoFrixion.MoneyMoov;
 using NoFrixion.MoneyMoov.Extensions;
 using NoFrixion.MoneyMoov.Models;
+using NoFrixion.MoneyMoov.UnitTests;
 
 namespace MoneyMoov.UnitTests.Models;
 
@@ -27,6 +29,7 @@ public class PayoutExportTests
     [Fact]
     public async Task Payout_ToCsvRow_MatchesSnapshot()
     {
+        using var culture = new CurrentCultureScope("en-IE");
         var payout = new Payout
         {
             ID = Guid.Parse("12345678-1234-1234-1234-123456789012"),
@@ -59,6 +62,7 @@ public class PayoutExportTests
     [Fact]
     public void Payout_CsvHeader_ColumnCount_Matches_ToCsvRow()
     {
+        using var culture = new CurrentCultureScope("fr-FR");
         var payout = new Payout
         {
             Destination = new Counterparty
@@ -73,10 +77,8 @@ public class PayoutExportTests
         var header = PayoutExtensions.GetCsvHeader();
         var row = payout.ToCsvRow();
 
-        var headerColumnCount = header.Split(',').Length;
-        var rowColumnCount = row.Split(',').Length;
-
-        Assert.Equal(headerColumnCount, rowColumnCount);
+        Assert.Contains("\"?0,00\"", row);
+        Assert.Equal(GetCsvColumnCount(header), GetCsvColumnCount(row));
     }
 
     /// <summary>
@@ -252,10 +254,7 @@ public class PayoutExportTests
         var header = PayoutExtensions.GetCsvHeader();
         var row = payout.ToCsvRow();
 
-        var headerColumnCount = header.Split(',').Length;
-        var rowColumnCount = row.Split(',').Length;
-
-        Assert.Equal(headerColumnCount, rowColumnCount);
+        Assert.Equal(GetCsvColumnCount(header), GetCsvColumnCount(row));
     }
 
     /// <summary>
@@ -299,5 +298,12 @@ public class PayoutExportTests
         Assert.Equal(expectedDecimal, columns[^3]);
         Assert.Equal(expectedDecimal, columns[^2]);
         Assert.Equal(expectedDecimal, columns[^1]);
+    }
+
+    private static int GetCsvColumnCount(string csv)
+    {
+        using var parser = new TextFieldParser(new StringReader(csv));
+        parser.SetDelimiters(",");
+        return parser.ReadFields()?.Length ?? 0;
     }
 }

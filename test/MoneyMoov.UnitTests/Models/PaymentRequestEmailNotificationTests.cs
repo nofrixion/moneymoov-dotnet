@@ -20,10 +20,14 @@ using Xunit.Abstractions;
 
 namespace NoFrixion.MoneyMoov.UnitTests;
 
-public class PaymentRequestEmailNotificationTests : MoneyMoovUnitTestBase<PaymentRequestEmailNotificationTests>
+public class PaymentRequestEmailNotificationTests : MoneyMoovUnitTestBase<PaymentRequestEmailNotificationTests>, IDisposable
 {
+    private readonly CurrentCultureScope _culture = new("en-IE");
+
     public PaymentRequestEmailNotificationTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     { }
+
+    public void Dispose() => _culture.Dispose();
 
     /// <summary>
     /// Tests that a payment request values can be substituted.
