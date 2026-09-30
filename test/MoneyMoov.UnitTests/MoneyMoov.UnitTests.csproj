@@ -6,8 +6,7 @@
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
 		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-		<NoWarn>$(NoWarn);NU1902;NU1903;</NoWarn>
-		<WarningsNotAsErrors>$(WarningsNotAsErrors);NU1904</WarningsNotAsErrors>
+		<NoWarn>$(NoWarn);NU1903;</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
