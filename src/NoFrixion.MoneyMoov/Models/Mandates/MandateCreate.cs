@@ -130,6 +130,11 @@ public class MandateCreate
     [System.Text.Json.Serialization.JsonIgnore]
     [Newtonsoft.Json.JsonIgnore]
     public decimal Amount { get; set; }
+    
+    /// <summary>
+    /// The date and time when the mandate was signed by the customer.
+    /// </summary>
+    public DateTimeOffset? DateOfSignature { get; set; }
 
     /// <summary>
     /// Places all the mandate's properties into a dictionary.
@@ -156,6 +161,7 @@ public class MandateCreate
         dict.Add(nameof(IsRecurring), IsRecurring?.ToString() ?? string.Empty);
         dict.Add(nameof(Currency), Currency.ToString());
         dict.Add(nameof(Amount), Amount.ToString());
+        dict.Add(nameof(DateOfSignature), DateOfSignature?.ToString() ?? string.Empty);
         
         return dict;
     }
