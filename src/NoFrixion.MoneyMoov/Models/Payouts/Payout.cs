@@ -20,6 +20,7 @@ using NoFrixion.MoneyMoov.Models.Approve;
 using System.ComponentModel.DataAnnotations;
 using NoFrixion.MoneyMoov.Extensions;
 using NoFrixion.MoneyMoov.Models.PayeeVerification;
+using NoFrixion.MoneyMoov.Models.Payouts;
 
 namespace NoFrixion.MoneyMoov.Models;
 
@@ -571,34 +572,6 @@ public class Payout : IValidatableObject, IWebhookPayload, IExportableToCsv
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         return PayoutsValidator.Validate(this, validationContext);
-    }
-
-    /// <summary>
-    /// Gets a hash of the critical fields for the payout. This hash is
-    /// used to ensure a payout's details are not modified between the time the
-    /// approval is given and the time the payout is actioned.
-    /// </summary>
-    /// <returns>A hash of the payout's critical fields.</returns>
-    public string GetApprovalHash()
-    {
-        if (Destination == null)
-        {
-            return string.Empty;
-        }
-        else
-        {
-            string input =
-                ID.ToString() +
-                AccountID.ToString() +
-                Currency +
-                AmountMinorUnits +
-                Destination.GetApprovalHash() +
-                Scheduled.GetValueOrDefault().ToString() +
-                ScheduleDate?.ToString("o") +
-                (string.IsNullOrEmpty(Nonce) ? string.Empty : Nonce);
-
-            return HashHelper.CreateHash(input);
-        }
     }
 
     public string CsvHeader() => PayoutExtensions.GetCsvHeader();
