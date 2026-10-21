@@ -8,7 +8,7 @@
 	<FileVersion>1.13.0.0</FileVersion>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-	<NoWarn>$(NoWarn);1591;NU1903;</NoWarn>
+	<NoWarn>$(NoWarn);1591;</NoWarn>
   </PropertyGroup>
 
     <ItemGroup>
@@ -16,7 +16,7 @@
         <PackageReference Include="CsvHelper" Version="33.0.1" />
         <PackageReference Include="IdentityModel" Version="7.0.0" />
         <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.13" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.13" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.13" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.13" />
