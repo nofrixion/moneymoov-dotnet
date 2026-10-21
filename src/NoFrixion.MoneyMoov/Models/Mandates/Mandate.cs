@@ -146,4 +146,24 @@ public class Mandate
     /// The timestamp this mandate was last updated at.
     /// </summary>
     public DateTimeOffset LastUpdated { get; set; }
+
+    /// <summary>
+    /// First line of the customer's address (street number, etc).
+    /// </summary>
+    public string? CustomerAddressLine1 { get; set; }
+    
+    /// <summary>
+    /// Second line of the customer's address (apartment, building, etc).
+    /// </summary>
+    public string? CustomerAddressLine2 { get; set; }
+    
+    /// <summary>
+    /// Customer's postal code.
+    /// </summary>
+    public string? CustomerPostalCode { get; set; }
+    
+    /// <summary>
+    /// The date and time when the mandate was signed by the customer.
+    /// </summary>
+    public DateTimeOffset? DateOfSignature { get; set; }
 }

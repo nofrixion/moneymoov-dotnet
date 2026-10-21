@@ -20,8 +20,9 @@ using Xunit.Abstractions;
 
 namespace NoFrixion.MoneyMoov.UnitTests;
 
-public class PayoutTests
+public class PayoutTests : IDisposable
 {
+    private readonly CurrentCultureScope _culture = new("en-IE");
     readonly ILogger _logger;
     private LoggerFactory _loggerFactory;
 
@@ -31,6 +32,8 @@ public class PayoutTests
         _loggerFactory.AddProvider(new XunitLoggerProvider(testOutputHelper));
         _logger = _loggerFactory.CreateLogger<PayoutTests>();
     }
+
+    public void Dispose() => _culture.Dispose();
 
     [Fact]
     public void FxFormattedDestinationAmount_ReturnsEmpty_WhenCurrencyOrRateIsNull()

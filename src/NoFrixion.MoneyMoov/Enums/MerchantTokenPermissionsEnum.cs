@@ -155,4 +155,10 @@ public enum MerchantTokenPermissionsEnum
     /// Permission to delete a payrun
     /// </summary>
     DeletePayrun = 1 << 25,
+
+    /// <summary>
+    /// Permission to execute Verification of Payee (VoP) requests.
+    /// This permission is not user-configurable and can only be set by NoFrixion.
+    /// </summary>
+    CanExecuteVoP = 1 << 26,
 }
