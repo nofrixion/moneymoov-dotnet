@@ -100,6 +100,14 @@ public class Payrun : IWebhookPayload
     public string? Nonce { get; set; }
     
     public List<PayrunInvoiceMinimal>? InvoicesMinimal { get; set; }
+
+    /// <summary>
+    /// Invoices excluded from this payrun because they were missing required
+    /// address fields (AddressLine1, PostTown, CountryCode). Null/empty when all
+    /// invoices were accepted or when address enforcement is off. Only populated
+    /// on the create-payrun response; null on all other payrun responses.
+    /// </summary>
+    public List<SkippedInvoice>? SkippedInvoices { get; set; }
     
     /// <summary>
     /// Gets a hash of the critical fields for the payrun. This hash is
