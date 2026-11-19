@@ -134,6 +134,7 @@ public class MandateCreate
     /// <summary>
     /// The date and time when the mandate was signed by the customer.
     /// </summary>
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Please, provide a valid date of signature.")]
     public DateTimeOffset? DateOfSignature { get; set; }
 
     /// <summary>
