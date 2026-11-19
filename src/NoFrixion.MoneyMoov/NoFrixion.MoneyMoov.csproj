@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<AssemblyVersion>1.13.0.0</AssemblyVersion>
-	<FileVersion>1.13.0.0</FileVersion>
+	<AssemblyVersion>1.14.0.0</AssemblyVersion>
+	<FileVersion>1.14.0.0</FileVersion>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	<NoWarn>$(NoWarn);1591;</NoWarn>
